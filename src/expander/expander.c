@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 13:29:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 14:30:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	get_env_len(char *str)
 	return (len);
 }
 
-static char *get_env_value(char *var_name, int len)
+static char	*get_env_value(char *var_name, int len)
 {
 	char	*name;
 	char	*value;
