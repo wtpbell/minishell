@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:30:39 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 10:38:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 10:44:07 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,13 @@ static t_token_type	get_token_type(char *str)
 	return (TOKEN_WORD);
 }
 
-t_token	**tokenize_input(char *input)
+static t_token	*process_tokens(char **tokens)
 {
-	t_token	**head;
+	t_token	*head;
 	t_token	*current;
-	char	**tokens;
 	int		i;
 
-	if (!input)
-		return (NULL);
-	tokens = ft_split(input, ' ');
-	if (!tokens)
-		return (NULL);
+	i = 0;
 	head = NULL;
 	while (tokens[i])
 	{
@@ -73,6 +68,30 @@ t_token	**tokenize_input(char *input)
 		}
 		i++;
 	}
+	return (head);
+}
+
+static void	free_token_array(char **tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i])
+		free(tokens[i++]);
 	free(tokens);
+}
+
+t_token	*tokenize_input(char *input)
+{
+	t_token	*head;
+	char	**tokens;
+
+	if (!input)
+		return (NULL);
+	tokens = ft_split(input, ' ');
+	if (!tokens)
+		return (NULL);
+	head = process_tokens(tokens);
+	free_token_array(tokens);
 	return (head);
 }
