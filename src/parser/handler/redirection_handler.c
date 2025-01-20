@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:13:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 22:36:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static t_ast_node	*create_redirection_node(t_token **token)
 
 t_ast_node	*parse_redirection(t_token **token)
 {
-	t_ast_node	*node;
 	t_ast_node	*redir_node;
 	t_ast_node	*cmd_node;
 

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:02:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 22:36:40 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static t_ast_node	*handle_group_error(char *msg)
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;
-	t_token		*start;
 
 	if (!token || !*token)
 		return (NULL);
