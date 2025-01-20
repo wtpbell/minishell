@@ -1,40 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parser.c                                           :+:    :+:            */
+/*   logic_parser.c                                     :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:17:36 by spyun         ########   odam.nl         */
+/*   Created: 2025/01/20 22:16:54 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/20 22:17:25 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_ast_node	*parse(t_token *tokens)
+static t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 {
-	if (!tokens)
+	t_ast_node	*logic_node;
+	t_ast_node	*result;
+
+	logic_node = create_logic_node(token);
+	if (!logic_node)
+	{
+		free_ast(left);
+		return (handle_logic_error());
+	}
+	result = process_logic_operator(token, left, logic_node);
+	if (!result)
 		return (NULL);
-	return (parse_pipeline(&tokens));
+	return (result);
 }
 
-void	free_ast(t_ast_node *node)
+t_ast_node	*parse_complete_bonus(t_token **token)
 {
-	int	i;
-
-	if (!node)
-		return ;
-	if (node->args)
-	{
-		i = 0;
-		while (node->args[i])
-			free(node->args[i++]);
-		free(node->args);
-	}
-	if (node->redirections)
-		free(node->redirections);
-	free_ast(node->left);
-	free_ast(node->right);
-	free(node);
+	if (!token || !*token)
+		return (NULL);
+	return (parse_group(token));
 }
