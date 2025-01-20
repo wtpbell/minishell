@@ -6,16 +6,20 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:20:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:23:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 16:29:15 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-void	skip_spaces(char **input)
+int	skip_spaces(const char *str)
 {
-	while (**input && (**input == ' ' || **input == '\t'))
-		(*input)++;
+	int	i;
+
+	i = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
+	return (i);
 }
 
 int	is_space(char c)

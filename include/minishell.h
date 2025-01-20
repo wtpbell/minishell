@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:48:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 16:25:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "../lib/include/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
