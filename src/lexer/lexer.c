@@ -6,24 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:30:39 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 10:44:07 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 13:20:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static t_token	*create_token(char *content, t_token_type type)
-{
-	t_token	*new_token;
-
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
-	new_token->content = content;
-	new_token->type = type;
-	new_token->next = NULL;
-	return (new_token);
-}
 
 static t_token_type	get_token_type(char *str)
 {
@@ -80,6 +67,7 @@ static void	free_token_array(char **tokens)
 		free(tokens[i++]);
 	free(tokens);
 }
+
 
 t_token	*tokenize_input(char *input)
 {

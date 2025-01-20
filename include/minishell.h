@@ -6,12 +6,16 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 10:22:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 10:45:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
 
 typedef enum e_token_type
 {
@@ -43,5 +47,7 @@ typedef struct s_cmd
 	int				append;
 	struct s_cmd	*next;
 }	t_cmd;
+
+t_token	*tokenize_input(char *input);
 
 #endif
