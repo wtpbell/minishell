@@ -6,11 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:12:53 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:45:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 15:52:32 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexer.h"
 
 t_token	*create_token(char *content, t_token_type type)
 {
