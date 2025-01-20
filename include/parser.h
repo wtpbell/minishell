@@ -6,7 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 13:46:09 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 15:48:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PARSER_H
+# define PARSER_H
+
+# include "minishell.h"
+
+#endif

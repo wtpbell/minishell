@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:47:13 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/20 15:48:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,6 @@
 # define LEXER_H
 
 # include "minishell.h"
-
-typedef enum e_token_type
-{
-	TOKEN_WORD,
-	TOKEN_PIPE, // |
-	TOKEN_REDIR_IN, // <
-	TOKEN_REDIR_OUT, // >
-	TOKEN_HEREDOC, // <<
-	TOKEN_APPEND, // >>
-	TOKEN_AND, // &&
-	TOKEN_OR, // ||
-	TOKEN_LPAREN, // (
-	TOKEN_RPAREN
-}	t_token_type;
-
-typedef struct s_token
-{
-	char			*content;
-	t_token_type	type;
-	struct s_token	*next;
-}	t_token;
 
 typedef struct s_tokenizer
 {
