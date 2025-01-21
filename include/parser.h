@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:34:18 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 09:21:48 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@
 # include "minishell.h"
 # include "lexer.h"
 
+typedef struct s_redirection
+{
+	t_token_type			type;
+	char					*file;
+	struct s_redirection	*next;
+}	t_redirection;
+
 typedef struct s_ast_node
 {
 	t_token_type		type;
 	char				**args;
-	char				*redirections;
+	t_redirection		*redirections;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 }	t_ast_node;

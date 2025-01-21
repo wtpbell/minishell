@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 16:25:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 08:59:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <readline/readline.h>
+# include <readline/history.h>
 
 extern int	g_exit_status;
 

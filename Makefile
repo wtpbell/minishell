@@ -20,7 +20,6 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
-			  $(LEXER_DIR)/utils/whitespace.c \
 			  $(LEXER_DIR)/utils/char_checks.c
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
@@ -30,7 +29,8 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/logic_parser.c \
-			   $(PARSER_DIR)/handler/group_handler.c
+			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/utils/free_utils.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
