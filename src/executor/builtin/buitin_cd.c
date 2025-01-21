@@ -6,19 +6,19 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/21 18:39:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/21 21:23:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 
-void	update_oldpwd(t_cmd *cmd)
+void	update_oldpwd(t_exec *cmd)
 {
 	
 }
 
-int	builtin_cd(t_cmd *cmd)
+int	builtin_cd(t_exec *cmd)
 {
 	if (cmd->argv[1] && cmd->argv[2])
 	{

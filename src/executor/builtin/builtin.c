@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/21 18:00:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/21 21:19:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 	Single Non-Numeric Argument: Displays an error and exits with status 2.
 	Multiple Arguments: Displays an error and does not exit.
 */
-int	builtin_exit(t_cmd *cmd)
+int	builtin_exit(t_exec *cmd)
 {
 	int	exit_code;
 
@@ -34,7 +34,7 @@ int	builtin_exit(t_cmd *cmd)
 	return (1);
 }
 
-int	builtin_env(t_cmd *cmd)
+int	builtin_env(t_exec *cmd)
 {
 	char	**env;
 	int		i;
@@ -55,7 +55,7 @@ int	builtin_env(t_cmd *cmd)
 /*
 	If the getcwd function fails, it return 1, otherwise returns 1.
 */
-int	builtin_pwd(t_cmd *cmd)
+int	builtin_pwd(t_exec *cmd)
 {
 	char	*pwd;
 	char	buffer[PATH_MAX];
@@ -72,7 +72,7 @@ int	builtin_pwd(t_cmd *cmd)
 	echo with multiple -n, skip those -n
 	echo with invalid -n, e.g. -nn, will directly output -nn
 */
-int	builtin_echo(t_cmd *cmd)
+int	builtin_echo(t_exec *cmd)
 {
 	int	i;
 	int	no_newline;
@@ -95,7 +95,7 @@ int	builtin_echo(t_cmd *cmd)
 	return (1);
 }
 
-int	builtin(t_cmd *cmd)
+int	builtin(t_exec *cmd)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return (1);

@@ -6,22 +6,24 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 17:59:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/21 22:15:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-# ifndef EXECTOR_H
-#define EXECTOR_H
+#ifndef EXECUTOR_H
+# define EXECUTOR_H
 
 # include "minishell.h"
 
 # define PATH_MAX 1024
 
-typedef struct s_cmd
+typedef struct s_exec
 {
 	char			**argv;
-	char			***env_ptr;
+	char			***env_ptr; //a ptr to the env var array, can directly update
 	int				*exitcode;
 	struct s_cmd	*next;
 	t_token_type	type;
-}	t_cmd;
+}	t_exec;
+
+#endif

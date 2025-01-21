@@ -6,8 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/21 17:59:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/21 21:25:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+int	builtin_unset(t_exec *cmd)
+{
+	
+}
