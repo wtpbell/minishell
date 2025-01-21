@@ -1,10 +1,12 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
+PARSER_DIR = $(SRC_DIR)/parser
 OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
@@ -15,22 +17,32 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
 			  $(LEXER_DIR)/token/token_create.c \
 			  $(LEXER_DIR)/token/token_type.c \
-			  $(LEXER_DIR)/processor/operator_handler.c \
-			  $(LEXER_DIR)/processor/quote_handler.c \
-			  $(LEXER_DIR)/processor/word_handler.c \
-			  $(LEXER_DIR)/utils/whitespace.c \
+			  $(LEXER_DIR)/handler/operator_handler.c \
+			  $(LEXER_DIR)/handler/quote_handler.c \
+			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/utils/char_checks.c
+
+PARSER_FILES = $(PARSER_DIR)/parser.c \
+			   $(PARSER_DIR)/core/ast.c \
+			   $(PARSER_DIR)/handler/command_handler.c \
+			   $(PARSER_DIR)/handler/redirection_handler.c \
+			   $(PARSER_DIR)/handler/pipeline_handler.c \
+			   $(PARSER_DIR)/handler/logic_handler.c \
+			   $(PARSER_DIR)/handler/logic_parser.c \
+			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/utils/free_utils.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES)
 
 all: $(NAME)
 
@@ -38,8 +50,10 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(OBJ_DIR)/lexer/init
 	@mkdir -p $(OBJ_DIR)/lexer/token
-	@mkdir -p $(OBJ_DIR)/lexer/processor
+	@mkdir -p $(OBJ_DIR)/lexer/handler
 	@mkdir -p $(OBJ_DIR)/lexer/utils
+	@mkdir -p $(OBJ_DIR)/parser/core
+	@mkdir -p $(OBJ_DIR)/parser/handlers
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
@@ -49,7 +63,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
-	$(CC) $(ALL_OBJ) $(LIBS) -o $(NAME)
+	$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
 	@echo "Minishell compiled successfully!"
 
 clean:

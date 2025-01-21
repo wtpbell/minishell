@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 10:20:55 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 08:59:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <fcntl.h>
-# include <unistd.h>
-# include <stddef.h>
-# include <limits.h>
-# include <stdbool.h>
-# include <sys/wait.h>
 
 extern int	g_exit_status;
 
