@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 14:28:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 16:50:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
-	TOKEN_APPED,
+	TOKEN_APPEND,
 	TOKEN_AND,
 	TOKEN_OR,
 	TOKEN_LPAREN,
