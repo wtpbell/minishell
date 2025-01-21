@@ -6,33 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/21 21:19:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/21 23:09:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-/*
-	No Arguments: Exits with status 0 (default).
-	Single Numeric Argument: Exits with the given status.
-	Single Non-Numeric Argument: Displays an error and exits with status 2.
-	Multiple Arguments: Displays an error and does not exit.
-*/
-int	builtin_exit(t_exec *cmd)
-{
-	int	exit_code;
-
-	printf("exit\n");
-	if (cmd->argv[1] && cmd->argv[2])
-		return (*cmd->exitcode = error_msg("exit: too many arguments"), 1);
-	exit_code = 0;
-	if (cmd->argv[1] &&ft_isnumber(cmd->argv[1]))
-		exit_code = ft_atoi(cmd->argv[1]);
-	else if (cmd->argv[1])
-		exit_code = 2 * error_msg("exit: numeric argument required");
-	//need to free memory//
-	return (1);
-}
 
 int	builtin_env(t_exec *cmd)
 {
