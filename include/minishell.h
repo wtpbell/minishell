@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 16:25:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 10:14:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,37 @@
 # define MINISHELL_H
 
 # include "../lib/include/libft.h"
-# include <unistd.h>
-# include <stdlib.h>
+# include <errno.h>
+# include <string.h>
+# include <signal.h>
 # include <stdio.h>
-# include <stdbool.h>
+# include <stdlib.h>
 # include <readline/readline.h>
+# include <readline/history.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <stddef.h>
+# include <limits.h>
+# include <stdbool.h>
+# include <sys/wait.h>
 
 extern int	g_exit_status;
+
 
 typedef enum e_token_type
 {
 	TOKEN_WORD,
-	TOKEN_PIPE, // |
-	TOKEN_REDIR_IN, // <
-	TOKEN_REDIR_OUT, // >
-	TOKEN_HEREDOC, // <<
-	TOKEN_APPEND, // >>
-	TOKEN_AND, // &&
-	TOKEN_OR, // ||
-	TOKEN_LPAREN, // (
-	TOKEN_RPAREN
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_HEREDOC,
+	TOKEN_APPED,
+	TOKEN_AND,
+	TOKEN_OR,
+	TOKEN_LPAREN,
+	TOKEN_EPAREN,
+	TOKEN_NEWLINE,
+	TOKEN_EOF
 }	t_token_type;
 
 typedef struct s_token
