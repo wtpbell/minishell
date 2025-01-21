@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 08:59:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 14:28:25 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
+# include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
