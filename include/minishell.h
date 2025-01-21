@@ -14,27 +14,31 @@
 # define MINISHELL_H
 
 # include "../lib/include/libft.h"
-# include <unistd.h>
-# include <stdlib.h>
+# include <errno.h>
+# include <string.h>
+# include <signal.h>
 # include <stdio.h>
-# include <stdbool.h>
+# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 extern int	g_exit_status;
 
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,
-	TOKEN_PIPE, // |
-	TOKEN_REDIR_IN, // <
-	TOKEN_REDIR_OUT, // >
-	TOKEN_HEREDOC, // <<
-	TOKEN_APPEND, // >>
-	TOKEN_AND, // &&
-	TOKEN_OR, // ||
-	TOKEN_LPAREN, // (
-	TOKEN_RPAREN
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_HEREDOC,
+	TOKEN_APPED,
+	TOKEN_AND,
+	TOKEN_OR,
+	TOKEN_LPAREN,
+	TOKEN_EPAREN,
+	TOKEN_NEWLINE,
+	TOKEN_EOF
 }	t_token_type;
 
 typedef struct s_token
@@ -44,14 +48,14 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_cmd
-{
-	char			**argv;
-	char			*infile;
-	char			*outfile;
-	int				here_doc;
-	int				append;
-	struct s_cmd	*next;
-}	t_cmd;
+// typedef struct s_cmd
+// {
+// 	char			**argv;
+// 	char			*infile;
+// 	char			*outfile;
+// 	int				here_doc;
+// 	int				append;
+// 	struct s_cmd	*next;
+// }	t_cmd;
 
 #endif
