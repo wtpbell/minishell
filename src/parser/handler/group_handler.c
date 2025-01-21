@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:36:40 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 08:57:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static int	is_right_paren(t_token *token)
 
 static t_ast_node	*handle_group_error(char *msg)
 {
-	ft_putstr_fd("minishell: syntax error: ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
+	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 	return (NULL);
 }
 

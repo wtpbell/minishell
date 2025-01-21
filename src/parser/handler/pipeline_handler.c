@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:36:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 08:56:40 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	is_pipe_token(t_token *token)
 
 static t_ast_node	*handle_pipe_error(void)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token '|'\n", 2);
+	ft_putendl_fd("minishell: syntax error near unexpected token '|'", STDERR_FILENO);
 	return (NULL);
 }
 
