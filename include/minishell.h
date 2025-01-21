@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 10:14:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/21 10:20:55 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_cmd
-{
-	char			**argv;
-	char			*infile;
-	char			*outfile;
-	int				here_doc;
-	int				append;
-	struct s_cmd	*next;
-}	t_cmd;
+// typedef struct s_cmd
+// {
+// 	char			**argv;
+// 	char			*infile;
+// 	char			*outfile;
+// 	int				here_doc;
+// 	int				append;
+// 	struct s_cmd	*next;
+// }	t_cmd;
 
 #endif
