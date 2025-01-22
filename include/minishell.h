@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 22:06:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/22 21:55:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include <readline/history.h>
 
 extern int	g_exit_status;
-
+# define MANY_ARGS_ERROR "Too many argument!"
 
 typedef enum e_token_type
 {
@@ -34,11 +34,14 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
+	TOKEN_ENV,
+	TOKEN_EXEC,
+	TOKEN_BLOCK,
 	TOKEN_APPEND,
 	TOKEN_AND,
 	TOKEN_OR,
 	TOKEN_LPAREN,
-	TOKEN_EPAREN,
+	TOKEN_RPAREN,
 	TOKEN_NEWLINE,
 	TOKEN_EOF
 }	t_token_type;
@@ -50,14 +53,9 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-// typedef struct s_cmd
-// {
-// 	char			**argv;
-// 	char			*infile;
-// 	char			*outfile;
-// 	int				here_doc;
-// 	int				append;
-// 	struct s_cmd	*next;
-// }	t_cmd;
+typedef struct s_tree
+{
+	t_token_type	type;
+}	t_tree;
 
 #endif
