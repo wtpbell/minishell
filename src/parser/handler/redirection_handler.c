@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:10:43 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 19:54:35 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Check for redirect tokens (<, >, >>, <<) */
 static int	is_redirection(t_token *token)
 {
 	return (token && (token->type == TOKEN_REDIR_IN
@@ -20,6 +21,7 @@ static int	is_redirection(t_token *token)
 			|| token->type == TOKEN_APPEND));
 }
 
+/* Handling redirect syntax errors */
 static t_ast_node	*handle_redirection_error(t_token **token)
 {
 	if (!*token || (*token)->type != TOKEN_WORD)
@@ -31,6 +33,7 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 	return (create_ast_node(TOKEN_WORD));
 }
 
+/* Create a redirect node */
 static t_ast_node	*create_redirection_node(t_token **token)
 {
 	t_ast_node		*node;
@@ -53,6 +56,7 @@ static t_ast_node	*create_redirection_node(t_token **token)
 	return (node);
 }
 
+/* Parses the entire redirect syntax */
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node	*redir_node;

@@ -6,18 +6,20 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:11:10 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 19:49:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Check for logical operator (&&, ||) tokens */
 static int	is_logic_operator(t_token *token)
 {
 	return (token && (token->type == TOKEN_AND
 			|| token->type == TOKEN_OR));
 }
 
+/* Create a logical operation node */
 t_ast_node	*create_logic_node(t_token **token)
 {
 	t_ast_node		*node;
@@ -33,6 +35,8 @@ t_ast_node	*create_logic_node(t_token **token)
 	return (node);
 }
 
+
+/*  Handling logical operation syntax errors */
 t_ast_node	*handle_logic_error(void)
 {
 	ft_putendl_fd("minishell: syntax error near unexpected token",
@@ -40,6 +44,7 @@ t_ast_node	*handle_logic_error(void)
 	return (NULL);
 }
 
+/* Organise logical operators and operands into AST nodes */
 t_ast_node	*process_logic_operator(t_token **token,
 	t_ast_node *left, t_ast_node *logic_node)
 {
@@ -57,6 +62,7 @@ t_ast_node	*process_logic_operator(t_token **token,
 	return (logic_node);
 }
 
+/* Parses the entire logical expression to create an AST */
 t_ast_node	*parse_logic(t_token **token)
 {
 	t_ast_node	*left;

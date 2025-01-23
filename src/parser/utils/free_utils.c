@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 09:19:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 19:55:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/*free redirect list memory */
 static void	free_redirections(t_redirection *redir)
 {
 	t_redirection	*current;
@@ -28,6 +29,8 @@ static void	free_redirections(t_redirection *redir)
 	}
 }
 
+
+/* Free instruction argument array memory */
 static void	free_args(char **args)
 {
 	int	i;
@@ -40,6 +43,8 @@ static void	free_args(char **args)
 	free(args);
 }
 
+
+/* Free AST full structure memory */
 void	free_ast(t_ast_node *node)
 {
 	if (!node)
