@@ -6,12 +6,17 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 14:36:18 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 16:29:30 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 17:26:23 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/*
+** Tokenise the input string
+** Generate a list of associations by skipping spaces
+   and converting operators/words to tokens
+*/
 t_token	*tokenize(char *input)
 {
 	t_tokenizer	tokenizer;

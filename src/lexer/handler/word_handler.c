@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:47:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 17:20:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/* Check word token termination conditions (meets null, operator, space) */
 static int	should_stop_word(t_tokenizer *tokenizer)
 {
 	char	current;
@@ -26,6 +27,10 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 	return (0);
 }
 
+/*
+** Extract and expand the contents of word tokens
+** Expand environment variables if they are not single quotes
+*/
 static char	*get_word_content(t_tokenizer *tokenizer, int start)
 {
 	char	*content;
@@ -44,6 +49,10 @@ static char	*get_word_content(t_tokenizer *tokenizer, int start)
 	return (content);
 }
 
+/*
+** Generate word tokens
+** Extract strings, handling quotes and extensions
+*/
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	int		start;

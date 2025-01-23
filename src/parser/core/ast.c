@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 22:14:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 17:30:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Create and initialise AST nodes */
 t_ast_node	*create_ast_node(t_token_type type)
 {
 	t_ast_node	*node;
@@ -27,6 +28,10 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
+/*
+** Add command arguments to the AST node
+** Replace the existing argument array with an array containing the new arguments
+*/
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:47:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 16:52:59 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ t_quote_state	get_quote_state(t_tokenizer *tokenizer);
 char			*get_var_value(char *str, int *pos, t_quote_state state);
 
 t_token			*handle_word(t_tokenizer *tokenizer);
-
 char			*handle_expansion(t_tokenizer *tokenizer, char *word);
+int				handle_heredoc(char *delimiter, int *heredoc_fd);
 
 t_token			*create_token(char *content, t_token_type type);
 void			add_token(t_token **head, t_token *new_token);

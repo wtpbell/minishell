@@ -6,12 +6,16 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 11:44:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:45:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 17:28:38 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/*
+** Handle environment variable expansion
+** Replace variables starting with $ with their actual values
+*/
 static char	*process_var_expansion(char *result, char *word,
 	int *i, t_quote_state state)
 {
@@ -25,17 +29,26 @@ static char	*process_var_expansion(char *result, char *word,
 	return (result);
 }
 
+/* Add a single character to the result string */
 static char	*process_char(char *result, char c)
 {
 	return (ft_strjoin_char(result, c));
 }
 
+/*
+** Check if the variable needs to be expanded
+** (if there is a character after $ and it is not a single quote)
+*/
 static int	should_expand_var(char c, char next_c, t_quote_state state)
 {
 	return (c == '$' && next_c
 		&& (state.quote_char != '\'' || !state.in_quote));
 }
 
+/*
+** Handle string expansion (environment variables, quotes)
+** Return a new converted string
+*/
 char	*handle_expansion(t_tokenizer *tokenizer, char *word)
 {
 	char			*result;
