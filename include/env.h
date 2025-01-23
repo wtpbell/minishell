@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/22 21:54:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 16:22:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@
 
 typedef enum	e_scope
 {
-	ENVE = 1 << 0, 
-	EXPORT = 1 << 1,
-	BOTH = 1 << 2,
-	SPECIAL = 1 << 3
+	ENVE = 1 << 0,   // Environment only
+	EXPORT = 1 << 1, // Exported variables
+	BOTH = 1 << 2,   // Visible in both env and export
+	SPECIAL = 1 << 3 // Special variables like "?"
 } t_scope;
 
 typedef struct	s_env

@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/21 23:19:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 17:26:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include <limits.h>
 
 static bool is_valid_numeric(char *arg)
 {
@@ -18,20 +19,50 @@ static bool is_valid_numeric(char *arg)
 	int j;
 
 	i = 0;
-	j = 0;
 	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
 		i++;
-
 	if (arg[i] == '+' || arg[i] == '-')
 		i++;
+	j = 0;
 	while (arg[i + j] && isdigit(arg[i + j]))
 		j++;
 	if (j > MAX_STATUS_LEN)
-		return false;
+		return (false);
 	i += j;
 	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
 		i++;
-	return (arg[i] == '\0');
+	if (arg[i] != '\0')
+		return (false);
+	return (true);
+}
+
+static bool	is_within_long_range(char *arg)
+{
+	long long	num;
+	int			sign;
+	int			i;
+
+	num = 0;
+	sign = 1;
+	i = 0;
+	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
+		i++;
+	if (arg[i] == '+' || arg[i] == '-')
+	{
+		if (arg[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (arg[i] && isdigit(arg[i]))
+	{
+		if ((num > LLONG_MAX / 10) ||
+			(num == LLONG_MAX / 10 && (arg[i] - '0') > LLONG_MAX % 10))
+			return (false);
+		num = num * 10 + (arg[i] - '0');
+		i++;
+	}
+	num *= sign;
+	return (num <= LLONG_MAX && num >= LLONG_MIN);
 }
 
 /*
@@ -40,29 +71,30 @@ static bool is_valid_numeric(char *arg)
 	Single Non-Numeric Argument: Displays an error and exits with status 2.
 	Multiple Arguments: Displays an error and does not exit.
 */
-int	builtin_exit(t_exec *cmd)
+int	builtin_exit(t_ast_node *node)
 {
-	int	exit_code;
+	char **args;
 
-	printf("exit\n");
-	if (cmd->argv[1] && cmd->argv[2])
-		return (*cmd->exitcode = error_msg("exit: too many arguments"), 1);
-	if (cmd->argv[1] == NULL)
+	args = node->args;
+	ft_putendl_fd("exit", STDIN_FILENO);
+	if (!args || !args[1])
 	{
-		*cmd->exitcode = exit_code;
+		g_exit_status = 0;
+		exit(g_exit_status);
 	}
-	else if (is_valid_numeric(cmd->argv[1]))
+	update_exit_status(node->args_count - 1, &args[1]);
+	if (!is_valid_numeric(args[1]) || !is_within_long_range(args[1]))
 	{
-		exit_code = atoi(cmd->argv[1]);
-		*cmd->exitcode = exit_code;
+		ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
+		// Free resources
+		exit(g_exit_status = 255);
 	}
-	else
+	if (node->args_count > 2)
 	{
-		printf("exit: numeric argument required\n");
-		*cmd->exitcode = EXIT_ERROR_CODE;
-		exit_code = EXIT_ERROR_CODE;
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+		g_exit_status = 1;
+		return (1);
 	}
-	//free memory
-	exit(exit_code);
+	exit(g_exit_status = (int)((unsigned char)ft_atoi(args[1])));
 	return (0);
 }

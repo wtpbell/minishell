@@ -53,9 +53,41 @@ t_env	*get_env(t_env *envs, const char *key)
 {
 	while (envs)
 	{
-		if (ft_strcmp(envs->key, key) == 0 && envs->hide == false)
+		if (ft_strcmp(envs->key, key) == 0 && !envs->hide)
 			return (envs);
 		envs = envs->next;
 	}
 	return (NULL);
+}
+void	unset_env(t_env **envs, const char *key)
+{
+	t_env *entry = get_env(*envs, key);
+	if (entry)
+		entry->hide = true;
+}
+
+char	**rebuild_env_to_char(t_env *envs)
+{
+	char	**env;
+	int		i;
+
+	i = 0;
+	for (t_env *tmp = envs; tmp; tmp = tmp->next)
+		if (!tmp->hide)
+			i++;
+
+	env = malloc((i + 1) * sizeof(char *));
+	i = 0;
+	while (envs)
+	{
+		if (!envs->hide)
+		{
+			env[i] = malloc(strlen(envs->key) + strlen(envs->value) + 2);
+			sprintf(env[i], "%s=%s", envs->key, envs->value);
+			i++;
+		}
+		envs = envs->next;
+	}
+	env[i] = NULL;
+	return (env);
 }

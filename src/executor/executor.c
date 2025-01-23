@@ -12,27 +12,24 @@
 
 #include "executor.h"
 
-static int	get_exec_status(t_tree *tree)
+void executor(t_ast_node *node)
 {
-	if (tree->type & (TOKEN_AND || TOKEN_OR))
-		return exec_ctrl(tree);
-	else if (tree->type & (TOKEN_REDIR_IN || TOKEN_REDIR_OUT))
-		return exec_redir(tree);
-	else if (tree->type & TOKEN_BLOCK)
-		return exec_block(tree);
-	else if (tree->type & TOKEN_PIPE)
-		return exec_pipe(tree);
-	else if (tree->type & TOKEN_EXEC)
-		return exec_cmd(tree);
-	return (EXIT_FAILURE);
+	if (!node)
+		return;
+	if (node->type == TOKEN_EXEC)
+		exec_cmd(node);
+	else if (node->type == TOKEN_PIPE)
+		exec_pipe(node);
+	else if (node->type == TOKEN_AND || node->type == TOKEN_OR)
+		exec_ctrl(node);
+	else if (node->type & (TOKEN_REDIR_IN | TOKEN_REDIR_OUT))
+		exec_redir(node);
+	else if (node->type == TOKEN_BLOCK)
+		exec_block(node);
+	if (node->type == TOKEN_PIPE || node->type == TOKEN_AND || node->type == TOKEN_OR)
+	{
+		executor(node->left);
+		executor(node->right);
+	}
 }
 
-void	executor(t_tree *tree)
-{
-	int	status;
-
-	if (!tree)
-		return ;
-	status = get_exec_status(tree);
-	set_exit_status(status);
-}

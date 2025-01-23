@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/22 21:55:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 16:22:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,5 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-typedef struct s_tree
-{
-	t_token_type	type;
-}	t_tree;
 
 #endif

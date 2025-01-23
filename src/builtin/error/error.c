@@ -31,3 +31,14 @@ int error_msg_format(const char *prefix, const char *arg, const char *suffix)
 	printf("\n");
 	return (1);
 }
+
+/*
+	Exit Code		Meaning 							Example
+	1				Catchall for general errors
+	2				Misuse of shell builtins			empty_function()
+	126				Command invoked cannot execute		/dev/null
+	127				"command not found"					illegal_command (typo)
+	128				Invalid argument to exit			kill -9 $PPID returns 137 (128 + 9)
+	130				Script terminated by Control-C		Ctl-C
+	255*			Exit status out of range			exit -1
+*/

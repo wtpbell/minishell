@@ -14,6 +14,31 @@
 #include "env.h"
 #include "minishell.h"
 
+void	set_env(t_env **envs, const char *key, const char *value)
+{
+	t_env *entry;
+	t_env *new_entry;
+
+	entry = get_env(*envs, key);
+	new_entry = malloc(sizeof(t_env));
+	if (entry)
+	{
+		free(entry->value);
+		entry->value = value ? strdup(value) : NULL;
+		entry->hide = false;
+		return;
+	}
+	new_entry->key = strdup(key);
+	new_entry->value = value ? strdup(value) : NULL;
+	new_entry->hide = false;
+	new_entry->scope = BOTH;
+	new_entry->next = *envs;
+	new_entry->prev = NULL;
+	if (*envs)
+		(*envs)->prev = new_entry;
+	*envs = new_entry;
+}
+
 static t_env	*env_int(char **key_value)
 {
 	t_env	*new;

@@ -13,8 +13,36 @@
 #include "env.h"
 #include "minishell.h"
 
-
-int get_exit_status(void)
+/*
+	1. Command Execution (exec_cmd)
+		Update g_exit_status after execve.
+	2. Pipelines (exec_pipe)
+		Update g_exit_status based on the last command in the pipeline.
+	3. Logical Operators (run_ctrl)
+		Use g_exit_status to determine conditional execution.
+	4. Redirections (run_redir)
+		Update g_exit_status after applying redirections and running commands.
+*/
+void	update_exit_status(int argc, char **args)
 {
-	return (g_exit_status);
+	if (argc == 0)
+	{
+		g_exit_status = 0;
+		return ;
+	}
+	if (argc == 1 && is_valid_numeric(args[0]) && is_within_long_range(args[0]))
+	{
+		g_exit_status = atoi(args[0]) % 256;
+		return ;
+	}
+	if (argc == 1)
+	{
+		fprintf(stderr, "minishell: exit: %s: numeric argument required\n", args[0]);
+		exit(g_exit_status = 255);
+	}
+	if (argc > 1)
+	{
+		fprintf(stderr, "minishell: exit: too many arguments\n");
+		g_exit_status = 1;
+	}
 }
