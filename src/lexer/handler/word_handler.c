@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:23:20 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 11:47:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	*get_word_content(t_tokenizer *tokenizer, int start)
 		return (NULL);
 	if (!tokenizer->in_quote || tokenizer->quote_char != '\'')
 	{
-		expanded = handle_expansion(content);
+		expanded = handle_expansion(tokenizer, content);
 		free(content);
 		return (expanded);
 	}
