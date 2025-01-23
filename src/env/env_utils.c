@@ -59,12 +59,7 @@ t_env	*get_env(t_env *envs, const char *key)
 	}
 	return (NULL);
 }
-void	unset_env(t_env **envs, const char *key)
-{
-	t_env *entry = get_env(*envs, key);
-	if (entry)
-		entry->hide = true;
-}
+
 
 char	**rebuild_env_to_char(t_env *envs)
 {

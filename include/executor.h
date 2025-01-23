@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:13:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 18:33:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ int		builtin_exit(t_ast_node *node);
 int		builtin_cd(t_ast_node *node, t_env **env);
 
 /*error*/
-int error_msg(const char *msg, int include_errno);
-int error_msg_format(const char *prefix, const char *arg, const char *suffix);
+void error(const char *word, const char *msg);
 
 /*execute_tree*/
 void	executor(t_ast_node *node);
@@ -54,9 +53,9 @@ int		exec_block(t_ast_node *node);
 int		exec_redir(t_ast_node *node);
 
 /*executor*/
-void	executor(t_tree *tree);
+void	executor(t_ast_node *node);
 
 /*utils*/
-int get_exit_status(void);
+void	update_exit_status(int argc, char **args);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/23 10:47:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 18:42:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,25 +70,28 @@ static bool	is_within_long_range(char *arg)
 	Single Non-Numeric Argument: Displays an error and exits with status 2.
 	Multiple Arguments: Displays an error and does not exit.
 */
-int	builtin_exit(t_exec *cmd)
+int	builtin_exit(t_ast_node *node)
 {
+	char **args;
+
+	args = node->args;
 	ft_putendl_fd("exit", STDIN_FILENO);
-	if (cmd && cmd->argc == 1)
+	if (args && args[1])
 	{
 		// Free memory 
-		exit((int)((unsigned char)get_exit_status()));
+		update_exit_status(node->args_count - 1, &args[1]);
 	}
-	if (!is_valid_numeric(cmd->argv[1]) || !is_within_long_range(cmd->argv[1]))
+	if (!is_valid_numeric(args[1]) || !is_within_long_range(args[1]))
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
 		// Free memory 
 		exit(255);
 	}
-	if (cmd->argc > 2)
+	if (node->args_count > 2)
 	{
 		ft_putendl_fd("minishell: exit: Too many arguments", STDERR_FILENO);
 		return (1);
 	}
-	exit((int)((unsigned char)ft_atoi(cmd->argv[1]))); //unsigned char to ensure within 0-255
+	exit((int)((unsigned char)ft_atoi(args[1]))); //unsigned char to ensure within 0-255
 	return (0);
 }

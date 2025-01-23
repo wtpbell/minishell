@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 16:22:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 18:31:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,17 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-extern int	g_exit_status;
+# define SHELL_ERROR "minishell: "
 # define MANY_ARGS_ERROR "Too many argument!"
+# define PATH_MAX 4096
+
+# define RED "\033[31m"
+# define GREEN "\033[32m"
+# define YELLOW "\033[33m"
+# define BLUE "\033[34m"
+# define RESET "\033[0m"
+
+extern int	g_exit_status;
 
 typedef enum e_token_type
 {

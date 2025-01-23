@@ -43,6 +43,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils/exit_update.c \
 
 BUILTIN_FILES =  $(BUILTIN_DIR)/builtin/builtin_exit.c \
+				 $(BUILTIN_DIR)/builtin/builtin_echo.c \
 				 $(BUILTIN_DIR)/builtin/builtin_export.c \
 				 $(BUILTIN_DIR)/builtin/builtin_cd.c \
 				 $(BUILTIN_DIR)/builtin/builtin.c \

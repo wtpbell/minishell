@@ -6,13 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/22 21:37:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/23 18:33:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-
 
 /*
 	Command				Expected Behavior
@@ -25,3 +23,8 @@
 	cd /path/to/file	Fails if /path/to/file is not a directory.
 	cd ..				Goes to the parent directory.
 */
+
+int		builtin_cd(t_ast_node *node, t_env **env)
+{
+	
+}
