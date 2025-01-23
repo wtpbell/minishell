@@ -6,7 +6,7 @@
 /*   By: spyun <marvin@42.fr>                         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/08 08:24:47 by spyun         #+#    #+#                 */
-/*   Updated: 2024/12/13 15:53:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 11:25:45 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,9 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strjoin_char(char *str, char c);
+int		is_space(char c);
+int		skip_spaces(const char *str);
 
 #endif

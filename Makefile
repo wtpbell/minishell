@@ -20,7 +20,8 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
-			  $(LEXER_DIR)/utils/char_checks.c
+			  $(LEXER_DIR)/handler/expansion_handler.c \
+			  $(LEXER_DIR)/utils/char_check.c
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/core/ast.c \

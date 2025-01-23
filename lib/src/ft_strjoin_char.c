@@ -1,20 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parser.c                                           :+:    :+:            */
+/*   ft_strjoin_char.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:10:20 by spyun         ########   odam.nl         */
+/*   Created: 2025/01/23 11:20:46 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/23 11:21:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "libft.h"
+#include <stdlib.h>
 
-t_ast_node	*parse(t_token *tokens)
+char	*ft_strjoin_char(char *str, char c)
 {
-	if (!tokens)
+	char	*result;
+	int		len;
+
+	if (!str)
 		return (NULL);
-	return (parse_pipeline(&tokens));
+	len = ft_strlen(str);
+	result = (char *)malloc(sizeof(char) * (len + 2));
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, str, len + 1);
+	result[len] = c;
+	result[len + 1] = '\0';
+	free(str);
+	return (result);
 }
