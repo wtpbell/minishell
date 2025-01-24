@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 18:33:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/24 17:42:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "env.h"
 # include <sys/types.h> 
 
-# define PATH_MAX 260
 # define MAX_STATUS_LEN 20
 # define EXIT_ERROR_CODE 255
 

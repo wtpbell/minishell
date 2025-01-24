@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/22 21:56:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/24 17:52:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int ac, char **av, char **env)
 	while (true)
 	{
 		env_ = get_env_list();
-		*env_ = create_list(env);
+		*env_ = build_env(env);
 		line = readline("minishell> ");
 		if (!line)
 			break ; //this may need to free memory
@@ -38,7 +38,7 @@ int	main(int ac, char **av, char **env)
 		tokens = tokenize(line);
 		ast = parse(tokens);
 		if (ast)
-			executor(&ast);
+			executor(ast);
 		free_ast(ast);
 		free(line);
 	}
