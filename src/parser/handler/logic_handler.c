@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 19:49:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/24 08:49:20 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ t_ast_node	*create_logic_node(t_token **token)
 	return (node);
 }
 
-
-/*  Handling logical operation syntax errors */
+/* Handling logical operation syntax errors */
 t_ast_node	*handle_logic_error(void)
 {
 	ft_putendl_fd("minishell: syntax error near unexpected token",

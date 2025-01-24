@@ -6,11 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 14:36:18 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:26:23 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/24 09:14:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "lexer.h"zz
 
 /*
 ** Tokenise the input string
