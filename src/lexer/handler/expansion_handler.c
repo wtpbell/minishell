@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 09:04:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 09:04:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	char	*var_name;
 	char	*value;
 
+	(void)state;
 	start = *pos + 1;
 	len = 0;
 	while (str[start + len] && is_valid_var_char(str[start + len]))

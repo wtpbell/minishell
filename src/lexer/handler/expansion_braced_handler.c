@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expansion_braced.c                                 :+:    :+:            */
+/*   expansion_braced_handler.c                         :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 08:43:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 09:02:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 09:00:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,19 @@ static void	init_param_exp(t_param_exp *exp)
 	exp->var_name = NULL;
 	exp->operator = NULL;
 	exp->word = NULL;
+}
+
+/* Free the memory of the parameter extension structure */
+static void free_param_exp(t_param_exp *exp)
+{
+	if (!exp)
+		return ;
+	if (exp->var_name)
+		free(exp->var_name);
+	if (exp->operator)
+		free(exp->operator);
+	if (exp->word)
+		free(exp->word);
 }
 
 /*
