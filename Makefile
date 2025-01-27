@@ -11,7 +11,8 @@ OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
 
-SRC_FILES = $(SRC_DIR)/main.c
+SRC_FILES = $(SRC_DIR)/main.c \
+			$(SRC_DIR)/banner.c
 
 LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 11:48:58 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 16:20:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,10 @@ int	main(void)
 	t_token		*tokens;
 	t_ast_node	*ast;
 
+	print_banner();
 	while (true)
 	{
-		line = readline("minishell> ");
+		line = readline("minishell👾 > ");
 		if (!line)
 			break ;
 		if (*line)
