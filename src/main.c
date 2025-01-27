@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 17:52:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/27 11:28:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,38 @@
 #include "executor.h"
 #include "env.h"
 
-int	main(int ac, char **av, char **env)
+#include <termios.h>
+#include <unistd.h>
+#include <asm-generic/termbits.h>
+
+/*
+	Disable canonical (line-buffered) mode with ICANON
+	Disable ECHOCTL, 
+*/
+void	init_terminal(void)
+{
+	struct termios	orig_term;
+	struct termios	new_term;
+
+	if (!isatty(STDIN_FILENO))
+		return ;
+	tcgetattr(STDIN_FILENO, &orig_term);
+	new_term = orig_term;
+	new_term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+}
+
+static void	minishell(t_env **env_)
 {
 	char		*line;
 	t_token		*tokens;
 	t_ast_node	*ast;
-	t_env		**env_;
 
-	(void)ac;
-	(void)av;
-	g_exit_status = 0;
 	while (true)
 	{
-		env_ = get_env_list();
-		*env_ = build_env(env);
 		line = readline("minishell> ");
 		if (!line)
-			break ; //this may need to free memory
+			break;
 		if (*line)
 			add_history(line);
 		tokens = tokenize(line);
@@ -41,6 +56,22 @@ int	main(int ac, char **av, char **env)
 			executor(ast);
 		free_ast(ast);
 		free(line);
+		free_tokens(tokens);
 	}
+}
+int	main(int ac, char **av, char **env)
+{
+	t_env	**env_;
+
+	(void)ac;
+	(void)av;
+	g_exit_status = 0;
+	env_ = get_env_list();
+	*env_ = build_env(env);
+	init_terminal();
+	minishell(env_);
+	init_terminal();
+	free_env(env_);
 	return (EXIT_SUCCESS);
 }
+

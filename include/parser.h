@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 09:21:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 13:00:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 # include "lexer.h"
+# include "env.h"
 
 typedef struct s_redirection
 {
@@ -30,6 +31,7 @@ typedef struct s_ast_node
 	t_redirection		*redirections;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
+	t_env				**env;
 }	t_ast_node;
 
 t_ast_node	*parse(t_token *tokens);

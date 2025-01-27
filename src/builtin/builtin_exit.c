@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/23 18:42:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/27 11:44:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	builtin_exit(t_ast_node *node)
 	if (args && args[1])
 	{
 		// Free memory 
-		update_exit_status(node->args_count - 1, &args[1]);
+		update_exit_status(node->argc - 1, &args[1]);
 	}
 	if (!is_valid_numeric(args[1]) || !is_within_long_range(args[1]))
 	{
@@ -87,7 +87,7 @@ int	builtin_exit(t_ast_node *node)
 		// Free memory 
 		exit(255);
 	}
-	if (node->args_count > 2)
+	if (node->argc > 2)
 	{
 		ft_putendl_fd("minishell: exit: Too many arguments", STDERR_FILENO);
 		return (1);

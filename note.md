@@ -38,17 +38,16 @@ e.g. struct stat file_stat;
 	if (stat("file.txt", &file_stat) == 0) 
 		printf("File size: %ld bytes\n", file_stat.st_size);
 struct stat {
-	dev_t st_dev; ID of device containing the file.
-	ino_t st_ino; Serial number for the file.
-	mode_t st_mode; Access mode and file type for the file (see Flags).
-	nlink_t st_nlink; Number of links to the file.
-	uid_t st_uid; User ID of file owner.
-	gid_t st_gid; Group ID of group owner.
-	dev_t st_rdev; Device ID (if the file is a character or block special device).
-	off_t st_size; File size in bytes (if the file is a regular file).
-	time_t st_atime; Time of last access.
-	time_t st_mtime; Time of last data modification.
-	time_t st_ctime; Time of last file status change.
+	dev_t     st_dev;     // Device ID of the filesystem
+    ino_t     st_ino;     // Inode number
+    mode_t    st_mode;    // File type and mode (permissions)
+    nlink_t   st_nlink;   // Number of hard links
+    uid_t     st_uid;     // User ID of the owner
+    gid_t     st_gid;     // Group ID of the owner
+    off_t     st_size;    // File size in bytes
+    time_t    st_atime;   // Time of last access
+    time_t    st_mtime;   // Time of last modification
+    time_t    st_ctime;   // Time of last status change
 	blksize_t st_blksize; A file system-specific preferred I/O block size for this object. 
 						On some file system types, this may vary from file to file.
 	blkcnt_t st_blocks; Number of blocks allocated for this file.

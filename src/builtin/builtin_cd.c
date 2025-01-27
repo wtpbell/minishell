@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/24 19:47:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/27 18:41:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,51 @@
 	cd ..				Goes to the parent directory.
 */
 
-int	cd_dir(t_ast_node *node)
+static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 {
-	char	old_pwd[PATH_MAX];
-
-	if(getcwd(old_pwd, PATH_MAX) == NULL)
-		return (errno); //need to chec what error msg;
-	if (node->args_count == 1 || ft_strcmp(node->args[1], '~') == 0)
-	
+	if (set_env(envs, "OLDPWD", old_pwd) == 0)
+		error("cd", "Failed to update OLDPWD");
+	if (set_env(envs, "PWD", pwd) == 0)
+		error("cd", "Failed to update PWD");
 }
 
+static int	cd_dir(t_ast_node *node)
+{
+	char	old_pwd[PATH_MAX];
+	char	*tmp;
+
+	if(getcwd(old_pwd, PATH_MAX) == NULL)
+		return (error("cd", NULL), EXIT_FAILURE);
+	tmp = NULL;
+	if (node->argc == 1 || ft_strcmp(node->args[1], '~') == 0)
+	{
+		tmp = get_env_value(*(node->env), "HOME");
+		if (!tmp)
+			return (error("cd", "HOME not set"), EXIT_FAILURE);
+		if (chdir(tmp) == -1)
+			return (EXIT_FAILURE);
+	}
+	else if (node->argc == 1 || ft_strcmp(node->args[1], '-') == 0)
+	{
+		tmp = get_env_value(*(node->env), "OLDPWD");
+		if (!tmp)
+			return (error("cd", "OLDPWD not set"), EXIT_FAILURE);
+		tmp = ft_strdup(tmp);
+		if (chdir(tmp) == -1)
+			return (error("cd", NULL), EXIT_FAILURE);
+		ft_putendl_fd(tmp, STDOUT_FILENO);
+	}
+	update_pwd(*(node->env), old_pwd, tmp);
+	return (EXIT_SUCCESS);
+}
+
+/* 
+	int stat(const char *path, struct stat *buf);
+	- path: A string representing the path to the file or directory you want to query.
+	- buf: A pointer to a struct stat, where the file's information will be stored.
+	0: Success. The struct stat pointed to by buf is filled with the file's information.
+	-1: Failure. The global variable errno is set to indicate the error 
+*/
 int	builtin_cd(t_ast_node *node, t_env **env)
 {
 	char		*tmp;
@@ -43,8 +78,8 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 	struct stat	info;
 
 	if (getcwd(old_pwd, PATH_MAX) == NULL)
-		return (errno); //need to check what error msg;
-	if (node->args_count == 1 || ft_strcmp(node->args[1], '-') == 0
+		return (error("cd", NULL), EXIT_FAILURE);
+	if (node->argc == 1 || ft_strcmp(node->args[1], '-') == 0
 		|| ft_strcmp(node->args[1], '~') == 0)
 		return (cd_dir(node));
 	else
@@ -55,11 +90,12 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 			return (error("cd", "not a directory"), EXIT_FAILURE);
 		if (access(node->args[1], R_OK || X_OK) == -1)
 			return (error("cd", "Permission denied"), EXIT_FAILURE);
-		if (!stat(node->args[1],&info))
+		if (stat(node->args[1],&info) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		if (chdir(node->args[1]) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		tmp = node->args[1];
 	}	
-	return (update_env(env, "OLDPWD", old_pwd) || update_env(env, "PWD", tmp));
+	update_pwd(*(node->env), old_pwd, tmp);
+	return ();
 }

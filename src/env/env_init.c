@@ -93,6 +93,26 @@ t_env	*build_env(char **env)
 	return (envs);
 }
 
+void	setup_shlvl(t_env *new)
+{
+	int	old_shlvl;
+
+	if (new->value)
+	{
+		old_shlvl = ft_atoi(new->value);
+		if (old_shlvl < 0)
+			new->value = ft_atoi(0);
+		else if (old_shlvl >= 999)
+		{
+			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
+			ft_putendl_fd("too high, resetting to 1", 2);
+			new->value = ft_itoa(1);
+		}
+		else
+			new->value = ft_itoa(++old_shlvl);
+		free(new->value); //it shd be free
+	}
+}
 
 t_env	**get_env_list(void)
 {
