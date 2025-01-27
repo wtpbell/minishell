@@ -17,10 +17,17 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
 			  $(LEXER_DIR)/token/token_create.c \
 			  $(LEXER_DIR)/token/token_type.c \
+			  $(LEXER_DIR)/handler/expansion_braced_handler.c \
+			  $(LEXER_DIR)/handler/expansion_handler.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
+			  $(LEXER_DIR)/handler/quote_validator.c \
+			  $(LEXER_DIR)/handler/tilde_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
-			  $(LEXER_DIR)/utils/char_checks.c
+			  $(LEXER_DIR)/heredoc/heredoc_handler.c \
+			  $(LEXER_DIR)/heredoc/heredoc_expansion.c \
+			  $(LEXER_DIR)/utils/char_check.c \
+			  $(LEXER_DIR)/utils/expansion_utils.c \
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/core/ast.c \

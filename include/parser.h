@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 09:21:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 09:20:30 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct s_ast_node
 {
 	t_token_type		type;
 	char				**args;
+	int					argc;
 	t_redirection		*redirections;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;

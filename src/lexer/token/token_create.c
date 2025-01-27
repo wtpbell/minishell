@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:12:53 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:52:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 17:08:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/* Create a new token */
 t_token	*create_token(char *content, t_token_type type)
 {
 	t_token	*new_token;
@@ -27,6 +28,7 @@ t_token	*create_token(char *content, t_token_type type)
 	return (new_token);
 }
 
+/* Add a new token to the token list */
 void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;

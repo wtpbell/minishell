@@ -6,22 +6,25 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 08:57:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/24 08:49:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Make sure the token is a left parenthesis */
 static int	is_left_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_LPAREN);
 }
 
+/* Make sure the token is a right parenthesis */
 static int	is_right_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_RPAREN);
 }
 
+/* Handle syntax errors related to parentheses */
 static t_ast_node	*handle_group_error(char *msg)
 {
 	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
@@ -30,6 +33,7 @@ static t_ast_node	*handle_group_error(char *msg)
 	return (NULL);
 }
 
+/* Parses the parenthesised expression to create an AST node */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;

@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   parser.c                                           :+:    :+:            */
+/*   ft_strcmp.c                                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 09:21:08 by spyun         ########   odam.nl         */
+/*   Created: 2025/01/27 08:53:46 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/27 08:54:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-
-/* Generate AST from token list (parsing starting point) */
-t_ast_node	*parse(t_token *tokens)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (!tokens)
-		return (NULL);
-	return (parse_pipeline(&tokens));
+	while (*s1 == *s2 && *s1 != '\0')
+	{
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-/* todo -> argument count */

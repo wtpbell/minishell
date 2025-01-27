@@ -6,23 +6,27 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 08:56:40 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 19:52:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Check for pipe (|) token */
 static int	is_pipe_token(t_token *token)
 {
 	return (token && token->type == TOKEN_PIPE);
 }
 
+/* Handling pipe syntax errors */
 static t_ast_node	*handle_pipe_error(void)
 {
-	ft_putendl_fd("minishell: syntax error near unexpected token '|'", STDERR_FILENO);
+	ft_putendl_fd("minishell: syntax error near unexpected token '|'",
+		STDERR_FILENO);
 	return (NULL);
 }
 
+/* Create a pipe node */
 static t_ast_node	*create_pipe_node(t_token **token)
 {
 	t_ast_node	*node;
@@ -41,6 +45,7 @@ static t_ast_node	*create_pipe_node(t_token **token)
 	return (node);
 }
 
+/* Parsing consecutive pipe commands */
 static t_ast_node	*parse_pipe_sequence(t_token **token)
 {
 	t_ast_node	*left;
@@ -68,6 +73,7 @@ static t_ast_node	*parse_pipe_sequence(t_token **token)
 	return (pipe_node);
 }
 
+/* Parsing the entire pipeline */
 t_ast_node	*parse_pipeline(t_token **token)
 {
 	if (!token || !*token)
