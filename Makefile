@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
@@ -11,7 +11,8 @@ OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
 
-SRC_FILES = $(SRC_DIR)/main.c
+SRC_FILES = $(SRC_DIR)/main.c \
+			$(SRC_DIR)/banner.c
 
 LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
@@ -37,6 +38,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/logic_parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/validator/validator.c \
 			   $(PARSER_DIR)/utils/free_utils.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

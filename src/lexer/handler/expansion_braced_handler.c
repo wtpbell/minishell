@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 08:43:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 09:00:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/27 10:52:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	init_param_exp(t_param_exp *exp)
 }
 
 /* Free the memory of the parameter extension structure */
-static void free_param_exp(t_param_exp *exp)
+static void	free_param_exp(t_param_exp *exp)
 {
 	if (!exp)
 		return ;
