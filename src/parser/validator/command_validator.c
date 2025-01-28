@@ -6,18 +6,22 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 14:46:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/28 18:01:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Checks for prohibited special characters in the filename.
+** Invalid if it contains characters such as ‘<’, ‘>’, ‘|’, ‘&’, ‘;’, ‘(’, ‘)’ */
 static int	is_invalid_filename_char(char c)
 {
 	return (c == '<' || c == '>' || c == '|' || c == '&'
 		|| c == ';' || c == '(' || c == ')');
 }
 
+/* Checks if the command name is valid
+** invalid if it is an empty string or contains special characters */
 int	is_valid_command_name(const char *cmd)
 {
 	int	i;
@@ -34,6 +38,8 @@ int	is_valid_command_name(const char *cmd)
 	return (1);
 }
 
+/* Validate redirect syntax
+** Return error if no filename or invalid filename */
 t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs)
 {
 	t_redirection	*curr;
@@ -50,6 +56,8 @@ t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs)
 	return (VALID_SUCCESS);
 }
 
+/* Complete validation of the command syntax.
+** Check for empty commands, bad syntax, too many arguments, invalid redirects, etc */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node)
 {
 	t_cmd_valid_error	redir_status;
@@ -74,6 +82,8 @@ t_cmd_valid_error	validate_command_syntax(t_ast_node *node)
 	return (VALID_SUCCESS);
 }
 
+/* Return the error message string corresponding to each error type
+** Define the message to be shown to the user for each error type */
 char	*get_validation_error_msg(t_cmd_valid_error error)
 {
 	static char	*messages[6];
