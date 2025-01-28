@@ -1,44 +1,57 @@
-1. Command-Line Input and History Management
+# Command-Line Input and History Management
 
-a. readline:
-Reads a single line of input from the user, displaying a prompt.
-It handles input interactively, supports editing (e.g., arrow keys),
-and offers a polished experience for the user.
+## a. readline:
+Reads a single line of input from the user, displaying a prompt. It handles input interactively, supports editing (e.g., arrow keys), and offers a polished experience for the user.
 
-b. add_history:
-Adds the provided input line to the history buffer so the user can recall 
-it using the up/down arrow keys in future sessions.
+## b. add_history:
+Adds the provided input line to the history buffer so the user can recall it using the up/down arrow keys in future sessions.
 
-c. rl_clear_history: 
-Clears all history entries. Use this to manage memory 
-or reset history when exiting the shell.
+## c. rl_clear_history: 
+Clears all history entries. Use this to manage memory or reset history when exiting the shell.
 
-d. rl_on_new_line, rl_replace_line, rl_redisplay: 
+## d. rl_on_new_line, rl_replace_line, rl_redisplay:
 Functions for customizing the line-editing behavior of readline.
-e.g.	rl_on_new_line();              // Notify readline about a new line
-		rl_replace_line("new input", 1); // Replace the current input line
-		rl_redisplay();                // Redisplay the updated line
 
-2. Signal Handling
+```c
+rl_on_new_line();              // Notify readline about a new line
+rl_replace_line("new input", 1); // Replace the current input line
+rl_redisplay();                // Redisplay the updated line
+```
 
-a. signal: 
+# Signal Handling
+
+## a. signal:
 Installs a signal handler for a specific signal.
-e.g. signal(SIGINT, handle_sigint); // Handle Ctrl+C
 
-b. sigaction:
+```c
+signal(SIGINT, handle_sigint); // Handle Ctrl+C
+```
+
+## b. sigaction:
 A more robust alternative to signal for handling signals.
 
-c. kill: Sends a signal to a process.
-e.g. kill(pid, SIGKILL); // Forcefully kill a process
+## c. kill:
+Sends a signal to a process.
 
-3. File and Directory Management
+```c
+kill(pid, SIGKILL); // Forcefully kill a process
+```
 
-a. stat, lstat, fstat: Get information about a file.
-e.g. struct stat file_stat;
-	if (stat("file.txt", &file_stat) == 0) 
-		printf("File size: %ld bytes\n", file_stat.st_size);
+# File and Directory Management
+
+## a. stat, lstat, fstat:
+Get information about a file.
+
+```c
+struct stat file_stat;
+if (stat("file.txt", &file_stat) == 0) 
+    printf("File size: %ld bytes\n", file_stat.st_size);
+```
+
+### struct stat:
+```c
 struct stat {
-	dev_t     st_dev;     // Device ID of the filesystem
+    dev_t     st_dev;     // Device ID of the filesystem
     ino_t     st_ino;     // Inode number
     mode_t    st_mode;    // File type and mode (permissions)
     nlink_t   st_nlink;   // Number of hard links
@@ -48,43 +61,112 @@ struct stat {
     time_t    st_atime;   // Time of last access
     time_t    st_mtime;   // Time of last modification
     time_t    st_ctime;   // Time of last status change
-	blksize_t st_blksize; A file system-specific preferred I/O block size for this object. 
-						On some file system types, this may vary from file to file.
-	blkcnt_t st_blocks; Number of blocks allocated for this file.
-	mode_t st_attr; The DOS-style attributes for this file (see Flags). 
-					This is a PTC MKS Toolkit UNIX APIs extension.
-}; 
+    blksize_t st_blksize; // Preferred I/O block size
+    blkcnt_t  st_blocks;  // Number of blocks allocated
+    mode_t    st_attr;    // DOS-style attributes (MKS Toolkit extension)
+};
+```
 
-b. getcwd: Gets the current working directory.
-e.g. char cwd[1024];
-	if (getcwd(cwd, sizeof(cwd)))
-	printf("Current directory: %s\n", cwd);
+## b. getcwd:
+Gets the current working directory.
 
-c. chdir: Changes the current working directory.
-e.g. chdir("/home/user");
+```c
+char cwd[1024];
+if (getcwd(cwd, sizeof(cwd)))
+    printf("Current directory: %s\n", cwd);
+```
 
-d.unlink: Deletes a file.
-e.g.unlink("file.txt");
+## c. chdir:
+Changes the current working directory.
 
-3. Directory Navigation
-- opendir, readdir, closedir: Functions for reading directories.
-e.g. DIR *dir = opendir(".");
-	struct dirent *entry;
-	while ((entry = readdir(dir)) != NULL)
-	{
-	printf("%s\n", entry->d_name);
-	}
-	closedir(dir);
+```c
+chdir("/home/user");
+```
 
-4. TTY and Terminal Control
+## d. unlink:
+Deletes a file.
 
-a. isatty: Checks if a file descriptor is associated with a terminal.
-e.g. if (isatty(STDIN_FILENO))
-		printf("Interactive shell\n");
+```c
+unlink("file.txt");
+```
 
-b. ttyname: Gets the name of the terminal associated with a file descriptor.
-e.g. printf("Terminal: %s\n", ttyname(STDIN_FILENO));
+# Directory Navigation
 
-c. ioctl: Configures device settings. Commonly used for terminals.
+## opendir, readdir, closedir:
+Functions for reading directories.
 
-d. tcsetattr, tcgetattr: Set or get terminal attributes.
+```c
+DIR *dir = opendir(".");
+struct dirent *entry;
+while ((entry = readdir(dir)) != NULL) {
+    printf("%s\n", entry->d_name);
+}
+closedir(dir);
+```
+
+# TTY and Terminal Control
+
+## a. isatty:
+Checks if a file descriptor is associated with a terminal.
+
+```c
+if (isatty(STDIN_FILENO))
+    printf("Interactive shell\n");
+```
+
+## b. ttyname:
+Gets the name of the terminal associated with a file descriptor.
+
+```c
+printf("Terminal: %s\n", ttyname(STDIN_FILENO));
+```
+
+## c. ioctl:
+Configures device settings. Commonly used for terminals.
+
+## d. tcsetattr, tcgetattr:
+Set or get terminal attributes.
+
+# Command Categories
+
+| Command   | Scope                  | Hidden | Execution Context |
+|-----------|------------------------|--------|-------------------|
+| cd        | Local + Environment    | No     | Parent            |
+| export    | Environment (Exported) | No     | Parent            |
+| unset     | Environment/Local      | Yes    | Parent            |
+| exit      | Local                  | No     | Parent            |
+| echo      | Local                  | No     | Child             |
+| env       | Environment (Exported) | No     | Child             |
+| pwd       | Local                  | No     | Child             |
+| ls        | Local                  | No     | Child             |
+| grep      | Local                  | No     | Child             |
+| history   | Local                  | No     | Parent            |
+| kill      | Local                  | No     | Child             |
+| type      | Local                  | No     | Parent            |
+
+# Scope Example
+
+| Command       | Scopes                     | Example                                                |
+|---------------|----------------------------|--------------------------------------------------------|
+| export VAR=1  | Environment (Both)         | Variable VAR is available to both parent and children. |
+| unset VAR     | Local/Environment Hidden   | Variable VAR is hidden in the parent and not passed.   |
+
+# Execution Context Summary
+
+| Context  | Commands                                                             |
+|----------|----------------------------------------------------------------------|
+| Parent   | cd, export, unset, history                                           |
+| Child    | ls, grep, pwd, env, echo, kill, test, which                          |
+| Both     | None                                                                 |
+
+# Key Notes
+
+- **Parent Process (Expansion):**
+  - The shell performs expansions such as:
+    - **Variable expansion:** Replace `$HOME` with `/home/user`.
+    - **Wildcard expansion:** Replace `*.txt` with `file1.txt file2.txt`.
+    - **Command substitution:** Replace `$(pwd)` with the output of `pwd`.
+  - The resulting expanded command is passed to the child process for execution.
+
+- **Child Process (Execution):**
+  - The shell forks a new process to execute the expanded command, preserving the parent shell state.
