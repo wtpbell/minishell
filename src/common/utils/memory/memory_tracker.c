@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 15:15:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/28 15:34:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	context_free(t_mem_context *ctx, void *ptr)
 	curr = ctx->head;
 	while (curr)
 	{
-		if (curr->ptr = ptr)
+		if (curr->ptr == ptr)
 		{
 			if (prev)
 				prev->next = curr->next;
@@ -74,7 +74,7 @@ void	context_free(t_mem_context *ctx, void *ptr)
 	free(ptr);
 }
 
-void cleanup_mem_context(t_mem_context *ctx)
+void	cleanup_mem_context(t_mem_context *ctx)
 {
 	t_mem_tracker	*curr;
 	t_mem_tracker	*next;

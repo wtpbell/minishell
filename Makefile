@@ -9,7 +9,7 @@ LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
 COMMON_DIR = $(SRC_DIR)/common
 OBJ_DIR = obj
-INCLUDE_DIR = -I./include
+INCLUDE_DIR = include
 LIBFT_DIR = lib
 
 SRC_FILES = $(SRC_DIR)/main.c \

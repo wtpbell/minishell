@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 15:30:18 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/28 15:37:48 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 		if (!node->left || node->right)
 			return (SYNTAX_INVALID_COMBINATION);
 	}
-	if (node->type = TOKEN_REDIR_IN || node->type == TOKEN_REDIR_OUT
+	if (node->type == TOKEN_REDIR_IN || node->type == TOKEN_REDIR_OUT
 		|| node->type == TOKEN_HEREDOC || node->type == TOKEN_APPEND)
 	{
-		if (!node->left || !node->right != TOKEN_WORD)
+		if (!node->left || node->right != TOKEN_WORD)
 			return (SYNTAX_INVALID_COMBINATION);
 		if (!node->left && node->right != TOKEN_WORD
 			&& node->left->type != TOKEN_REDIR_IN && node->left->type != TOKEN_REDIR_OUT
 			&& node->left->type != TOKEN_HEREDOC && node->left->type != TOKEN_APPEND)
 			return (SYNTAX_INVALID_COMBINATION);
 	}
-	if (node->type = TOKEN_PIPE)
+	if (node->type == TOKEN_PIPE)
 	{
 		if (node->right && node->right->type == TOKEN_PIPE)
 			return (SYNTAX_INVALID_SEQUENCE);
@@ -49,7 +49,7 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
 	{
 		if (node->right && (node->right->type == TOKEN_AND
-			|| node->right->type == TOKEN_OR))
+				|| node->right->type == TOKEN_OR))
 			return (SYNTAX_INVALID_SEQUENCE);
 	}
 	if (node->type == TOKEN_LPAREN)
