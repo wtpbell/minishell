@@ -34,7 +34,7 @@ static t_env	*env_int(char **key_value)
 	_: Represents the last executed command; its scope is set to ENVE.
 	?: Special variable representing the exit status of the last command.
 */
-t_env	*creat_env(char *env)
+t_env	*create_env(char *env)
 {
 	t_env	*new;
 	char	**key_value;
@@ -49,7 +49,7 @@ t_env	*creat_env(char *env)
 		new->scope = EXPORT; //exported to child processes when creating new shell
 	}
 	else if (ft_strcmp(new->key, "SHLVL") == 0)
-		set_shelvl(new);
+		setup_shlvl(new);
 	else if (ft_strcmp(new->key, "_") == 0)
 		new->scope = ENVE;
 	else if (ft_strcmp(new->key, "?") == 0)

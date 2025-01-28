@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/27 11:51:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 15:34:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	ft_unset(t_ast_node *node, t_env **env)
 			tmp->hide = true;
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
 static int	builtin_env(t_ast_node *node, t_env **env)
@@ -63,7 +63,7 @@ static int	builtin_pwd(t_ast_node *node, t_env **env)
 	if (getcwd(cwd, PATH_MAX) == NULL)
 		return (errno); //check what error 
 	printf("%s\n", cwd);
-	return (EXIT_SUCCESS);
+	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
 
@@ -77,7 +77,7 @@ int	execute_builtin(t_ast_node *node, t_env **env)
 	if (strcmp(args[0], "cd") == 0)
 		return (g_exit_status = builtin_cd(node, env));
 	if (strcmp(args[0], "export") == 0)
-		return (g_exit_status = builtin_export(node, env));
+		return (g_exit_status = builtin_export(node));
 	if (strcmp(args[0], "unset") == 0)
 		return (g_exit_status = builtin_unset(node, env));
 	if (strcmp(args[0], "env") == 0)

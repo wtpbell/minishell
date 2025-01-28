@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/27 15:15:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 17:49:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ typedef enum	e_scope
 
 typedef struct	s_env
 {
-	char		*key;
-	char		*value;
-	bool		hide; // hide from env, handle "unset" without removing them
-	t_scope		scope;
-	t_env		*prev;
-	t_env		*next;
+	char				*key;
+	char				*value;
+	bool				hide; // hide from env, handle "unset" without removing them
+	t_scope				scope;
+	struct t_env		*prev;
+	struct t_env		*next;
 }	t_env;
 
 
@@ -53,5 +53,7 @@ t_env	**get_env_list(void);
 void	add_env(t_env **env, t_env *new);
 void	setup_shlvl(t_env *new);
 t_env	*get_env(t_env *envs, const char *key);
-
+t_env	*create_env(char *env);
+t_env	*build_env(char **env);
+t_env	**get_env_list(void);
 #endif

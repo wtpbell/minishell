@@ -7,6 +7,7 @@ LDFLAGS = -fsanitize=address
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
+COMMON_DIR = $(SRC_DIR)/common
 EXECUTOR_DIR = $(SRC_DIR)/executor
 BUITLIN_DIR = $(SRC_DIR)/builtin
 ENV_DIR = $(SRC_DIR)/env

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 11:28:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 17:50:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "executor.h"
 #include "env.h"
 
-#include <termios.h>
+
 #include <unistd.h>
 #include <asm-generic/termbits.h>
 

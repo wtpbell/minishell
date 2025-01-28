@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/27 18:41:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 14:55:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,5 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 		tmp = node->args[1];
 	}	
 	update_pwd(*(node->env), old_pwd, tmp);
-	return ();
+	return (set_underscore(node->args, node->args), EXIT_SUCCESS);
 }

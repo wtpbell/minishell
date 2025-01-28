@@ -14,6 +14,8 @@
 
 void executor(t_ast_node *node)
 {
+	set_underscore(node->argc, node->args);
+	
 	if (!node)
 		return;
 	if (node->type == TOKEN_EXEC)

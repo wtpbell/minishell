@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/27 18:44:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 18:17:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,30 @@ int	set_env(t_env *envs, const char *key, const char *new_value)
 	return (0);
 }
 
-void	set_underscore(int argc, char **argv)
+/*
+	_ is automatically updated by the shell to store:
+	- The last argument of the last command.
+	- Or the full path of the executed command if there are no arguments.
+*/
+void	set_underscore(int argc, char **args)
 {
-	
+	char	**splited;
+	int		i;
+
+	if ((argc - 1) != 0)
+	{
+		set_env(*get_env_list(), '_', args[argc - 1]);
+		return	;
+	}
+	splited = ft_split(args[argc - 1], "/");
+	if (!splited)
+		return ;
+	i = 0;
+	while (splited[i])
+		i++;
+	if (i == 0)
+		i = 1;
+	if (i > 0)
+		set_env(*get_env_list(), '_', splited[i - 1]);
+	free(splited); //free splited;
 }

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 18:31:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/28 18:03:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # define SHELL_ERROR "minishell: "
 # define MANY_ARGS_ERROR "Too many argument!"
 # define PATH_MAX 4096
+# define DECLARE "declare -x "
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"

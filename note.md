@@ -170,3 +170,19 @@ Set or get terminal attributes.
 
 - **Child Process (Execution):**
   - The shell forks a new process to execute the expanded command, preserving the parent shell state.
+
+
+# Buildin commands
+
+- **Export Command:**
+  -**Marks Variables for Export:** export does not create new variables. Instead, it marks existing shell variables as environment variables, making them available to child processes.
+  -**Updates the Environment:** once a variable is exported, it is added to the shell's environment list, which is inherited by all subsequent child processes.
+  - **Persistent for the Session:** exported variables remain in the shell's environment until explicitly removed (e.g., with unset) or until the shell session ends.
+
+- **Command Syntax**
+export VAR=value				# Define and export a variable in one step.
+								Any child processes will now inherit VAR
+VAR=value; export VAR			# create local variable, then mark an existing variable for export
+export VAR1 VAR2				# Mark multiple variables for export
+export -p						# List all exported variables
+unset VAR						# Remove VAR entirely(both local variables and environment)
