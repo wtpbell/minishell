@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 12:16:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/28 15:16:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 /* Generate AST from token list (parsing starting point) */
 t_ast_node	*parse(t_token *tokens)
 {
-	t_ast_node		*root;
-	t_valid_error	status;
+	t_ast_node			*root;
+	t_cmd_valid_error	status;
 
 	if (!tokens)
 		return (NULL);
