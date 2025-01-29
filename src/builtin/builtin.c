@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 13:30:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 19:14:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "builtin.h"
 
-static int	ft_unset(t_ast_node *node, t_env **env)
+static int	builtin_unset(t_ast_node *node, t_env **env)
 {
 	t_env	*tmp;
 	int		i;
@@ -67,25 +68,31 @@ static int	builtin_pwd(t_ast_node *node, t_env **env)
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
-
-int	execute_builtin(t_ast_node *node, t_env **env)
+/*
+	This function is responsible for checking whether the command (represented by args)
+	corresponds to a built-in shell command like pwd, env, cd, etc
+	is_builtin() takes a string (the command name) as an argument (char *args), checks it
+	against a list of known built-ins, and returns a function pointer to the corresponding
+	built-in handler
+	The return type of is_builtin is a function pointer: int (*)(t_ast_node *node)
+*/
+int	(*is_builtin(char *args))(t_ast_node *node)
 {
-	char **args;
-
-	args = node->args;
 	if (!args || !args[0])
-		return (g_exit_status = EXIT_FAILURE);
-	if (strcmp(args[0], "cd") == 0)
-		return (g_exit_status = builtin_cd(node, env));
-	if (strcmp(args[0], "export") == 0)
-		return (g_exit_status = builtin_export(node));
-	if (strcmp(args[0], "unset") == 0)
-		return (g_exit_status = builtin_unset(node, env));
-	if (strcmp(args[0], "env") == 0)
-		return (g_exit_status = builtin_env(node, env));
-	if (strcmp(args[0], "echo") == 0)
-		return (g_exit_status = builtin_echo(node));
-	if (strcmp(args[0], "exit") == 0)
-		builtin_exit(node);
-	return (g_exit_status = EXIT_FAILURE);
+		return (NULL);
+	if (ft_strcmp(args, "pwd") == 0)
+		return (builtin_pwd);
+	else if (ft_strcmp(args, "env") == 0)
+		return (builtin_env);
+	else if (ft_strcmp(args, "unset") == 0)
+		return (builtin_unset);
+	else if (ft_strcmp(args, "echo") == 0)
+		return (builtin_echo);
+	else if (ft_strcmp(args, "cd") == 0)
+		return (builtin_cd);
+	else if (ft_strcmp(args, "exit") == 0)
+		return (builtin_exit);
+	else if (ft_strcmp(args, "export") == 0)
+		return (builtin_export);
+	return (NULL);
 }

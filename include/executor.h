@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 17:19:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 20:19:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int		exec_redir(t_ast_node *node);
 void	executor(t_ast_node *node);
 
 /*utils*/
-void	update_exit_status(int argc, char **args);
+void	set_exit_status(int status);
+int		get_exit_status(void);
 
 #endif

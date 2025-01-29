@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 17:50:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 17:43:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 }
 
-static void	minishell(t_env **env_)
+static void	minishell(void)
 {
 	char		*line;
 	t_token		*tokens;
@@ -69,7 +69,7 @@ int	main(int ac, char **av, char **env)
 	env_ = get_env_list();
 	*env_ = build_env(env);
 	init_terminal();
-	minishell(env_);
+	minishell();
 	init_terminal();
 	free_env(env_);
 	return (EXIT_SUCCESS);

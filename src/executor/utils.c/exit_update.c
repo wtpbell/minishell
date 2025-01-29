@@ -12,6 +12,7 @@
 
 #include "env.h"
 #include "minishell.h"
+#include "executor.h"
 
 /*
 	1. Command Execution (exec_cmd)
@@ -35,26 +36,14 @@
 	255*			Exit status out of range			exit -1
 */
 
-void	update_exit_status(int argc, char **args)
+
+void	set_exit_status(int status)
 {
-	if (argc == 0)
-	{
-		g_exit_status = 0;
-		return ;
-	}
-	if (argc == 1 && is_valid_numeric(args[0]) && is_within_long_range(args[0]))
-	{
-		g_exit_status = atoi(args[0]) % 256;
-		return ;
-	}
-	if (argc == 1)
-	{
-		fprintf(stderr, "minishell: exit: %s: numeric argument required\n", args[0]);
-		exit(g_exit_status = 255);
-	}
-	if (argc > 1)
-	{
-		fprintf(stderr, "minishell: exit: too many arguments\n");
-		g_exit_status = 1;
-	}
+	g_exit_status = status;
+	set_env(*get_env_list(), "?", ft_itoa(status));
+}
+
+int	get_exit_status(void)
+{
+	return (g_exit_status);
 }

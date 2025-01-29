@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/23 17:54:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 16:20:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 	echo with multiple -n, skip those -n
 	echo with invalid -n, e.g. -nn, will directly output -nn
 */
-
 static int	valid_n_flag(const char *arg)
 {
 	int	i;
@@ -42,7 +41,7 @@ int	builtin_echo(t_ast_node *node)
 	i = 1;
 	no_newline = -1;
 	if (!node || !node->args)
-		return (EXIT_FAILURE);
+		return (set_exit_status(1), EXIT_FAILURE);
 	if (node->args[i] && ft_strncmp(node->args[++i], "-n", 2) == 0
 		&& valid_n_flag(node->args[i]))
 		no_newline = 1;
@@ -58,5 +57,5 @@ int	builtin_echo(t_ast_node *node)
 	}
 	if (!no_newline)
 		printf("\n");
-	return (EXIT_SUCCESS);
+	return (set_exit_status(0), EXIT_SUCCESS);
 }

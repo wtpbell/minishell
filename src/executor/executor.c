@@ -12,24 +12,25 @@
 
 #include "executor.h"
 
-void	executor(t_ast_node *node)
+int	executor_status(t_ast_node *node)
 {	
 	if (!node)
 		return ;
 	if (node->type == TOKEN_EXEC)
-		exec_cmd(node);
+		return (exec_cmd(node));
 	else if (node->type == TOKEN_PIPE)
-		exec_pipe(node);
+		return (exec_pipe(node));
 	else if (node->type == TOKEN_AND || node->type == TOKEN_OR)
-		exec_ctrl(node);
-	else if (node->type & (TOKEN_REDIR_IN | TOKEN_REDIR_OUT))
-		exec_redir(node);
+		return (exec_ctrl(node));
+	else if (node->type ==  (TOKEN_REDIR_IN) || node->type ==  (TOKEN_REDIR_OUT))
+		return (exec_redir(node));
 	else if (node->type == TOKEN_BLOCK)
-		exec_block(node);
-	if (node->type == TOKEN_PIPE || node->type == TOKEN_AND || node->type == TOKEN_OR)
-	{
-		executor(node->left);
-		executor(node->right);
-	}
+		return (exec_block(node));
 }
 
+void	executor(t_ast_node *node)
+{
+	if (!node)
+		return ;
+	set_exit_status(executor_status(node));
+}
