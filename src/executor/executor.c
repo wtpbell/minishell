@@ -12,12 +12,10 @@
 
 #include "executor.h"
 
-void executor(t_ast_node *node)
-{
-	set_underscore(node->argc, node->args);
-	
+void	executor(t_ast_node *node)
+{	
 	if (!node)
-		return;
+		return ;
 	if (node->type == TOKEN_EXEC)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)

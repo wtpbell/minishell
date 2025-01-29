@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/28 15:34:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 13:30:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static int	builtin_env(t_ast_node *node, t_env **env)
 
 	if (!node || !env || !*env)
 		return (EXIT_FAILURE);
+	set_underscore(node->argc, node->args);
 	if (node->argc > 1)
 	{
 		ft_putendl_fd("Too many args", STDERR_FILENO);
