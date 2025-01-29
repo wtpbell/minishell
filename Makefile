@@ -39,6 +39,8 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/logic_parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
+			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
 			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \

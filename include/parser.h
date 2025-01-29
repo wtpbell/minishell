@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 12:42:43 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 16:56:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ typedef struct s_redirection
 	char					*file;
 	struct s_redirection	*next;
 }	t_redirection;
+
+typedef struct s_last_redirs
+{
+	t_redirection	*in;
+	t_redirection	*out;
+	t_redirection	*heredoc;
+	t_redirection	*append;
+}	t_last_redirs;
 
 typedef struct s_ast_node
 {
@@ -81,4 +89,8 @@ t_syntax_error		validate_syntax_tree(t_ast_node *root);
 
 char				*get_validation_error_msg(t_cmd_valid_error error);
 char				*get_syntax_error_msg(t_syntax_error error);
+
+t_ast_node			*optimize_ast(t_ast_node *root);
+t_ast_node			*remove_empty_nodes(t_ast_node *node);
+t_ast_node			*optimize_empty_node(t_ast_node *node);
 #endif
