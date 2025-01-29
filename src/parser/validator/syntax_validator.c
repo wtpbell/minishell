@@ -6,52 +6,38 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 15:37:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 12:26:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static t_syntax_error	validate_operator_precedence(t_ast_node *node)
+/* Validate pipe operator syntax */
+static t_syntax_error	validate_pipe_syntax(t_ast_node *node)
 {
-	if (!node)
-		return (SYNTAX_OK);
-	if (node->type == TOKEN_PIPE)
-	{
-		if (!node->left || !node->right)
-			return (SYNTAX_INVALID_COMBINATION);
-	}
-	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
-	{
-		if (!node->left || !node->right)
-			return (SYNTAX_INVALID_COMBINATION);
-	}
-	if (node->type == TOKEN_LPAREN || node->type == TOKEN_RPAREN)
-	{
-		if (!node->left || node->right)
-			return (SYNTAX_INVALID_COMBINATION);
-	}
-	if (node->type == TOKEN_REDIR_IN || node->type == TOKEN_REDIR_OUT
-		|| node->type == TOKEN_HEREDOC || node->type == TOKEN_APPEND)
-	{
-		if (!node->left || node->right != TOKEN_WORD)
-			return (SYNTAX_INVALID_COMBINATION);
-		if (!node->left && node->right != TOKEN_WORD
-			&& node->left->type != TOKEN_REDIR_IN && node->left->type != TOKEN_REDIR_OUT
-			&& node->left->type != TOKEN_HEREDOC && node->left->type != TOKEN_APPEND)
-			return (SYNTAX_INVALID_COMBINATION);
-	}
-	if (node->type == TOKEN_PIPE)
-	{
-		if (node->right && node->right->type == TOKEN_PIPE)
-			return (SYNTAX_INVALID_SEQUENCE);
-	}
-	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
-	{
-		if (node->right && (node->right->type == TOKEN_AND
-				|| node->right->type == TOKEN_OR))
-			return (SYNTAX_INVALID_SEQUENCE);
-	}
+	if (!node->left || !node->right)
+		return (SYNTAX_INVALID_COMBINATION);
+	if (node->right && node->right->type == TOKEN_PIPE)
+		return (SYNTAX_INVALID_SEQUENCE);
+	return (SYNTAX_OK);
+}
+
+/* Validate logical operators (AND, OR) syntax */
+static t_syntax_error	validate_logic_syntax(t_ast_node *node)
+{
+	if (!node->left || !node->right)
+		return (SYNTAX_INVALID_COMBINATION);
+	if (node->right && (node->right->type == TOKEN_AND
+			|| node->right->type == TOKEN_OR))
+		return (SYNTAX_INVALID_SEQUENCE);
+	return (SYNTAX_OK);
+}
+
+/* Validate parentheses syntax */
+static t_syntax_error	validate_paren_syntax(t_ast_node *node)
+{
+	if (!node->left || node->right)
+		return (SYNTAX_INVALID_COMBINATION);
 	if (node->type == TOKEN_LPAREN)
 	{
 		if (!node->left)
@@ -65,20 +51,39 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
+/* Main operator precedence validation function */
+static t_syntax_error	validate_operator_precedence(t_ast_node *node)
+{
+	if (!node)
+		return (SYNTAX_OK);
+	if (node->type == TOKEN_PIPE)
+		return (validate_pipe_syntax(node));
+	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
+		return (validate_logic_syntax(node));
+	if (node->type == TOKEN_LPAREN || node->type == TOKEN_RPAREN)
+		return (validate_paren_syntax(node));
+	if (node->type == TOKEN_REDIR_IN || node->type == TOKEN_REDIR_OUT
+		|| node->type == TOKEN_HEREDOC || node->type == TOKEN_APPEND)
+		return (validate_redir_syntax(node));
+	return (SYNTAX_OK);
+}
+
 t_syntax_error	validate_syntax_tree(t_ast_node *root)
 {
-	t_syntax_error	error;
+	t_syntax_error	left_error;
+	t_syntax_error	right_error;
+	t_syntax_error	node_error;
 
 	if (!root)
 		return (SYNTAX_OK);
-	error = validate_operator_precedence(root);
-	if (error != SYNTAX_OK)
-		return (error);
-	error = validate_syntax_tree(root->left);
-	if (error != SYNTAX_OK)
-		return (error);
-	error = validate_syntax_tree(root->right);
-	if (error != SYNTAX_OK)
-		return (error);
+	node_error = validate_operator_precedence(root);
+	if (node_error != SYNTAX_OK)
+		return (node_error);
+	left_error = validate_syntax_tree(root->left);
+	if (left_error != SYNTAX_OK)
+		return (left_error);
+	right_error = validate_syntax_tree(root->right);
+	if (right_error != SYNTAX_OK)
+		return (right_error);
 	return (SYNTAX_OK);
 }
