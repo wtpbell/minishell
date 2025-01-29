@@ -6,13 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 16:28:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 22:57:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "env.h"
-#include "minishell.h"
 
 static void	print_envs(t_env *env)
 {
@@ -80,7 +78,7 @@ static void	append_env_value(t_env *env, char **key, char **value)
 	}
 }
 
-void	modify_env(t_env **env, char *args)
+static void	modify_env(t_env **env, char *args)
 {
 	char	**split;
 

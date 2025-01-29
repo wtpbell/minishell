@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/28 17:41:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 23:57:50 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "env.h"
 
 static void	ft_swap(t_env *a, t_env *b)
 {

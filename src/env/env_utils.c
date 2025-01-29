@@ -37,29 +37,5 @@ char	*get_env_value(t_env *envs, const char *key)
 	return (NULL);
 }
 
-char	**rebuild_env_to_char(t_env *envs)
-{
-	char	**env;
-	int		i;
 
-	i = 0;
-	for (t_env *tmp = envs; tmp; tmp = tmp->next)
-		if (!tmp->hide)
-			i++;
-
-	env = malloc((i + 1) * sizeof(char *));
-	i = 0;
-	while (envs)
-	{
-		if (!envs->hide)
-		{
-			env[i] = malloc(strlen(envs->key) + strlen(envs->value) + 2);
-			sprintf(env[i], "%s=%s", envs->key, envs->value);
-			i++;
-		}
-		envs = envs->next;
-	}
-	env[i] = NULL;
-	return (env);
-}
 

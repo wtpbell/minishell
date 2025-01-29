@@ -37,33 +37,35 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/free_utils.c
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
-			   $(ENV_DIR)/env_utils.c
+			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_set.c \
 
 EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
 				 $(EXECUTOR_DIR)/utils/exit_update.c \
+				 $(EXECUTOR_DIR)/error/error.c \
 
-BUILTIN_FILES =  $(BUILTIN_DIR)/builtin/builtin_exit.c \
-				 $(BUILTIN_DIR)/builtin/builtin_echo.c \
-				 $(BUILTIN_DIR)/builtin/builtin_export.c \
-				 $(BUILTIN_DIR)/builtin/builtin_cd.c \
-				 $(BUILTIN_DIR)/builtin/builtin.c \
-				 $(BUILTIN_DIR)/error/error.c 
+BUILTIN_FILES =  $(BUILTIN_DIR)/builtin_exit.c \
+				 $(BUILTIN_DIR)/builtin_echo.c \
+				 $(BUILTIN_DIR)/builtin_export.c \
+				 $(BUILTIN_DIR)/builtin_cd.c \
+				 $(BUILTIN_DIR)/builtin.c \
+				 $(BUILTIN_DIR)/utils.c 
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
-BUILTIN_DIR = $(BUILTIN_DIR:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+BUILTIN_OBJ = $(BUILTIN_DIR:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(EXECUTOR_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(EXECUTOR_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(EXECUTOR_OBJ) $(BUILTIN_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(EXECUTOR_FILES) $(BUILTIN_FILES)
 
 all: $(NAME)
 
@@ -78,8 +80,9 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/env
 	@mkdir -p $(OBJ_DIR)/executor
 	@mkdir -p $(OBJ_DIR)/executor/utils
-	@mkdir -p $(OBJ_DIR)/builtin/builtin
-	@mkdir -p $(OBJ_DIR)/builtin/error
+	@mkdir -p $(OBJ_DIR)/executor/error
+	@mkdir -p $(OBJ_DIR)/builtin
+
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

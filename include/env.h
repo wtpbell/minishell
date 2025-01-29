@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/28 17:49:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 00:08:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,25 @@ typedef struct	s_env
 	char				*value;
 	bool				hide; // hide from env, handle "unset" without removing them
 	t_scope				scope;
-	struct t_env		*prev;
-	struct t_env		*next;
+	struct s_env		*prev;
+	struct s_env		*next;
 }	t_env;
 
 
 /*env_init.c*/
-t_env	*creat_env(char *env);
-t_env	*build_env(char **env);
-t_env	**get_env_list(void);
-
-
-/*env_utils.c*/
-void	add_env(t_env **env, t_env *new);
-void	setup_shlvl(t_env *new);
-t_env	*get_env(t_env *envs, const char *key);
 t_env	*create_env(char *env);
 t_env	*build_env(char **env);
 t_env	**get_env_list(void);
+void	setup_shlvl(t_env *new);
+t_env	**get_env_list(void);
+
+/*env_utils.c*/
+t_env	*get_env(t_env *envs, const char *key);
+char	*get_env_value(t_env *envs, const char *key);
+
+/*env_set.c*/
+void	add_env(t_env **env, t_env *new);
+int		set_env(t_env *envs, const char *key, const char *new_value);
+void	set_underscore(int argc, char **args);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 20:19:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 23:03:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include "minishell.h"
 # include "parser.h"
 # include "env.h"
-# include <sys/types.h> 
+# include "builtin.h"
+# include <sys/types.h>
 
 # define MAX_STATUS_LEN 20
 # define EXIT_ERROR_CODE 255

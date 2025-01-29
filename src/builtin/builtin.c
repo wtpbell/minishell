@@ -6,12 +6,11 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 19:14:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/29 22:57:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-#include "builtin.h"
 
 static int	builtin_unset(t_ast_node *node, t_env **env)
 {
