@@ -41,6 +41,8 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
 			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
+			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
+			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
 			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
@@ -65,12 +67,16 @@ all: $(NAME)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)/lexer/handler
+	@mkdir -p $(OBJ_DIR)/lexer/heredoc
 	@mkdir -p $(OBJ_DIR)/lexer/init
 	@mkdir -p $(OBJ_DIR)/lexer/token
-	@mkdir -p $(OBJ_DIR)/lexer/handler
 	@mkdir -p $(OBJ_DIR)/lexer/utils
 	@mkdir -p $(OBJ_DIR)/parser/core
-	@mkdir -p $(OBJ_DIR)/parser/handlers
+	@mkdir -p $(OBJ_DIR)/parser/handler
+	@mkdir -p $(OBJ_DIR)/parser/optimizer
+	@mkdir -p $(OBJ_DIR)/parser/utils
+	@mkdir -p $(OBJ_DIR)/parser/validator
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

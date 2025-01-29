@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   skip_spaces.c                                      :+:    :+:            */
+/*   ft_skipspaces.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:00:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 10:00:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 17:10:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	skip_spaces(const char *str)
+int	ft_skipspaces(const char *str)
 {
 	int	i;
 
