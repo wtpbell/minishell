@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 17:09:06 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 16:07:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ int				is_in_quotes(t_tokenizer *tokenizer);
 int				is_special_in_quotes(char c, char quote_char);
 t_quote_state	get_quote_state(t_tokenizer *tokenizer);
 char			*get_var_value(char *str, int *pos, t_quote_state state);
+
+char			*expand_special_param(const char *param);
+char			*handle_extended_expansion(char *var_name, char *operator, char *word);
 
 t_token			*handle_word(t_tokenizer *tokenizer);
 char			*handle_expansion(t_tokenizer *tokenizer, char *word);

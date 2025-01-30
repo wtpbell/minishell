@@ -25,7 +25,7 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
 			  $(LEXER_DIR)/handler/tilde_handler.c \
-			  $(LEXER_DIR)/handler/var_expension_handler.c \
+			  $(LEXER_DIR)/handler/var_expansion_handler.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/heredoc/heredoc_handler.c \
