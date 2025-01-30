@@ -39,7 +39,7 @@ t_env	*create_env(char *env)
 	t_env	*new;
 	char	**key_value;
 
-	key_value = ft_split(env, "=");
+	key_value = ft_split(env, '=');
 	if (!key_value)
 		return (NULL); // need to free memory?
 	new = env_int(key_value);
@@ -54,6 +54,7 @@ t_env	*create_env(char *env)
 		new->scope = ENVE;
 	else if (ft_strcmp(new->key, "?") == 0)
 		new->scope = SPECIAL;
+	return (new);
 }
 
 static void	add_empty_env(t_env **env)
@@ -80,7 +81,7 @@ static void	add_empty_env(t_env **env)
 t_env	*build_env(char **env)
 {
 	t_env	*envs;
-	t_env	*tmp;
+	// t_env	*tmp;
 	int		i;
 
 	envs = NULL;
@@ -101,7 +102,7 @@ void	setup_shlvl(t_env *new)
 	{
 		old_shlvl = ft_atoi(new->value);
 		if (old_shlvl < 0)
-			new->value = ft_atoi(0);
+			new->value = ft_itoa(0);
 		else if (old_shlvl >= 999)
 		{
 			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);

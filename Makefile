@@ -45,12 +45,12 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils/exit_update.c \
 				 $(EXECUTOR_DIR)/error/error.c \
 
-BUILTIN_FILES =  $(BUILTIN_DIR)/builtin_exit.c \
-				 $(BUILTIN_DIR)/builtin_echo.c \
-				 $(BUILTIN_DIR)/builtin_export.c \
-				 $(BUILTIN_DIR)/builtin_cd.c \
-				 $(BUILTIN_DIR)/builtin.c \
-				 $(BUILTIN_DIR)/utils.c 
+BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
+				 $(BUITLIN_DIR)/builtin_echo.c \
+				 $(BUITLIN_DIR)/builtin_export.c \
+				 $(BUITLIN_DIR)/builtin_cd.c \
+				 $(BUITLIN_DIR)/builtin.c \
+				 $(BUITLIN_DIR)/utils.c 
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

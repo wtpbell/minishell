@@ -14,8 +14,6 @@
 
 int	executor_status(t_ast_node *node)
 {	
-	if (!node)
-		return ;
 	if (node->type == TOKEN_EXEC)
 		return (exec_cmd(node));
 	else if (node->type == TOKEN_PIPE)
@@ -26,6 +24,7 @@ int	executor_status(t_ast_node *node)
 		return (exec_redir(node));
 	else if (node->type == TOKEN_BLOCK)
 		return (exec_block(node));
+	return (EXIT_FAILURE);
 }
 
 void	executor(t_ast_node *node)

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 23:03:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 01:26:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_pipeline
 
 
 /*error*/
-void error(const char *word, const char *msg);
+void error(char *word, char *msg);
 
 /*execute_tree*/
 void	executor(t_ast_node *node);

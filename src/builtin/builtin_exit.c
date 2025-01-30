@@ -6,12 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 22:57:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 01:41:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include <limits.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 static bool	is_valid_numeric(char *arg)
 {
@@ -24,7 +26,7 @@ static bool	is_valid_numeric(char *arg)
 	if (arg[i] == '+' || arg[i] == '-')
 		i++;
 	j = 0;
-	while (arg[i + j] && isdigit(arg[i + j]))
+	while (arg[i + j] && ft_isdigit(arg[i + j]))
 		j++;
 	if (j > MAX_STATUS_LEN)
 		return (false);
@@ -53,7 +55,7 @@ static bool	is_within_long_range(char *arg)
 			sign = -1;
 		i++;
 	}
-	while (arg[i] && isdigit(arg[i]))
+	while (arg[i] && ft_isdigit(arg[i]))
 	{
 		if ((num > LLONG_MAX / 10) ||
 			(num == LLONG_MAX / 10 && (arg[i] - '0') > LLONG_MAX % 10))
@@ -79,22 +81,19 @@ int	builtin_exit(t_ast_node *node)
 	if (args && args[1])
 	{
 		// Free memory
-		update_exit_status(node->argc - 1, &args[1]);
+		exit((int)((unsigned char)get_exit_status()));
 	}
 	if (!(is_valid_numeric(args[1]) || is_within_long_range(args[1])))
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
 		// Free memory
-		set_exit_status(255);
-		exit(g_exit_status);
+		exit(255);
 	}
 	if (node->argc > 2)
 	{
 		ft_putendl_fd("minishell: exit: Too many arguments", STDERR_FILENO);
-		set_exit_status(1);
 		return (1);
 	}
-	set_exit_status((int)((unsigned char)ft_atoi(args[1])));
-	exit(g_exit_status);
+	exit((int)((unsigned char)ft_atoi(node->args[1])));
 	return (0);
 }
