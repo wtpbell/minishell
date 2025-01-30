@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 18:03:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 12:04:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,7 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+
+void	print_banner(void);
 
 #endif

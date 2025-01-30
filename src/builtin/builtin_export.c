@@ -6,11 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 22:57:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 11:25:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "env.h"
+#include "builtin.h"
 
 static void	print_envs(t_env *env)
 {
@@ -82,23 +84,23 @@ static void	modify_env(t_env **env, char *args)
 {
 	char	**split;
 
-	split = ft_split(args, "=");
+	split = ft_split_mini(args, "=");
 	if (!split)
-		return (NULL);
+		return ;
 	if (split[0])
-		append_env_value((*env), split[0], split[1]);
-	if (!is_valid_key(split[0]) || split[0] == '=')
+		append_env_value((*env), &split[0], &split[1]);
+	if (!is_valid_key(split[0]) || args[0] == '=')
 	{
 		ft_putstr_fd(args, STDERR_FILENO);
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		return ;
 	}
-	if (args[ft_strlen(args - 1)] == '=')
-		add_env_var(env, split[0], "");
-	else if (args[0] && !args[1])
-		add_env_var(env, split[0], NULL);
-	else
-		add_env_var(env, split[0], split[1]);
+	// if (args[ft_strlen(args - 1)] == '=')
+	// 	add_env_var(env, split[0], "");
+	// else if (args[0] && !args[1])
+	// 	add_env_var(env, split[0], NULL);
+	// else
+	// 	add_env_var(env, split[0], split[1]);
 }
 
 int	builtin_export(t_ast_node *node)
@@ -106,7 +108,7 @@ int	builtin_export(t_ast_node *node)
 	int	i;
 
 	i = 0;
-	sort_envs(node->env);
+	sort_env(node->env);
 	if (node->argc == 1)
 	{
 		print_envs(*(node->env));
@@ -115,7 +117,7 @@ int	builtin_export(t_ast_node *node)
 	else
 	{
 		while(++i < node->argc)
-			modify_env(node->env, node->args);
+			modify_env(node->env, node->args[i]);
 		return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 	}
 }

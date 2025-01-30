@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/29 22:57:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 11:29:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	cd_dir(t_ast_node *node)
 	if(getcwd(old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	tmp = NULL;
-	if (node->argc == 1 || ft_strcmp(node->args[1], '~') == 0)
+	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
 	{
 		tmp = get_env_value(*(node->env), "HOME");
 		if (!tmp)
@@ -50,7 +50,7 @@ static int	cd_dir(t_ast_node *node)
 		if (chdir(tmp) == -1)
 			return (EXIT_FAILURE);
 	}
-	else if (node->argc == 1 || ft_strcmp(node->args[1], '-') == 0)
+	else if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0)
 	{
 		tmp = get_env_value(*(node->env), "OLDPWD");
 		if (!tmp)
@@ -71,7 +71,7 @@ static int	cd_dir(t_ast_node *node)
 	0: Success. The struct stat pointed to by buf is filled with the file's information.
 	-1: Failure. The global variable errno is set to indicate the error 
 */
-int	builtin_cd(t_ast_node *node, t_env **env)
+int	builtin_cd(t_ast_node *node)
 {
 	char		*tmp;
 	char		old_pwd[PATH_MAX];
@@ -79,8 +79,8 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 
 	if (getcwd(old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
-	if (node->argc == 1 || ft_strcmp(node->args[1], '-') == 0
-		|| ft_strcmp(node->args[1], '~') == 0)
+	if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0
+		|| ft_strcmp(node->args[1], "~") == 0)
 		return (cd_dir(node));
 	else
 	{
@@ -97,5 +97,5 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 		tmp = node->args[1];
 	}	
 	update_pwd(*(node->env), old_pwd, tmp);
-	return (set_underscore(node->args, node->args), EXIT_SUCCESS);
+	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }

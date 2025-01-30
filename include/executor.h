@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/30 01:26:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 15:29:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ typedef struct s_pipeline
 void error(char *word, char *msg);
 
 /*execute_tree*/
-void	executor(t_ast_node *node);
 int		exec_cmd(t_ast_node *node);
 int		exec_pipe(t_ast_node *node);
 int		exec_ctrl(t_ast_node *node);
@@ -48,9 +47,12 @@ int		exec_redir(t_ast_node *node);
 
 /*executor*/
 void	executor(t_ast_node *node);
+int		executor_status(t_ast_node *node);
 
 /*utils*/
 void	set_exit_status(int status);
 int		get_exit_status(void);
+void	sort_env(t_env **envs);
+char	**ft_split_mini(char const *s, char *set);
 
 #endif

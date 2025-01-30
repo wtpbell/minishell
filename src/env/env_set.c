@@ -6,11 +6,10 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/30 01:12:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 09:49:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "env.h"
 #include "minishell.h"
 

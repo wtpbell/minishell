@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "env.h"
-#include "executor.h"
 #include "minishell.h"
+#include "parser.h"
+#include "executor.h"
 #include <fcntl.h>
 
 /*
@@ -24,7 +25,12 @@
 */
 int	exec_ctrl(t_ast_node *node)
 {
+	int	(*builtin)(t_ast_node *node);
 
+	builtin = is_builtin(node->args[0]);
+	if (builtin)
+		return (set_exit_status(builtin(node)), get_exit_status());
+	return (1); //temprory
 }
 
 /*
@@ -37,7 +43,12 @@ int	exec_ctrl(t_ast_node *node)
 */
 int	exec_block(t_ast_node *node)
 {
+	int	(*builtin)(t_ast_node *node);
 
+	builtin = is_builtin(node->args[0]);
+	if (builtin)
+		return (set_exit_status(builtin(node)), get_exit_status());
+	return (1); //temprory
 }
 
 /*
@@ -49,7 +60,12 @@ int	exec_block(t_ast_node *node)
 */
 int	exec_pipe(t_ast_node *node)
 {
+	int	(*builtin)(t_ast_node *node);
 
+	builtin = is_builtin(node->args[0]);
+	if (builtin)
+		return (set_exit_status(builtin(node)), get_exit_status());
+	return (1); //temprory
 }
 
 /*
@@ -60,7 +76,12 @@ int	exec_pipe(t_ast_node *node)
 */
 int	exec_redir(t_ast_node *node)
 {
+	int	(*builtin)(t_ast_node *node);
 
+	builtin = is_builtin(node->args[0]);
+	if (builtin)
+		return (set_exit_status(builtin(node)), get_exit_status());
+	return (1); //temprory
 }
 
 /*
@@ -82,4 +103,5 @@ int exec_cmd(t_ast_node *node)
 	if (builtin)
 		return (set_exit_status(builtin(node)), get_exit_status());
 	//still need to handle external cmd
+	return (1); //temprory
 }

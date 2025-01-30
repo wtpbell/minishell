@@ -6,7 +6,7 @@
 /*   By: spyun <marvin@42.fr>                         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/08 08:24:47 by spyun         #+#    #+#                 */
-/*   Updated: 2024/12/13 15:53:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 17:07:15 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strrchr(const char *s, int c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 char	*ft_strnstr(const char *big, const char *little, size_t len);
@@ -65,5 +66,9 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+char	*ft_strjoin_free(char *s1, char *s2);
+char	*ft_strjoin_char(char *str, char c);
+int		ft_isspace(char c);
+int		ft_skipspaces(const char *str);
 
 #endif

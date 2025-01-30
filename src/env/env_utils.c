@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
 #include "env.h"
 #include "minishell.h"
 
@@ -36,6 +35,5 @@ char	*get_env_value(t_env *envs, const char *key)
 	}
 	return (NULL);
 }
-
 
 

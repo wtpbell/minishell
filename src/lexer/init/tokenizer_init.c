@@ -6,12 +6,16 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:28:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/20 15:28:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/23 19:44:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/*
+** tokenizer initialisation function
+** Initialise a structure for tokenising input strings
+*/
 void	init_tokenizer(t_tokenizer *tokenizer, char *input)
 {
 	if (!tokenizer || !input)
