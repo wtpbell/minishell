@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/30 09:49:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 17:55:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,42 +17,44 @@ void	add_env(t_env **env, t_env *new)
 {
 	t_env	*head;
 
-	if (!env || !new)
-		return ;
 	if (!*env)
+	{
 		*env = new;
+		new->prev = NULL;
+		new->next = NULL;
+		return;
+	}
 	head = *env;
 	while (head->next)
 		head = head->next;
 	head->next = new;
 	new->prev = head;
+	new->next = NULL;
 }
 
-int	set_env(t_env *envs, const char *key, const char *new_value)
+void	set_env(t_env *envs, const char *key, const char *new_value)
 {
-	if (!key || !*key)
-		return (0);
 	while (envs)
 	{
+		if (!envs->key)  // ✅ Prevent NULL pointer dereference
+		{
+			printf("Error: envs->key is NULL\n");
+			return;
+		}
 		if (ft_strcmp(envs->key, key) == 0)
 		{
 			envs->hide = false;
-			if (envs->value)
-			{
-				free(envs->value);
-				envs->value = NULL;
-			}
+			envs->value = NULL;
 			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = BOTH;
 			if (new_value)
 				envs->value = ft_strdup(new_value);
 			else if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = EXPORT;
-			return (1);
+			return ;
 		}
 		envs = envs->next;
 	}
-	return (0);
 }
 
 /*

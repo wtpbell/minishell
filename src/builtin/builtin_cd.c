@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/30 11:29:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/30 17:34:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@
 
 static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 {
-	if (set_env(envs, "OLDPWD", old_pwd) == 0)
-		error("cd", "Failed to update OLDPWD");
-	if (set_env(envs, "PWD", pwd) == 0)
-		error("cd", "Failed to update PWD");
+	set_env(envs, "OLDPWD", old_pwd);
+	set_env(envs, "PWD", pwd);
+
 }
 
 static int	cd_dir(t_ast_node *node)
