@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   validator.c                                        :+:    :+:            */
+/*   command_validator.c                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 12:15:58 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 09:42:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Checks for prohibited special characters in the filename.
+** Invalid if it contains characters
+such as ‘<’, ‘>’, ‘|’, ‘&’, ‘;’, ‘(’, ‘)’ */
 static int	is_invalid_filename_char(char c)
 {
 	return (c == '<' || c == '>' || c == '|' || c == '&'
 		|| c == ';' || c == '(' || c == ')');
 }
 
+/* Checks if the command name is valid
+** invalid if it is an empty string or contains special characters */
 int	is_valid_command_name(const char *cmd)
 {
 	int	i;
@@ -34,7 +39,9 @@ int	is_valid_command_name(const char *cmd)
 	return (1);
 }
 
-t_valid_error	validate_redirection_syntax(t_redirection *redirs)
+/* Validate redirect syntax
+** Return error if no filename or invalid filename */
+t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs)
 {
 	t_redirection	*curr;
 
@@ -50,9 +57,12 @@ t_valid_error	validate_redirection_syntax(t_redirection *redirs)
 	return (VALID_SUCCESS);
 }
 
-t_valid_error	validate_command_syntax(t_ast_node *node)
+/* Complete validation of the command syntax.
+** Check for empty commands, bad syntax,
+too many arguments, invalid redirects, etc */
+t_cmd_valid_error	validate_command_syntax(t_ast_node *node)
 {
-	t_valid_error	redir_status;
+	t_cmd_valid_error	redir_status;
 
 	if (!node)
 		return (VALID_EMPTY_CMD);
@@ -72,17 +82,4 @@ t_valid_error	validate_command_syntax(t_ast_node *node)
 		}
 	}
 	return (VALID_SUCCESS);
-}
-
-char	*get_validation_error_msg(t_valid_error error)
-{
-	static char	*messages[6];
-
-	messages[VALID_SUCCESS] = "Success";
-	messages[VALID_EMPTY_CMD] = "Command cannot be empty";
-	messages[VALID_INVALID_REDIR] = "Invalid redirection";
-	messages[VALID_MISSING_FILENAME] = "Missing filename after redirection";
-	messages[VALID_SYNTAX_ERROR] = "Syntax error in command";
-	messages[VALID_TOO_MANY_ARGS] = "Too many arguments";
-	return (messages[error]);
 }

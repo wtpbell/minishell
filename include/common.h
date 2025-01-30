@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   skip_spaces.c                                      :+:    :+:            */
+/*   common.h                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/21 10:00:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 10:00:57 by spyun         ########   odam.nl         */
+/*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/28 15:09:38 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	skip_spaces(const char *str)
-{
-	int	i;
+#ifndef COMMON_H
+# define COMMON_H
 
-	i = 0;
-	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
-		i++;
-	return (i);
-}
+# include "utils.h"
+
+#endif

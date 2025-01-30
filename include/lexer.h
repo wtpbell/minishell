@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 13:23:23 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 17:09:06 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,5 @@ int				is_operator(char *str);
 int				is_special_char(char c);
 int				is_quote(char c);
 int				validate_quotes(const char *input);
-int				skip_spaces(const char *str);
-int				is_space(char c);
 
 #endif

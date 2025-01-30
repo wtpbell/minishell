@@ -1,16 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   is_space.c                                         :+:    :+:            */
+/*   ft_skipspaces.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/21 10:00:12 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/21 10:00:55 by spyun         ########   odam.nl         */
+/*   Created: 2025/01/21 10:00:10 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/29 17:10:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	is_space(char c)
+int	ft_skipspaces(const char *str)
 {
-	return (c == ' ' || c == '\t');
+	int	i;
+
+	i = 0;
+	while (str[i] && (str[i] == ' ' || str[i] == '\t'))
+		i++;
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 09:04:46 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/29 17:08:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 		return (1);
 	if (!is_in_quotes(tokenizer)
 		&& (is_operator(&tokenizer->input[tokenizer->position])
-			|| is_space(tokenizer->input[tokenizer->position])))
+			|| ft_isspace(tokenizer->input[tokenizer->position])))
 		return (1);
 	return (0);
 }
