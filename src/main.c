@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/30 09:47:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 10:23:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,3 @@ int	main(void)
 	}
 	return (EXIT_SUCCESS);
 }
-
-
