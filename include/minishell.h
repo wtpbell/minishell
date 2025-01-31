@@ -35,6 +35,7 @@
 # define BLUE "\033[34m"
 # define RESET "\033[0m"
 
+
 extern int	g_exit_status;
 
 typedef enum e_token_type
@@ -47,6 +48,7 @@ typedef enum e_token_type
 	TOKEN_ENV,
 	TOKEN_EXEC,
 	TOKEN_BLOCK,
+
 	TOKEN_APPEND,
 	TOKEN_AND,
 	TOKEN_OR,
@@ -63,6 +65,8 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+
+void	print_banner(void);
 
 void	print_banner(void);
 

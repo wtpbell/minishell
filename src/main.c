@@ -19,6 +19,7 @@
 
 int	g_exit_status = 0;
 
+
 int	main(int argc, char **argv, char **env)
 {
 	char		*line;
@@ -35,6 +36,7 @@ int	main(int argc, char **argv, char **env)
 		printf("build_env() returned NULL\n");
 		exit(EXIT_FAILURE);
 	}
+
 	print_banner();
 	while (true)
 	{

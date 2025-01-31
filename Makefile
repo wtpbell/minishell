@@ -67,7 +67,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/exit_update.c \
 				 $(EXECUTOR_DIR)/utils.c \
 				 $(EXECUTOR_DIR)/error/error.c \
-
+         
 COMMON_FILES = $(COMMON_DIR)/utils.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -103,6 +103,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/executor
 	@mkdir -p $(OBJ_DIR)/executor/error
 	@mkdir -p $(OBJ_DIR)/builtin
+
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
