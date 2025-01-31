@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 18:06:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/31 18:41:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 void	append_cwd(t_ast_node *node)
 {
-	char	*cwd;
+	char	cwd[PATH_MAX];
 	char	*tmp;
 	char	*tmp2;
 
-	cwd = getcwd(node->env, PATH_MAX);
-	if (!cwd)
-		return (error("cd", NULL), EXIT_FAILURE);
+	if (!getcwd(cwd, PATH_MAX))
+		return (error("Error: ", NULL), EXIT_FAILURE);
+	tmp = ft_strjoin(cwd, "/");
+	tmp2 = ft_strjoin(tmp, node->args[0]);
+	ft_free(tmp);
 	
 }
 
