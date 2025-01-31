@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:34:05 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:07:07 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/31 11:12:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ t_token	*handle_operator(t_tokenizer *tokenizer)
 	char			*input;
 
 	input = tokenizer->input + tokenizer->position;
+	printf("print input %s\n", input);
 	if (!validate_operator(input))
 		return (NULL);
 	type = get_operator_type(input);
+	printf("print type %u\n", type);
 	if (type == TOKEN_WORD)
 		return (NULL);
 	len = get_operator_len(type);

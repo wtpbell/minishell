@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "parser.h"
 #include "executor.h"
+#include "common.h"
 #include <fcntl.h>
 
 /*
@@ -94,14 +95,25 @@ int	exec_redir(t_ast_node *node)
 int exec_cmd(t_ast_node *node)
 {
 	int	(*builtin)(t_ast_node *node);
+	int	status_;
 
 	if (!node || !node->args)
 		return (set_exit_status(0), 0);
 	if (node->argc == 0)
 		return (set_exit_status(0), 0);
+	status_ = 0;
+	node->env = get_env_list();
+	if (node->env == 0)
+		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node)), get_exit_status());
-	//still need to handle external cmd
-	return (1); //temprory
+	status_ = check_cmd(node);
+	if (status_ != 0)
+		return (status_);
+	signal(SIGINT, interrupt_from_keyboard);
+	signal(SIGQUIT, interrupt_from_keyboard);
+	if (fork())
+		child(node);
+	return (parent(node));
 }
