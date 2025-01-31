@@ -6,7 +6,7 @@
 /*   By: spyun <marvin@42.fr>                         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/08 08:24:47 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 17:07:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/31 17:34:46 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,6 @@ char	*ft_strjoin_free(char *s1, char *s2);
 char	*ft_strjoin_char(char *str, char c);
 int		ft_isspace(char c);
 int		ft_skipspaces(const char *str);
+void	ft_free_strarr(char **arr);
 
 #endif
