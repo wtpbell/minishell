@@ -1,19 +1,21 @@
 #include "builtin.h"
+#include "minishell.h"
+#include "executor.h"
+#include <stdio.h>
+#include <unistd.h>
 
-int	error_msg (char *msg)
+void error(char *word, char *msg)
 {
-	char	*errno_msg;
-
-	write(STDERR_FILENO, "minishell: ", 11);
+	ft_putstr_fd(RED, STDERR_FILENO);
+	ft_putstr_fd(SHELL_ERROR, STDERR_FILENO);
 	if (msg)
-		write(STDERR_FILENO, msg, ft_strlen(msg));
-	errno_msg = strerror(errno);
-	if (errno_msg)
 	{
-		write(STDERR_FILENO, ": ", 2);
-		write(STDERR_FILENO, errno_msg, ft_strlen(errno_msg));
+		ft_putstr_fd(word, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(msg, STDERR_FILENO);
 	}
-	write(STDERR_FILENO, "\n", 1);
-	return (1);
+	else
+		perror(word);
+	ft_putstr_fd(RESET, STDERR_FILENO);
+	set_exit_status(EXIT_FAILURE);
 }
-

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 17:03:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 12:02:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 # include "lexer.h"
+# include "env.h"
 
 typedef struct s_redirection
 {
@@ -39,6 +40,7 @@ typedef struct s_ast_node
 	t_redirection		*redirections;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
+	t_env				**env;
 }	t_ast_node;
 
 typedef enum e_cmd_valid_error

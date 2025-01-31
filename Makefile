@@ -8,6 +8,9 @@ SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
 COMMON_DIR = $(SRC_DIR)/common
+EXECUTOR_DIR = $(SRC_DIR)/executor
+BUITLIN_DIR = $(SRC_DIR)/builtin
+ENV_DIR = $(SRC_DIR)/env
 OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
@@ -49,19 +52,38 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
 			   $(PARSER_DIR)/utils/error_messages.c
 
+ENV_FILES 	 = $(ENV_DIR)/env_init.c \
+			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_set.c \
+
+BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
+				 $(BUITLIN_DIR)/builtin_echo.c \
+				 $(BUITLIN_DIR)/builtin_export.c \
+				 $(BUITLIN_DIR)/builtin_cd.c \
+				 $(BUITLIN_DIR)/builtin.c \
+
+EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
+				 $(EXECUTOR_DIR)/execute_tree.c \
+				 $(EXECUTOR_DIR)/exit_update.c \
+				 $(EXECUTOR_DIR)/utils.c \
+				 $(EXECUTOR_DIR)/error/error.c \
+         
 COMMON_FILES = $(COMMON_DIR)/utils.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+BUILTIN_OBJ = $(BUILTIN_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES)
 
 all: $(NAME)
 
@@ -77,6 +99,11 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/parser/optimizer
 	@mkdir -p $(OBJ_DIR)/parser/utils
 	@mkdir -p $(OBJ_DIR)/parser/validator
+	@mkdir -p $(OBJ_DIR)/env
+	@mkdir -p $(OBJ_DIR)/executor
+	@mkdir -p $(OBJ_DIR)/executor/error
+	@mkdir -p $(OBJ_DIR)/builtin
+
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

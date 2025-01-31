@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 15:36:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 12:04:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define SHELL_ERROR "minishell: "
+# define MANY_ARGS_ERROR "Too many argument!"
+# define PATH_MAX 4096
+# define DECLARE "declare -x "
+
+# define RED "\033[31m"
+# define GREEN "\033[32m"
+# define YELLOW "\033[33m"
+# define BLUE "\033[34m"
+# define RESET "\033[0m"
+
+
 extern int	g_exit_status;
 
 typedef enum e_token_type
@@ -33,6 +45,10 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
+	TOKEN_ENV,
+	TOKEN_EXEC,
+	TOKEN_BLOCK,
+
 	TOKEN_APPEND,
 	TOKEN_AND,
 	TOKEN_OR,
@@ -49,15 +65,8 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
-// typedef struct s_cmd
-// {
-// 	char			**argv;
-// 	char			*infile;
-// 	char			*outfile;
-// 	int				here_doc;
-// 	int				append;
-// 	struct s_cmd	*next;
-// }	t_cmd;
+
+void	print_banner(void);
 
 void	print_banner(void);
 
