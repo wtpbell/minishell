@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 17:15:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/02 23:34:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 
 static void	print_envs(t_env *env)
 {
-	int	i;
-
-	i = 0;
 	while (env)
 	{
 		if (env->hide == false && (env->scope & (BOTH | EXPORT)))
