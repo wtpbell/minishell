@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/31 17:36:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 14:28:33 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,26 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 	return (0);
 }
 
+static t_token	*add_wildcard_token(t_token **first,
+								t_token **current,
+								char *word)
+{
+	t_token	*new_token;
+
+	new_token = create_token(word, TOKEN_WORD);
+	if (!*first)
+	{
+		*first = new_token;
+		*current = new_token;
+	}
+	else
+	{
+		(*current)->next = new_token;
+		*current = new_token;
+	}
+	return (new_token);
+}
+
 static t_token	*create_wildcard_tokens(char *pattern)
 {
 	char	**matches;
@@ -42,17 +62,12 @@ static t_token	*create_wildcard_tokens(char *pattern)
 	i = 0;
 	while (matches[i])
 	{
-		if (!first)
+		if (!add_wildcard_token(&first, &current, matches[i]))
 		{
-			first = create_token(matches[i], TOKEN_WORD);
-			current = first;
+			ft_free_strarr(matches);
+			free_tokens(first);
+			return (NULL);
 		}
-		else
-		{
-			current->next = create_token(matches[i], TOKEN_WORD);
-			current = current->next;
-		}
-		i++;
 	}
 	ft_free_strarr(matches);
 	return (first);

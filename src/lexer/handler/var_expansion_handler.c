@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:14:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/30 17:21:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 14:21:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*handle_var_assign(char *var_name, char *assign_value)
 	return (ft_strdup(value));
 }
 
-static char *handle_var_error(char *var_name, char *error_msg)
+static char	*handle_var_error(char *var_name, char *error_msg)
 {
 	char	*value;
 

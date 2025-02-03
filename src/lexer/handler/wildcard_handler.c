@@ -6,12 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/31 16:02:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 14:45:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-#include <dirent.h>
 
 static int	match_pattern(const char *pattern, const char *str)
 {
@@ -37,7 +36,8 @@ static int	count_matches(const char *pattern)
 	if (!dir)
 		return (0);
 	count = 0;
-	while ((entry = readdir(dir)))
+	entry = readdir(dir);
+	while ((entry != NULL))
 	{
 		if (entry->d_name[0] != '.' && match_pattern(pattern, entry->d_name))
 			count++;
@@ -63,7 +63,8 @@ static char	**get_matches(const char *pattern, int count)
 		return (NULL);
 	}
 	i = 0;
-	while ((entry = readdir(dir)))
+	entry = readdir(dir);
+	while (entry != NULL)
 	{
 		if (entry->d_name[0] != '.' && match_pattern(pattern, entry->d_name))
 			matches[i++] = ft_strdup(entry->d_name);

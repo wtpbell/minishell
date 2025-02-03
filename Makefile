@@ -19,6 +19,7 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
 			  $(LEXER_DIR)/token/token_create.c \
 			  $(LEXER_DIR)/token/token_type.c \
+			  $(LEXER_DIR)/token/token_utils.c \
 			  $(LEXER_DIR)/handler/expansion_braced_handler.c \
 			  $(LEXER_DIR)/handler/expansion_handler.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \

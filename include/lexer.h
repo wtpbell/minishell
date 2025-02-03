@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/31 17:28:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 14:50:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ char			*handle_braced_expansion(char *str, int *pos,
 
 t_token			*create_token(char *content, t_token_type type);
 void			add_token(t_token **head, t_token *new_token);
+void			free_tokens(t_token *token);
 
 t_token_type	get_operator_type(char *input);
 int				get_operator_len(t_token_type type);
