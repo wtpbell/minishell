@@ -6,11 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/03 14:49:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 14:50:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 15:01:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "lexer.h"
+#include "lexer.h"
 
 void	free_tokens(t_token *token)
 {

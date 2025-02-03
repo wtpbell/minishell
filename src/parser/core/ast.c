@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/31 17:37:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 15:03:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,26 @@ static char	**expand_args_array(char **old_args, int old_len, int add_len)
 	return (new_args);
 }
 
-/*
-** Add command arguments to the AST node
-** Replace the existing argument array with an array containing the new arguments
-*/
+static void	copy_expanded_args(char **new_args, char **expanded_args,
+	int old_len, int exp_len)
+{
+	int	i;
+
+	i = 0;
+	while (i < exp_len)
+	{
+		new_args[old_len + i] = expanded_args[i];
+		i++;
+	}
+	new_args[old_len + i] = NULL;
+}
+
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**expanded_args;
 	char	**new_args;
 	int		old_len;
-	int		i;
-	int		j;
+	int		exp_len;
 
 	if (!node || !arg)
 		return ;
@@ -83,21 +92,13 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 	if (!expanded_args)
 		return ;
 	old_len = get_args_length(node->args);
-	i = 0;
-	while (expanded_args[i])
-		i++;
-	new_args = expand_args_array(node->args, old_len, i);
+	exp_len = get_args_length(expanded_args);
+	new_args = expand_args_array(node->args, old_len, exp_len);
 	if (!new_args)
 		return ;
-	j = 0;
-	while (j < i)
-	{
-		new_args[old_len + j] = expanded_args[j];
-		j++;
-	}
+	copy_expanded_args(new_args, expanded_args, old_len, exp_len);
 	free(expanded_args);
 	free(node->args);
 	node->args = new_args;
-	node->argc = old_len + i;
+	node->argc = old_len + exp_len;
 }
-
