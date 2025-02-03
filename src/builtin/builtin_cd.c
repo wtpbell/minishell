@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 18:20:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/03 14:54:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ int	builtin_cd(t_ast_node *node)
 	else
 	{
 		if (access(node->args[1], F_OK) == -1)
-			return (error("cd", "no such file or directory"), EXIT_FAILURE);
+			return (error("cd", "No such file or directory"), EXIT_FAILURE);
 		if (stat(node->args[1],&info) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		if (!S_ISDIR(info.st_mode))
-			return (error("cd", "not a directory"), EXIT_FAILURE);
+			return (error("cd", "Is not a directory"), EXIT_FAILURE);
 		if (access(node->args[1], R_OK | X_OK) == -1)
 			return (error("cd", "Permission denied"), EXIT_FAILURE);
 		if (chdir(node->args[1]) == -1)

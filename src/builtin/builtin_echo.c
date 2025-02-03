@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 14:18:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/03 15:47:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	valid_n_flag(const char *arg)
 	}
 	return (1);
 }
-
 
 int	builtin_echo(t_ast_node *node)
 {

@@ -36,4 +36,7 @@ char	*get_env_value(t_env *envs, const char *key)
 	return (NULL);
 }
 
-
+void	add_env_var()
+{
+	
+}

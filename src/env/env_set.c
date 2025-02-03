@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 10:29:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/03 09:54:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 		{
 			envs->hide = false;
 			envs->value = NULL;
-			printf("Print key: %s\n", envs->key);
 			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = BOTH;
 			if (new_value)

@@ -108,7 +108,7 @@ int exec_cmd(t_ast_node *node)
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node)), get_exit_status());
-	// status_ = check_cmd(node);
+	status_ = check_cmd(node);
 	if (status_ != 0)
 		return (status_);
 	// signal(SIGINT, interrupt_from_keyboard);
