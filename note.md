@@ -186,3 +186,10 @@ VAR=value; export VAR			# create local variable, then mark an existing variable 
 export VAR1 VAR2				# Mark multiple variables for export
 export -p						# List all exported variables
 unset VAR						# Remove VAR entirely(both local variables and environment)
+
+
+# getcwd fail
+
+  -**pwd Command Behaviour:** pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+  -**execvp() Command Behaviour:** e.g. ls: cannot open directory '.': No such file or directory
+

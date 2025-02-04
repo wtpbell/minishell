@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/30 11:36:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/01/31 13:57:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	sort_env(t_env **envs)
 			}
 			env = env->next;
 		}
-		if (did_swap)
+		if (!did_swap)
 			break ;
 	}
 }

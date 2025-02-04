@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   common.h                                           :+:    :+:            */
+/*   signal.c                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: spyun <spyun@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/31 16:43:47 by bewong        ########   odam.nl         */
+/*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
+/*   Updated: 2025/01/31 16:40:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMON_H
-# define COMMON_H
+#include "common.h"
+#include "executor.h"
+#include <unistd.h>
 
-# include "executor.h"
-
-void	interrupt_from_keyboard(int sig);
-
-#endif
+void	interrupt_from_keyboard(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	set_exit_status(1);
+}

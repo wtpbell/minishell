@@ -12,6 +12,7 @@
 
 #include "env.h"
 #include "minishell.h"
+#include "executor.h"
 
 static t_env	*env_int(char **key_value)
 {
@@ -33,12 +34,12 @@ static t_env	*env_int(char **key_value)
 	_: Represents the last executed command; its scope is set to ENVE.
 	?: Special variable representing the exit status of the last command.
 */
-t_env	*create_env(char *env)
+t_env *create_env(char *env)
 {
-	t_env	*new;
-	char	**key_value;
+	t_env *new;
+	char **key_value;
 
-	key_value = ft_split(env, '=');
+	key_value = ft_split_mini(env, "=");
 	if (!key_value)
 		return (NULL); // need to free memory?
 	new = env_int(key_value);
@@ -80,14 +81,19 @@ static void	add_empty_env(t_env **env)
 t_env	*build_env(char **env)
 {
 	t_env	*envs;
+	t_env	*news;
 	int		i;
 
+	envs = NULL;
 	i = -1;
 	add_env(&envs, create_env("?=0"));
 	if (!env[0])
 		add_empty_env(&envs);
 	while(env[++i])
-		add_env(&envs, create_env(env[i]));
+	{
+		news = create_env(env[i]);
+		add_env(&envs, news);
+	}
 	return (envs);
 }
 

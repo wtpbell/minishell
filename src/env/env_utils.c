@@ -30,10 +30,13 @@ char	*get_env_value(t_env *envs, const char *key)
 	while (envs)
 	{
 		if (ft_strcmp(envs->key, key) == 0 && !envs->hide)
-			return (envs->key);
+			return (envs->value);
 		envs = envs->next;
 	}
 	return (NULL);
 }
 
-
+void	add_env_var()
+{
+	
+}

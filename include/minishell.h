@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/30 12:04:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/03 09:46:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 
 # define SHELL_ERROR "minishell: "
 # define MANY_ARGS_ERROR "Too many argument!"
-# define PATH_MAX 4096
+# define NON_EXIST_DIR "Nonexistent directory"
+# define PATH_MAX 4096  //getconf PATH_MAX /
 # define DECLARE "declare -x "
 
 # define RED "\033[31m"
@@ -46,7 +47,7 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
 	TOKEN_ENV,
-	TOKEN_EXEC,
+	TOKEN_EXEC = TOKEN_WORD,
 	TOKEN_BLOCK,
 
 	TOKEN_APPEND,

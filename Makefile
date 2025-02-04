@@ -66,9 +66,12 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
 				 $(EXECUTOR_DIR)/exit_update.c \
 				 $(EXECUTOR_DIR)/utils.c \
+				 $(EXECUTOR_DIR)/utils2.c \
+				 $(EXECUTOR_DIR)/utils3.c \
 				 $(EXECUTOR_DIR)/error/error.c \
-         
-COMMON_FILES = $(COMMON_DIR)/utils.c
+
+COMMON_FILES = $(COMMON_DIR)/utils.c \
+				$(COMMON_DIR)/signal.c
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
