@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 16:56:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 20:13:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,35 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 	return (0);
 }
 
+/* Checks if word contains wildcard */
 static int	has_wildcard(const char *word)
 {
 	return (word && ft_strchr(word, '*') != NULL);
 }
 
+/* Checks if word is an environment variable */
+static int	is_env_var(const char *word)
+{
+    if (!word || !*word)
+        return (0);
+    return (*word == '$');
+}
+
+/* Create appropriate token based on word content */
 static t_token	*create_word_token(char *word, t_tokenizer *tokenizer)
 {
 	if (!word)
 		return (NULL);
 	if (tokenizer->in_quote)
 		return (create_token(word, TOKEN_WORD));
-	if (word[0] == '$')
+	if (is_env_var(word))
 		return (create_token(word, TOKEN_VAR));
 	if (has_wildcard(word))
 		return (create_token(word, TOKEN_WILDCARD));
 	return (create_token(word, TOKEN_WORD));
 }
 
-/*
-** Generate word tokens
-** Extract strings, handling quotes and extensions
-*/
+/* Generate word tokens */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	int		start;
