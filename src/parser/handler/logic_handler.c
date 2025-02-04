@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 08:49:20 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 20:52:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* Check for logical operator (&&, ||) tokens */
-static int	is_logic_operator(t_token *token)
+int	is_logic_operator(t_token *token)
 {
 	return (token && (token->type == TOKEN_AND
 			|| token->type == TOKEN_OR));
@@ -65,19 +65,17 @@ t_ast_node	*process_logic_operator(t_token **token,
 t_ast_node	*parse_logic(t_token **token)
 {
 	t_ast_node	*left;
-	t_ast_node	*processed;
+	t_ast_node	*result;
 
 	left = parse_pipeline(token);
 	if (!left || !*token)
 		return (left);
 	while (*token && is_logic_operator(*token))
 	{
-		processed = handle_logic_sequence(token, left);
-		if (!processed)
+		result = handle_logic_sequence(token, left);
+		if (!result)
 			return (NULL);
-		left = processed;
-		if (!*token)
-			break ;
+		left = result;
 	}
 	return (left);
 }

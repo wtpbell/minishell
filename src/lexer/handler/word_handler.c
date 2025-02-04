@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 20:13:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 21:07:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ static int	has_wildcard(const char *word)
 /* Checks if word is an environment variable */
 static int	is_env_var(const char *word)
 {
-    if (!word || !*word)
-        return (0);
-    return (*word == '$');
+	if (!word || !*word)
+		return (0);
+	return (*word == '$');
 }
 
 /* Create appropriate token based on word content */

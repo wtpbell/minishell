@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 20:35:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 21:07:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 static int	is_command_token(t_token *token)
 {
 	return (token && (token->type == TOKEN_WORD
-		|| token->type == TOKEN_VAR
-		|| token->type == TOKEN_WILDCARD));
+			|| token->type == TOKEN_VAR
+			|| token->type == TOKEN_WILDCARD));
 }
 
 /* create and initialise a single instruction node */

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 17:03:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 20:52:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ t_ast_node			*optimize_ast(t_ast_node *root);
 t_ast_node			*remove_empty_nodes(t_ast_node *node);
 t_redirection		*merge_redirections(t_redirection *redir);
 t_ast_node			*optimize_pipeline(t_ast_node *node);
-
+int					is_logic_operator(t_token *token);
 #endif
