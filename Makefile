@@ -72,6 +72,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils2.c \
 				 $(EXECUTOR_DIR)/utils3.c \
 				 $(EXECUTOR_DIR)/error/error.c \
+				 $(EXECUTOR_DIR)/execute_process.c \
 
 COMMON_FILES = $(COMMON_DIR)/utils.c \
 				$(COMMON_DIR)/signal.c

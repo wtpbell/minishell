@@ -113,8 +113,7 @@ int exec_cmd(t_ast_node *node)
 		return (status_);
 	// signal(SIGINT, interrupt_from_keyboard);
 	// signal(SIGQUIT, interrupt_from_keyboard);
-	// if (fork())
-	// 	child(node);
-	// return (parent(node));
-	return (1); //temprory
+	if (fork() == 0)
+		child(node);
+	return (parent(node));
 }

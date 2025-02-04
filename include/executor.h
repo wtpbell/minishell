@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 15:37:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/04 18:55:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ int		exec_pipe(t_ast_node *node);
 int		exec_ctrl(t_ast_node *node);
 int		exec_block(t_ast_node *node);
 int		exec_redir(t_ast_node *node);
+
+/*execute_process*/
+void	child(t_ast_node *node);
+int		parent(t_ast_node *node);
 
 /*executor*/
 void	executor(t_ast_node *node);
