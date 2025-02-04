@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 09:22:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 15:03:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,62 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
-/*
-** Add command arguments to the AST node
-** Replace the existing argument array with an array containing the new arguments
-*/
-void	add_arg_to_node(t_ast_node *node, char *arg)
+static char	**expand_args_array(char **old_args, int old_len, int add_len)
 {
 	char	**new_args;
 	int		i;
-	int		len;
+
+	new_args = (char **)malloc(sizeof(char *) * (old_len + add_len + 1));
+	if (!new_args)
+		return (NULL);
+	i = 0;
+	while (i < old_len)
+	{
+		new_args[i] = old_args[i];
+		i++;
+	}
+	while (i <= old_len + add_len)
+	{
+		new_args[i] = NULL;
+		i++;
+	}
+	return (new_args);
+}
+
+static void	copy_expanded_args(char **new_args, char **expanded_args,
+	int old_len, int exp_len)
+{
+	int	i;
+
+	i = 0;
+	while (i < exp_len)
+	{
+		new_args[old_len + i] = expanded_args[i];
+		i++;
+	}
+	new_args[old_len + i] = NULL;
+}
+
+void	add_arg_to_node(t_ast_node *node, char *arg)
+{
+	char	**expanded_args;
+	char	**new_args;
+	int		old_len;
+	int		exp_len;
 
 	if (!node || !arg)
 		return ;
-	len = get_args_length(node->args);
-	new_args = (char **)malloc(sizeof(char *) * (len + 2));
+	expanded_args = expand_wildcards(arg);
+	if (!expanded_args)
+		return ;
+	old_len = get_args_length(node->args);
+	exp_len = get_args_length(expanded_args);
+	new_args = expand_args_array(node->args, old_len, exp_len);
 	if (!new_args)
 		return ;
-	i = 0;
-	while (i < len)
-	{
-		new_args[i] = node->args[i];
-		i++;
-	}
-	new_args[i] = ft_strdup(arg);
-	new_args[i + 1] = NULL;
+	copy_expanded_args(new_args, expanded_args, old_len, exp_len);
+	free(expanded_args);
 	free(node->args);
 	node->args = new_args;
-	node->argc++;
+	node->argc = old_len + exp_len;
 }
