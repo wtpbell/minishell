@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:14:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 14:21:11 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 10:36:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*handle_var_assign(char *var_name, char *assign_value)
 	char	*value;
 
 	value = getenv(var_name);
-	if (!value | !*value)
+	if (!value || !*value)
 	{
 		setenv(var_name, assign_value, 1);
 		return (ft_strdup(assign_value));
