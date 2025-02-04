@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:43:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 10:54:59 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 16:24:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,7 @@
 /* Return the value of the HOME environment variable */
 static char	*get_home_directory(void)
 {
-	char	*home;
-
-	/* change to get_env */
-	home = getenv("HOME");
-	if (!home)
-		return (NULL);
-	return (ft_strdup(home));
+	return (ft_strdup("~"));
 }
 
 /* ~ Handle path expansion (~/ -> $HOME/ or ~ -> $HOME) */

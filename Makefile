@@ -86,10 +86,10 @@ $(LIBFT):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
-	$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
 	@echo "Minishell compiled successfully!"
 
 clean:

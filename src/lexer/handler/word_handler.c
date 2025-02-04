@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 14:28:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 16:56:32 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,68 +27,21 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 	return (0);
 }
 
-static t_token	*add_wildcard_token(t_token **first,
-								t_token **current,
-								char *word)
+static int	has_wildcard(const char *word)
 {
-	t_token	*new_token;
-
-	new_token = create_token(word, TOKEN_WORD);
-	if (!*first)
-	{
-		*first = new_token;
-		*current = new_token;
-	}
-	else
-	{
-		(*current)->next = new_token;
-		*current = new_token;
-	}
-	return (new_token);
+	return (word && ft_strchr(word, '*') != NULL);
 }
 
-static t_token	*create_wildcard_tokens(char *pattern)
+static t_token	*create_word_token(char *word, t_tokenizer *tokenizer)
 {
-	char	**matches;
-	t_token	*first;
-	t_token	*current;
-	int		i;
-
-	matches = expand_wildcards(pattern);
-	if (!matches)
-		return (create_token(pattern, TOKEN_WORD));
-	first = NULL;
-	current = NULL;
-	i = 0;
-	while (matches[i])
-	{
-		if (!add_wildcard_token(&first, &current, matches[i]))
-		{
-			ft_free_strarr(matches);
-			free_tokens(first);
-			return (NULL);
-		}
-	}
-	ft_free_strarr(matches);
-	return (first);
-}
-
-static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
-{
-	char	*expanded;
-
-	if (!tokenizer->in_quote)
-	{
-		expanded = handle_expansion(tokenizer, word);
-		if (ft_strchr(expanded, '*'))
-		{
-			free(word);
-			word = expanded;
-			return (create_wildcard_tokens(word));
-		}
-		free(word);
-		return (create_token(expanded, TOKEN_WORD));
-	}
+	if (!word)
+		return (NULL);
+	if (tokenizer->in_quote)
+		return (create_token(word, TOKEN_WORD));
+	if (word[0] == '$')
+		return (create_token(word, TOKEN_VAR));
+	if (has_wildcard(word))
+		return (create_token(word, TOKEN_WILDCARD));
 	return (create_token(word, TOKEN_WORD));
 }
 
@@ -99,7 +52,7 @@ static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	int		start;
-	char	*content;
+	char	*word;
 
 	if (!validate_quotes(tokenizer->input + tokenizer->position))
 		return (NULL);
@@ -112,9 +65,9 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 			break ;
 		tokenizer->position++;
 	}
-	content = ft_substr(tokenizer->input, start,
+	word = ft_substr(tokenizer->input, start,
 			tokenizer->position - start);
-	if (!content)
+	if (!word)
 		return (NULL);
-	return (expand_word(tokenizer, content));
+	return (create_word_token(word, tokenizer));
 }

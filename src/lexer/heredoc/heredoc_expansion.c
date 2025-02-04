@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:55:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 10:55:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 16:24:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@ static int	get_var_length(const char *str)
 /* Adds the value of the environment variable to the result string. */
 static char	*append_var_value(char *result, const char *var_name)
 {
-	char	*value;
+	char	*var_token;
 	char	*temp;
 
-	/* change to get_env */
-	value = getenv(var_name);
-	if (!value)
+	var_token = ft_strjoin("$", var_name);
+	if (!var_token)
 		return (result);
 	temp = result;
-	result = ft_strjoin(result, value);
+	result = ft_strjoin(result, var_token);
 	free(temp);
+	free(var_token);
 	return (result);
 }
 
