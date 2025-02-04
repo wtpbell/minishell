@@ -114,7 +114,6 @@ void	setup_shlvl(t_env *new)
 		}
 		else
 			new->value = ft_itoa(++old_shlvl);
-		free(new->value); //it shd be free
 	}
 }
 

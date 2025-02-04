@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 09:52:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/04 15:03:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ static void	modify_env(t_env **env, char *args)
 	split = ft_split_mini(args, "=");
 	if (!split)
 		return ;
+	printf("Debug - export args: %s\n", args); //debug
+	if (split[0])
+		printf("Debug - key: %s. value: %s\n", split[0], split[1]); //debug
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
 	if (!split[0] || !is_valid_key(split[0]) || args[0] == '=')
