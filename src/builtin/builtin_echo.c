@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 15:10:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/04 15:45:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int	builtin_echo(t_ast_node *node)
 	printf("Debug - echo args start:\n");  // Debug
 	int j = 0; //debug
 	while (node->args[j])
-    {
-        printf("Debug - arg[%d]: '%s'\n", j, node->args[j]);  // Debug
-        j++;
-    }
+	{
+		printf("Debug - arg[%d]: '%s'\n", j, node->args[j]);  // Debug
+		j++;
+	}
 	while (node->args[i] && ft_strcmp(node->args[i], "-n") == 0
 		&& valid_n_flag(node->args[i]))
 	{
@@ -65,7 +65,10 @@ int	builtin_echo(t_ast_node *node)
 			printf("Debug - looking up key: '%s'\n", key);  // Debug
 			char *value = get_env_value(*(node->env), key);
 			printf("Debug - found value: '%s'\n", value ? value : "NULL");  // Debug
-			printf("%s", value ? value : "");
+			if (value)
+				printf("%s", value);
+			else
+				printf("%s", "");
 		}
 		else
 			printf("%s", node->args[i]);

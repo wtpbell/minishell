@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:55:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:00:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 10:55:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static char	*append_var_value(char *result, const char *var_name)
 	char	*value;
 	char	*temp;
 
+	/* change to get_env */
 	value = getenv(var_name);
 	if (!value)
 		return (result);
