@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 14:27:55 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/04 12:01:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef enum e_token_type
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
 	TOKEN_NEWLINE,
-	TOKEN_EOF
+	TOKEN_EOF,
+	TOKEN_SUBSHELL,
 }	t_token_type;
 
 typedef struct s_token
