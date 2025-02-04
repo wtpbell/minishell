@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 16:02:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/04 09:52:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,24 @@ static void	append_env_value(t_env *env, char **key, char **value)
 {
 	char	*key_;
 	char	*value_;
-	char	*new_value;
-
+	char	*tmp;
+	
 	key_ = *key;
 	value_ = *value;
 	if (!key_ || !value_)
 		return ;
 	if (key_[ft_strlen(key_) - 1] == '+')
 	{
-		*key = ft_substr(key_, 0, ft_strlen(key_) - 1);
-		free(key_);
+		tmp = key_;
+		*key = ft_substr(key_, 0, (ft_strlen(key_) - 1));
+		free(tmp);
 		if (value_ == NULL)
 			return ;
-
-		new_value = ft_strjoin(get_env_value(env, (*key)), value_);
-		free(value_);
-		*value = new_value;
+		tmp = value_;
+		*value = ft_strjoin(get_env_value(env, (*key)), value_);
+		if (tmp != NULL)
+			free(tmp);
+		return ;
 	}
 }
 
@@ -86,18 +88,18 @@ static void	modify_env(t_env **env, char *args)
 		return ;
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
-	if (!is_valid_key(split[0]) || args[0] == '=')
+	if (!split[0] || !is_valid_key(split[0]) || args[0] == '=')
 	{
 		ft_putstr_fd(args, STDERR_FILENO);
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		return ;
 	}
-	// if (args[ft_strlen(args - 1)] == '=')
-	// 	add_env_var(env, split[0], "");
-	// else if (args[0] && !args[1])
-	// 	add_env_var(env, split[0], NULL);
-	// else
-	// 	add_env_var(env, split[0], split[1]);
+	if (args[ft_strlen(args) - 1] == '=') 
+		add_env_var(env, split[0], "");
+	else if (split[0] && !split[1])
+		add_env_var(env, split[0], NULL);
+	else
+		add_env_var(env, split[0], split[1]);
 }
 
 int	builtin_export(t_ast_node *node)
