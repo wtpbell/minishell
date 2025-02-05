@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 09:25:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 11:10:10 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,24 @@ static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 	{
 		expanded = handle_expansion(tokenizer, word);
 		if (!expanded)
-			return (NULL);
-		if (has_wildcard(expanded))
 		{
 			free(word);
+			return (NULL);
+		}
+		if (has_wildcard(expanded))
+		{
 			token = handle_wildcard_token(expanded);
 			free(expanded);
+			free(word);
 			return (token);
 		}
 		free(word);
 		return (create_token(expanded, get_word_token_type(expanded)));
 	}
-	return (create_token(word, get_word_token_type(word)));
+	token = create_token(word, get_word_token_type(word));
+	if (!token)
+		free(word);
+	return (token);
 }
 
 /* Generate word tokens */
