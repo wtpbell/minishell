@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 09:35:42 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 15:31:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*get_cmd_path(char *cmd)
 	return (free(paths), NULL);
 }
 
-int	exec_path(t_ast_node *node)
+static int	resolve_command(t_ast_node *node)
 {
 	char	*tmp;
 
@@ -76,7 +76,7 @@ int	exec_path(t_ast_node *node)
 	return (0);
 }
 
-int	exec_exec(t_ast_node *node)
+static int	validate_executable(t_ast_node *node)
 {
 	int			i;
 	struct stat	info;
@@ -87,19 +87,19 @@ int	exec_exec(t_ast_node *node)
 	if (access(node->args[0], F_OK) == -1)
 	{
 		error(node->args[0], "No such file or directory");
-		return (set_exit_status(127), 127);
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
 	}
 	if (stat(node->args[0], &info) == -1)
 		return (error(node->args[0], NULL), 1);
 	if (!S_ISDIR(info.st_mode))
 	{
 		error(node->args[0], "Is not a directory");
-		return (set_exit_status(126), 126);
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
 	}
 	if (access(node->args[0], R_OK | X_OK) == -1)
 	{
 		error(node->args[0], "Permission denied");
-		return (set_exit_status(126), 126);
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
 	}
 	return (0);
 }
@@ -119,9 +119,9 @@ int	check_cmd(t_ast_node *node)
 			&& node->args[0][0] != '.')
 		append_cwd(node);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
-		status_ = exec_path(node);
+		status_ = resolve_command(node);
 	else
-		status_ = exec_exec(node);
+		status_ = validate_executable(node);
 	return (status_);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/05 13:54:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 15:22:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	set_underscore(int argc, char **args)
 	-The last argument if there are arguments (argc > 1)
 	-An empty string if there are no arguments
 */
-void	set_last_arg_env(char	**args, int	argc)
+void	set_last_arg_env(char **args, int argc)
 {
 	if (!args)
 		return ;
