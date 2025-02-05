@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 16:54:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 14:45:07 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_ast_node	*parse(t_token *tokens)
 
 	if (!tokens)
 		return (NULL);
-	root = parse_pipeline(&tokens);
+	root = parse_complete_bonus(&tokens);
 	if (!root)
 		return (NULL);
 	syntax_status = validate_syntax_tree(root);

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:12:53 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 09:26:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 15:31:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_token	*create_token(char *content, t_token_type type)
 		free(content);
 		return (NULL);
 	}
+	ft_memset(new_token, 0, sizeof(t_token));
 	new_token->content = content;
 	new_token->type = type;
 	new_token->next = NULL;

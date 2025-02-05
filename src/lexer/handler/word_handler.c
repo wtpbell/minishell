@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 11:10:10 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 15:29:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,29 @@ static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 	char		*expanded;
 	t_token		*token;
 
-	if (!tokenizer->in_quote)
+	if (!tokenizer || !word)
+		return (NULL);
+	if (tokenizer->in_quote)
 	{
-		expanded = handle_expansion(tokenizer, word);
-		if (!expanded)
-		{
-			free(word);
+		token = create_token(word, get_word_token_type(word));
+		if (!token)
 			return (NULL);
-		}
-		if (has_wildcard(expanded))
-		{
-			token = handle_wildcard_token(expanded);
-			free(expanded);
-			free(word);
-			return (token);
-		}
-		free(word);
-		return (create_token(expanded, get_word_token_type(expanded)));
+		return (token);
 	}
-	token = create_token(word, get_word_token_type(word));
-	if (!token)
+	expanded = handle_expansion(tokenizer, word);
+	if (!expanded)
+		return(free(word),(NULL));
+	if (has_wildcard(expanded))
+	{
+		token = handle_wildcard_token(expanded);
+		free(expanded);
 		free(word);
+		return (token);
+	}
+	token = create_token(expanded, get_word_token_type(expanded));
+	if (!token)
+		free(expanded);
+	free(word);
 	return (token);
 }
 

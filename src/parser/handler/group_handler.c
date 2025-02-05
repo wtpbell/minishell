@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 15:12:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 14:52:45 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static t_ast_node	*create_subshell_node(void)
 {
 	t_ast_node	*node;
 
-	node = create_ast_node(TOKEN_WORD);
+	node = create_ast_node(TOKEN_SUBSHELL);
 	if (!node)
 		return (NULL);
 	node->is_subshell = 1;
@@ -70,16 +70,14 @@ static t_ast_node	*create_subshell_node(void)
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;
-	t_token		*start;
 
 	if (!token || !*token)
 		return (NULL);
 	if (!is_left_paren(*token))
 		return (parse_logic(token));
-	if(!validate_subshell((*token)->next))
+	if (!validate_subshell((*token)->next))
 		return (handle_group_error("unmatched parentheses"));
-	start = *token;
-	*token = (*token)->next;
+	(*token)++;
 	node = create_subshell_node();
 	if (!node)
 		return (NULL);
@@ -89,6 +87,6 @@ t_ast_node	*parse_group(t_token **token)
 		free_ast(node);
 		return (handle_group_error("invalid subshell syntax"));
 	}
-	*token = (*token)->next;
+	(*token)++;
 	return (node);
 }

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 15:36:45 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 14:47:52 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ static t_syntax_error	validate_paren_syntax(t_ast_node *node)
 {
 	t_ast_node *content;
 
-	if (!node->left || node->right)
-		return (SYNTAX_INVALID_COMBINATION);
+	if (!node->left)
+		return (SYNTAX_INVALID_SUBSHELL);
+	if (node->right)
+		return (SYNTAX_INVALID_SUBSHELL);
 	if (node->type == TOKEN_LPAREN)
 	{
 		if (!node->left)
