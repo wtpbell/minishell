@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 15:31:21 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 16:10:36 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* check for instruction tokens */
 static int	is_command_token(t_token *token)
 {
-	if (!token || !token->content)
+	if (!token)
 		return (0);
 	return (token && (token->type == TOKEN_WORD
 			|| token->type == TOKEN_VAR
@@ -27,7 +27,7 @@ static t_ast_node	*create_command_node(t_token **token)
 {
 	t_ast_node	*node;
 
-	if (!token || !*token || !(*token)->content)
+	if (!token || !*token )
 		return (NULL);
 	if (!is_command_token(*token))
 		return (NULL);
@@ -46,7 +46,7 @@ t_ast_node	*parse_command(t_token **token)
 	t_ast_node	*node;
     t_token		*current;
 
-	if (!token || !*token || !(*token)->content)
+	if (!token || !*token )
 		return (NULL);
 	node = create_command_node(token);
 	if (!node)
