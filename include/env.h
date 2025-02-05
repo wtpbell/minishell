@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 09:19:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 13:55:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,5 @@ void	add_env_var(t_env **env, char *key, char *value);
 void	add_env(t_env **env, t_env *new);
 void	set_env(t_env *envs, const char *key, const char *new_value);
 void	set_underscore(int argc, char **args);
-
+char	**env_to_arr(t_env *envs);
 #endif

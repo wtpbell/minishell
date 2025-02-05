@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 09:54:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 13:54:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,65 @@ void	set_underscore(int argc, char **args)
 	if (i > 0)
 		set_env(*get_env_list(), "_", splited[i - 1]);
 	free(splited); //free splited;
+}
+
+/*
+	Set the _ environment variable to:
+	-The last argument if there are arguments (argc > 1)
+	-An empty string if there are no arguments
+*/
+void	set_last_arg_env(char	**args, int	argc)
+{
+	if (!args)
+		return ;
+	if (argc > 1)
+		set_env(*get_env_list(), "_", args[argc - 1]);
+	else
+		set_env(*get_env_list(), "_", "");
+}
+
+/*
+	Convert env variables into an arrray of strings, formatted as
+	"key=value" for execve() as executing a new process with execve(),
+	we need to pass environment variables as a char ** array
+*/
+char	**env_to_arr(t_env *envs)
+{
+	char	**env;
+	int		i;
+	t_env	*head;
+	char	*tmp;
+	char	*full_entry;
+
+	if (!envs)
+		return (NULL);
+	head = envs;
+	i = 0;
+	while (head)
+	{
+		i += (head->hide == 0);
+		head = head->next;
+	}
+	env = (char **)malloc(sizeof(char *) * (i + 1));
+	if (!env)
+		return (NULL);
+	i = -1;
+	head = envs;
+	while (head)
+	{
+		if (head->hide == 0)
+		{
+			tmp = ft_strjoin(head->key, "=");
+			if (head->value)
+			{
+				full_entry = ft_strjoin(tmp, head->value);
+				free(tmp);
+				tmp = full_entry;
+			}
+			env[++i] = tmp;
+		}
+		head = head->next;
+	}
+	env[++i] = NULL;
+	return (env);
 }

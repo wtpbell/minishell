@@ -74,23 +74,24 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/error/error.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 
-COMMON_FILES = $(COMMON_DIR)/utils.c \
-				$(COMMON_DIR)/signal.c
-
+COMMON_FILES = $(COMMON_DIR)/signal.c \
+				# $(COMMON_DIR)/utils.c
+				
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BUILTIN_OBJ = $(BUILTIN_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+COMMON_OBJ = $(COMMON_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ) $(COMMON_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES) $(COMMON_FILES)
 
 all: $(NAME)
 
@@ -110,6 +111,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/executor
 	@mkdir -p $(OBJ_DIR)/executor/error
 	@mkdir -p $(OBJ_DIR)/builtin
+	@mkdir -p $(OBJ_DIR)/common
 
 
 $(LIBFT):

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 18:52:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 14:03:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <signal.h>
 #include <unistd.h>
 
-void	interrupt_handler(int sig)
+static void	interrupt_handler(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", STDOUT_FILENO);
@@ -40,7 +40,7 @@ void	signals_init(void)
 	error = signal(SIGINT, interrupt_handler);
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
-	error = singal(SIGQUIT, SIG_IGN);
+	error = signal(SIGQUIT, SIG_IGN);
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
 }

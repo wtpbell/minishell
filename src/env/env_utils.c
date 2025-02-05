@@ -27,11 +27,11 @@ t_env	*get_env(t_env *envs, const char *key)
 
 char	*get_env_value(t_env *envs, const char *key)
 {
-	printf("Debug - searching for key: %s\n", key); // Debug
+	// printf("Debug - searching for key: %s\n", key); // Debug
 	while (envs)
 	{
-		printf("Debug - checking env: key=%s, value=%s, hide=%d\n", 
-			envs->key, envs->value ? envs->value : "NULL", envs->hide); //debug
+		// printf("Debug - checking env: key=%s, value=%s, hide=%d\n", 
+			// envs->key, envs->value ? envs->value : "NULL", envs->hide); //debug
 		if (ft_strcmp(envs->key, key) == 0 && envs->hide == false)
 			return (envs->value);
 		envs = envs->next;

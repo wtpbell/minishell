@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 18:57:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/05 14:04:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "minishell.h"
 #include "parser.h"
 #include "executor.h"
+#include "common.h"
+#include <sys/wait.h>
 
 /*
 	SIG_DFL (default handler for signal), informs the kernel that
@@ -25,10 +27,10 @@ void	child(t_ast_node *node)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	execve(node->args[0], node->args);
+	execve(node->args[0], node->args, env_to_arr(*(node->env)));
 	error(node->args[0], NULL);
 	set_exit_status(127);
-	free(); // free sth 
+	// free(); // free sth
 	exit(get_exit_status());
 }
 
@@ -43,6 +45,6 @@ int	parent(t_ast_node *node)
 		status_ = WTERMSIG(status_) + 128;
 	set_underscore(node->argc, node->args);
 	set_exit_status(status_);
-	// signals_init();
+	signals_init();
 	return (get_exit_status());
 }
