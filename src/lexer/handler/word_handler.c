@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 09:15:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:25:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 		if (has_wildcard(expanded))
 		{
 			free(word);
-			token = expand_wildcard_pattern(expanded);
+			token = handle_wildcard_token(expanded);
 			free(expanded);
 			return (token);
 		}

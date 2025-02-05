@@ -25,12 +25,9 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
-			  $(LEXER_DIR)/handler/tilde_handler.c \
 			  $(LEXER_DIR)/handler/var_expansion_handler.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
-			  $(LEXER_DIR)/heredoc/heredoc_handler.c \
-			  $(LEXER_DIR)/heredoc/heredoc_expansion.c \
 			  $(LEXER_DIR)/utils/char_check.c \
 			  $(LEXER_DIR)/utils/expansion_utils.c \
 
@@ -86,10 +83,10 @@ $(LIBFT):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
-	$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
 	@echo "Minishell compiled successfully!"
 
 clean:

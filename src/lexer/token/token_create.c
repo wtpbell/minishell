@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:12:53 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:08:21 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:26:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ t_token	*create_token(char *content, t_token_type type)
 		return (NULL);
 	new_token = (t_token *)malloc(sizeof(t_token));
 	if (!new_token)
+	{
+		free(content);
 		return (NULL);
+	}
 	new_token->content = content;
 	new_token->type = type;
 	new_token->next = NULL;
@@ -33,7 +36,7 @@ void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;
 
-	if (!new_token)
+	if (!head || !new_token)
 		return ;
 	if (!*head)
 	{

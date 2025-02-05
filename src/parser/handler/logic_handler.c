@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 08:49:20 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:52:33 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* Check for logical operator (&&, ||) tokens */
-static int	is_logic_operator(t_token *token)
+int	is_logic_operator(t_token *token)
 {
 	return (token && (token->type == TOKEN_AND
 			|| token->type == TOKEN_OR));
