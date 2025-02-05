@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 21:07:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:21:55 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_ast_node	*create_command_node(t_token **token)
 
 	if (!is_command_token(*token))
 		return (NULL);
-	node = create_ast_node(TOKEN_WORD);
+	node = create_ast_node((*token)->type);
 	if (!node)
 		return (NULL);
 	add_arg_to_node(node, (*token)->content);

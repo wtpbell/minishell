@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 20:18:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:19:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,8 @@ int	has_wildcard(const char *str)
 	return (ft_strchr(str, '*') != NULL);
 }
 
-char	**create_wildcard_token(const char *pattern)
+t_token	*handle_wildcard_token(const char *str)
 {
-	char	**result;
-
-	if (!pattern)
-		return (NULL);
-	result = (char **)malloc(sizeof(char *) * 2);
-	if (!result)
-		return (NULL);
-	result[0] = ft_strdup(pattern);
-	if (!result[0])
-	{
-		free(result);
-		return (NULL);
-	}
-	result[1] = NULL;
-	return (result);
+	return (create_token(ft_strdup(str), TOKEN_WILDCARD));
 }
+

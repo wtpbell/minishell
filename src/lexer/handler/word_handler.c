@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 21:07:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/05 09:20:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,44 +22,50 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 		return (1);
 	if (!is_in_quotes(tokenizer)
 		&& (is_operator(&tokenizer->input[tokenizer->position])
-			|| ft_isspace(tokenizer->input[tokenizer->position])))
+		|| ft_isspace(tokenizer->input[tokenizer->position])))
 		return (1);
 	return (0);
 }
 
-/* Checks if word contains wildcard */
-static int	has_wildcard(const char *word)
-{
-	return (word && ft_strchr(word, '*') != NULL);
-}
-
-/* Checks if word is an environment variable */
-static int	is_env_var(const char *word)
+/* Handles special characters and creates appropriate token type */
+static t_token_type	get_word_token_type(char *word)
 {
 	if (!word || !*word)
-		return (0);
-	return (*word == '$');
+		return (TOKEN_WORD);
+	if (word[0] == '$')
+		return (TOKEN_VAR);
+	return (TOKEN_WORD);
 }
 
-/* Create appropriate token based on word content */
-static t_token	*create_word_token(char *word, t_tokenizer *tokenizer)
+/* Process word expansions and create appropriate token */
+static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 {
-	if (!word)
-		return (NULL);
-	if (tokenizer->in_quote)
-		return (create_token(word, TOKEN_WORD));
-	if (is_env_var(word))
-		return (create_token(word, TOKEN_VAR));
-	if (has_wildcard(word))
-		return (create_token(word, TOKEN_WILDCARD));
-	return (create_token(word, TOKEN_WORD));
+	char		*expanded;
+	t_token		*token;
+
+	if (!tokenizer->in_quote)
+	{
+		expanded = handle_expansion(tokenizer, word);
+		if (!expanded)
+			return (NULL);
+		if (has_wildcard(expanded))
+		{
+			free(word);
+			token = handle_wildcard_token(expanded);
+			free(expanded);
+			return (token);
+		}
+		free(word);
+		return (create_token(expanded, get_word_token_type(expanded)));
+	}
+	return (create_token(word, get_word_token_type(word)));
 }
 
 /* Generate word tokens */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	int		start;
-	char	*word;
+	char	*content;
 
 	if (!validate_quotes(tokenizer->input + tokenizer->position))
 		return (NULL);
@@ -72,9 +78,9 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 			break ;
 		tokenizer->position++;
 	}
-	word = ft_substr(tokenizer->input, start,
+	content = ft_substr(tokenizer->input, start,
 			tokenizer->position - start);
-	if (!word)
+	if (!content)
 		return (NULL);
-	return (create_word_token(word, tokenizer));
+	return (expand_word(tokenizer, content));
 }
