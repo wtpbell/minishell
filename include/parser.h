@@ -61,6 +61,8 @@ typedef enum e_syntax_error
 	SYNTAX_UNMATCHED_PARENTHESES,
 	SYNTAX_INVALID_SEQUENCE,
 	SYNTAX_INVALID_SUBSHELL,
+	SYNTAX_NESTED_TOO_DEEP,
+	SYNTAX_INVALID_COMMAND
 }	t_syntax_error;
 
 t_ast_node			*parse(t_token *tokens);
@@ -96,4 +98,9 @@ t_ast_node			*remove_empty_nodes(t_ast_node *node);
 t_redirection		*merge_redirections(t_redirection *redir);
 t_ast_node			*optimize_pipeline(t_ast_node *node);
 int					is_logic_operator(t_token *token);
+
+t_syntax_error		validate_subshell_syntax(t_ast_node *node);
+int					is_left_paren(t_token *token);
+int					is_right_paren(t_token *token);
+int					check_paren_balance(t_token *start);
 #endif

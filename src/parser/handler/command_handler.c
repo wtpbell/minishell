@@ -52,8 +52,21 @@ static t_ast_node	*create_command_node(t_token **token)
 	return (node);
 }
 
-/* Parse the token to create an AST node consisting of commands and arguments */
-t_ast_node *parse_command(t_token **token)
+static int	process_command_args(t_ast_node *node, t_token **current)
+{
+	add_arg_to_node(node, (*current)->content);
+	if (!node->args)
+		return (0);
+	if (!(*current)->next)
+	{
+		*current = NULL;
+		return (0);
+	}
+	*current = (*current)->next;
+	return (1);
+}
+
+t_ast_node	*parse_command(t_token **token)
 {
 	t_ast_node	*node;
 	t_token		*current;
@@ -67,18 +80,10 @@ t_ast_node *parse_command(t_token **token)
 	while (current && is_command_token(current))
 	{
 		if (!current->content)
-			break;
-		add_arg_to_node(node, current->content);
-		if (!node->args)
-			return (free_ast(node), NULL);
-		if (!current->next)
-		{
-			*token = NULL;
-			break;
-		}
-		current = current->next;
+			break ;
+		if (!process_command_args(node, &current))
+			break ;
 	}
-	if (current)
-		*token = current;
+	*token = current;
 	return (node);
 }

@@ -81,9 +81,18 @@ t_syntax_error	validate_syntax_tree(t_ast_node *root)
 
 	if (!root)
 		return (SYNTAX_OK);
-	node_error = validate_operator_precedence(root);
-	if (node_error != SYNTAX_OK)
-		return (node_error);
+	if (root->type == TOKEN_SUBSHELL)
+	{
+		node_error = validate_subshell_syntax(root);
+		if (node_error != SYNTAX_OK)
+			return (node_error);
+	}
+	else
+	{
+		node_error = validate_operator_precedence(root);
+		if (node_error != SYNTAX_OK)
+			return (node_error);
+	}
 	left_error = validate_syntax_tree(root->left);
 	if (left_error != SYNTAX_OK)
 		return (left_error);

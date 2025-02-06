@@ -46,8 +46,10 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
 			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
+			   $(PARSER_DIR)/validator/subshell_validator.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
-			   $(PARSER_DIR)/utils/error_messages.c
+			   $(PARSER_DIR)/utils/error_messages.c \
+			   $(PARSER_DIR)/utils/group_utils.c
 
 COMMON_FILES = $(COMMON_DIR)/utils.c
 
