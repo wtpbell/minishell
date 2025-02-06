@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/05 15:31:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 11:12:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void	append_cwd(t_ast_node *node)
 	char	*tmp;
 	char	*tmp2;
 
-	getcwd(cwd, PATH_MAX);
+	if(!getcwd(cwd, PATH_MAX))
+		return (error("exec", "Failed to get CWD"));
 	tmp = ft_strjoin(cwd, "/");
 	tmp2 = ft_strjoin(tmp, node->args[0]);
 	free(tmp);
@@ -50,6 +51,7 @@ char	*get_cmd_path(char *cmd)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		full_path = ft_strjoin(tmp, cmd);
+		printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
 			return (free(paths), free(tmp), full_path); //i need to free paths tab 
 		free(full_path);//i need to free full_path tab
@@ -89,11 +91,10 @@ static int	validate_executable(t_ast_node *node)
 		error(node->args[0], "No such file or directory");
 		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
 	}
-	if (stat(node->args[0], &info) == -1)
-		return (error(node->args[0], NULL), 1);
-	if (!S_ISDIR(info.st_mode))
+	stat(node->args[0], &info);
+	if (S_ISDIR(info.st_mode))
 	{
-		error(node->args[0], "Is not a directory");
+		error(node->args[0], "Is a directory");
 		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
 	}
 	if (access(node->args[0], R_OK | X_OK) == -1)
@@ -114,14 +115,22 @@ int	check_cmd(t_ast_node *node)
 {
 	int status_;
 
-	status_ = 0;
+	printf("Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*node->env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
+	{
 		status_ = resolve_command(node);
+		if (status_ != 0)
+			return (status_);
+	}
 	else
+	{
 		status_ = validate_executable(node);
-	return (status_);
+		if (status_ != 0)
+			return (status_);
+	}
+	return (0);
 }
 

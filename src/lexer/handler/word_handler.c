@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/03 14:28:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 09:14:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,80 +22,54 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 		return (1);
 	if (!is_in_quotes(tokenizer)
 		&& (is_operator(&tokenizer->input[tokenizer->position])
-			|| ft_isspace(tokenizer->input[tokenizer->position])))
+		|| ft_isspace(tokenizer->input[tokenizer->position])))
 		return (1);
 	return (0);
 }
 
-static t_token	*add_wildcard_token(t_token **first,
-								t_token **current,
-								char *word)
+/* Handles special characters and creates appropriate token type */
+static t_token_type	get_word_token_type(char *word)
 {
-	t_token	*new_token;
-
-	new_token = create_token(word, TOKEN_WORD);
-	if (!*first)
-	{
-		*first = new_token;
-		*current = new_token;
-	}
-	else
-	{
-		(*current)->next = new_token;
-		*current = new_token;
-	}
-	return (new_token);
+	if (!word || !*word)
+		return (TOKEN_WORD);
+	if (word[0] == '$')
+		return (TOKEN_VAR);
+	return (TOKEN_WORD);
 }
 
-static t_token	*create_wildcard_tokens(char *pattern)
-{
-	char	**matches;
-	t_token	*first;
-	t_token	*current;
-	int		i;
-
-	matches = expand_wildcards(pattern);
-	if (!matches)
-		return (create_token(pattern, TOKEN_WORD));
-	first = NULL;
-	current = NULL;
-	i = 0;
-	while (matches[i])
-	{
-		if (!add_wildcard_token(&first, &current, matches[i]))
-		{
-			ft_free_strarr(matches);
-			free_tokens(first);
-			return (NULL);
-		}
-	}
-	ft_free_strarr(matches);
-	return (first);
-}
-
+/* Process word expansions and create appropriate token */
 static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 {
-	char	*expanded;
+	char		*expanded;
+	t_token		*token;
 
-	if (!tokenizer->in_quote)
+	if (!tokenizer || !word)
+		return (NULL);
+	if (tokenizer->in_quote)
 	{
-		expanded = handle_expansion(tokenizer, word);
-		if (ft_strchr(expanded, '*'))
-		{
-			free(word);
-			word = expanded;
-			return (create_wildcard_tokens(word));
-		}
-		free(word);
-		return (create_token(expanded, TOKEN_WORD));
+		token = create_token(word, get_word_token_type(word));
+		if (!token)
+			return (NULL);
+		return (token);
 	}
-	return (create_token(word, TOKEN_WORD));
+	expanded = handle_expansion(tokenizer, word);
+	if (!expanded)
+		return(free(word),(NULL));
+	if (has_wildcard(expanded))
+	{
+		token = handle_wildcard_token(expanded);
+		free(expanded);
+		free(word);
+		return (token);
+	}
+	token = create_token(expanded, get_word_token_type(expanded));
+	if (!token)
+		free(expanded);
+	free(word);
+	return (token);
 }
 
-/*
-** Generate word tokens
-** Extract strings, handling quotes and extensions
-*/
+/* Generate word tokens */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	int		start;

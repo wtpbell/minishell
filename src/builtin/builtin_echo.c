@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 15:45:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 09:23:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ int	builtin_echo(t_ast_node *node)
 	no_newline = 0;
 	if (!node || !node->args)
 		return (set_exit_status(1), EXIT_FAILURE);
-	printf("Debug - echo args start:\n");  // Debug
-	int j = 0; //debug
-	while (node->args[j])
-	{
-		printf("Debug - arg[%d]: '%s'\n", j, node->args[j]);  // Debug
-		j++;
-	}
+	// printf("Debug - echo args start:\n");  // Debug
+	// int j = 0; //debug
+	// while (node->args[j])
+	// {
+		// printf("Debug - arg[%d]: '%s'\n", j, node->args[j]);  // Debug
+		// j++;
+	// }
 	while (node->args[i] && ft_strcmp(node->args[i], "-n") == 0
 		&& valid_n_flag(node->args[i]))
 	{
@@ -56,15 +56,15 @@ int	builtin_echo(t_ast_node *node)
 	}
 	while (node->args[i])
 	{
-		printf("Debug - processing arg: '%s'\n", node->args[i]);  // Debug
+		// printf("Debug - processing arg: '%s'\n", node->args[i]);  // Debug
 		if (ft_strcmp(node->args[i], "$?") == 0) // Expand `$?`
 			printf("%d", get_exit_status());
 		else if (node->args[i][0] == '$')
 		{
 			const char *key = &node->args[i][1];  // Skip the $
-			printf("Debug - looking up key: '%s'\n", key);  // Debug
+			// printf("Debug - looking up key: '%s'\n", key);  // Debug
 			char *value = get_env_value(*(node->env), key);
-			printf("Debug - found value: '%s'\n", value ? value : "NULL");  // Debug
+			// printf("Debug - found value: '%s'\n", value ? value : "NULL");  // Debug
 			if (value)
 				printf("%s", value);
 			else
