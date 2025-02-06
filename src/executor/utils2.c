@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 11:12:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 12:06:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	resolve_command(t_ast_node *node)
 	char	*tmp;
 
 	tmp = get_cmd_path(node->args[0]);
-	// printf("print tmp: %s\n", tmp);
+	printf("print tmp: %s\n", tmp);
 	if (!tmp)
 	{
 		error(node->args[0], "Command not found");
@@ -84,14 +84,21 @@ static int	validate_executable(t_ast_node *node)
 	struct stat	info;
 
 	i = check_paths(node->args[0]);
+	printf("in validate_executable\n");
 	if (i != 0)
 		return (set_underscore(node->argc, node->args), set_exit_status(i), i);
+	printf("Checking absolute path: %s\n", node->args[0]);
 	if (access(node->args[0], F_OK) == -1)
 	{
+		printf("File does not exist: %s\n", node->args[0]);
 		error(node->args[0], "No such file or directory");
 		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
 	}
-	stat(node->args[0], &info);
+	if (stat(node->args[0], &info) == -1)
+	{
+		printf("Stat failed on file: %s\n", node->args[0]);
+		return 1;
+	}
 	if (S_ISDIR(info.st_mode))
 	{
 		error(node->args[0], "Is a directory");
@@ -119,6 +126,7 @@ int	check_cmd(t_ast_node *node)
 	if (get_env_value(*node->env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
+	printf("Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);
