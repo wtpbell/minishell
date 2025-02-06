@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 12:06:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:19:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "env.h"
 #include "parser.h"
+#include "common.h"
 #include <sys/stat.h>
 
 void	append_cwd(t_ast_node *node)
@@ -29,6 +30,8 @@ void	append_cwd(t_ast_node *node)
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
+
+
 
 char	*get_cmd_path(char *cmd)
 {
@@ -53,12 +56,12 @@ char	*get_cmd_path(char *cmd)
 		full_path = ft_strjoin(tmp, cmd);
 		printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
-			return (free(paths), free(tmp), full_path); //i need to free paths tab 
-		free(full_path);//i need to free full_path tab
-		free(tmp);
+			return (free_tab(paths), free_alloc(tmp, GENERAL), full_path);
+		free_alloc(full_path, GENERAL);
+		free_alloc(tmp, GENERAL);
 		i++;
 	}
-	return (free(paths), NULL);
+	return (free_tab(paths), NULL);
 }
 
 static int	resolve_command(t_ast_node *node)
@@ -73,7 +76,7 @@ static int	resolve_command(t_ast_node *node)
 		set_underscore(node->argc, node->args);
 		return (set_exit_status(127), 127);
 	}
-	free(node->args[0]);
+	free_alloc(node->args[0], GENERAL);
 	node->args[0] = tmp;
 	return (0);
 }
@@ -84,21 +87,15 @@ static int	validate_executable(t_ast_node *node)
 	struct stat	info;
 
 	i = check_paths(node->args[0]);
-	printf("in validate_executable\n");
 	if (i != 0)
 		return (set_underscore(node->argc, node->args), set_exit_status(i), i);
-	printf("Checking absolute path: %s\n", node->args[0]);
 	if (access(node->args[0], F_OK) == -1)
 	{
-		printf("File does not exist: %s\n", node->args[0]);
 		error(node->args[0], "No such file or directory");
 		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
 	}
 	if (stat(node->args[0], &info) == -1)
-	{
-		printf("Stat failed on file: %s\n", node->args[0]);
-		return 1;
-	}
+		return (printf("Stat failed on file: %s\n", node->args[0]), 1);
 	if (S_ISDIR(info.st_mode))
 	{
 		error(node->args[0], "Is a directory");

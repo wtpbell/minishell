@@ -75,8 +75,9 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
-				# $(COMMON_DIR)/utils.c
-				
+				$(COMMON_DIR)/utils/memory/memory_tracker.c \
+				$(COMMON_DIR)/utils/memory/utils.c \
+
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -112,6 +113,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/executor/error
 	@mkdir -p $(OBJ_DIR)/builtin
 	@mkdir -p $(OBJ_DIR)/common
+	@mkdir -p $(OBJ_DIR)/common/utils/memory
 
 
 $(LIBFT):

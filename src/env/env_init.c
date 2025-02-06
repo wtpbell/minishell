@@ -13,12 +13,13 @@
 #include "env.h"
 #include "minishell.h"
 #include "executor.h"
+#include "common.h"
 
 static t_env	*env_int(char **key_value)
 {
 	t_env	*new;
 
-	new = malloc(sizeof(t_env));
+	new = mem_alloc(sizeof(t_env), GENERAL);
 	new->key = key_value[0];
 	new->value = key_value[1];
 	new->scope = BOTH;
@@ -41,7 +42,7 @@ t_env *create_env(char *env)
 
 	key_value = ft_split_mini(env, "=");
 	if (!key_value)
-		return (NULL); // need to free memory?
+		return (NULL);
 	new = env_int(key_value);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{

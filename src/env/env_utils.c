@@ -12,7 +12,8 @@
 
 #include "env.h"
 #include "minishell.h"
-
+#include "executor.h"
+#include "common.h"
 
 t_env	*get_env(t_env *envs, const char *key)
 {
@@ -55,7 +56,7 @@ void	add_env_var(t_env **env, char *key, char *value)
 	t_env	*new_env;
 
 	printf("Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
-	new_env = (t_env *)malloc(sizeof(t_env));
+	new_env = (t_env *)mem_alloc(sizeof(t_env), GENERAL);
 	if(!new_env)
 		return ;
 	new_env->key = key;

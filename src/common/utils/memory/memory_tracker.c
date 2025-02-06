@@ -6,11 +6,15 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/02 23:27:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:46:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "common.h"
+#include "minishell.h"
+#include <stdio.h>
+
 // t_mem_container	*create_mem_context(void)
 // {
 // 	t_mem_container	*context;
@@ -93,136 +97,104 @@
 // 	free(ctx);
 // }
 
-t_mem_container	*create_mem_context(void)
-{
-	t_mem_container	*ctx;
-
-	ctx = (t_mem_container *)malloc(sizeof(t_mem_container));
-	if (!ctx)
-		return (NULL);
-	ctx->head = NULL;
-	ctx->count = 0;
-	return (ctx);
-}
-
-// Allocate Memory and Track It
-void	*context_malloc(t_mem_container *ctx, t_mem_context context_type, size_t size)
-{
-	void			*ptr;
-	t_mem_tracker	*new_tracker;
-
-	if (!ctx || size == 0)
-		return (NULL);
-	ptr = malloc(size);
-	if (!ptr)
-		return (NULL);
-	new_tracker = (t_mem_tracker *)malloc(sizeof(t_mem_tracker));
-	if (!new_tracker)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new_tracker->ptr = ptr;
-	new_tracker->size = size;
-	new_tracker->context = context_type;
-	new_tracker->next = ctx->head;
-	ctx->head = new_tracker;
-	ctx->count++;
-	return (ptr);
-}
 /*
+	It is a static array of linked lists, each representing a memory ctx.
+	it returns a ptr to the linked list for the requested ctx.
+*/
+static t_mem_tracker	**get_mem_list(t_mem_context ctx)
+{
+	static	t_mem_tracker	*heap[ALL + 1];
+	return (&heap[ctx]);
+}
+
+/* Iterate over all memory contexts and free all */
+void	free_all_memory(void)
+{
+	int				i;
+	t_mem_tracker	**head;
+
+	i = -1;
+	while (++i < ALL)
+	{
+		head = get_mem_list((t_mem_context)i);
+		mem_lstclear(head, free);
+	}
+}
+
+/* 
+	Loop through the specific ctx memory list.
+	If the ptr is found, free it and return.
+*/
+void	free_alloc(void *ptr, t_mem_context ctx)
+{
+	t_mem_tracker	**head;
+	t_mem_tracker	*cur;
+
+	head = get_mem_list(ctx);
+	cur = *head;
+	while (cur)
+	{
+		if (cur->ptr == ptr)
+		{
+			mem_lstdelone(head, cur);
+			return ;
+		}
+		cur = cur->next;
+	}
+}
+
+/* Free all memory allocated in the given context */
+void	free_mem_context(t_mem_context ctx)
+{
+	t_mem_tracker	**head;
+	
+	head = get_mem_list(ctx);
+	mem_lstclear(head, free);
+}
+
+/*
+	Create a node to store the allocated ptr.
 	Use Selective Cleanup :
 	- Shell runs continuously (like a real shell) and processes multiple commands.
 	- Some parts of memory should be freed while keeping others.
 	- Prevent memory leaks in a long-running shell
 */
-
-void	context_free(t_mem_container *ctx, void *ptr, t_mem_context context_type)
+void	*mem_alloc(size_t size, t_mem_context ctx)
 {
-	t_mem_tracker	*curr;
-	t_mem_tracker	*prev;
+	t_mem_tracker	**head;
+	t_mem_tracker	*node;
+	void			*ptr;
 
-	if (!ctx || !ptr)
-		return ;
-	prev = NULL;
-	curr = ctx->head;
-	while (curr)
+	head = get_mem_list(ctx);
+	ptr = malloc(size);
+	if (!ptr)
 	{
-		if (curr->ptr == ptr && (curr->context == context_type || context_type == ALL))
-		{
-			if (prev)
-				prev->next = curr->next;
-			else
-				ctx->head = curr->next;
-			free(curr->ptr);
-			free(curr);
-			ctx->count--;
-			break ;
-		}
-		prev = curr;
-		curr = curr->next;
+		free_all_memory();
+		perror("Memory allocation failure");
+		exit(EXIT_FAILURE);
 	}
+	node =	mem_lstnew(ptr);
+	if (!node)
+	{
+		free_all_memory();
+		perror("Memory allocation failure");
+		exit(EXIT_FAILURE);
+	}
+	node->size = size;
+	mem_lstadd_back(head, node);
+	return (ptr);
 }
 
-void	cleanup_mem_context(t_mem_container *ctx, t_mem_context context_type)
-{
-	t_mem_tracker	*curr;
-	t_mem_tracker	*prev;
-	t_mem_tracker	*next;
+/* Debug Function: Print All Allocated Memory */
 
-	curr = ctx->head;
-	prev = NULL;
-	if (!ctx)
-		return;
-	while (curr)
-	{
-		next = curr->next;
-		if (curr->context == context_type)
-		{
-			free(curr->ptr);
-			free(curr);
-			if (prev)
-				prev->next = next;
-			else
-				ctx->head = next;
-			ctx->count--;
-		}
-		else
-			prev = curr;
-		curr = next;
-	}
+
+void	free_tab(char **tab)
+{
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+		free_alloc(tab[i++], GENERAL);
+	free_alloc(tab, GENERAL);
 }
 
-// Debug Function: Print All Allocated Memory
-void	print_mem_tracker(const t_mem_container *ctx)
-{
-	t_mem_tracker	*curr;
-	const char	*ctx_names[] = {"GENERAL", "LEXER", "PARSER", "EXECUTOR", "EXPANDER"};
-
-	if (!ctx)
-		return;
-	curr = ctx->head;
-	if (!curr)
-	{
-		printf("No memory allocations found.\n");
-		return ;
-	}
-	printf("Memory Allocations:\n");
-	while (curr)
-	{
-		if (curr->context >= 0 && curr->context < ALL)
-			printf("PTR: %p | SIZE: %zu | CTX: %s\n", 
-				curr->ptr, curr->size, ctx_names[curr->context]);
-		else
-			printf("PTR: %p | SIZE: %zu | CTX: INVALID\n", 
-				curr->ptr, curr->size);
-		curr = curr->next;
-	}
-}
-
-void	debug_mem_context(const t_mem_container *ctx)
-{
-	printf("\n========== Memory Contexts Debug ==========\n");
-	print_mem_tracker(ctx);
-	printf("==========================================\n\n");
-}

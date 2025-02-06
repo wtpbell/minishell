@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 11:09:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:11:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "env.h"
 #include "minishell.h"
 #include "executor.h"
+#include "common.h"
 
 void	add_env(t_env **env, t_env *new)
 {
@@ -75,7 +76,7 @@ void	set_underscore(int argc, char **args)
 		i = 1;
 	if (i > 0)
 		set_env(*get_env_list(), "_", splited[i - 1]);
-	free(splited); //free splited;
+	free_alloc(splited, GENERAL);
 }
 
 /*
@@ -115,7 +116,7 @@ char	**env_to_arr(t_env *envs)
 		i += (head->hide == 0);
 		head = head->next;
 	}
-	env = (char **)malloc(sizeof(char *) * (i + 1));
+	env = (char **)mem_alloc(sizeof(char *) * (i + 1), GENERAL);
 	if (!env)
 		return (NULL);
 	i = -1;

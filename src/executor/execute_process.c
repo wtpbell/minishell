@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 10:53:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:20:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	child(t_ast_node *node)
 	printf("post Executing: %s\n", node->args[0]);
 	error(node->args[0], NULL);
 	set_exit_status(127);
-	// free(); // free sth
+	free_all_memory();
 	exit(get_exit_status());
 }
 
@@ -47,6 +47,6 @@ int	parent(t_ast_node *node)
 		status_ = WTERMSIG(status_) + 128;
 	set_underscore(node->argc, node->args);
 	set_exit_status(status_);
-	signals_init();
+	// signals_init();
 	return (get_exit_status());
 }

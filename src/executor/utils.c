@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 09:30:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:35:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include "common.h"
 #include "env.h"
 
 static void	ft_swap(t_env *a, t_env *b)
@@ -119,14 +120,14 @@ char	**ft_split_mini(char const *s, char *set)
 	char	**arr;
 
 	words = ft_count_words(s, set);
-	arr = (char **)malloc(sizeof(char *) * (words + 1));
+	arr = (char **)mem_alloc(sizeof(char *) * (words + 1), GENERAL);
 	i = 0;
 	k = 0;
 	while (s && s[k] && ft_strchr(set, s[k]))
 		k++;
 	while (i < words)
 	{
-		arr[i] = (char *)malloc(sizeof(char) * (ft_strlen_c(s + k, set) + 1));
+		arr[i] = (char *)mem_alloc(sizeof(char) * (ft_strlen_c(s + k, set) + 1), GENERAL);
 		k += ft_strcpy_k(arr[i], s + k, set);
 		i++;
 	}
