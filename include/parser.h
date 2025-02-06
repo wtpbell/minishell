@@ -65,41 +65,47 @@ typedef enum e_syntax_error
 	SYNTAX_INVALID_COMMAND
 }	t_syntax_error;
 
+/* Main parsing functions */
 t_ast_node			*parse(t_token *tokens);
-void				free_ast(t_ast_node *node);
-t_ast_node			*create_ast_node(t_token_type type);
-void				add_arg_to_node(t_ast_node *node, char *arg);
-t_ast_node			*parse_pipeline(t_token **token);
-
-t_ast_node			*parse_command(t_token **token);
-t_ast_node			*create_logic_node(t_token **token);
-t_ast_node			*handle_logic_error(void);
-t_ast_node			*process_logic_operator(t_token **token,
-						t_ast_node *left, t_ast_node *logic_node);
-t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
-t_ast_node			*parse_logic(t_token **token);
 t_ast_node			*parse_complete_bonus(t_token **token);
+t_ast_node			*parse_logic(t_token **token);
+t_ast_node			*parse_pipeline(t_token **token);
+t_ast_node			*parse_command(t_token **token);
 t_ast_node			*parse_group(t_token **token);
 t_ast_node			*parse_redirection(t_token **token);
 
+/* AST node manipulation */
+t_ast_node			*create_ast_node(t_token_type type);
+void				add_arg_to_node(t_ast_node *node, char *arg);
+void				free_ast(t_ast_node *node);
+
+/* Logic operation handling */
+t_ast_node			*create_logic_node(t_token **token);
+t_ast_node			*process_logic_operator(t_token **token,
+						t_ast_node *left, t_ast_node *logic_node);
+t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
+t_ast_node			*handle_logic_error(void);
+int					is_logic_operator(t_token *token);
+
+/* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
 t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs);
-char				*get_validation_error_msg(t_cmd_valid_error error);
+t_syntax_error		validate_syntax_tree(t_ast_node *root);
+t_syntax_error		validate_redir_syntax(t_ast_node *node);
+t_syntax_error		validate_subshell_syntax(t_ast_node *node);
 int					is_valid_command_name(const char *cmd);
 
-t_syntax_error		validate_redir_syntax(t_ast_node *node);
-t_syntax_error		validate_syntax_tree(t_ast_node *root);
-
+/* Error messages */
 char				*get_validation_error_msg(t_cmd_valid_error error);
 char				*get_syntax_error_msg(t_syntax_error error);
 
+/* AST optimization */
 t_ast_node			*optimize_ast(t_ast_node *root);
 t_ast_node			*remove_empty_nodes(t_ast_node *node);
 t_redirection		*merge_redirections(t_redirection *redir);
 t_ast_node			*optimize_pipeline(t_ast_node *node);
-int					is_logic_operator(t_token *token);
 
-t_syntax_error		validate_subshell_syntax(t_ast_node *node);
+/* Parentheses handling */
 int					is_left_paren(t_token *token);
 int					is_right_paren(t_token *token);
 int					check_paren_balance(t_token *start);
