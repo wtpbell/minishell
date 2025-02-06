@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Check if the command is empty */
 static int	is_empty_command(t_ast_node *node)
 {
 	if (!node || node->type != TOKEN_WORD)
@@ -21,6 +22,7 @@ static int	is_empty_command(t_ast_node *node)
 	return (0);
 }
 
+/* Remove empty pipe segment */
 static t_ast_node	*remove_empty_pipe_segment(t_ast_node *node)
 {
 	t_ast_node	*result;
@@ -64,6 +66,7 @@ static t_ast_node	*merge_consecutive_pipes(t_ast_node *node)
 	return (node);
 }
 
+/* Optimize pipeline */
 t_ast_node	*optimize_pipeline(t_ast_node *node)
 {
 	if (!node)

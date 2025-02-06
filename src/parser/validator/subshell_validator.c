@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Get the depth of the subshell */
 static int	get_subshell_depth(t_ast_node *node)
 {
 	int	left_depth;
@@ -29,6 +30,7 @@ static int	get_subshell_depth(t_ast_node *node)
 	return (1 + max_depth);
 }
 
+/* Validate the subshell command */
 static int	validate_subshell_command(t_ast_node *node)
 {
 	if (!node)
@@ -43,6 +45,7 @@ static int	validate_subshell_command(t_ast_node *node)
 	return (1);
 }
 
+/* Validate the subshell redirections */
 static t_syntax_error	validate_subshell_redirections(t_ast_node *node)
 {
 	t_redirection	*redir;
@@ -61,6 +64,7 @@ static t_syntax_error	validate_subshell_redirections(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
+/* Validate the subshell syntax */
 t_syntax_error	validate_subshell_syntax(t_ast_node *node)
 {
 	t_syntax_error	redir_status;

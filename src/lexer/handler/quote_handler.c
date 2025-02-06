@@ -18,11 +18,7 @@ int	is_in_quotes(t_tokenizer *tokenizer)
 	return (tokenizer->in_quote);
 }
 
-/*
-** Functions to handle quote status.
-** Enter quote mode when first encountering a quote,
-** exit mode when the same quote is encountered again.
-*/
+/* Handle nested quotes */
 static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
 {
 	if (!tokenizer->in_quote)
@@ -40,8 +36,7 @@ static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
 	return (0);
 }
 
-/* Check for characters that require special handling
-   within double quotes ($, `, \) */
+/* Check for characters that require special handling within double quotes */
 int	is_special_in_quotes(char c, char quote_char)
 {
 	if (quote_char == '"')

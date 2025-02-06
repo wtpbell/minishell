@@ -43,6 +43,7 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
+/* Add an argument to the node */
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;

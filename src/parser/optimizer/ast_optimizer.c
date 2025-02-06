@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Optimize subshell */
 static t_ast_node	*optimize_subshell(t_ast_node *node)
 {
 	if (!node->left)
@@ -32,6 +33,7 @@ static t_ast_node	*optimize_subshell(t_ast_node *node)
 	return (node);
 }
 
+/* Optimize the AST */
 t_ast_node	*optimize_ast(t_ast_node *root)
 {
 	if (!root)

@@ -12,8 +12,7 @@
 
 #include "parser.h"
 
-/* Return the error message string corresponding to each error type
-** Define the message to be shown to the user for each error type */
+/* Get the validation error message */
 char	*get_validation_error_msg(t_cmd_valid_error error)
 {
 	static char	*messages[6];
@@ -27,6 +26,7 @@ char	*get_validation_error_msg(t_cmd_valid_error error)
 	return (messages[error]);
 }
 
+/* Get the syntax error message */
 char	*get_syntax_error_msg(t_syntax_error error)
 {
 	static char	*messages[9];

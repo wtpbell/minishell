@@ -73,6 +73,7 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
+/* Validate the syntax tree */
 t_syntax_error	validate_syntax_tree(t_ast_node *root)
 {
 	t_syntax_error	left_error;

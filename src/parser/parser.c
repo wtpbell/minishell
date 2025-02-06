@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Parse the tokens */
 t_ast_node	*parse(t_token *tokens)
 {
 	t_ast_node			*root;

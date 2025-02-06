@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 
+/* Check if the string contains a wildcard */
 int	has_wildcard(const char *str)
 {
 	if (!str)
@@ -19,6 +20,7 @@ int	has_wildcard(const char *str)
 	return (ft_strchr(str, '*') != NULL);
 }
 
+/* Create a wildcard token */
 t_token	*handle_wildcard_token(const char *str)
 {
 	return (create_token(ft_strdup(str), TOKEN_WILDCARD));

@@ -12,11 +12,7 @@
 
 #include "lexer.h"
 
-/*
-** Tokenise the input string
-** Generate a list of associations by skipping spaces
-   and converting operators/words to tokens
-*/
+/* Tokenize the input string */
 t_token	*tokenize(char *input)
 {
 	t_tokenizer	tokenizer;

@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 
+/* Check if the string is an operator */
 int	is_operator(char *str)
 {
 	if (!str || !*str)
@@ -24,6 +25,7 @@ int	is_operator(char *str)
 	return (0);
 }
 
+/* Check if the character is a special character */
 int	is_special_char(char c)
 {
 	return (c == '|' || c == '<' || c == '>'
@@ -32,6 +34,7 @@ int	is_special_char(char c)
 		|| c == '\t' || c == '\n');
 }
 
+/* Check if the character is a quote */
 int	is_quote(char c)
 {
 	return (c == '\'' || c == '\"');

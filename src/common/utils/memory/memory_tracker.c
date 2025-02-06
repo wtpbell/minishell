@@ -12,6 +12,7 @@
 
 #include "common.h"
 
+/* Memory tracking functions */
 t_mem_context	*create_mem_context(void)
 {
 	t_mem_context	*context;
@@ -24,6 +25,7 @@ t_mem_context	*create_mem_context(void)
 	return (context);
 }
 
+/* Memory allocation functions */
 void	*context_malloc(t_mem_context *ctx, size_t size)
 {
 	void			*ptr;
@@ -47,6 +49,7 @@ void	*context_malloc(t_mem_context *ctx, size_t size)
 	return (ptr);
 }
 
+/* Memory deallocation functions */
 void	context_free(t_mem_context *ctx, void *ptr)
 {
 	t_mem_tracker	*curr;
@@ -74,6 +77,7 @@ void	context_free(t_mem_context *ctx, void *ptr)
 	free(ptr);
 }
 
+/* Cleanup memory context */
 void	cleanup_mem_context(t_mem_context *ctx)
 {
 	t_mem_tracker	*curr;

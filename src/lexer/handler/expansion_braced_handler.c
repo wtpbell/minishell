@@ -33,10 +33,7 @@ static void	free_param_exp(t_param_exp *exp)
 		free(exp->word);
 }
 
-/*
-** Parsing of parameters enclosed in curly braces (${var:-word} format)
-** @return: 1 if parsing is successful, 0 if parsing fails.
-*/
+/* Parsing of parameters enclosed in curly braces (${var:-word} format) */
 static int	parse_braced_param(char *str, int *pos, t_param_exp *exp)
 {
 	int	start;
@@ -62,11 +59,7 @@ static int	parse_braced_param(char *str, int *pos, t_param_exp *exp)
 	return (1);
 }
 
-/*
-** Apply parsed parameter expansion
-** If there is no variable and :- operator, use default value
-** If there are no variables and no operators, an empty string is returned.
-*/
+/* Apply parsed parameter expansion */
 static char	*apply_param_expansion(t_param_exp *exp)
 {
 	char	*param_token;
@@ -89,11 +82,7 @@ static char	*apply_param_expansion(t_param_exp *exp)
 	return (param_token);
 }
 
-/*
-** Main function of brace expansion processing
-** Handles parameter expansion in the form ${variable name:-default value}
-** @return: extended value or NULL (on error)
-*/
+/* Main function of brace expansion processing */
 char	*handle_braced_expansion(char *str, int *pos, t_quote_state state)
 {
 	t_param_exp	exp;

@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Check if the string is empty */
 static int	is_empty_string(char *str)
 {
 	if (!str)
@@ -25,6 +26,7 @@ static int	is_empty_string(char *str)
 	return (1);
 }
 
+/* Check if the command is empty */
 static int	is_empty_command(t_ast_node *node)
 {
 	if (!node->args || !node->args[0])
@@ -34,6 +36,7 @@ static int	is_empty_command(t_ast_node *node)
 	return (0);
 }
 
+/* Handle parentheses */
 static t_ast_node	*handle_parentheses(t_ast_node *node)
 {
 	t_ast_node	*child;
@@ -63,6 +66,7 @@ static t_ast_node	*optimize_empty_node(t_ast_node *node)
 	return (handle_parentheses(node));
 }
 
+/* Remove empty nodes */
 t_ast_node	*remove_empty_nodes(t_ast_node *node)
 {
 	t_ast_node	*optimized;

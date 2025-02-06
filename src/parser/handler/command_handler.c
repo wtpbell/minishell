@@ -27,7 +27,6 @@ static int	is_command_token(t_token *token)
 }
 
 /* create and initialise a single instruction node */
-
 static t_ast_node	*create_command_node(t_token **token)
 {
 	t_ast_node	*node;
@@ -52,6 +51,7 @@ static t_ast_node	*create_command_node(t_token **token)
 	return (node);
 }
 
+/* Process command arguments */
 static int	process_command_args(t_ast_node *node, t_token **current)
 {
 	add_arg_to_node(node, (*current)->content);
@@ -66,6 +66,7 @@ static int	process_command_args(t_ast_node *node, t_token **current)
 	return (1);
 }
 
+/* Parse command */
 t_ast_node	*parse_command(t_token **token)
 {
 	t_ast_node	*node;

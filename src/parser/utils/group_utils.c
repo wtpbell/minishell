@@ -12,16 +12,19 @@
 
 #include "parser.h"
 
+/* Check if the token is a left parenthesis */
 int	is_left_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_LPAREN);
 }
 
+/* Check if the token is a right parenthesis */
 int	is_right_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_RPAREN);
 }
 
+/* Check if the parentheses are balanced */
 int	check_paren_balance(t_token *start)
 {
 	t_token	*current;

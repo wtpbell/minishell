@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Handle group error */
 static t_ast_node	*handle_group_error(char *msg)
 {
 	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
@@ -20,6 +21,7 @@ static t_ast_node	*handle_group_error(char *msg)
 	return (NULL);
 }
 
+/* Validate subshell end */
 static int	validate_subshell_end(t_token *token)
 {
 	if (!token)
@@ -32,6 +34,7 @@ static int	validate_subshell_end(t_token *token)
 	return (0);
 }
 
+/* Parse group */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;
