@@ -13,7 +13,7 @@
 #include "parser.h"
 
 /* Check for redirect tokens (<, >, >>, <<) */
-static int	is_redirection(t_token *token)
+int	is_redirection(t_token *token)
 {
 	if (!token || !token->content)
 		return (0);
@@ -36,7 +36,7 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 }
 
 /* Create a redirect node */
-static t_ast_node	*create_redirection_node(t_token **token)
+t_ast_node	*create_redirection_node(t_token **token)
 {
 	t_ast_node		*node;
 	t_token_type	type;

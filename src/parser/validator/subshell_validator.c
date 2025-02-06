@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                         ::::::::           */
-/*   subshell_validator.c                                :+:    :+:           */
-/*                                                      +:+                   */
-/*   By: spyun <spyun@student.codam.nl>                +#+                    */
-/*                                                    +#+                     */
-/*   Created: 2025/02/06 13:42:19 by spyun          #+#    #+#                */
-/*   Updated: 2025/02/06 13:42:20 by spyun          ########   odam.nl        */
+/*                                                        ::::::::            */
+/*   subshell_validator.c                               :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: spyun <spyun@student.codam.nl>               +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/06 13:42:19 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/06 16:33:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	get_subshell_depth(t_ast_node *node)
 }
 
 /* Validate the subshell command */
-static int	validate_subshell_command(t_ast_node *node)
+int	validate_subshell_command(t_ast_node *node)
 {
 	if (!node)
 		return (0);
@@ -45,25 +45,6 @@ static int	validate_subshell_command(t_ast_node *node)
 	return (1);
 }
 
-/* Validate the subshell redirections */
-static t_syntax_error	validate_subshell_redirections(t_ast_node *node)
-{
-	t_redirection	*redir;
-
-	if (!node || !node->redirections)
-		return (SYNTAX_OK);
-	redir = node->redirections;
-	while (redir)
-	{
-		if (!redir->file)
-			return (SYNTAX_MISSING_TOKEN);
-		if (!is_valid_command_name(redir->file))
-			return (SYNTAX_INVALID_COMBINATION);
-		redir = redir->next;
-	}
-	return (SYNTAX_OK);
-}
-
 /* Validate the subshell syntax */
 t_syntax_error	validate_subshell_syntax(t_ast_node *node)
 {
@@ -75,8 +56,17 @@ t_syntax_error	validate_subshell_syntax(t_ast_node *node)
 		return (SYNTAX_NESTED_TOO_DEEP);
 	if (!node->left || !validate_subshell_command(node->left))
 		return (SYNTAX_INVALID_COMMAND);
-	redir_status = validate_subshell_redirections(node);
-	if (redir_status != SYNTAX_OK)
-		return (redir_status);
+	if (node->type == TOKEN_REDIR_IN || node->type == TOKEN_REDIR_OUT
+		|| node->type == TOKEN_HEREDOC || node->type == TOKEN_APPEND)
+	{
+		redir_status = validate_redir_syntax(node);
+		if (redir_status != SYNTAX_OK)
+			return (redir_status);
+	}
+	else if (node->type == TOKEN_WORD)
+	{
+		if (!node->args || !node->args[0])
+			return (SYNTAX_INVALID_COMMAND);
+	}
 	return (SYNTAX_OK);
 }

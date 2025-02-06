@@ -6,60 +6,71 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 14:52:45 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 16:34:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Handle group error */
-static t_ast_node	*handle_group_error(char *msg)
+/* Create a subshell node */
+t_ast_node	*create_subshell_node(void)
 {
-	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
-	return (NULL);
+	t_ast_node	*node;
+
+	node = create_ast_node(TOKEN_SUBSHELL);
+	if (!node)
+		return (NULL);
+	node->is_subshell = 1;
+	return (node);
 }
 
-/* Validate subshell end */
-static int	validate_subshell_end(t_token *token)
+/* Combine a subshell with a redirection */
+static t_ast_node	*combine_subshell_redirection(t_ast_node *subshell, t_token **token)
 {
-	if (!token)
-		return (1);
-	if (token->type == TOKEN_PIPE || token->type == TOKEN_AND
-		|| token->type == TOKEN_OR)
-		return (1);
-	if (token->type == TOKEN_RPAREN && check_paren_balance(token))
-		return (1);
-	return (0);
+	t_ast_node	*redir_node;
+
+	if (!token || !*token || !is_redirection(*token))
+		return (subshell);
+	redir_node = create_redirection_node(token);
+	if (!redir_node)
+	{
+		free_ast(subshell);
+		return (NULL);
+	}
+	redir_node->left = subshell;
+	if (*token && is_redirection(*token))
+		return (combine_subshell_redirection(redir_node, token));
+	return (redir_node);
 }
 
 /* Parse group */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;
+	t_ast_node	*subshell_node;
 
 	if (!token || !*token)
 		return (NULL);
 	if (!is_left_paren(*token))
 		return (parse_logic(token));
-	if (!check_paren_balance(*token))
-		return (handle_group_error("unmatched parenthesis"));
-	(*token) = (*token)->next;
-	node = create_ast_node(TOKEN_SUBSHELL);
-	if (!node)
+	*token = (*token)->next;
+	subshell_node = create_subshell_node();
+	if (!subshell_node)
 		return (NULL);
-	node->left = parse_logic(token);
-	if (!node->left || !is_right_paren(*token))
+	node = parse_logic(token);
+	if (!node || !*token || !is_right_paren(*token))
 	{
-		free_ast(node);
+		free_ast(subshell_node);
 		return (handle_group_error("invalid subshell syntax"));
 	}
-	if (!validate_subshell_end((*token)->next))
+	subshell_node->left = node;
+	*token = (*token)->next;
+	if (*token && !is_valid_after_subshell(*token))
 	{
-		free_ast(node);
-		return (handle_group_error("unexpected token after subshell"));
+		free_ast(subshell_node);
+		return (handle_group_error("invalid token after subshell"));
 	}
-	(*token) = (*token)->next;
-	return (node);
+	if (*token && is_redirection(*token))
+		return (combine_subshell_redirection(subshell_node, token));
+	return (subshell_node);
 }
