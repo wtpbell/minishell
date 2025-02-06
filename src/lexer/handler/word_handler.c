@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 15:29:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 13:21:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	should_stop_word(t_tokenizer *tokenizer)
 		return (1);
 	if (!is_in_quotes(tokenizer)
 		&& (is_operator(&tokenizer->input[tokenizer->position])
-		|| ft_isspace(tokenizer->input[tokenizer->position])))
+			|| ft_isspace(tokenizer->input[tokenizer->position])))
 		return (1);
 	return (0);
 }
@@ -54,7 +54,7 @@ static t_token	*expand_word(t_tokenizer *tokenizer, char *word)
 	}
 	expanded = handle_expansion(tokenizer, word);
 	if (!expanded)
-		return(free(word),(NULL));
+		return (free(word), (NULL));
 	if (has_wildcard(expanded))
 	{
 		token = handle_wildcard_token(expanded);

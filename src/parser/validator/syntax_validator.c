@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 14:47:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 13:21:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_syntax_error	validate_logic_syntax(t_ast_node *node)
 /* Validate parentheses syntax */
 static t_syntax_error	validate_paren_syntax(t_ast_node *node)
 {
-	t_ast_node *content;
+	t_ast_node	*content;
 
 	if (!node->left)
 		return (SYNTAX_INVALID_SUBSHELL);

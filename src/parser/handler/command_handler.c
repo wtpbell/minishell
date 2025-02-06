@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 16:10:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 13:22:25 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,67 +17,68 @@ static int	is_command_token(t_token *token)
 {
 	if (!token)
 		return (0);
-	return (token && (token->type == TOKEN_WORD
-			|| token->type == TOKEN_VAR
-			|| token->type == TOKEN_WILDCARD));
+	if (!token->content)
+		return (0);
+	if (token->type != TOKEN_WORD
+		&& token->type != TOKEN_VAR
+		&& token->type != TOKEN_WILDCARD)
+		return (0);
+	return (1);
 }
 
 /* create and initialise a single instruction node */
+
 static t_ast_node	*create_command_node(t_token **token)
 {
 	t_ast_node	*node;
+	t_token		*current;
 
-	if (!token || !*token )
+	if (!token || !*token)
 		return (NULL);
-	if (!is_command_token(*token))
+	current = *token;
+	if (!is_command_token(current))
 		return (NULL);
-	node = create_ast_node((*token)->type);
+	node = create_ast_node(current->type);
 	if (!node)
 		return (NULL);
-	add_arg_to_node(node, (*token)->content);
-	if ((*token)->next)
-		*token = (*token)->next;
+	if (current->content)
+		add_arg_to_node(node, current->content);
+	else
+	{
+		free_ast(node);
+		return (NULL);
+	}
+	*token = current->next;
 	return (node);
 }
 
 /* Parse the token to create an AST node consisting of commands and arguments */
-t_ast_node	*parse_command(t_token **token)
+t_ast_node *parse_command(t_token **token)
 {
 	t_ast_node	*node;
-    t_token		*current;
+	t_token		*current;
 
-	if (!token || !*token )
+	if (!token || !*token)
 		return (NULL);
 	node = create_command_node(token);
 	if (!node)
 		return (NULL);
 	current = *token;
-	if (current->content)
-	{
-		add_arg_to_node(node, current->content);
-		if (!node->args)
-		{
-			free_ast(node);
-			return (NULL);
-		}
-	}
-	if (current->next)
-		current = current->next;
 	while (current && is_command_token(current))
 	{
-		if (current->content)
-		{
-			add_arg_to_node(node, current->content);
-			if (!node->args)
-			{
-				free_ast(node);
-				return (NULL);
-			}
-		}
+		if (!current->content)
+			break;
+		add_arg_to_node(node, current->content);
+		if (!node->args)
+			return (free_ast(node), NULL);
 		if (!current->next)
-			break ;
+		{
+			*token = NULL;
+			break;
+		}
 		current = current->next;
 	}
-	*token = current;
+	if (current)
+		*token = current;
 	return (node);
 }
