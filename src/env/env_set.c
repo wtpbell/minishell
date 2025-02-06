@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 17:11:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:04:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = BOTH;
 			if (new_value)
-				envs->value = ft_strdup(new_value);
+				envs->value = mem_strdup(new_value);
 			else if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = EXPORT;
 			return ;
@@ -66,7 +66,7 @@ void	set_underscore(int argc, char **args)
 		set_env(*get_env_list(), "_", args[argc - 1]);
 		return	;
 	}
-	splited = ft_split_mini(args[argc - 1], "/");
+	splited = mem_split(args[argc - 1], "/");
 	if (!splited)
 		return ;
 	i = 0;
@@ -125,10 +125,10 @@ char	**env_to_arr(t_env *envs)
 	{
 		if (head->hide == 0)
 		{
-			tmp = ft_strjoin(head->key, "=");
+			tmp = mem_strjoin(head->key, "=");
 			if (head->value)
 			{
-				full_entry = ft_strjoin(tmp, head->value);
+				full_entry = mem_strjoin(tmp, head->value);
 				free(tmp);
 				tmp = full_entry;
 			}

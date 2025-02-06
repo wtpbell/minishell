@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 16:36:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 17:45:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:29:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,34 @@
 
 t_mem_tracker	*mem_lstnew(void *ptr)
 {
-	t_mem_tracker	*new_node;
+	t_mem_tracker	*newnode;
 
-	new_node = malloc(sizeof(t_mem_tracker));
-	if (!new_node)
+	newnode = (t_mem_tracker *)malloc(sizeof(t_mem_tracker));
+	if (newnode == NULL)
 		return (NULL);
-	new_node->ptr = ptr;
-	new_node->next = NULL;
-	return (new_node);
+	newnode->ptr = ptr;
+	newnode->next = NULL;
+	return (newnode);
 }
 
-void	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
+bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
 {
-	t_mem_tracker	*temp;
-	t_mem_tracker	*current;
+	t_mem_tracker	*curr;
+	t_mem_tracker	*head;
 
-	if (!lst || !*lst)
-		return ;
-	current = *lst;
-	while (current)
+	if (del == NULL || lst == NULL || *lst == NULL)
+		return (false);
+	head = *lst;
+	curr = head;
+	while (head != NULL)
 	{
-		temp = current->next;
-		if (del)
-			del(current->ptr);
-		free(current);
-		current = temp;
+		head = head->next;
+		del(curr->ptr);
+		free(curr);
+		curr = head;
 	}
 	*lst = NULL;
+	return (true);
 }
 
 
@@ -69,19 +70,27 @@ void	mem_lstdelone(t_mem_tracker **head, t_mem_tracker *target)
 	}
 }
 
-void	mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node)
+static t_mem_tracker	*mem_lstlast(t_mem_tracker *lst)
 {
-	t_mem_tracker	*temp;
+	if (lst == NULL)
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
+}
 
-	if (!lst || !new_node)
-		return ;
-	if (!*lst)
+bool	mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node)
+{
+	t_mem_tracker	*last;
+
+	if (new_node == NULL || lst == NULL)
+		return (false);
+	if (*lst == NULL)
 	{
 		*lst = new_node;
-		return;
+		return (true);
 	}
-	temp = *lst;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_node;
+	last = mem_lstlast(*lst);
+	last->next = new_node;
+	return (true);
 }

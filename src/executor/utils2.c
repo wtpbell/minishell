@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 17:19:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:06:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	append_cwd(t_ast_node *node)
 
 	if(!getcwd(cwd, PATH_MAX))
 		return (error("exec", "Failed to get CWD"));
-	tmp = ft_strjoin(cwd, "/");
-	tmp2 = ft_strjoin(tmp, node->args[0]);
+	tmp = mem_strjoin(cwd, "/");
+	tmp2 = mem_strjoin(tmp, node->args[0]);
 	free(tmp);
 	free(node->args[0]);
 	node->args[0] = tmp2;
@@ -46,14 +46,14 @@ char	*get_cmd_path(char *cmd)
 	path_var = get_env_value(*get_env_list(), "PATH");
 	if (!path_var)
 		return (NULL);
-	paths = ft_split_mini(path_var, ":");
+	paths = mem_split(path_var, ":");
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(tmp, cmd);
+		tmp = mem_strjoin(paths[i], "/");
+		full_path = mem_strjoin(tmp, cmd);
 		printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
 			return (free_tab(paths), free_alloc(tmp, GENERAL), full_path);

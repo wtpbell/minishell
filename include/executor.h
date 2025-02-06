@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 18:55:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 19:13:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,13 @@
 # include "parser.h"
 # include "env.h"
 # include "builtin.h"
+# include <errno.h>
+# include <fcntl.h>
 # include <sys/types.h>
+# include <sys/wait.h>
 
 # define MAX_STATUS_LEN 20
 # define EXIT_ERROR_CODE 255
-
-typedef struct s_process
-{
-	pid_t	pid;
-	int		status;
-}	t_process;
-
-typedef struct s_pipeline
-{
-	t_process	*processes;
-	int			num_processes;
-}	t_pipeline;
 
 
 /*error*/
@@ -53,6 +44,13 @@ int		parent(t_ast_node *node);
 void	executor(t_ast_node *node);
 int		executor_status(t_ast_node *node);
 
+/*execute_pipe*/
+size_t		count_pipes(t_ast_node *node);
+pid_t	launch_pipe(t_ast_node *node);
+pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node);
+void	child_process(t_ast_node *node, int input, int output, int new_input);
+void	redirect_io(int input, int output, int new_input);
+
 /*utils*/
 void	set_exit_status(int status);
 int		get_exit_status(void);
@@ -60,7 +58,6 @@ void	sort_env(t_env **envs);
 char	**ft_split_mini(char const *s, char *set);
 
 /*utils2*/
-
 void	append_cwd(t_ast_node *node);
 int		check_cmd(t_ast_node *node);
 

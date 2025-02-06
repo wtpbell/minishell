@@ -13,6 +13,7 @@
 #include "env.h"
 #include "minishell.h"
 #include "executor.h"
+#include "common.h"
 
 /*
 	1. Command Execution (exec_cmd)
@@ -40,7 +41,7 @@
 void	set_exit_status(int status)
 {
 	g_exit_status = status;
-	set_env(*get_env_list(), "?", ft_itoa(status));
+	set_env(*get_env_list(), "?", mem_itoa(status));
 }
 
 int	get_exit_status(void)

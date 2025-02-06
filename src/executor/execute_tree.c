@@ -61,12 +61,24 @@ int	exec_block(t_ast_node *node)
 */
 int	exec_pipe(t_ast_node *node)
 {
-	int	(*builtin)(t_ast_node *node);
+	pid_t	last_pid;
+	int		status_;
+	size_t	i;
 
-	builtin = is_builtin(node->args[0]);
-	if (builtin)
-		return (set_exit_status(builtin(node)), get_exit_status());
-	return (1); //temprory
+	printf("Executing pipe node\n");
+	set_exit_status(0);
+	last_pid = launch_pipe(node);
+	waitpid(last_pid, &status_, 0);
+	if (WIFEXITED(status_))
+		status_ = WEXITSTATUS(status_);
+	else
+		status_ = EXIT_FAILURE;
+	i = 0;
+	while (i++ < count_pipes(node) - 1)
+		wait(NULL);
+	set_exit_status(status_);
+	// ft_init_signals();
+	return (status_);
 }
 
 /*

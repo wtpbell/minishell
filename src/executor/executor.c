@@ -35,25 +35,72 @@ int	executor_status(t_ast_node *node)
 // 	set_exit_status(executor_status(node));
 // }
 
-void executor(t_ast_node *node) //for checking
+// void executor(t_ast_node *node) //for checking
+// {
+// 	int i;
+
+// 	if (!node)
+// 	{
+// 		printf("executor: received NULL node\n");
+// 		return ;
+// 	}
+// 	printf("executor: processing node of type %d\n", node->type);
+// 	if (node->args)
+// 	{
+// 		printf("executor: command = %s\n", node->args[0]);
+// 		printf("executor: arguments = ");
+// 		for (i = 0; node->args[i]; i++)
+// 		printf("\"%s\" ", node->args[i]);
+// 		printf("\n");
+// 	}
+
+// 	set_exit_status(executor_status(node));
+// }
+
+void	executor(t_ast_node *node) // For checking pipe
 {
 	int i;
 
-	if (!node)
+	if	(!node)
 	{
 		printf("executor: received NULL node\n");
 		return ;
 	}
-	printf("executor: processing node of type %d\n", node->type);
-	if (node->args)
+	if (node->type == 1)
 	{
-		printf("executor: command = %s\n", node->args[0]);
-		printf("executor: arguments = ");
-		for (i = 0; node->args[i]; i++)
-		printf("\"%s\" ", node->args[i]);
-		printf("\n");
+		printf("executor: processing pipe node\n");
+		if (node->left) {
+			printf("executor: left command = %s\n", node->left->args ? node->left->args[0] : "NULL");
+			if (node->left->args) {
+				for (i = 0; node->left->args[i]; i++)
+					printf("executor: left argument %d: \"%s\"\n", i, node->left->args[i]);
+			}
+		}
+		if (node->right) 
+		{
+			printf("executor: right command = %s\n", node->right->args ? node->right->args[0] : "NULL");
+			if (node->right->args)
+			{
+			for (i = 0; node->right->args[i]; i++) {
+				printf("executor: right argument %d: \"%s\"\n", i, node->right->args[i]);
+			}
+			}
+		}
 	}
-
+	else
+	{
+		printf("executor: processing command node of type %d\n", node->type);
+		if (node->args)
+		{
+			printf("executor: command = %s\n", node->args[0]);
+			printf("executor: arguments = ");
+			for (i = 0; node->args[i]; i++)
+				printf("\"%s\" ", node->args[i]);
+			printf("\n");
+		}
+	}
 	set_exit_status(executor_status(node));
 }
+
+
 

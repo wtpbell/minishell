@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 17:16:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:03:05 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,12 @@ static void	append_env_value(t_env *env, char **key, char **value)
 	if (key_[ft_strlen(key_) - 1] == '+')
 	{
 		tmp = key_;
-		*key = ft_substr(key_, 0, (ft_strlen(key_) - 1));
+		*key = mem_substr(key_, 0, (ft_strlen(key_) - 1));
 		free_alloc(tmp, GENERAL);
 		if (value_ == NULL)
 			return ;
 		tmp = value_;
-		*value = ft_strjoin(get_env_value(env, (*key)), value_);
+		*value = mem_strjoin(get_env_value(env, (*key)), value_);
 		if (tmp != NULL)
 			free_alloc(tmp, GENERAL);
 		return ;
@@ -84,7 +84,7 @@ static void	modify_env(t_env **env, char *args)
 {
 	char	**split;
 
-	split = ft_split_mini(args, "=");
+	split = mem_split(args, "=");
 	if (!split)
 		return ;
 	// printf("Debug - export args: %s\n", args); //debug

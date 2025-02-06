@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 17:46:50 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:30:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,17 @@ void	free_mem_context(t_mem_context ctx);
 void	*mem_alloc(size_t size, t_mem_context ctx);
 void	free_tab(char **tab);
 
-/*utils*/
+/* utils/memory */
 t_mem_tracker  *mem_lstnew(void *ptr);
-void	mem_lstclear(t_mem_tracker **lst, void (*del)(void *));
+bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *));
 void	mem_lstdelone(t_mem_tracker **head, t_mem_tracker *target);
-void	mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node);
+bool	mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node);
 
-
+/*utils/tailor_helper*/
+char	*mem_itoa(int n);
+char	**mem_split(char const *s, char *set);
+char	*mem_strjoin(char const *s1, char const *s2);
+char	*mem_strndup(const char *str, int n);
+char	*mem_strdup(const char *str);
+char	*mem_substr(char const *s, unsigned int start, size_t len);
 #endif

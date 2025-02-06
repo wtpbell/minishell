@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 19:52:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 20:44:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static t_ast_node	*parse_pipe_sequence(t_token **token)
 	t_ast_node	*pipe_node;
 	t_ast_node	*right;
 
+	printf("Parsing pipe sequence at token: %s\n", (*token)->content);
 	left = parse_redirection(token);
 	if (!left || !*token || !is_pipe_token(*token))
 		return (left);

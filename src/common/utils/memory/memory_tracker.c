@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 17:46:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:48:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,6 @@ void	*mem_alloc(size_t size, t_mem_context ctx)
 	mem_lstadd_back(head, node);
 	return (ptr);
 }
-
-/* Debug Function: Print All Allocated Memory */
 
 
 void	free_tab(char **tab)
