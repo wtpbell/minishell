@@ -193,3 +193,24 @@ unset VAR						# Remove VAR entirely(both local variables and environment)
   -**pwd Command Behaviour:** pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
   -**execvp() Command Behaviour:** e.g. ls: cannot open directory '.': No such file or directory
 
+
+
+# Types of Expansions
+
+  -**The order of expansion:**
+	- Brace Expansion ({a,b,c} → a b c)
+	- Tilde Expansion (~ → /home/user)
+	- Parameter Expansion ($VAR → Value)
+	- Command Substitution ($(cmd) or `cmd` → Output of cmd)
+	- Arithmetic Expansion ($((1 + 2)) → 3)
+	- Word Splitting (Except in redirections)
+	- Filename (Pathname) Expansion (*.c → file1.c file2.c)
+
+
+# Signals Overview
+	- SIGINT (Interrupt signal, usually from Ctrl+C)
+	- SIGQUIT (Quit signal, usually from Ctrl+)
+	- SIGTERM (Termination signal, generally used to request graceful process termination)
+	- SIGCHLD (Child process terminated signal, sent to the parent when a child finishes)
+	- SIGSEGV (Segmentation fault)
+	- SIGKILL (Forceful kill signal, cannot be caught or ignored)

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/07 15:44:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 18:25:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*get_cmd_path(char *cmd)
 	{
 		tmp = mem_strjoin(paths[i], "/");
 		full_path = mem_strjoin(tmp, cmd);
-		printf("print full_path: %s\n", full_path);
+		// printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
 			return (free_tab(paths), free_alloc(tmp, GENERAL), full_path);
 		free_alloc(full_path, GENERAL);

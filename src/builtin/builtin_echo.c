@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 09:23:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 19:09:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,65 +18,49 @@
 	echo with multiple -n, skip those -n
 	echo with invalid -n, e.g. -nn, do not output the trailing newline
 */
-static int	valid_n_flag(const char *arg)
+static int	verify_args(char **args)
 {
 	int	i;
+	int	j;
 
-	i = 2;
-	while (arg[i])
+	if (ft_strcmp(args[1], "-") == 0)
+		return (1);
+	i = 1;
+	while (args[i] && args[i][0] == '-')
 	{
-		if (arg[i] != 'n')
-			return (0);
+		j = 0;
+		while (args[i][++j])
+		{
+			if (args[i][j] != 'n')
+				return (i);
+		}
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int	builtin_echo(t_ast_node *node)
 {
 	int	i;
-	int	no_newline;
 
-	i = 1;
-	no_newline = 0;
-	if (!node || !node->args)
-		return (set_exit_status(1), EXIT_FAILURE);
-	// printf("Debug - echo args start:\n");  // Debug
-	// int j = 0; //debug
-	// while (node->args[j])
-	// {
-		// printf("Debug - arg[%d]: '%s'\n", j, node->args[j]);  // Debug
-		// j++;
-	// }
-	while (node->args[i] && ft_strcmp(node->args[i], "-n") == 0
-		&& valid_n_flag(node->args[i]))
+	if (node->argc == 1)
+		return (printf("\n"), EXIT_SUCCESS);
+	i = verify_args(node->args);
+	while (i < node->argc)
 	{
-		no_newline = 1;
-		i++;
-	}
-	while (node->args[i])
-	{
-		// printf("Debug - processing arg: '%s'\n", node->args[i]);  // Debug
-		if (ft_strcmp(node->args[i], "$?") == 0) // Expand `$?`
-			printf("%d", get_exit_status());
-		else if (node->args[i][0] == '$')
+		if (ft_strcmp(node->args[i], "$?") == 0)
 		{
-			const char *key = &node->args[i][1];  // Skip the $
-			// printf("Debug - looking up key: '%s'\n", key);  // Debug
-			char *value = get_env_value(*(node->env), key);
-			// printf("Debug - found value: '%s'\n", value ? value : "NULL");  // Debug
-			if (value)
-				printf("%s", value);
-			else
-				printf("%s", "");
+			printf("%d", get_exit_status());
+			set_exit_status(0);
+			i++;
+			continue ;
 		}
-		else
-			printf("%s", node->args[i]);
-		if (node->args[i + 1])
-			printf(" ");
+		printf("%s", node->args[i]);
 		i++;
+		if (i < node->argc)
+			printf(" ");
 	}
-	if (!no_newline)
+	if (verify_args(node->args) == 1)
 		printf("\n");
-	return (set_exit_status(0), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/07 12:40:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 18:23:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	executor(t_ast_node *node);
 int		executor_status(t_ast_node *node);
 
 /*execute_pipe*/
-size_t		count_pipes(t_ast_node *node);
+size_t	count_pipes(t_ast_node *node);
 pid_t	launch_pipe(t_ast_node *node);
 pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node);
 void	child_process(t_ast_node *node, int input, int output, int new_input);
@@ -56,7 +56,7 @@ void	set_exit_status(int status);
 int		get_exit_status(void);
 void	sort_env(t_env **envs);
 int		get_redirection_flags(t_token_type type);
-
+int		get_redirection_fd(t_token_type type);
 /*utils2*/
 void	append_cwd(t_ast_node *node);
 int		check_cmd(t_ast_node *node);

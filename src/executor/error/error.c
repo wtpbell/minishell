@@ -15,7 +15,11 @@ void error(char *word, char *msg)
 		ft_putendl_fd(msg, STDERR_FILENO);
 	}
 	else
-		perror(word);
+	{
+		ft_putstr_fd(word, STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		ft_putendl_fd(strerror(errno), STDERR_FILENO); 
+	}
 	ft_putstr_fd(RESET, STDERR_FILENO);
 	set_exit_status(EXIT_FAILURE);
 }
