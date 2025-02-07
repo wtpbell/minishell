@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 20:06:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 15:44:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	resolve_command(t_ast_node *node)
 	char	*tmp;
 
 	tmp = get_cmd_path(node->args[0]);
-	printf("print tmp: %s\n", tmp);
+	// printf("print tmp: %s\n", tmp);
 	if (!tmp)
 	{
 		error(node->args[0], "Command not found");

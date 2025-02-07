@@ -26,12 +26,22 @@
 */
 int	exec_ctrl(t_ast_node *node)
 {
-	int	(*builtin)(t_ast_node *node);
+	int			status_;
 
-	builtin = is_builtin(node->args[0]);
-	if (builtin)
-		return (set_exit_status(builtin(node)), get_exit_status());
-	return (1); //temprory
+	if (node->type == TOKEN_AND)
+	{
+		status_ = executor_status(node->left);
+		if (status_ == EXIT_SUCCESS)
+			status_ = executor_status(node->right);
+	}
+	else if (node->type == TOKEN_OR)
+	{
+		status_ = executor_status(node->left);
+		if (status_ != EXIT_SUCCESS)
+			status_ = executor_status(node->right);
+	}
+	set_exit_status(status_);
+	return (status_);
 }
 
 /*
@@ -83,37 +93,30 @@ int	exec_pipe(t_ast_node *node)
 
 /*
 	The exec_redir() handles input/output redirection.
-	This function opens a file for redirection and updates the file descriptors.
+	This function must open a file for redirection and updates the file descriptors.
 	It performs the redirection before executing the command and restores
 	the original file descriptor afterward.
 */
 int	exec_redir(t_ast_node *node)
 {
 	t_redirection	*redir;
-	int				fd;
-	int				dup_fd;
 	int				status_;
+	int				fd;
 	int				flags;
 
 	if (!node || !node->redirections)
 		return (0);
 	redir = node->redirections;
-	flags = get_redirection_flags(node->type);
 	while(redir)
 	{
+		flags = get_redirection_flags(node->type);
 		fd = open(redir->file, flags, 0644);
 		if (fd == -1)
 		{
 			error(redir->file, NULL);
 			return (set_exit_status(1), 1);
 		}
-		dup_fd = dup(fd);
-		dup2(fd, fd);
 		status_ = executor_status(node);
-		set_exit_status(status_);
-		close(fd);
-		dup2(dup_fd, fd);
-		close(dup_fd);
 		if (redir->type == TOKEN_HEREDOC)
 			unlink(redir->file);
 	}

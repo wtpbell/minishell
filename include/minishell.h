@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 09:15:49 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 14:52:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef enum e_token_type
 	TOKEN_NEWLINE,
 	TOKEN_EOF,
 	TOKEN_SUBSHELL,
+	TOKEN_CTRL = TOKEN_AND | TOKEN_OR,
+	TOKEN_REDIR = TOKEN_REDIR_IN | TOKEN_REDIR_OUT | TOKEN_APPEND | TOKEN_HEREDOC
 }	t_token_type;
 
 typedef struct s_token
