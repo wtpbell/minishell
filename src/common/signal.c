@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/05 14:03:42 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 10:17:50 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,18 @@ static void	interrupt_handler(int sig)
 	set_exit_status(1);
 }
 
-void	interrupt_from_keyboard(int sig)
+void	interrupt_w_msg(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	set_exit_status(1);
 }
 
+void	interrput_slience(int sig)
+{
+	(void)sig;
+	set_exit_status(1);
+}
 
 void	signals_init(void)
 {

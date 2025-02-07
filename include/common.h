@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 20:30:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 10:19:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,10 @@ char	*mem_strjoin(char const *s1, char const *s2);
 char	*mem_strndup(const char *str, int n);
 char	*mem_strdup(const char *str);
 char	*mem_substr(char const *s, unsigned int start, size_t len);
+
+/*signal*/
+
+void	signals_init(void);
+void	interrupt_w_msg(int sig);
+void	interrput_slience(int sig);
 #endif

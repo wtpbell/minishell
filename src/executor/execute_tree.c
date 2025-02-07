@@ -77,7 +77,7 @@ int	exec_pipe(t_ast_node *node)
 	while (i++ < count_pipes(node) - 1)
 		wait(NULL);
 	set_exit_status(status_);
-	// ft_init_signals();
+	signals_init();
 	return (status_);
 }
 
@@ -89,12 +89,35 @@ int	exec_pipe(t_ast_node *node)
 */
 int	exec_redir(t_ast_node *node)
 {
-	int	(*builtin)(t_ast_node *node);
+	t_redirection	*redir;
+	int				fd;
+	int				dup_fd;
+	int				status_;
+	int				flags;
 
-	builtin = is_builtin(node->args[0]);
-	if (builtin)
-		return (set_exit_status(builtin(node)), get_exit_status());
-	return (1); //temprory
+	if (!node || !node->redirections)
+		return (0);
+	redir = node->redirections;
+	flags = get_redirection_flags(node->type);
+	while(redir)
+	{
+		fd = open(redir->file, flags, 0644);
+		if (fd == -1)
+		{
+			error(redir->file, NULL);
+			return (set_exit_status(1), 1);
+		}
+		dup_fd = dup(fd);
+		dup2(fd, fd);
+		status_ = executor_status(node);
+		set_exit_status(status_);
+		close(fd);
+		dup2(dup_fd, fd);
+		close(dup_fd);
+		if (redir->type == TOKEN_HEREDOC)
+			unlink(redir->file);
+	}
+	return (status_);
 }
 
 /*
@@ -123,8 +146,8 @@ int exec_cmd(t_ast_node *node)
 	status_ = check_cmd(node);
 	if (status_ != 0)
 		return (status_);
-	// signal(SIGINT, interrupt_from_keyboard);
-	// signal(SIGQUIT, interrupt_from_keyboard);
+	signal(SIGINT, interrupt_w_msg);
+	signal(SIGQUIT, interrupt_w_msg);;
 	if (fork() == 0)
 		child(node);
 	return (parent(node));

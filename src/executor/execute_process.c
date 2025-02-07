@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:32:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 10:28:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,6 @@ int	parent(t_ast_node *node)
 		status_ = WTERMSIG(status_) + 128;
 	set_underscore(node->argc, node->args);
 	set_exit_status(status_);
-	// signals_init();
+	signals_init();
 	return (get_exit_status());
 }

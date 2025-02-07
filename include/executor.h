@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 19:13:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 12:40:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	redirect_io(int input, int output, int new_input);
 void	set_exit_status(int status);
 int		get_exit_status(void);
 void	sort_env(t_env **envs);
-char	**ft_split_mini(char const *s, char *set);
+int		get_redirection_flags(t_token_type type);
 
 /*utils2*/
 void	append_cwd(t_ast_node *node);

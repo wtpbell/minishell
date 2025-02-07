@@ -21,7 +21,8 @@ int	executor_status(t_ast_node *node)
 		return (exec_pipe(node));
 	else if (node->type == TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_ctrl(node));
-	else if (node->type ==  (TOKEN_REDIR_IN) || node->type ==  (TOKEN_REDIR_OUT))
+	else if (node->type ==  (TOKEN_REDIR_IN) || node->type ==  (TOKEN_REDIR_OUT)
+			|| node->type == TOKEN_APPEND || node->type == TOKEN_HEREDOC)
 		return (exec_redir(node));
 	else if (node->type == TOKEN_BLOCK)
 		return (exec_block(node));

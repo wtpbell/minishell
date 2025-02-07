@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 20:03:05 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 12:48:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static bool	is_valid_key(char *key)
 	int	i;
 
 	i = 0;
+	if (!key)
+		return (false);
 	if (!(ft_isalpha(key[i]) || key[i] == '_'))
 		return (false);
 	while (ft_isalpha(key[i]) || key[i] == '_')

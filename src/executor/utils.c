@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:44:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 12:08:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,19 @@ void	sort_env(t_env **envs)
 		if (!did_swap)
 			break ;
 	}
+}
+
+
+/* flags to check for redirection types */
+int	get_redirection_flags(t_token_type type)
+{
+	if (type == TOKEN_REDIR_IN)
+		return (O_RDONLY);
+	if (type == TOKEN_REDIR_OUT)
+		return (O_WRONLY | O_CREAT | O_TRUNC);
+	if (type == TOKEN_APPEND)
+		return (O_WRONLY | O_CREAT | O_APPEND);
+	if (type == TOKEN_HEREDOC)
+		return (O_RDONLY);
+	return (0);
 }
