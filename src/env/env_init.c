@@ -13,12 +13,13 @@
 #include "env.h"
 #include "minishell.h"
 #include "executor.h"
+#include "common.h"
 
 static t_env	*env_int(char **key_value)
 {
 	t_env	*new;
 
-	new = malloc(sizeof(t_env));
+	new = mem_alloc(sizeof(t_env), GENERAL);
 	new->key = key_value[0];
 	new->value = key_value[1];
 	new->scope = BOTH;
@@ -39,9 +40,9 @@ t_env *create_env(char *env)
 	t_env *new;
 	char **key_value;
 
-	key_value = ft_split_mini(env, "=");
+	key_value = mem_split(env, "=");
 	if (!key_value)
-		return (NULL); // need to free memory?
+		return (NULL);
 	new = env_int(key_value);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
@@ -67,7 +68,7 @@ static void	add_empty_env(t_env **env)
 	i = 0;
 	getcwd(pwd, PATH_MAX);
 	new[0] = create_env("OLDPWD");
-	pwd2 = ft_strjoin("PWD=", pwd);
+	pwd2 = mem_strjoin("PWD=", pwd);
 	new[1] = create_env(pwd2);
 	new[2] = create_env("SHLVL=0");
 	new[3] = create_env("PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin");
@@ -105,16 +106,15 @@ void	setup_shlvl(t_env *new)
 	{
 		old_shlvl = ft_atoi(new->value);
 		if (old_shlvl < 0)
-			new->value = ft_itoa(0);
+			new->value = mem_itoa(0);
 		else if (old_shlvl >= 999)
 		{
 			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
 			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = ft_itoa(1);
+			new->value = mem_itoa(1);
 		}
 		else
-			new->value = ft_itoa(++old_shlvl);
-		free(new->value); //it shd be free
+			new->value = mem_itoa(++old_shlvl);
 	}
 }
 

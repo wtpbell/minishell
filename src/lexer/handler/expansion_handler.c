@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 15:42:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/01/30 17:21:55 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,6 @@
 static int	is_valid_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
-}
-
-/* Handling $? (exit status) */
-static char	*handle_special_param(char *str, int *pos, t_quote_state state)
-{
-	if (str[*pos + 1] == '?'
-		&& (state.quote_char != '\'' || !state.in_quote))
-	{
-		(*pos)++;
-		return (ft_itoa(g_exit_status));
-	}
-	return (NULL);
 }
 
 /*
@@ -55,11 +43,29 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	var_name = ft_substr(str, start, len);
 	if (!var_name)
 		return (NULL);
-	value = getenv(var_name);
+	value = handle_extended_expansion(var_name, NULL, NULL);
 	free(var_name);
 	if (!value)
 		return (ft_strdup(""));
-	return (ft_strdup(value));
+	return (value);
+}
+
+static char	*handle_special_param(char *str, int *pos, t_quote_state state)
+{
+	char	*param;
+	char	*result;
+
+	if (str[*pos + 1] == '?' || str[*pos + 1] == '$' || str[*pos + 1] == '#')
+	{
+		param = ft_substr(str, *pos + 1, 1);
+		if (!param)
+			return (NULL);
+		result = expand_special_param(param);
+		free(param);
+		(*pos)++;
+		return (result);
+	}
+	return (handle_simple_expansion(str, pos, state));
 }
 
 /*
@@ -68,14 +74,9 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 ** that start with $ to their actual value. */
 char	*get_var_value(char *str, int *pos, t_quote_state state)
 {
-	char	*special_value;
-
-	if (state.quote_char == '\'')
+	if (state.quote_char == '\'' && state.in_quote)
 		return (ft_strdup("$"));
-	special_value = handle_special_param(str, pos, state);
-	if (special_value)
-		return (special_value);
 	if (str[*pos + 1] == '{')
 		return (handle_braced_expansion(str, pos, state));
-	return (handle_simple_expansion(str, pos, state));
+	return (handle_special_param(str, pos, state));
 }

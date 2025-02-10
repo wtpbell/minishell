@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.h                                            :+:    :+:            */
+/*   ft_free_strarr.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/28 12:40:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 14:10:43 by bewong        ########   odam.nl         */
+/*   Created: 2025/01/31 17:33:34 by spyun         #+#    #+#                 */
+/*   Updated: 2025/01/31 17:35:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <stdlib.h>
 
-# include "parser.h"
+void	ft_free_strarr(char **arr)
+{
+	int	i;
 
-// typedef struct s_mem_tracker
-// {
-// 	void					*ptr;
-// 	struct s_mem_tracker	*next;
-// }	t_mem_tracker;
-
-// typedef struct s_mem_context
-// {
-// 	t_mem_tracker	*head;
-// 	int				count;
-// }	t_mem_context;
-
-
-
-#endif
+	if (!arr)
+		return ;
+	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}

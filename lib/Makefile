@@ -19,7 +19,7 @@ SRC_FILES	= ft_atoi.c ft_bzero.c ft_calloc.c ft_isalnum.c ft_isalpha.c \
 			ft_strlcpy.c ft_strlen.c ft_strmapi.c ft_strncmp.c ft_strnstr.c \
 			ft_strrchr.c ft_strtrim.c ft_substr.c ft_tolower.c ft_toupper.c \
 			get_next_line.c ft_skipspaces.c ft_isspace.c ft_strjoin_free.c \
-			ft_strjoin_char.c ft_strcmp.c
+			ft_strjoin_char.c ft_strcmp.c ft_free_strarr.c
 
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
 OBJS		= $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

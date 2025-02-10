@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/30 17:33:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 18:22:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,12 @@ t_env	**get_env_list(void);
 /*env_utils.c*/
 t_env	*get_env(t_env *envs, const char *key);
 char	*get_env_value(t_env *envs, const char *key);
+void	add_env_var(t_env **env, char *key, char *value);
 
 /*env_set.c*/
 void	add_env(t_env **env, t_env *new);
-void		set_env(t_env *envs, const char *key, const char *new_value);
+void	set_env(t_env *envs, const char *key, const char *new_value);
 void	set_underscore(int argc, char **args);
-
+char	**env_to_arr(t_env *envs);
+void	set_last_arg_env(char **args, int argc);
 #endif

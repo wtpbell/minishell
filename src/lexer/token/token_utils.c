@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.h                                            :+:    :+:            */
+/*   token_utils.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/28 12:40:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 14:10:43 by bewong        ########   odam.nl         */
+/*   Created: 2025/02/03 14:49:07 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/03 15:01:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "lexer.h"
 
-# include "parser.h"
+void	free_tokens(t_token *token)
+{
+	t_token	*next;
 
-// typedef struct s_mem_tracker
-// {
-// 	void					*ptr;
-// 	struct s_mem_tracker	*next;
-// }	t_mem_tracker;
-
-// typedef struct s_mem_context
-// {
-// 	t_mem_tracker	*head;
-// 	int				count;
-// }	t_mem_context;
-
-
-
-#endif
+	if (!token)
+		return ;
+	next = token->next;
+	if (token->content)
+		free(token->content);
+	free(token);
+	free_tokens(next);
+}

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 15:47:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 19:09:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,48 +16,51 @@
 	echo with -n do not output the trailing newline
 	echo with no args, output a newline
 	echo with multiple -n, skip those -n
-	echo with invalid -n, e.g. -nn, will directly output -nn
+	echo with invalid -n, e.g. -nn, do not output the trailing newline
 */
-static int	valid_n_flag(const char *arg)
+static int	verify_args(char **args)
 {
 	int	i;
+	int	j;
 
-	i = 2;
-	while (arg[i])
+	if (ft_strcmp(args[1], "-") == 0)
+		return (1);
+	i = 1;
+	while (args[i] && args[i][0] == '-')
 	{
-		if (arg[i] != 'n')
-			return (0);
+		j = 0;
+		while (args[i][++j])
+		{
+			if (args[i][j] != 'n')
+				return (i);
+		}
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int	builtin_echo(t_ast_node *node)
 {
 	int	i;
-	int	no_newline;
 
-	i = 1;
-	no_newline = 0;
-	if (!node || !node->args)
-		return (set_exit_status(1), EXIT_FAILURE);
-	while (node->args[i] && ft_strcmp(node->args[i], "-n") == 0
-		&& valid_n_flag(node->args[i]))
+	if (node->argc == 1)
+		return (printf("\n"), EXIT_SUCCESS);
+	i = verify_args(node->args);
+	while (i < node->argc)
 	{
-		no_newline = 1;
-		i++;
-	}
-	while (node->args[i])
-	{
-		if (ft_strcmp(node->args[i], "$?") == 0) // Expand `$?`
+		if (ft_strcmp(node->args[i], "$?") == 0)
+		{
 			printf("%d", get_exit_status());
-		else
-			printf("%s", node->args[i]);
-		if (node->args[i + 1])
-			printf(" ");
+			set_exit_status(0);
+			i++;
+			continue ;
+		}
+		printf("%s", node->args[i]);
 		i++;
+		if (i < node->argc)
+			printf(" ");
 	}
-	if (!no_newline)
+	if (verify_args(node->args) == 1)
 		printf("\n");
-	return (set_exit_status(0), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }

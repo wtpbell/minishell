@@ -22,12 +22,15 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
 			  $(LEXER_DIR)/token/token_create.c \
 			  $(LEXER_DIR)/token/token_type.c \
+			  $(LEXER_DIR)/token/token_utils.c \
 			  $(LEXER_DIR)/handler/expansion_braced_handler.c \
 			  $(LEXER_DIR)/handler/expansion_handler.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
 			  $(LEXER_DIR)/handler/tilde_handler.c \
+			  $(LEXER_DIR)/handler/var_expansion_handler.c \
+			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/heredoc/heredoc_handler.c \
 			  $(LEXER_DIR)/heredoc/heredoc_expansion.c \
@@ -69,9 +72,18 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils2.c \
 				 $(EXECUTOR_DIR)/utils3.c \
 				 $(EXECUTOR_DIR)/error/error.c \
+				 $(EXECUTOR_DIR)/execute_process.c \
+				 $(EXECUTOR_DIR)/execute_pipe.c \
 
-COMMON_FILES = $(COMMON_DIR)/utils.c \
-				$(COMMON_DIR)/signal.c
+COMMON_FILES = $(COMMON_DIR)/signal.c \
+				$(COMMON_DIR)/utils/memory/memory_tracker.c \
+				$(COMMON_DIR)/utils/memory/utils.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_itoa.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_split.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_strjoin.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_strndup.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_strdup.c \
+				$(COMMON_DIR)/utils/tailor_helper/mem_substr.c \
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -79,14 +91,15 @@ PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BUILTIN_OBJ = $(BUILTIN_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+COMMON_OBJ = $(COMMON_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ) $(COMMON_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES) $(COMMON_FILES)
 
 all: $(NAME)
 
@@ -106,6 +119,8 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/executor
 	@mkdir -p $(OBJ_DIR)/executor/error
 	@mkdir -p $(OBJ_DIR)/builtin
+	@mkdir -p $(OBJ_DIR)/common
+	@mkdir -p $(OBJ_DIR)/common/utils/memory
 
 
 $(LIBFT):

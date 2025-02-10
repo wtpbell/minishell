@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 14:14:25 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 17:14:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "common.h"
 #include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -80,13 +81,13 @@ int	builtin_exit(t_ast_node *node)
 	ft_putendl_fd("exit", STDIN_FILENO);
 	if (node->argc == 1)
 	{
-		// Free memory
+		free_all_memory();
 		exit((int)((unsigned char)get_exit_status()));
 	}
 	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
-		// Free memory
+		free_all_memory();
 		exit(255);
 	}
 	if (node->argc > 2)

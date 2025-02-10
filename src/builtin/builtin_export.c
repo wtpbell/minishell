@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 16:02:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 12:48:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "env.h"
 #include "builtin.h"
+#include "common.h"
 
 static void	print_envs(t_env *env)
 {
@@ -39,6 +40,8 @@ static bool	is_valid_key(char *key)
 	int	i;
 
 	i = 0;
+	if (!key)
+		return (false);
 	if (!(ft_isalpha(key[i]) || key[i] == '_'))
 		return (false);
 	while (ft_isalpha(key[i]) || key[i] == '_')
@@ -58,22 +61,24 @@ static void	append_env_value(t_env *env, char **key, char **value)
 {
 	char	*key_;
 	char	*value_;
-	char	*new_value;
-
+	char	*tmp;
+	
 	key_ = *key;
 	value_ = *value;
 	if (!key_ || !value_)
 		return ;
 	if (key_[ft_strlen(key_) - 1] == '+')
 	{
-		*key = ft_substr(key_, 0, ft_strlen(key_) - 1);
-		free(key_);
+		tmp = key_;
+		*key = mem_substr(key_, 0, (ft_strlen(key_) - 1));
+		free_alloc(tmp, GENERAL);
 		if (value_ == NULL)
 			return ;
-
-		new_value = ft_strjoin(get_env_value(env, (*key)), value_);
-		free(value_);
-		*value = new_value;
+		tmp = value_;
+		*value = mem_strjoin(get_env_value(env, (*key)), value_);
+		if (tmp != NULL)
+			free_alloc(tmp, GENERAL);
+		return ;
 	}
 }
 
@@ -81,9 +86,12 @@ static void	modify_env(t_env **env, char *args)
 {
 	char	**split;
 
-	split = ft_split_mini(args, "=");
+	split = mem_split(args, "=");
 	if (!split)
 		return ;
+	// printf("Debug - export args: %s\n", args); //debug
+	// if (split[0])
+	// 	printf("Debug - key: %s. value: %s\n", split[0], split[1]); //debug
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
 	if (!is_valid_key(split[0]) || args[0] == '=')
@@ -92,12 +100,12 @@ static void	modify_env(t_env **env, char *args)
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		return ;
 	}
-	// if (args[ft_strlen(args - 1)] == '=')
-	// 	add_env_var(env, split[0], "");
-	// else if (args[0] && !args[1])
-	// 	add_env_var(env, split[0], NULL);
-	// else
-	// 	add_env_var(env, split[0], split[1]);
+	if (args[ft_strlen(args) - 1] == '=') 
+		add_env_var(env, split[0], "");
+	else if (split[0] && !split[1])
+		add_env_var(env, split[0], NULL);
+	else
+		add_env_var(env, split[0], split[1]);
 }
 
 int	builtin_export(t_ast_node *node)

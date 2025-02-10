@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 14:36:18 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 17:10:24 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/03 15:00:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ t_token	*tokenize(char *input)
 	init_tokenizer(&tokenizer, input);
 	while (tokenizer.input[tokenizer.position])
 	{
-		tokenizer.position += ft_skipspaces(&tokenizer.input[tokenizer.position]);
+		tokenizer.position
+			+= ft_skipspaces(&tokenizer.input[tokenizer.position]);
 		if (!tokenizer.input[tokenizer.position])
 			break ;
 		if (is_operator(&tokenizer.input[tokenizer.position]))

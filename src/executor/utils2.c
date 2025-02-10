@@ -6,13 +6,14 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 16:09:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 18:25:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "env.h"
 #include "parser.h"
+#include "common.h"
 #include <sys/stat.h>
 
 void	append_cwd(t_ast_node *node)
@@ -21,13 +22,16 @@ void	append_cwd(t_ast_node *node)
 	char	*tmp;
 	char	*tmp2;
 
-	getcwd(cwd, PATH_MAX);
-	tmp = ft_strjoin(cwd, "/");
-	tmp2 = ft_strjoin(tmp, node->args[0]);
+	if(!getcwd(cwd, PATH_MAX))
+		return (error("exec", "Failed to get CWD"));
+	tmp = mem_strjoin(cwd, "/");
+	tmp2 = mem_strjoin(tmp, node->args[0]);
 	free(tmp);
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
+
+
 
 char	*get_cmd_path(char *cmd)
 {
@@ -42,41 +46,42 @@ char	*get_cmd_path(char *cmd)
 	path_var = get_env_value(*get_env_list(), "PATH");
 	if (!path_var)
 		return (NULL);
-	paths = ft_split_mini(path_var, ":");
+	paths = mem_split(path_var, ":");
 	if (!paths)
 		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(tmp, cmd);
+		tmp = mem_strjoin(paths[i], "/");
+		full_path = mem_strjoin(tmp, cmd);
+		// printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
-			return (free(paths), free(tmp), full_path); //i need to free paths tab 
-		free(full_path);//i need to free full_path tab
-		free(tmp);
+			return (free_tab(paths), free_alloc(tmp, GENERAL), full_path);
+		free_alloc(full_path, GENERAL);
+		free_alloc(tmp, GENERAL);
 		i++;
 	}
-	return (free(paths), NULL);
+	return (free_tab(paths), NULL);
 }
 
-int	exec_path(t_ast_node *node)
+static int	resolve_command(t_ast_node *node)
 {
 	char	*tmp;
 
 	tmp = get_cmd_path(node->args[0]);
-	printf("print tmp: %s\n", tmp);
+	// printf("print tmp: %s\n", tmp);
 	if (!tmp)
 	{
 		error(node->args[0], "Command not found");
 		set_underscore(node->argc, node->args);
 		return (set_exit_status(127), 127);
 	}
-	free(node->args[0]);
+	free_alloc(node->args[0], GENERAL);
 	node->args[0] = tmp;
 	return (0);
 }
 
-int	exec_exec(t_ast_node *node)
+static int	validate_executable(t_ast_node *node)
 {
 	int			i;
 	struct stat	info;
@@ -87,19 +92,19 @@ int	exec_exec(t_ast_node *node)
 	if (access(node->args[0], F_OK) == -1)
 	{
 		error(node->args[0], "No such file or directory");
-		return (set_exit_status(127), 127);
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
 	}
 	if (stat(node->args[0], &info) == -1)
-		return (error(node->args[0], NULL), 1);
-	if (!S_ISDIR(info.st_mode))
+		return (printf("Stat failed on file: %s\n", node->args[0]), 1);
+	if (S_ISDIR(info.st_mode))
 	{
-		error(node->args[0], "Is not a directory");
-		return (set_exit_status(126), 126);
+		error(node->args[0], "Is a directory");
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
 	}
 	if (access(node->args[0], R_OK | X_OK) == -1)
 	{
 		error(node->args[0], "Permission denied");
-		return (set_exit_status(126), 126);
+		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
 	}
 	return (0);
 }
@@ -114,14 +119,23 @@ int	check_cmd(t_ast_node *node)
 {
 	int status_;
 
-	status_ = 0;
+	printf("Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*node->env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
+	printf("Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
-		status_ = exec_path(node);
+	{
+		status_ = resolve_command(node);
+		if (status_ != 0)
+			return (status_);
+	}
 	else
-		status_ = exec_exec(node);
-	return (status_);
+	{
+		status_ = validate_executable(node);
+		if (status_ != 0)
+			return (status_);
+	}
+	return (0);
 }
 

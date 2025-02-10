@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/27 09:22:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/06 09:18:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,31 +43,30 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
-/*
-** Add command arguments to the AST node
-** Replace the existing argument array with an array containing the new arguments
-*/
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;
-	int		i;
-	int		len;
+	int		args_len;
 
 	if (!node || !arg)
 		return ;
-	len = get_args_length(node->args);
-	new_args = (char **)malloc(sizeof(char *) * (len + 2));
+	args_len = get_args_length(node->args);
+	new_args = (char **)malloc(sizeof(char *) * (args_len + 2));
 	if (!new_args)
 		return ;
-	i = 0;
-	while (i < len)
+	if (node->args)
 	{
-		new_args[i] = node->args[i];
-		i++;
+		while (args_len--)
+			new_args[args_len] = node->args[args_len];
+		free(node->args);
 	}
-	new_args[i] = ft_strdup(arg);
-	new_args[i + 1] = NULL;
-	free(node->args);
+	new_args[node->argc] = ft_strdup(arg);
+	new_args[node->argc + 1] = NULL;
+	if (!new_args[node->argc])
+	{
+		free(new_args);
+		return ;
+	}
 	node->args = new_args;
 	node->argc++;
 }

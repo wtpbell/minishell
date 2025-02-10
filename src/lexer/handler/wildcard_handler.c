@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.h                                            :+:    :+:            */
+/*   wildcard_handler.c                                 :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/28 12:40:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 14:10:43 by bewong        ########   odam.nl         */
+/*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/06 09:16:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "lexer.h"
 
-# include "parser.h"
+int	has_wildcard(const char *str)
+{
+	if (!str)
+		return (0);
+	return (ft_strchr(str, '*') != NULL);
+}
 
-// typedef struct s_mem_tracker
-// {
-// 	void					*ptr;
-// 	struct s_mem_tracker	*next;
-// }	t_mem_tracker;
-
-// typedef struct s_mem_context
-// {
-// 	t_mem_tracker	*head;
-// 	int				count;
-// }	t_mem_context;
-
-
-
-#endif
+t_token	*handle_wildcard_token(const char *str)
+{
+	return (create_token(ft_strdup(str), TOKEN_WILDCARD));
+}

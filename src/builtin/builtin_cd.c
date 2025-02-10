@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/03 14:54:22 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/06 20:06:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "common.h"
 #include <sys/stat.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -54,7 +55,7 @@ static int	cd_dir(t_ast_node *node)
 		tmp = get_env_value(*(node->env), "OLDPWD");
 		if (!tmp)
 			return (error("cd", "OLDPWD not set"), EXIT_FAILURE);
-		tmp = ft_strdup(tmp);
+		tmp = mem_strdup(tmp);
 		if (chdir(tmp) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		ft_putendl_fd(tmp, STDOUT_FILENO);
