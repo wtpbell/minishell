@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 16:31:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 09:19:35 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ t_ast_node			*handle_group_error(char *msg);
 int 				validate_subshell_command(t_ast_node *node);
 
 /* Group handling */
-t_ast_node			*create_subshell_node(void);
 t_ast_node			*create_redirection_node(t_token **token);
 
 #endif

@@ -6,13 +6,71 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 16:34:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 09:26:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Create a subshell node */
+static void	print_current_token(t_token *token, const char *prefix)
+{
+	if (token)
+		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
+			prefix, token->type, token->content);
+	else
+		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
+}
+
+static t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
+{
+	t_ast_node	*logic_node;
+	t_ast_node	*right;
+
+	logic_node = create_logic_node(token);
+	if (!logic_node)
+		return (NULL);
+	if ((*token)->type == TOKEN_LPAREN)
+		right = parse_group(token);
+	else
+		right = parse_pipeline(token);
+	if (!right)
+	{
+		free_ast(logic_node);
+		return (NULL);
+	}
+	logic_node->left = left;
+	logic_node->right = right;
+	return (logic_node);
+}
+
+static t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type)
+{
+	t_ast_node	*current;
+	t_ast_node	*result;
+
+	print_current_token(*token, "Parsing command sequence");
+	if ((*token)->type == TOKEN_LPAREN)
+		current = parse_group(token);
+	else
+		current = parse_pipeline(token);
+	if (!current)
+		return (NULL);
+	while (*token && (*token)->type != end_type)
+	{
+		print_current_token(*token, "Processing sequence token");
+		if (!is_logic_operator(*token))
+			break ;
+		result = handle_logic_operation(token, current);
+		if (!result)
+		{
+			free_ast(current);
+			return (NULL);
+		}
+		current = result;
+	}
+	return (current);
+}
+
 t_ast_node	*create_subshell_node(void)
 {
 	t_ast_node	*node;
@@ -24,53 +82,44 @@ t_ast_node	*create_subshell_node(void)
 	return (node);
 }
 
-/* Combine a subshell with a redirection */
-static t_ast_node	*combine_subshell_redirection(t_ast_node *subshell, t_token **token)
-{
-	t_ast_node	*redir_node;
-
-	if (!token || !*token || !is_redirection(*token))
-		return (subshell);
-	redir_node = create_redirection_node(token);
-	if (!redir_node)
-	{
-		free_ast(subshell);
-		return (NULL);
-	}
-	redir_node->left = subshell;
-	if (*token && is_redirection(*token))
-		return (combine_subshell_redirection(redir_node, token));
-	return (redir_node);
-}
-
-/* Parse group */
 t_ast_node	*parse_group(t_token **token)
 {
-	t_ast_node	*node;
 	t_ast_node	*subshell_node;
+	t_ast_node	*content;
+	t_ast_node	*result;
 
+	print_current_token(*token, "Entering parse_group");
 	if (!token || !*token)
 		return (NULL);
-	if (!is_left_paren(*token))
-		return (parse_logic(token));
-	*token = (*token)->next;
+	if ((*token)->type != TOKEN_LPAREN)
+		return (parse_command_sequence(token, TOKEN_EOF));
 	subshell_node = create_subshell_node();
 	if (!subshell_node)
 		return (NULL);
-	node = parse_logic(token);
-	if (!node || !*token || !is_right_paren(*token))
+	*token = (*token)->next;
+	content = parse_command_sequence(token, TOKEN_RPAREN);
+	if (!content)
 	{
 		free_ast(subshell_node);
 		return (handle_group_error("invalid subshell syntax"));
 	}
-	subshell_node->left = node;
-	*token = (*token)->next;
-	if (*token && !is_valid_after_subshell(*token))
+	subshell_node->left = content;
+	if (!*token || (*token)->type != TOKEN_RPAREN)
 	{
 		free_ast(subshell_node);
-		return (handle_group_error("invalid token after subshell"));
+		return (handle_group_error("missing closing parenthesis"));
 	}
-	if (*token && is_redirection(*token))
-		return (combine_subshell_redirection(subshell_node, token));
+	print_current_token(*token, "Found closing parenthesis");
+	*token = (*token)->next;
+	if (*token && is_logic_operator(*token))
+	{
+		result = handle_logic_operation(token, subshell_node);
+		if (!result)
+		{
+			free_ast(subshell_node);
+			return (NULL);
+		}
+		return (result);
+	}
 	return (subshell_node);
 }

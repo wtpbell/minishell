@@ -37,7 +37,6 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/redirection_handler.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
-			   $(PARSER_DIR)/handler/logic_parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
 			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
