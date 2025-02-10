@@ -6,7 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
+<<<<<<< HEAD
 /*   Updated: 2025/02/10 13:57:04 by spyun         ########   odam.nl         */
+=======
+/*   Updated: 2025/02/05 09:20:34 by spyun         ########   odam.nl         */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +72,13 @@ char			**expand_wildcards(const char *pattern);
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
 int				get_operator_len(t_token_type type);
+<<<<<<< HEAD
+=======
+
+int				has_wildcard(const char *str);
+t_token			*handle_wildcard_token(const char *str);
+
+>>>>>>> main
 int				is_operator(char *str);
 int				is_special_char(char c);
 int				is_quote(char c);
