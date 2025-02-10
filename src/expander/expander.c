@@ -1,0 +1,30 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   expander.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/10 10:35:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/10 11:53:05 by bewong        ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include "parser.h"
+
+void	expand_vars(t_ast_node *node)
+{
+	if (node->type == TOKEN_EXEC)
+		return (expand_exec_vars(node));
+	else
+		return (expand_redir_vars(node));
+}
+
+void	expand_wildcards()
+
+void	expander(t_ast_node *node)
+{
+	expand_vars(node);
+	expand_wildcards(node);
+}

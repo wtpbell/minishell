@@ -127,6 +127,7 @@ int	exec_redir(t_ast_node *node)
 	if (!node || !node->redirections)
 		return (0);
 	redir = node->redirections;
+	// expander(node);
 	while(redir)
 	{
 		flags = get_redirection_flags(node->type);
@@ -168,6 +169,7 @@ int exec_cmd(t_ast_node *node)
 		return (set_exit_status(0), 0);
 	status_ = 0;
 	node->env = get_env_list();
+	// expander(node);
 	if (node->env == 0)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
