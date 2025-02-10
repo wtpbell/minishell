@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 09:19:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 15:34:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
 t_ast_node			*create_logic_node(t_token **token);
-t_ast_node			*process_logic_operator(t_token **token,
-						t_ast_node *left, t_ast_node *logic_node);
 t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
 t_ast_node			*handle_logic_error(void);
 int					is_logic_operator(t_token *token);
@@ -114,7 +112,9 @@ int					is_redirection(t_token *token);
 t_ast_node			*handle_group_error(char *msg);
 int 				validate_subshell_command(t_ast_node *node);
 
-/* Group handling */
-t_ast_node			*create_redirection_node(t_token **token);
-
+t_ast_node			*parse_command_sequence(t_token **token, t_token_type end_type);
+t_ast_node			*handle_logic_operation(t_token **token, t_ast_node *left);
+int					is_logic_operator(t_token *token);
+t_ast_node			*create_logic_node(t_token **token);
+t_ast_node			*handle_logic_error(void);
 #endif

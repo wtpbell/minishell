@@ -6,20 +6,20 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 12:13:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 15:21:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static void	print_current_token(t_token *token, const char *prefix)
-{
-	if (token)
-		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
-			prefix, token->type, token->content);
-	else
-		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
-}
+// static void	print_current_token(t_token *token, const char *prefix)
+// {
+// 	if (token)
+// 		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
+// 			prefix, token->type, token->content);
+// 	else
+// 		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
+// }
 
 t_ast_node	*create_subshell_node(void)
 {
@@ -32,69 +32,11 @@ t_ast_node	*create_subshell_node(void)
 	return (node);
 }
 
-static t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
+static t_ast_node	*parse_group_content(t_token **token)
 {
-	t_ast_node	*logic_node;
-	t_ast_node	*right;
-
-	logic_node = create_logic_node(token);
-	if (!logic_node)
-		return (NULL);
-	if ((*token)->type == TOKEN_LPAREN)
-		right = parse_group(token);
-	else
-		right = parse_pipeline(token);
-	if (!right)
-	{
-		free_ast(logic_node);
-		return (NULL);
-	}
-	logic_node->left = left;
-	logic_node->right = right;
-	return (logic_node);
-}
-
-static t_ast_node	*parse_command_sequence(t_token **token,
-										t_token_type end_type)
-{
-	t_ast_node	*current;
-	t_ast_node	*result;
-
-	print_current_token(*token, "Parsing command sequence");
-	if ((*token)->type == TOKEN_LPAREN)
-		current = parse_group(token);
-	else
-	{
-		current = parse_redirection(token);
-		if (!current)
-			current = parse_pipeline(token);
-	}
-	if (!current)
-		return (NULL);
-	while (*token && (*token)->type != end_type)
-	{
-		print_current_token(*token, "Processing sequence token");
-		if (!is_logic_operator(*token))
-			break ;
-		result = handle_logic_operation(token, current);
-		if (!result)
-			return (free_ast(current), NULL);
-		current = result;
-	}
-	return (current);
-}
-
-t_ast_node	*parse_group(t_token **token)
-{
-	t_ast_node	*subshell_node;
 	t_ast_node	*content;
-	t_ast_node	*result;
+	t_ast_node	*subshell_node;
 
-	print_current_token(*token, "Entering parse_group");
-	if (!token || !*token)
-		return (NULL);
-	if ((*token)->type != TOKEN_LPAREN)
-		return (parse_command_sequence(token, TOKEN_EOF));
 	subshell_node = create_subshell_node();
 	if (!subshell_node)
 		return (NULL);
@@ -106,22 +48,42 @@ t_ast_node	*parse_group(t_token **token)
 		return (handle_group_error("invalid subshell syntax"));
 	}
 	subshell_node->left = content;
+	return (subshell_node);
+}
+
+static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
+{
+	t_ast_node	*result;
+
 	if (!*token || (*token)->type != TOKEN_RPAREN)
 	{
-		free_ast(subshell_node);
+		free_ast(node);
 		return (handle_group_error("missing closing parenthesis"));
 	}
-	print_current_token(*token, "Found closing parenthesis");
 	*token = (*token)->next;
 	if (*token && is_logic_operator(*token))
 	{
-		result = handle_logic_operation(token, subshell_node);
+		result = handle_logic_operation(token, node);
 		if (!result)
 		{
-			free_ast(subshell_node);
+			free_ast(node);
 			return (NULL);
 		}
 		return (result);
 	}
-	return (subshell_node);
+	return (node);
+}
+
+t_ast_node	*parse_group(t_token **token)
+{
+	t_ast_node	*node;
+
+	if (!token || !*token)
+		return (NULL);
+	if ((*token)->type != TOKEN_LPAREN)
+		return (parse_command_sequence(token, TOKEN_EOF));
+	node = parse_group_content(token);
+	if (!node)
+		return (NULL);
+	return (handle_group_closure(token, node));
 }

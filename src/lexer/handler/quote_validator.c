@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 10:01:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 10:50:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 15:16:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,26 @@ static int	find_closing_quote(const char *str, int start, char quote_char)
 	return (-1);
 }
 
+static int	process_quote(const char *input, int *i)
+{
+	char	current_quote;
+	int		closing_pos;
+
+	current_quote = input[*i];
+	closing_pos = find_closing_quote(input, *i, current_quote);
+	if (closing_pos == -1)
+	{
+		ft_putstr_fd("minishell: unclosed quote detected\n", STDERR_FILENO);
+		return (0);
+	}
+	*i = closing_pos;
+	return (1);
+}
+
 /* Validate quotes in input string */
 int	validate_quotes(const char *input)
 {
-	int		i;
-	char	current_quote;
-	int		closing_pos;
+	int	i;
 
 	if (!input || !*input)
 		return (1);
@@ -59,17 +73,8 @@ int	validate_quotes(const char *input)
 			continue ;
 		}
 		if ((input[i] == '\'' || input[i] == '\"') && !is_escaped(input, i))
-		{
-			current_quote = input[i];
-			closing_pos = find_closing_quote(input, i, current_quote);
-			if (closing_pos == -1)
-			{
-				ft_putstr_fd("minishell: unclosed quote detected\n",
-					STDERR_FILENO);
+			if (!process_quote(input, &i))
 				return (0);
-			}
-			i = closing_pos;
-		}
 		i++;
 	}
 	return (1);

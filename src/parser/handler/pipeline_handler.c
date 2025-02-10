@@ -6,18 +6,46 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 12:12:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 15:16:32 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
+{
+	t_ast_node	*pipe_node;
+
+	pipe_node = create_ast_node(TOKEN_PIPE);
+	if (!pipe_node)
+	{
+		free_ast(left);
+		return (NULL);
+	}
+	pipe_node->left = left;
+	pipe_node->right = right;
+	return (pipe_node);
+}
+
+static t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
+											t_token **token)
+{
+	t_ast_node	*redir;
+
+	redir = parse_redirection(token);
+	if (!redir)
+	{
+		free_ast(left);
+		return (NULL);
+	}
+	redir->left = left;
+	return (redir);
+}
+
 static t_ast_node	*parse_pipe_sequence(t_token **token)
 {
 	t_ast_node	*left;
-	t_ast_node	*pipe_node;
 	t_ast_node	*right;
-	t_ast_node	*redir;
 
 	if (!token || !*token)
 		return (NULL);
@@ -27,38 +55,19 @@ static t_ast_node	*parse_pipe_sequence(t_token **token)
 		if (!left)
 			return (NULL);
 		if (*token && is_redirection(*token))
-		{
-			redir = parse_redirection(token);
-			if (!redir)
-			{
-				free_ast(left);
-				return (NULL);
-			}
-			redir->left = left;
-			left = redir;
-		}
+			left = handle_redirection_in_pipe(left, token);
+		if (!left)
+			return (NULL);
 	}
 	else
 		return (NULL);
 	if (!*token || (*token)->type != TOKEN_PIPE)
 		return (left);
-	pipe_node = create_ast_node(TOKEN_PIPE);
-	if (!pipe_node)
-	{
-		free_ast(left);
-		return (NULL);
-	}
 	*token = (*token)->next;
 	right = parse_pipe_sequence(token);
 	if (!right)
-	{
-		free_ast(left);
-		free_ast(pipe_node);
-		return (NULL);
-	}
-	pipe_node->left = left;
-	pipe_node->right = right;
-	return (pipe_node);
+		return (free_ast(left), NULL);
+	return (create_pipe_node(left, right));
 }
 
 t_ast_node	*parse_pipeline(t_token **token)
