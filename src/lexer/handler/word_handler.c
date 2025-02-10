@@ -6,25 +6,33 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 13:21:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 11:10:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+
+static int is_safe_char(const char *str, size_t pos)
+{
+	if (!str || pos == (size_t)-1)
+		return (0);
+	return (str[pos] != '\0');
+}
 
 /* Check word token termination conditions (meets null, operator, space) */
 static int	should_stop_word(t_tokenizer *tokenizer)
 {
 	char	current;
 
+	if (!tokenizer || !tokenizer->input)
+		return (1);
 	current = tokenizer->input[tokenizer->position];
 	if (!current)
 		return (1);
-	if (!is_in_quotes(tokenizer)
-		&& (is_operator(&tokenizer->input[tokenizer->position])
-			|| ft_isspace(tokenizer->input[tokenizer->position])))
-		return (1);
-	return (0);
+	if (is_in_quotes(tokenizer))
+		return (0);
+	return (is_operator(&tokenizer->input[tokenizer->position])
+		|| ft_isspace(current));
 }
 
 /* Handles special characters and creates appropriate token type */
@@ -75,17 +83,31 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 	int		start;
 	char	*content;
 
+	if (!tokenizer || !tokenizer->input || !tokenizer->input[0])
+		return (NULL);
+	if (is_special_char(tokenizer->input[tokenizer->position])
+		&& !is_quote(tokenizer->input[tokenizer->position]))
+	{
+		ft_putstr_fd("minishell: invalid character\n", STDERR_FILENO);
+		return (NULL);
+	}
 	if (!validate_quotes(tokenizer->input + tokenizer->position))
 		return (NULL);
 	start = tokenizer->position;
-	while (tokenizer->input[tokenizer->position])
+	while (is_safe_char(tokenizer->input, tokenizer->position))
 	{
 		if (is_quote(tokenizer->input[tokenizer->position]))
+		{
 			handle_quote(tokenizer);
+			if (tokenizer->position < 0)
+				return (NULL);
+		}
 		else if (should_stop_word(tokenizer))
 			break ;
 		tokenizer->position++;
 	}
+	if (start >= tokenizer->position)
+		return (NULL);
 	content = ft_substr(tokenizer->input, start,
 			tokenizer->position - start);
 	if (!content)

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 10:01:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 09:02:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 10:50:15 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,16 @@ int	validate_quotes(const char *input)
 	char	current_quote;
 	int		closing_pos;
 
+	if (!input || !*input)
+		return (1);
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '\\' && input[i + 1])
+		{
+			i = i + 2;
+			continue ;
+		}
 		if ((input[i] == '\'' || input[i] == '\"') && !is_escaped(input, i))
 		{
 			current_quote = input[i];

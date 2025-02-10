@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 10:19:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 12:13:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@ static void	print_current_token(t_token *token, const char *prefix)
 			prefix, token->type, token->content);
 	else
 		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
+}
+
+t_ast_node	*create_subshell_node(void)
+{
+	t_ast_node	*node;
+
+	node = create_ast_node(TOKEN_SUBSHELL);
+	if (!node)
+		return (NULL);
+	node->is_subshell = 1;
+	return (node);
 }
 
 static t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
@@ -43,7 +54,8 @@ static t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
 	return (logic_node);
 }
 
-static t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type)
+static t_ast_node	*parse_command_sequence(t_token **token,
+										t_token_type end_type)
 {
 	t_ast_node	*current;
 	t_ast_node	*result;
@@ -66,24 +78,10 @@ static t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type
 			break ;
 		result = handle_logic_operation(token, current);
 		if (!result)
-		{
-			free_ast(current);
-			return (NULL);
-		}
+			return (free_ast(current), NULL);
 		current = result;
 	}
 	return (current);
-}
-
-t_ast_node	*create_subshell_node(void)
-{
-	t_ast_node	*node;
-
-	node = create_ast_node(TOKEN_SUBSHELL);
-	if (!node)
-		return (NULL);
-	node->is_subshell = 1;
-	return (node);
 }
 
 t_ast_node	*parse_group(t_token **token)

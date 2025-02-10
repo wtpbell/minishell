@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 10:21:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 12:12:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ t_ast_node	*parse_pipeline(t_token **token)
 	{
 		if (current->type == TOKEN_PIPE && (!current->left || !current->right))
 		{
-			printf("Invalid pipeline structure detected\n");
+			ft_putendl_fd("minishell: syntax error near unexpected token '|'",
+				STDERR_FILENO);
 			free_ast(root);
 			return (NULL);
 		}
