@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 11:29:34 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 14:18:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,20 @@ t_ast_node	*parse_logic(t_token **token)
 
 t_ast_node	*parse_complete_bonus(t_token **token)
 {
+	t_ast_node	*root;
+	t_ast_node	*logic_node;
+
 	if (!token || !*token)
 		return (NULL);
-	return (parse_group(token));
+	root = parse_group(token);
+	if (!root)
+		return (NULL);
+	while (*token && is_logic_operator(*token))
+	{
+		logic_node = handle_logic_sequence(token, root);
+		if (!logic_node)
+			return (free_ast(root), NULL);
+		root = logic_node;
+	}
+	return (root);
 }

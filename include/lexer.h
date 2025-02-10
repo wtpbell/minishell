@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/05 09:52:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 13:57:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ int				is_operator(char *str);
 int				is_special_char(char c);
 int				is_quote(char c);
 int				has_wildcard(const char *str);
+int				is_valid_position(t_tokenizer *tokenizer);
 
 #endif
