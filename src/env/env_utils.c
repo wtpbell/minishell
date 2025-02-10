@@ -61,7 +61,7 @@ void	add_env_var(t_env **env, char *key, char *value)
 		return ;
 	new_env->key = key;
 	if (value)
-		new_env->value = ft_strdup(value);
+		new_env->value = mem_strdup(value);
 	else
 		new_env->value = NULL;
 	new_env->hide = false;
