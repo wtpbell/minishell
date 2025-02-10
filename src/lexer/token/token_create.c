@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:12:53 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:08:21 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 17:26:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,19 @@
 /* Create a new token */
 t_token	*create_token(char *content, t_token_type type)
 {
-	t_token	*new_token;
+	t_token	*token;
 
-	if (!content)
+	token = (t_token *)malloc(sizeof(t_token) + 8);
+	if (!token)
+	{
+		free(content);
 		return (NULL);
-	new_token = (t_token *)malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
-	new_token->content = content;
-	new_token->type = type;
-	new_token->next = NULL;
-	return (new_token);
+	}
+	ft_memset(token, 0, sizeof(t_token) + 8);
+	token->type = type;
+	token->content = content;
+	token->next = NULL;
+	return (token);
 }
 
 /* Add a new token to the token list */
@@ -33,7 +35,7 @@ void	add_token(t_token **head, t_token *new_token)
 {
 	t_token	*current;
 
-	if (!new_token)
+	if (!head || !new_token)
 		return ;
 	if (!*head)
 	{

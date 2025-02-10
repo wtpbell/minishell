@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/07 14:52:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 17:38:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ typedef enum e_token_type
 typedef struct s_token
 {
 	char			*content;
-	t_token_type	type;
 	struct s_token	*next;
+	t_token_type	type;
 }	t_token;
 
 

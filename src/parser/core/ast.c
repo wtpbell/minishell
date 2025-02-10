@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 09:18:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 17:35:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_ast_node	*create_ast_node(t_token_type type)
 	node = (t_ast_node *)malloc(sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
+	ft_memset(node, 0, sizeof(t_ast_node));
 	node->type = type;
 	node->args = NULL;
 	node->argc = 0;
@@ -43,6 +44,7 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
+/* Add an argument to the node */
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;

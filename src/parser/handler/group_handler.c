@@ -6,53 +6,84 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/24 08:49:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 15:21:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Make sure the token is a left parenthesis */
-static int	is_left_paren(t_token *token)
+// static void	print_current_token(t_token *token, const char *prefix)
+// {
+// 	if (token)
+// 		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
+// 			prefix, token->type, token->content);
+// 	else
+// 		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
+// }
+
+t_ast_node	*create_subshell_node(void)
 {
-	return (token && token->type == TOKEN_LPAREN);
+	t_ast_node	*node;
+
+	node = create_ast_node(TOKEN_SUBSHELL);
+	if (!node)
+		return (NULL);
+	node->is_subshell = 1;
+	return (node);
 }
 
-/* Make sure the token is a right parenthesis */
-static int	is_right_paren(t_token *token)
+static t_ast_node	*parse_group_content(t_token **token)
 {
-	return (token && token->type == TOKEN_RPAREN);
+	t_ast_node	*content;
+	t_ast_node	*subshell_node;
+
+	subshell_node = create_subshell_node();
+	if (!subshell_node)
+		return (NULL);
+	*token = (*token)->next;
+	content = parse_command_sequence(token, TOKEN_RPAREN);
+	if (!content)
+	{
+		free_ast(subshell_node);
+		return (handle_group_error("invalid subshell syntax"));
+	}
+	subshell_node->left = content;
+	return (subshell_node);
 }
 
-/* Handle syntax errors related to parentheses */
-static t_ast_node	*handle_group_error(char *msg)
+static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 {
-	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
-	return (NULL);
+	t_ast_node	*result;
+
+	if (!*token || (*token)->type != TOKEN_RPAREN)
+	{
+		free_ast(node);
+		return (handle_group_error("missing closing parenthesis"));
+	}
+	*token = (*token)->next;
+	if (*token && is_logic_operator(*token))
+	{
+		result = handle_logic_operation(token, node);
+		if (!result)
+		{
+			free_ast(node);
+			return (NULL);
+		}
+		return (result);
+	}
+	return (node);
 }
 
-/* Parses the parenthesised expression to create an AST node */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;
 
 	if (!token || !*token)
 		return (NULL);
-	if (!is_left_paren(*token))
-		return (parse_logic(token));
-	*token = (*token)->next;
-	if (!*token)
-		return (handle_group_error("unexpected end after '('"));
-	node = parse_logic(token);
+	if ((*token)->type != TOKEN_LPAREN)
+		return (parse_command_sequence(token, TOKEN_EOF));
+	node = parse_group_content(token);
 	if (!node)
 		return (NULL);
-	if (!*token || !is_right_paren(*token))
-	{
-		free_ast(node);
-		return (handle_group_error("missing closing parenthesis"));
-	}
-	*token = (*token)->next;
-	return (node);
+	return (handle_group_closure(token, node));
 }

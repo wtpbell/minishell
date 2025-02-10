@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/07 16:05:22 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 17:39:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,28 @@ static void	print_ast_node(t_ast_node *node, int depth)
 {
 	int	i;
 
-	i = 0;
 	if (!node)
 		return ;
-	while (i++ < depth)
-		printf("  ");
-	printf("Node Type: %d\n", node->type);
+	printf("%*sNode Type: %d\n", depth * 2, "", node->type);
 	if (node->args)
 	{
+		printf("%*sArgs: ", depth * 2, "");
 		i = 0;
 		while (node->args[i])
 		{
-			printf("  Arg[%d]: %s\n", i, node->args[i]);
+			printf("'%s' ", node->args[i]);
 			i++;
 		}
+		printf("\n");
 	}
-	if (node->left || node->right)
+	if (node->left)
 	{
-		printf("  Left:\n");
+		printf("%*sLeft child:\n", depth * 2, "");
 		print_ast_node(node->left, depth + 1);
-		printf("  Right:\n");
+	}
+	if (node->right)
+	{
+		printf("%*sRight child:\n", depth * 2, "");
 		print_ast_node(node->right, depth + 1);
 	}
 }
@@ -73,9 +75,9 @@ int	main(int argc, char **argv, char **env)
 	env_ = get_env_list();
 	*env_ = build_env(env);
 	print_banner();
-	while (true)
+	while (1)
 	{
-		line = readline("minishell👾 > ");
+		line = readline("minishell-parser👾 > ");
 		if (!line)
 			break ;
 		if (*line)

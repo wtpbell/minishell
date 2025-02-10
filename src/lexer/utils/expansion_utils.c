@@ -12,10 +12,7 @@
 
 #include "lexer.h"
 
-/*
-** Handle environment variable expansion
-** Replace variables starting with $ with their actual values
-*/
+/* Process variable expansion */
 static char	*process_var_expansion(char *result, char *word,
 	int *i, t_quote_state state)
 {
@@ -35,20 +32,14 @@ static char	*process_char(char *result, char c)
 	return (ft_strjoin_char(result, c));
 }
 
-/*
-** Check if the variable needs to be expanded
-** (if there is a character after $ and it is not a single quote)
-*/
+/* Check if the variable needs to be expanded */
 static int	should_expand_var(char c, char next_c, t_quote_state state)
 {
 	return (c == '$' && next_c
 		&& (state.quote_char != '\'' || !state.in_quote));
 }
 
-/*
-** Handle string expansion (environment variables, quotes)
-** Return a new converted string
-*/
+/* Handle string expansion */
 char	*handle_expansion(t_tokenizer *tokenizer, char *word)
 {
 	char			*result;

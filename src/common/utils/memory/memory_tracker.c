@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 17:48:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 17:41:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,88 +14,6 @@
 #include "common.h"
 #include "minishell.h"
 #include <stdio.h>
-
-// t_mem_container	*create_mem_context(void)
-// {
-// 	t_mem_container	*context;
-
-// 	context = (t_mem_container *)malloc(sizeof(t_mem_container));
-// 	if (!context)
-// 		return (NULL);
-// 	context->head = NULL;
-// 	context->count = 0;
-// 	return (context);
-// }
-
-// void	*context_malloc(t_mem_container *ctx, size_t size)
-// {
-// 	void			*ptr;
-// 	t_mem_tracker	*new_tracker;
-
-// 	if (!ctx)
-// 		return (NULL);
-// 	ptr = malloc(size);
-// 	if (!ptr)
-// 		return (NULL);
-// 	new_tracker = (t_mem_tracker *)malloc(sizeof(t_mem_tracker));
-// 	if (!new_tracker)
-// 	{
-// 		free(ptr);
-// 		return (NULL);
-// 	}
-// 	new_tracker->ptr = ptr;
-// 	new_tracker->next = ctx->head;
-// 	ctx->head = new_tracker;
-// 	ctx->count++;
-// 	return (ptr);
-// }
-
-
-// void	context_free(t_mem_container *ctx, void *ptr)
-// {
-// 	t_mem_tracker	*curr;
-// 	t_mem_tracker	*prev;
-
-// 	if (!ctx || !ptr)
-// 		return ;
-// 	prev = NULL;
-// 	curr = ctx->head;
-// 	while (curr)
-// 	{
-// 		if (curr->ptr == ptr)
-// 		{
-// 			if (prev)
-// 				prev->next = curr->next;
-// 			else
-// 				ctx->head = curr->next;
-// 			free(curr);
-// 			ctx->count--;
-// 			break ;
-// 		}
-// 		prev = curr;
-// 		curr = curr->next;
-// 	}
-// 	free(ptr);
-// }
-
-
-// void	cleanup_mem_context(t_mem_container *ctx)
-// {
-// 	t_mem_tracker	*curr;
-// 	t_mem_tracker	*next;
-
-// 	if (!ctx)
-// 		return ;
-// 	curr = ctx->head;
-// 	while (curr)
-// 	{
-// 		next = curr->next;
-// 		free(curr->ptr);
-// 		free(curr);
-// 		curr = next;
-// 	}
-// 	free(ctx);
-// }
 
 /*
 	It is a static array of linked lists, each representing a memory ctx.
@@ -195,4 +113,3 @@ void	free_tab(char **tab)
 		free_alloc(tab[i++], GENERAL);
 	free_alloc(tab, GENERAL);
 }
-

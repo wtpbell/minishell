@@ -28,12 +28,9 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
-			  $(LEXER_DIR)/handler/tilde_handler.c \
 			  $(LEXER_DIR)/handler/var_expansion_handler.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
-			  $(LEXER_DIR)/heredoc/heredoc_handler.c \
-			  $(LEXER_DIR)/heredoc/heredoc_expansion.c \
 			  $(LEXER_DIR)/utils/char_check.c \
 			  $(LEXER_DIR)/utils/expansion_utils.c \
 
@@ -43,7 +40,6 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/redirection_handler.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
-			   $(PARSER_DIR)/handler/logic_parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
 			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
@@ -52,8 +48,12 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
 			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
+			   $(PARSER_DIR)/validator/subshell_validator.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
-			   $(PARSER_DIR)/utils/error_messages.c
+			   $(PARSER_DIR)/utils/error_messages.c \
+			   $(PARSER_DIR)/utils/group_utils.c \
+			   $(PARSER_DIR)/utils/group_sequence_utils.c \
+			   $(PARSER_DIR)/utils/logic_utils.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
 			   $(ENV_DIR)/env_utils.c \
@@ -128,10 +128,10 @@ $(LIBFT):
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
-	$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
 	@echo "Minishell compiled successfully!"
 
 clean:

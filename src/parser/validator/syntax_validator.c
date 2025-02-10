@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 21:18:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 17:34:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,21 @@ static t_syntax_error	validate_logic_syntax(t_ast_node *node)
 /* Validate parentheses syntax */
 static t_syntax_error	validate_paren_syntax(t_ast_node *node)
 {
-	if (!node->left || node->right)
-		return (SYNTAX_INVALID_COMBINATION);
+	t_ast_node	*content;
+
+	if (!node->left)
+		return (SYNTAX_INVALID_SUBSHELL);
+	if (node->right)
+		return (SYNTAX_INVALID_SUBSHELL);
 	if (node->type == TOKEN_LPAREN)
 	{
 		if (!node->left)
 			return (SYNTAX_INVALID_SUBSHELL);
-		if (node->left->type != TOKEN_WORD
-			&& node->left->type != TOKEN_PIPE
-			&& node->left->type != TOKEN_AND
-			&& node->left->type != TOKEN_OR)
+		content = node->left;
+		if (content->type == TOKEN_PIPE
+			&& (!content->left || !content->right))
+			return (SYNTAX_INVALID_SUBSHELL);
+		if (content->type == TOKEN_LPAREN)
 			return (SYNTAX_INVALID_SUBSHELL);
 	}
 	return (SYNTAX_OK);
@@ -68,6 +73,7 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
+/* Validate the syntax tree */
 t_syntax_error	validate_syntax_tree(t_ast_node *root)
 {
 	t_syntax_error	left_error;
@@ -76,9 +82,18 @@ t_syntax_error	validate_syntax_tree(t_ast_node *root)
 
 	if (!root)
 		return (SYNTAX_OK);
-	node_error = validate_operator_precedence(root);
-	if (node_error != SYNTAX_OK)
-		return (node_error);
+	if (root->type == TOKEN_SUBSHELL)
+	{
+		node_error = validate_subshell_syntax(root);
+		if (node_error != SYNTAX_OK)
+			return (node_error);
+	}
+	else
+	{
+		node_error = validate_operator_precedence(root);
+		if (node_error != SYNTAX_OK)
+			return (node_error);
+	}
 	left_error = validate_syntax_tree(root->left);
 	if (left_error != SYNTAX_OK)
 		return (left_error);
