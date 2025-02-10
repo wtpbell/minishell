@@ -6,12 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:34:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 12:11:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-#include <fcntl.h>
 
 /* Check for redirect tokens (<, >, >>, <<) */
 int	is_redirection(t_token *token)

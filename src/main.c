@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:39:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 19:07:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv, char **env)
 					printf("\nAST Structure:\n");
 					print_ast_node(ast, 0);
 					printf("\033[0m");
-					executor(ast);
+					// executor(ast);
 					free_ast(ast);
 				}
 				free_tokens(tokens);
