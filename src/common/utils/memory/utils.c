@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 16:36:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 20:29:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 09:22:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
 	{
 		head = head->next;
 		del(curr->ptr);
+		curr->next = NULL;
 		free(curr);
 		curr = head;
 	}

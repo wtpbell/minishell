@@ -26,8 +26,9 @@
 */
 int	exec_ctrl(t_ast_node *node)
 {
-	int			status_;
+	int	status_;
 
+	status_ = 0;
 	if (node->type == TOKEN_AND)
 	{
 		status_ = executor_status(node->left);
