@@ -6,49 +6,25 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 20:52:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 17:26:46 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Check for logical operator (&&, ||) tokens */
-int	is_logic_operator(t_token *token)
+t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 {
-	return (token && (token->type == TOKEN_AND
-			|| token->type == TOKEN_OR));
-}
-
-/* Create a logical operation node */
-t_ast_node	*create_logic_node(t_token **token)
-{
-	t_ast_node		*node;
-	t_token_type	type;
-
-	if (!token || !*token || !is_logic_operator(*token))
-		return (NULL);
-	type = (*token)->type;
-	node = create_ast_node(type);
-	if (!node)
-		return (NULL);
-	*token = (*token)->next;
-	return (node);
-}
-
-/* Handling logical operation syntax errors */
-t_ast_node	*handle_logic_error(void)
-{
-	ft_putendl_fd("minishell: syntax error near unexpected token",
-		STDERR_FILENO);
-	return (NULL);
-}
-
-/* Organise logical operators and operands into AST nodes */
-t_ast_node	*process_logic_operator(t_token **token,
-	t_ast_node *left, t_ast_node *logic_node)
-{
+	t_ast_node	*logic_node;
 	t_ast_node	*right;
 
+	if (!token || !*token || !is_logic_operator(*token))
+		return (left);
+	logic_node = create_logic_node(token);
+	if (!logic_node)
+	{
+		free_ast(left);
+		return (handle_logic_error());
+	}
 	right = parse_pipeline(token);
 	if (!right)
 	{
@@ -61,7 +37,6 @@ t_ast_node	*process_logic_operator(t_token **token,
 	return (logic_node);
 }
 
-/* Parses the entire logical expression to create an AST */
 t_ast_node	*parse_logic(t_token **token)
 {
 	t_ast_node	*left;
@@ -78,4 +53,24 @@ t_ast_node	*parse_logic(t_token **token)
 		left = result;
 	}
 	return (left);
+}
+
+t_ast_node	*parse_complete_bonus(t_token **token)
+{
+	t_ast_node	*root;
+	t_ast_node	*logic_node;
+
+	if (!token || !*token)
+		return (NULL);
+	root = parse_group(token);
+	if (!root)
+		return (NULL);
+	while (*token && is_logic_operator(*token))
+	{
+		logic_node = handle_logic_sequence(token, root);
+		if (!logic_node)
+			return (free_ast(root), NULL);
+		root = logic_node;
+	}
+	return (root);
 }

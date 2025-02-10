@@ -6,15 +6,17 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 19:54:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 12:11:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* Check for redirect tokens (<, >, >>, <<) */
-static int	is_redirection(t_token *token)
+int	is_redirection(t_token *token)
 {
+	if (!token || !token->content)
+		return (0);
 	return (token && (token->type == TOKEN_REDIR_IN
 			|| token->type == TOKEN_REDIR_OUT
 			|| token->type == TOKEN_HEREDOC
@@ -33,48 +35,29 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 	return (create_ast_node(TOKEN_WORD));
 }
 
-/* Create a redirect node */
-static t_ast_node	*create_redirection_node(t_token **token)
+t_ast_node	*parse_redirection(t_token **token)
 {
-	t_ast_node		*node;
-	t_token_type	type;
+	t_ast_node		*redir_node;
+	t_token_type	redir_type;
+	t_ast_node		*next_redir;
 
 	if (!token || !*token || !is_redirection(*token))
 		return (NULL);
-	type = (*token)->type;
-	*token = (*token)->next;
-	node = create_ast_node(type);
-	if (!node)
-		return (NULL);
-	if (!*token || (*token)->type != TOKEN_WORD)
-	{
-		free_ast(node);
-		return (handle_redirection_error(token));
-	}
-	add_arg_to_node(node, (*token)->content);
-	*token = (*token)->next;
-	return (node);
-}
-
-/* Parses the entire redirect syntax */
-t_ast_node	*parse_redirection(t_token **token)
-{
-	t_ast_node	*redir_node;
-	t_ast_node	*cmd_node;
-
-	if (!token || !*token)
-		return (NULL);
-	if (!is_redirection(*token))
-		return (parse_command(token));
-	redir_node = create_redirection_node(token);
+	redir_type = (*token)->type;
+	redir_node = create_ast_node(redir_type);
 	if (!redir_node)
 		return (NULL);
-	cmd_node = parse_command(token);
-	if (!cmd_node)
+	*token = (*token)->next;
+	if (!*token || (*token)->type != TOKEN_WORD)
+		return (free_ast(redir_node), handle_redirection_error(token));
+	add_arg_to_node(redir_node, (*token)->content);
+	*token = (*token)->next;
+	if (*token && is_redirection(*token))
 	{
-		redir_node->left = NULL;
-		return (redir_node);
+		next_redir = parse_redirection(token);
+		if (!next_redir)
+			return (free_ast(redir_node), NULL);
+		redir_node->right = next_redir;
 	}
-	redir_node->left = cmd_node;
 	return (redir_node);
 }

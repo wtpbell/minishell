@@ -6,12 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:14:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 16:56:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 17:25:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/* Handles variable default expansion */
 static char	*handle_var_default(char *var_name, char *default_value)
 {
 	char	*expansion_token;
@@ -31,6 +32,7 @@ static char	*handle_var_default(char *var_name, char *default_value)
 	return (expansion_token);
 }
 
+/* Handles variable assignment expansion */
 static char	*handle_var_assign(char *var_name, char *assign_value)
 {
 	char	*var_token;
@@ -48,6 +50,7 @@ static char	*handle_var_assign(char *var_name, char *assign_value)
 	return (var_token);
 }
 
+/* Handles variable error expansion */
 static char	*handle_var_error(char *var_name, char *error_msg)
 {
 	char	*var_token;
@@ -65,6 +68,7 @@ static char	*handle_var_error(char *var_name, char *error_msg)
 	return (var_token);
 }
 
+/* Expands special parameters */
 char	*expand_special_param(const char *param)
 {
 	char	*special_token;
@@ -78,6 +82,7 @@ char	*expand_special_param(const char *param)
 	return (special_token);
 }
 
+/* Handles extended expansion */
 char	*handle_extended_expansion(char *var_name, char *operator, char *word)
 {
 	if (!operator)

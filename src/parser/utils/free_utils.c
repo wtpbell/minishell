@@ -13,7 +13,7 @@
 #include "parser.h"
 
 /* free redirect list memory */
-static void	free_redirections(t_redirection *redir)
+void	free_redirections(t_redirection *redir)
 {
 	t_redirection	*current;
 	t_redirection	*next;
@@ -30,7 +30,7 @@ static void	free_redirections(t_redirection *redir)
 }
 
 /* Free instruction argument array memory */
-static void	free_args(char **args)
+void	free_args(char **args)
 {
 	int	i;
 

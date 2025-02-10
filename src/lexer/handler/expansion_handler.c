@@ -6,25 +6,20 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/04 16:32:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/10 17:25:52 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/*
-** Check environment variable characters
-** (alphabets, numbers, _ starting with $)
-*/
+/* Check environment variable characters
+** (alphabets, numbers, _ starting with $) */
 static int	is_valid_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_');
 }
 
-/*
-** Extract environment variable names and return their values
-** Returns an empty string for non-existent variables
-*/
+/* Extract environment variable names and return their values */
 static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 {
 	int		start;
@@ -52,6 +47,7 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	return (value);
 }
 
+/* Handles special parameter expansion */
 static char	*handle_special_param(char *str, int *pos, t_quote_state state)
 {
 	char	*param;
@@ -70,10 +66,7 @@ static char	*handle_special_param(char *str, int *pos, t_quote_state state)
 	return (handle_simple_expansion(str, pos, state));
 }
 
-/*
-** Handles environment variable expansion.
-** It is responsible for expanding variables
-** that start with $ to their actual value. */
+/* Handles environment variable expansion */
 char	*get_var_value(char *str, int *pos, t_quote_state state)
 {
 	if (state.quote_char == '\'' && state.in_quote)

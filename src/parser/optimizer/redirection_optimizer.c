@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Check if the redirection should be removed */
 static int	should_remove_redir(t_redirection *curr, t_last_redirs *last)
 {
 	return ((curr->type == TOKEN_REDIR_IN && curr != last->in)
@@ -20,6 +21,7 @@ static int	should_remove_redir(t_redirection *curr, t_last_redirs *last)
 		|| (curr->type == TOKEN_APPEND && curr != last->append));
 }
 
+/* Free the redirection node */
 static void	free_redir_node(t_redirection *curr)
 {
 	if (curr->file)
@@ -27,6 +29,7 @@ static void	free_redir_node(t_redirection *curr)
 	free(curr);
 }
 
+/* Remove overridden redirections */
 static void	remove_overridden_redirs(t_redirection **redir, t_last_redirs *last)
 {
 	t_redirection	*curr;
@@ -52,6 +55,7 @@ static void	remove_overridden_redirs(t_redirection **redir, t_last_redirs *last)
 	}
 }
 
+/* Find the last redirections */
 static void	find_last_redirs(t_redirection *redir, t_last_redirs *last)
 {
 	t_redirection	*curr;
