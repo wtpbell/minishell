@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/07 10:17:50 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/07 19:25:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include <signal.h>
 #include <unistd.h>
 
+/*
+	Print a newline on Ctrl+C.
+	rl_on_new_lin: Readline (if using) on a new line.
+	rl_replace_line: Clear the current line.
+	rl_redisplay: Redisplay the prompt.
+	Set exit status for interrupt.
+*/
 static void	interrupt_handler(int sig)
 {
 	(void)sig;
@@ -32,12 +39,17 @@ void	interrupt_w_msg(int sig)
 	set_exit_status(1);
 }
 
+
 void	interrput_slience(int sig)
 {
 	(void)sig;
 	set_exit_status(1);
 }
 
+/* 
+	Ignore SIGINT and SIGQUIT in the parent process while it’s managing a subshell,
+	preventing it from being interrupted while waiting for the child to finish.
+*/
 void	signals_init(void)
 {
 	sig_t	error;

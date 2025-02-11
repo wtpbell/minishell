@@ -139,7 +139,7 @@ int	exec_redir(t_ast_node *node)
 		if (dup2(fd, get_redirection_fd(redir->type)) == -1)
 			return (error("dup2 failed", NULL), set_exit_status(1), 1);
 		close(fd);
-		status_ = executor_status(node->redir_cmd);
+		status_ = executor_status(node->left);
 		if (dup2(dup_fd, get_redirection_fd(redir->type)) == -1)
 			return (error("dup failed", NULL), set_exit_status(1), 1);
 		close(dup_fd);

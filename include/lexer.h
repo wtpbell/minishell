@@ -6,10 +6,9 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 17:38:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/10 17:38:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/10 21:41:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef LEXER_H
 # define LEXER_H
@@ -69,8 +68,6 @@ char			**expand_wildcards(const char *pattern);
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
 int				get_operator_len(t_token_type type);
-int				has_wildcard(const char *str);
-t_token			*handle_wildcard_token(const char *str);
 int				is_operator(char *str);
 int				is_special_char(char c);
 int				is_quote(char c);
