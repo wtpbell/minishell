@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/30 09:42:47 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 14:51:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,38 @@ t_cmd_valid_error	validate_command_syntax(t_ast_node *node)
 
 	if (!node)
 		return (VALID_EMPTY_CMD);
+	if (node->redirections)
+	{
+		redir_status = validate_redirection_syntax(node->redirections);
+		if (redir_status != VALID_SUCCESS)
+			return (redir_status);
+	}
 	if (node->type == TOKEN_WORD)
 	{
-		if (!node->args || !node->args[0])
-			return (VALID_EMPTY_CMD);
-		if (!is_valid_command_name(node->args[0]))
-			return (VALID_SYNTAX_ERROR);
-		if (node->argc > 1024)
-			return (VALID_TOO_MANY_ARGS);
-		if (node->redirections)
+		if (node->left && node->left->args && node->left->args[0])
 		{
-			redir_status = validate_redirection_syntax(node->redirections);
-			if (redir_status != VALID_SUCCESS)
-				return (redir_status);
+			if (!is_valid_command_name(node->left->args[0]))
+				return (VALID_SYNTAX_ERROR);
+			if (node->left->argc > 1024)
+				return (VALID_TOO_MANY_ARGS);
 		}
+		else if (!node->args || !node->args[0])
+		{
+			if (!node->redirections)
+				return (VALID_EMPTY_CMD);
+		}
+	}
+	if (node->left)
+	{
+		redir_status = validate_command_syntax(node->left);
+		if (redir_status != VALID_SUCCESS)
+			return (redir_status);
+	}
+	if (node->right)
+	{
+		redir_status = validate_command_syntax(node->right);
+		if (redir_status != VALID_SUCCESS)
+			return (redir_status);
 	}
 	return (VALID_SUCCESS);
 }
