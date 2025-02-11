@@ -6,28 +6,31 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 15:26:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 16:24:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static void	handle_command_args(t_ast_node *node, t_token **token)
+static int	handle_command_args(t_ast_node *node, t_token **token)
 {
 	t_token	*current;
 
 	if ((*token)->type == TOKEN_WORD)
 	{
-		add_arg_to_node(node, (*token)->content);
+		if (!add_arg_to_node(node, (*token)->content))
+			return (0);
 		*token = (*token)->next;
 	}
 	current = *token;
 	while (current && current->type == TOKEN_WORD)
 	{
-		add_arg_to_node(node, current->content);
+		if (!add_arg_to_node(node, current->content))
+			return (0);
 		current = current->next;
 	}
 	*token = current;
+	return (1);
 }
 
 static int	handle_command_redirs(t_ast_node *node, t_token **token)
@@ -59,7 +62,11 @@ t_ast_node	*parse_command(t_token **token)
 	node = create_ast_node(TOKEN_WORD);
 	if (!node)
 		return (NULL);
-	handle_command_args(node, token);
+	if (!handle_command_args(node, token))
+	{
+		free_ast(node);
+		return (NULL);
+	}
 	if (!handle_command_redirs(node, token))
 	{
 		free_ast(node);
