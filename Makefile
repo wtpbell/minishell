@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -MMD -Wall -Wextra -Werror -g3 -fsanitize=address
 LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
@@ -38,6 +38,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/handler/sequence_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
 			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
@@ -48,8 +49,8 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/validator/subshell_validator.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
 			   $(PARSER_DIR)/utils/error_messages.c \
+			   $(PARSER_DIR)/utils/error_utils.c \
 			   $(PARSER_DIR)/utils/group_utils.c \
-			   $(PARSER_DIR)/utils/group_sequence_utils.c \
 			   $(PARSER_DIR)/utils/logic_utils.c \
 
 COMMON_FILES = $(COMMON_DIR)/utils.c
