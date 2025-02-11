@@ -12,15 +12,6 @@
 
 #include "parser.h"
 
-// static void	print_current_token(t_token *token, const char *prefix)
-// {
-// 	if (token)
-// 		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
-// 			prefix, token->type, token->content);
-// 	else
-// 		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
-// }
-
 t_ast_node	*create_subshell_node(void)
 {
 	t_ast_node	*node;
