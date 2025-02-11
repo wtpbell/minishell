@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/07 19:25:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/11 17:37:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	interrupt_w_msg(int sig)
 }
 
 
-void	interrput_slience(int sig)
+void	interrput_silence(int sig)
 {
 	(void)sig;
 	set_exit_status(1);

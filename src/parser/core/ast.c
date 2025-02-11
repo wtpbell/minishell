@@ -6,12 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 16:02:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/11 18:35:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-// #include "common.h"
 
 /* Check if a token is a redirection operator */
 

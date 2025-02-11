@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/07 10:22:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/11 17:41:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,9 @@ pid_t	launch_pipe(t_ast_node *node)
 {
 	int		input;
 	int		pipe_fd[2];
-	size_t	i;
 
-	signal(SIGINT, interrput_slience);
-	signal(SIGQUIT, interrput_slience);
-	i = 0;
+	signal(SIGINT, interrput_silence);
+	signal(SIGQUIT, interrput_silence);
 	while (node && node->left && node->right)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -50,7 +48,6 @@ pid_t	launch_pipe(t_ast_node *node)
 		close(pipe_fd[1]);
 		input = pipe_fd[0];
 		node = node->right;
-		i++;
 	}
 	pipe_fd[1] = 1;
 	pipe_fd[0] = 0;

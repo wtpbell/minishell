@@ -59,8 +59,8 @@ int	exec_block(t_ast_node *node)
 	pid_t	pid;
 
 	status_ = 0;
-	signal(SIGINT, interrput_slience);
-	signal(SIGQUIT, interrput_slience);
+	signal(SIGINT, interrput_silence);
+	signal(SIGQUIT, interrput_silence);
 	pid = fork();
 	if (pid== -1)
 		return (error("fork() failed", NULL), EXIT_FAILURE);
@@ -83,9 +83,6 @@ int	exec_block(t_ast_node *node)
 	printf("print status: %d\n", status_);
 	return (status_);
 }
-
-
-
 
 /*
 	The exec_pipe() is responsible for handling pipelines of commands
@@ -132,8 +129,6 @@ int	exec_redir(t_ast_node *node)
 		return (0);
 	if (node->right && exec_redir(node->right) != 0)
 		return (1);
-	if (!node->args || !node->args[0]) //need to check with seungha do i need to check the file name empty or not? 
-		return (error("minishell: missing file name", NULL), set_exit_status(1), 1);
 	fd = open(node->args[0], get_redirection_flags(node->type), 0644);
 	if (fd == -1)
 		return (error(node->args[0], NULL), set_exit_status(1), 1);
