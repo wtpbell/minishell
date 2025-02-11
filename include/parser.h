@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:25:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:14:39 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_ast_node			*handle_logic_operation(t_token **token, t_ast_node *left);
 int					is_logic_operator(t_token *token);
 t_ast_node			*create_logic_node(t_token **token);
 t_ast_node			*handle_logic_error(void);
+void				add_redirection(t_ast_node *node, t_token_type type, char *file);
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
@@ -110,7 +111,6 @@ t_ast_node			*optimize_pipeline(t_ast_node *node);
 int					is_left_paren(t_token *token);
 int					is_right_paren(t_token *token);
 int					is_valid_after_subshell(t_token *token);
-int					check_paren_balance(t_token *start);
 int					is_redirection(t_token *token);
 t_ast_node			*handle_group_error(char *msg);
 int 				validate_subshell_command(t_ast_node *node);

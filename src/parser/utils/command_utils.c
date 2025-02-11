@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   logic_utils.c                                      :+:    :+:            */
+/*   command_utils.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/10 15:08:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 15:24:51 by spyun         ########   odam.nl         */
+/*   Created: 2025/02/11 15:30:14 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/11 15:35:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-int	is_logic_operator(t_token *token)
+static int	is_invalid_filename_char(char c)
 {
-	return (token && (token->type == TOKEN_AND
-			|| token->type == TOKEN_OR));
+	return (c == '<' || c == '>' || c == '|' || c == '&'
+		|| c == ';' || c == '(' || c == ')');
 }
 
-t_ast_node	*create_logic_node(t_token **token)
+int	is_valid_command_name(const char *cmd)
 {
-	t_ast_node		*node;
-	t_token_type	type;
+	int	i;
 
-	if (!token || !*token || !is_logic_operator(*token))
-		return (NULL);
-	type = (*token)->type;
-	node = create_ast_node(type);
-	if (!node)
-		return (NULL);
-	*token = (*token)->next;
-	return (node);
+	if (!cmd || !*cmd)
+		return (0);
+	i = 0;
+	while (cmd[i])
+	{
+		if (is_invalid_filename_char(cmd[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

@@ -6,24 +6,16 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:53:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:26:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-
-/* Parse command */
-t_ast_node	*parse_command(t_token **token)
+static void	handle_command_args(t_ast_node *node, t_token **token)
 {
-	t_ast_node	*node;
-	t_token		*current;
+	t_token	*current;
 
-	if (!token || !*token)
-		return (NULL);
-	node = create_ast_node(TOKEN_WORD);
-	if (!node)
-		return (NULL);
 	if ((*token)->type == TOKEN_WORD)
 	{
 		add_arg_to_node(node, (*token)->content);
@@ -36,17 +28,42 @@ t_ast_node	*parse_command(t_token **token)
 		current = current->next;
 	}
 	*token = current;
+}
+
+static int	handle_command_redirs(t_ast_node *node, t_token **token)
+{
+	t_token	*temp;
+
 	if (*token && is_redirection(*token))
 	{
-		t_token *temp = *token;
+		temp = *token;
 		while (temp && is_redirection(temp))
 		{
 			if (!temp->next || temp->next->type != TOKEN_WORD)
-				return (free_ast(node), NULL);
+				return (0);
 			add_redirection(node, temp->type, temp->next->content);
 			temp = temp->next->next;
 		}
 		*token = temp;
+	}
+	return (1);
+}
+
+/* Parse command */
+t_ast_node	*parse_command(t_token **token)
+{
+	t_ast_node	*node;
+
+	if (!token || !*token)
+		return (NULL);
+	node = create_ast_node(TOKEN_WORD);
+	if (!node)
+		return (NULL);
+	handle_command_args(node, token);
+	if (!handle_command_redirs(node, token))
+	{
+		free_ast(node);
+		return (NULL);
 	}
 	return (node);
 }

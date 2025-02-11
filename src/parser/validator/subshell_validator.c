@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 13:42:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 16:33:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:25:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ int	validate_parentheses(t_token *tokens)
 	}
 	return (depth == 0);
 }
-
-
 
 /* Validate the subshell command */
 int	validate_subshell_command(t_ast_node *node)

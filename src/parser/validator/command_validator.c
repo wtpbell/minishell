@@ -6,41 +6,48 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:51:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:34:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Checks for prohibited special characters in the filename.
-** Invalid if it contains characters
-such as ‘<’, ‘>’, ‘|’, ‘&’, ‘;’, ‘(’, ‘)’ */
-static int	is_invalid_filename_char(char c)
+static t_cmd_valid_error	validate_node_args(t_ast_node *node)
 {
-	return (c == '<' || c == '>' || c == '|' || c == '&'
-		|| c == ';' || c == '(' || c == ')');
-}
-
-/* Checks if the command name is valid
-** invalid if it is an empty string or contains special characters */
-int	is_valid_command_name(const char *cmd)
-{
-	int	i;
-
-	if (!cmd || !*cmd)
-		return (0);
-	i = 0;
-	while (cmd[i])
+	if (node->left && node->left->args && node->left->args[0])
 	{
-		if (is_invalid_filename_char(cmd[i]))
-			return (0);
-		i++;
+		if (!is_valid_command_name(node->left->args[0]))
+			return (VALID_SYNTAX_ERROR);
+		if (node->left->argc > 1024)
+			return (VALID_TOO_MANY_ARGS);
 	}
-	return (1);
+	else if (!node->args || !node->args[0])
+	{
+		if (!node->redirections)
+			return (VALID_EMPTY_CMD);
+	}
+	return (VALID_SUCCESS);
 }
 
-/* Validate redirect syntax
-** Return error if no filename or invalid filename */
+static t_cmd_valid_error	validate_children(t_ast_node *node)
+{
+	t_cmd_valid_error	status;
+
+	if (node->left)
+	{
+		status = validate_command_syntax(node->left);
+		if (status != VALID_SUCCESS)
+			return (status);
+	}
+	if (node->right)
+	{
+		status = validate_command_syntax(node->right);
+		if (status != VALID_SUCCESS)
+			return (status);
+	}
+	return (VALID_SUCCESS);
+}
+
 t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs)
 {
 	t_redirection	*curr;
@@ -57,47 +64,23 @@ t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs)
 	return (VALID_SUCCESS);
 }
 
-/* Complete validation of the command syntax.
-** Check for empty commands, bad syntax,
-too many arguments, invalid redirects, etc */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node)
 {
-	t_cmd_valid_error	redir_status;
+	t_cmd_valid_error	status;
 
 	if (!node)
 		return (VALID_EMPTY_CMD);
 	if (node->redirections)
 	{
-		redir_status = validate_redirection_syntax(node->redirections);
-		if (redir_status != VALID_SUCCESS)
-			return (redir_status);
+		status = validate_redirection_syntax(node->redirections);
+		if (status != VALID_SUCCESS)
+			return (status);
 	}
 	if (node->type == TOKEN_WORD)
 	{
-		if (node->left && node->left->args && node->left->args[0])
-		{
-			if (!is_valid_command_name(node->left->args[0]))
-				return (VALID_SYNTAX_ERROR);
-			if (node->left->argc > 1024)
-				return (VALID_TOO_MANY_ARGS);
-		}
-		else if (!node->args || !node->args[0])
-		{
-			if (!node->redirections)
-				return (VALID_EMPTY_CMD);
-		}
+		status = validate_node_args(node);
+		if (status != VALID_SUCCESS)
+			return (status);
 	}
-	if (node->left)
-	{
-		redir_status = validate_command_syntax(node->left);
-		if (redir_status != VALID_SUCCESS)
-			return (redir_status);
-	}
-	if (node->right)
-	{
-		redir_status = validate_command_syntax(node->right);
-		if (redir_status != VALID_SUCCESS)
-			return (redir_status);
-	}
-	return (VALID_SUCCESS);
+	return (validate_children(node));
 }
