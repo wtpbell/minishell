@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 15:14:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 16:05:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,15 @@ void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
 t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
-t_ast_node			*parse_command_sequence(t_token **token, t_token_type end_type);
-t_ast_node			*handle_logic_operation(t_token **token, t_ast_node *left);
+t_ast_node			*parse_command_sequence(t_token **token,
+						t_token_type end_type);
+t_ast_node			*handle_logic_operation(t_token **token,
+						t_ast_node *left);
 int					is_logic_operator(t_token *token);
 t_ast_node			*create_logic_node(t_token **token);
 t_ast_node			*handle_logic_error(void);
-void				add_redirection(t_ast_node *node, t_token_type type, char *file);
+void				add_redirection(t_ast_node *node, t_token_type type,
+						char *file);
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
@@ -113,6 +116,6 @@ int					is_right_paren(t_token *token);
 int					is_valid_after_subshell(t_token *token);
 int					is_redirection(t_token *token);
 t_ast_node			*handle_group_error(char *msg);
-int 				validate_subshell_command(t_ast_node *node);
+int					validate_subshell_command(t_ast_node *node);
 
 #endif
