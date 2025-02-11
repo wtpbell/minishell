@@ -18,7 +18,6 @@
 #include <fcntl.h>
 
 /*
-	The exec_ctrl() handles the AND (&&) and OR (||) control operators.
 	These are typically used in shell commands to control the flow of
 	execution based on the success or failure of the previous command.
 	AND Operator (&&): The second command runs only if the first one succeeds.
@@ -31,7 +30,8 @@ int	exec_ctrl(t_ast_node *node)
 	status_ = 0;
 	if (node->type == TOKEN_AND)
 	{
-		status_ = executor_status(node->left);
+		if (node->left)
+			status_ = executor_status(node->left);
 		if (status_ == EXIT_SUCCESS)
 			status_ = executor_status(node->right);
 	}
@@ -56,17 +56,19 @@ int	exec_ctrl(t_ast_node *node)
 int	exec_block(t_ast_node *node)
 {
 	int	status_;
+	pid_t	pid;
 
-	status_= 0;
+	status_ = 0;
 	signal(SIGINT, interrput_slience);
 	signal(SIGQUIT, interrput_slience);
-	if (fork() == -1)
+	pid = fork();
+	if (pid== -1)
 		return (error("fork() failed", NULL), EXIT_FAILURE);
-	else
+	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		status_= executor_status(node->subshell_cmd);
+		status_ = executor_status(node->left);
 		set_exit_status(status_);
 		free_all_memory();
 		exit(status_);
@@ -78,8 +80,12 @@ int	exec_block(t_ast_node *node)
 		status_ = EXIT_FAILURE;
 	set_exit_status(status_);
 	signals_init();
+	printf("print status: %d\n", status_);
 	return (status_);
 }
+
+
+
 
 /*
 	The exec_pipe() is responsible for handling pipelines of commands
@@ -118,37 +124,34 @@ int	exec_pipe(t_ast_node *node)
 */
 int	exec_redir(t_ast_node *node)
 {
-	t_redirection	*redir;
-	int				status_;
-	int				fd;
-	int				dup_fd;
-	int				flags;
+	int	fd;
+	int	saved_fd;
+	int	status_;
 
-	if (!node || !node->redirections)
+	if (!node)
 		return (0);
-	redir = node->redirections;
-	while(redir)
-	{
-		flags = get_redirection_flags(node->type);
-		fd = open(redir->file, flags, 0644);
-		if (fd == -1)
-			return (error(redir->file, NULL), set_exit_status(1), 1);
-		dup_fd = dup(get_redirection_fd(redir->type));
-		if (dup_fd == -1)
-			return (error("dup failed", NULL), set_exit_status(1), 1);
-		if (dup2(fd, get_redirection_fd(redir->type)) == -1)
-			return (error("dup2 failed", NULL), set_exit_status(1), 1);
-		close(fd);
-		status_ = executor_status(node->left);
-		if (dup2(dup_fd, get_redirection_fd(redir->type)) == -1)
-			return (error("dup failed", NULL), set_exit_status(1), 1);
-		close(dup_fd);
-		if (redir->type == TOKEN_HEREDOC)
-			unlink(redir->file);
-		redir = redir->next;
-	}
+	if (node->right && exec_redir(node->right) != 0)
+		return (1);
+	if (!node->args || !node->args[0]) //need to check with seungha do i need to check the file name empty or not? 
+		return (error("minishell: missing file name", NULL), set_exit_status(1), 1);
+	fd = open(node->args[0], get_redirection_flags(node->type), 0644);
+	if (fd == -1)
+		return (error(node->args[0], NULL), set_exit_status(1), 1);
+	saved_fd = dup(get_redirection_fd(node->type));
+	if (saved_fd == -1)
+		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
+	if (dup2(fd, get_redirection_fd(node->type)) == -1)
+		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
+	close(fd);
+	status_ = executor_status(node->left);
+	if (dup2(saved_fd, get_redirection_fd(node->type)) == -1)
+		return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
+	close(saved_fd);
+	if (node->type == TOKEN_HEREDOC)
+		unlink(node->args[0]);
 	return (status_);
 }
+
 
 /*
 	The exec_cmd() is responsible for executing a single command in the shell,

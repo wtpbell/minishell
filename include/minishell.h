@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:38:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/11 13:26:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ typedef enum e_token_type
 	TOKEN_REDIR_IN,
 	TOKEN_REDIR_OUT,
 	TOKEN_HEREDOC,
-	TOKEN_ENV,
-	TOKEN_EXEC = TOKEN_WORD,
-	TOKEN_BLOCK,
 	TOKEN_APPEND,
 	TOKEN_AND,
 	TOKEN_OR,
@@ -60,6 +57,9 @@ typedef enum e_token_type
 	TOKEN_NEWLINE,
 	TOKEN_EOF,
 	TOKEN_SUBSHELL,
+	TOKEN_ENV,
+	TOKEN_BLOCK = TOKEN_SUBSHELL,
+	TOKEN_EXEC = TOKEN_WORD,
 	TOKEN_CTRL = TOKEN_AND | TOKEN_OR,
 	TOKEN_REDIR = TOKEN_REDIR_IN | TOKEN_REDIR_OUT | TOKEN_APPEND | TOKEN_HEREDOC
 }	t_token_type;
