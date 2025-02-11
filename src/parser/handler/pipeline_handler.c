@@ -12,6 +12,7 @@
 
 #include "parser.h"
 
+/* Create a pipe node */
 static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
 	t_ast_node	*pipe_node;
@@ -27,6 +28,7 @@ static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return (pipe_node);
 }
 
+/* Handle redirection in pipe */
 static t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 											t_token **token)
 {
@@ -42,6 +44,7 @@ static t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 	return (redir);
 }
 
+/* Parse pipe sequence */
 static t_ast_node	*parse_pipe_sequence(t_token **token)
 {
 	t_ast_node	*left;
@@ -70,6 +73,7 @@ static t_ast_node	*parse_pipe_sequence(t_token **token)
 	return (create_pipe_node(left, right));
 }
 
+/* Parse pipeline */
 t_ast_node	*parse_pipeline(t_token **token)
 {
 	t_ast_node	*root;
