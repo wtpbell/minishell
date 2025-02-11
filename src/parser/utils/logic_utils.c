@@ -33,9 +33,3 @@ t_ast_node	*create_logic_node(t_token **token)
 	return (node);
 }
 
-t_ast_node	*handle_logic_error(void)
-{
-	ft_putendl_fd("minishell: syntax error near unexpected token",
-		STDERR_FILENO);
-	return (NULL);
-}

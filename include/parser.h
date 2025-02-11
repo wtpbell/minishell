@@ -93,6 +93,7 @@ t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs);
 t_syntax_error		validate_syntax_tree(t_ast_node *root);
 t_syntax_error		validate_redir_syntax(t_ast_node *node);
 t_syntax_error		validate_subshell_syntax(t_ast_node *node);
+int					validate_parentheses(t_token *tokens);
 int					is_valid_command_name(const char *cmd);
 
 /* Error messages */

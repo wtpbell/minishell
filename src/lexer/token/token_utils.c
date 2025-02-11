@@ -25,3 +25,14 @@ void	free_tokens(t_token *token)
 	free(token);
 	free_tokens(next);
 }
+
+/* Check for redirect tokens (<, >, >>, <<) */
+int	is_redirection(t_token *token)
+{
+	if (!token || !token->content)
+		return (0);
+	return (token && (token->type == TOKEN_REDIR_IN
+			|| token->type == TOKEN_REDIR_OUT
+			|| token->type == TOKEN_HEREDOC
+			|| token->type == TOKEN_APPEND));
+}

@@ -12,6 +12,28 @@
 
 #include "parser.h"
 
+t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
+{
+	t_ast_node	*logic_node;
+	t_ast_node	*right;
+
+	logic_node = create_logic_node(token);
+	if (!logic_node)
+		return (NULL);
+	if ((*token)->type == TOKEN_LPAREN)
+		right = parse_group(token);
+	else
+		right = parse_pipeline(token);
+	if (!right)
+	{
+		free_ast(logic_node);
+		return (NULL);
+	}
+	logic_node->left = left;
+	logic_node->right = right;
+	return (logic_node);
+}
+
 t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*logic_node;
