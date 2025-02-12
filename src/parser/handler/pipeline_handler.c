@@ -6,11 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/12 09:58:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/12 10:50:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+static t_ast_node	*parse_pipe_sequence(t_token **token);
 
 /* Create a pipe node */
 static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
