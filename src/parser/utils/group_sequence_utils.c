@@ -45,7 +45,11 @@ t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type)
 	{
 		current = parse_redirection(token);
 		if (!current)
+		{
 			current = parse_pipeline(token);
+			if (!current)
+				return (NULL);
+		}
 	}
 	if (!current)
 		return (NULL);
@@ -55,7 +59,10 @@ t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type)
 			break ;
 		result = handle_logic_operation(token, current);
 		if (!result)
-			return (free_ast(current), NULL);
+		{
+			free_ast(current);
+			return (NULL);
+		}
 		current = result;
 	}
 	return (current);
