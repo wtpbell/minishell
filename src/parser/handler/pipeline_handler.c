@@ -93,8 +93,6 @@ t_ast_node	*parse_pipeline(t_token **token)
 
 	if (!token || !*token)
 		return (NULL);
-	printf("Starting pipeline parse with token: type=%d, content='%s'\n",
-		(*token)->type, (*token)->content);
 	root = parse_pipe_sequence(token);
 	if (!root)
 		return (NULL);

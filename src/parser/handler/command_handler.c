@@ -56,7 +56,10 @@ static int	process_command_args(t_ast_node *node, t_token **current)
 {
 	add_arg_to_node(node, (*current)->content);
 	if (!node->args)
+	{
+		free_ast(node);
 		return (0);
+	}
 	if (!(*current)->next)
 	{
 		*current = NULL;
@@ -81,9 +84,12 @@ t_ast_node	*parse_command(t_token **token)
 	while (current && is_command_token(current))
 	{
 		if (!current->content)
-			break ;
+			break;
 		if (!process_command_args(node, &current))
-			break ;
+		{
+			free_ast(node);
+			return (NULL);
+		}
 	}
 	*token = current;
 	return (node);
