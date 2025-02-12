@@ -47,11 +47,11 @@ void	free_ast(t_ast_node *node)
 {
 	if (!node)
 		return ;
-	if (node->args)
-		free_args(node->args);
-	if (node->redirections)
-		free_redirections(node->redirections);
 	free_ast(node->left);
 	free_ast(node->right);
+	if (node->args)
+		ft_free_strarr(node->args);
+	if (node->redirections)
+		free_redirections(node->redirections);
 	free(node);
 }
