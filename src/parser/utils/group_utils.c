@@ -35,35 +35,3 @@ int	is_valid_after_subshell(t_token *token)
 		|| token->type == TOKEN_APPEND || token->type == TOKEN_RPAREN
 		|| !token);
 }
-
-/* Handle group error */
-t_ast_node	*handle_group_error(char *msg)
-{
-	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
-	return (NULL);
-}
-
-/* Check if the parentheses are balanced */
-int	check_paren_balance(t_token *start)
-{
-	t_token	*current;
-	int		count;
-
-	count = 0;
-	current = start;
-	while (current)
-	{
-		if (current->type == TOKEN_LPAREN)
-			count++;
-		else if (current->type == TOKEN_RPAREN)
-		{
-			count--;
-			if (count < 0)
-				return (0);
-		}
-		current = current->next;
-	}
-	return (count == 0);
-}

@@ -80,10 +80,12 @@ void				add_arg_to_node(t_ast_node *node, char *arg);
 void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
-t_ast_node			*create_logic_node(t_token **token);
 t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
-t_ast_node			*handle_logic_error(void);
+t_ast_node			*parse_command_sequence(t_token **token, t_token_type end_type);
+t_ast_node			*handle_logic_operation(t_token **token, t_ast_node *left);
 int					is_logic_operator(t_token *token);
+t_ast_node			*create_logic_node(t_token **token);
+t_ast_node			*handle_logic_error(void);
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
@@ -91,6 +93,7 @@ t_cmd_valid_error	validate_redirection_syntax(t_redirection *redirs);
 t_syntax_error		validate_syntax_tree(t_ast_node *root);
 t_syntax_error		validate_redir_syntax(t_ast_node *node);
 t_syntax_error		validate_subshell_syntax(t_ast_node *node);
+int					validate_parentheses(t_token *tokens);
 int					is_valid_command_name(const char *cmd);
 
 /* Error messages */
@@ -112,9 +115,4 @@ int					is_redirection(t_token *token);
 t_ast_node			*handle_group_error(char *msg);
 int 				validate_subshell_command(t_ast_node *node);
 
-t_ast_node			*parse_command_sequence(t_token **token, t_token_type end_type);
-t_ast_node			*handle_logic_operation(t_token **token, t_ast_node *left);
-int					is_logic_operator(t_token *token);
-t_ast_node			*create_logic_node(t_token **token);
-t_ast_node			*handle_logic_error(void);
 #endif

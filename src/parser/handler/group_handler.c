@@ -12,15 +12,7 @@
 
 #include "parser.h"
 
-// static void	print_current_token(t_token *token, const char *prefix)
-// {
-// 	if (token)
-// 		printf("\033[0;33m%s: type=%d, content='%s'\n\033[0m",
-// 			prefix, token->type, token->content);
-// 	else
-// 		printf("\033[0;33m%s: NULL\n\033[0m", prefix);
-// }
-
+/* Create a subshell node */
 t_ast_node	*create_subshell_node(void)
 {
 	t_ast_node	*node;
@@ -32,6 +24,7 @@ t_ast_node	*create_subshell_node(void)
 	return (node);
 }
 
+/* Parse the content of the group */
 static t_ast_node	*parse_group_content(t_token **token)
 {
 	t_ast_node	*content;
@@ -51,6 +44,7 @@ static t_ast_node	*parse_group_content(t_token **token)
 	return (subshell_node);
 }
 
+/* Handle the closure of the group */
 static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 {
 	t_ast_node	*result;
@@ -74,6 +68,7 @@ static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 	return (node);
 }
 
+/* Parse the group */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;

@@ -12,17 +12,6 @@
 
 #include "parser.h"
 
-/* Check for redirect tokens (<, >, >>, <<) */
-int	is_redirection(t_token *token)
-{
-	if (!token || !token->content)
-		return (0);
-	return (token && (token->type == TOKEN_REDIR_IN
-			|| token->type == TOKEN_REDIR_OUT
-			|| token->type == TOKEN_HEREDOC
-			|| token->type == TOKEN_APPEND));
-}
-
 /* Handling redirect syntax errors */
 static t_ast_node	*handle_redirection_error(t_token **token)
 {
@@ -35,6 +24,7 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 	return (create_ast_node(TOKEN_WORD));
 }
 
+/* Parse redirection */
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node		*redir_node;

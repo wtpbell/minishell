@@ -30,6 +30,31 @@ static int	get_subshell_depth(t_ast_node *node)
 	return (1 + max_depth);
 }
 
+/* Validate the parentheses */
+int	validate_parentheses(t_token *tokens)
+{
+	int		depth;
+	t_token	*current;
+
+	depth = 0;
+	current = tokens;
+	while (current)
+	{
+		if (current->type == TOKEN_LPAREN)
+			depth++;
+		else if (current->type == TOKEN_RPAREN)
+		{
+			depth--;
+			if (depth < 0)
+				return (0);
+		}
+		current = current->next;
+	}
+	return (depth == 0);
+}
+
+
+
 /* Validate the subshell command */
 int	validate_subshell_command(t_ast_node *node)
 {
