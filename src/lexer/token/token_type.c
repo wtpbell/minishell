@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:25:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:28:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/12 15:41:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ t_token_type	get_operator_type(char *input)
 		return (TOKEN_LPAREN);
 	if (input[0] == ')')
 		return (TOKEN_RPAREN);
+	if (input[0] == '*')
+		return (TOKEN_WILDCARD);
 	return (TOKEN_WORD);
 }
 
