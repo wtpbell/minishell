@@ -51,6 +51,7 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;
 	int		args_len;
+	int		i;
 
 	if (!node || !arg)
 		return ;
@@ -58,19 +59,22 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 	new_args = (char **)malloc(sizeof(char *) * (args_len + 2));
 	if (!new_args)
 		return ;
-	if (node->args)
+	i = 0;
+	while (i < args_len)
 	{
-		while (args_len--)
-			new_args[args_len] = node->args[args_len];
-		free(node->args);
+		new_args[i] = node->args[i];
+		i++;
 	}
-	new_args[node->argc] = ft_strdup(arg);
-	new_args[node->argc + 1] = NULL;
-	if (!new_args[node->argc])
+	new_args[args_len] = ft_strdup(arg);
+	if (!new_args[args_len])
 	{
+		while (--i >= 0)
+			free(new_args[i]);
 		free(new_args);
 		return ;
 	}
+	new_args[args_len + 1] = NULL;
+	free(node->args);
 	node->args = new_args;
 	node->argc++;
 }
