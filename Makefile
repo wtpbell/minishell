@@ -36,6 +36,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/command_handler.c \
 			   $(PARSER_DIR)/handler/redirection_handler.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
+			   $(PARSER_DIR)/handler/pipeline_sequence_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/handler/sequence_handler.c \
