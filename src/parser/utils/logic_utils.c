@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 15:08:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:26:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:24:51 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ t_ast_node	*create_logic_node(t_token **token)
 	*token = (*token)->next;
 	return (node);
 }
-

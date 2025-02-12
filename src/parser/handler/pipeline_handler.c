@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 15:16:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/12 11:18:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* Create a pipe node */
-static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
+t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
 	t_ast_node	*pipe_node;
 
@@ -29,7 +29,7 @@ static t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 }
 
 /* Handle redirection in pipe */
-static t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
+t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 											t_token **token)
 {
 	t_ast_node	*redir;
@@ -42,35 +42,6 @@ static t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 	}
 	redir->left = left;
 	return (redir);
-}
-
-/* Parse pipe sequence */
-static t_ast_node	*parse_pipe_sequence(t_token **token)
-{
-	t_ast_node	*left;
-	t_ast_node	*right;
-
-	if (!token || !*token)
-		return (NULL);
-	if ((*token)->type == TOKEN_WORD)
-	{
-		left = parse_command(token);
-		if (!left)
-			return (NULL);
-		if (*token && is_redirection(*token))
-			left = handle_redirection_in_pipe(left, token);
-		if (!left)
-			return (NULL);
-	}
-	else
-		return (NULL);
-	if (!*token || (*token)->type != TOKEN_PIPE)
-		return (left);
-	*token = (*token)->next;
-	right = parse_pipe_sequence(token);
-	if (!right)
-		return (free_ast(left), NULL);
-	return (create_pipe_node(left, right));
 }
 
 /* Parse pipeline */

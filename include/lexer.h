@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:30:59 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 16:06:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void			free_tokens(t_token *token);
 t_token			*handle_operator(t_tokenizer *tokenizer);
 t_token			*handle_word(t_tokenizer *tokenizer);
 t_token			*handle_wildcard_token(const char *str);
-int				handle_heredoc(char *delimiter, int *heredoc_fd);
 
 /* Quote handling */
 void			handle_quote(t_tokenizer *tokenizer);
@@ -60,10 +59,10 @@ int				validate_quotes(const char *input);
 char			*handle_expansion(t_tokenizer *tokenizer, char *word);
 char			*handle_braced_expansion(char *str, int *pos,
 					t_quote_state state);
-char			*handle_extended_expansion(char *var_name, char *operator, char *word);
+char			*handle_extended_expansion(char *var_name,
+					char *operator, char *word);
 char			*expand_special_param(const char *param);
 char			*get_var_value(char *str, int *pos, t_quote_state state);
-char			**expand_wildcards(const char *pattern);
 
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
