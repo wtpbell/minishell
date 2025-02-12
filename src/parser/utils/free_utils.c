@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 18:35:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/12 09:09:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,19 @@ void	free_args(char **args)
 /* Free AST full structure memory */
 void	free_ast(t_ast_node *node)
 {
+	int	i;
+
 	if (!node)
 		return ;
 	free_ast(node->left);
 	free_ast(node->right);
 	if (node->args)
-		ft_free_strarr(node->args);
+	{
+		i = 0;
+		while (node->args[i])
+			free(node->args[i++]);
+		free(node->args);
+	}
 	if (node->redirections)
 		free_redirections(node->redirections);
 	free(node);
