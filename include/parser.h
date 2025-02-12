@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/07 18:59:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/12 12:44:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ typedef struct s_ast_node
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	t_env				**env;
-	struct s_ast_node	*redir_cmd;
-	struct s_ast_node	*subshell_cmd;
 }	t_ast_node;
 
 typedef struct s_redirection

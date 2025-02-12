@@ -11,6 +11,7 @@ COMMON_DIR = $(SRC_DIR)/common
 EXECUTOR_DIR = $(SRC_DIR)/executor
 BUITLIN_DIR = $(SRC_DIR)/builtin
 ENV_DIR = $(SRC_DIR)/env
+EXPANDER_DIR = $(SRC_DIR)/expander
 OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
@@ -85,6 +86,12 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/utils/tailor_helper/mem_strdup.c \
 				$(COMMON_DIR)/utils/tailor_helper/mem_substr.c \
 
+EXPANDER_FILES = $(EXPANDER_DIR)/expand_exec.c \
+				 $(EXPANDER_DIR)/expand_quotes.c \
+				 $(EXPANDER_DIR)/expand_utils.c \
+				 $(EXPANDER_DIR)/expand_utils2.c \
+				 $(EXPANDER_DIR)/expander.c \
+
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -92,14 +99,15 @@ ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 BUILTIN_OBJ = $(BUILTIN_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 COMMON_OBJ = $(COMMON_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+EXPANDER_OBJ = $(EXPANDER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ) $(COMMON_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES) $(COMMON_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ) $(COMMON_OBJ) $(EXPANDER_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES) $(COMMON_FILES) $(EXPANDER_FILES)
 
 all: $(NAME)
 
@@ -121,6 +129,7 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/builtin
 	@mkdir -p $(OBJ_DIR)/common
 	@mkdir -p $(OBJ_DIR)/common/utils/memory
+	@mkdir -p $(OBJ_DIR)/expander
 
 
 $(LIBFT):
