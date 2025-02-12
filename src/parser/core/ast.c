@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/12 09:57:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/12 10:40:06 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 	if (!new_args)
 		return ;
 	if (!copy_and_add_arg(new_args, node->args, arg, args_len))
+	{
+		free(new_args);
 		return ;
+	}
 	free(node->args);
 	node->args = new_args;
 	node->argc++;
