@@ -76,7 +76,7 @@ t_ast_node			*parse_redirection(t_token **token);
 
 /* AST node manipulation */
 t_ast_node			*create_ast_node(t_token_type type);
-int					add_arg_to_node(t_ast_node *node, char *arg);
+void				add_arg_to_node(t_ast_node *node, char *arg);
 void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
