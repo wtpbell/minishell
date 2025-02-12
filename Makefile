@@ -78,12 +78,12 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/utils/memory/memory_tracker.c \
 				$(COMMON_DIR)/utils/memory/utils.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_itoa.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_split.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_strjoin.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_strndup.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_strdup.c \
-				$(COMMON_DIR)/utils/tailor_helper/mem_substr.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_split.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strjoin.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strndup.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strdup.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
