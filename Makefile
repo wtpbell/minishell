@@ -91,6 +91,9 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expand_exec.c \
 				 $(EXPANDER_DIR)/expand_utils.c \
 				 $(EXPANDER_DIR)/expand_utils2.c \
 				 $(EXPANDER_DIR)/expander.c \
+				 $(EXPANDER_DIR)/expand_redir.c \
+				 $(EXPANDER_DIR)/expand_heredoc.c \
+
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

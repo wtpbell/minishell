@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 10:10:56 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/12 12:36:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 17:54:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "parser.h"
 #include "expander.h"
 
-static char	*append_vars(char *appended, char *str, int *pos)
+char	*append_vars(char *appended, char *str, int *pos)
 {
 	char	*var;
 	char	*tmp;
@@ -31,12 +31,12 @@ static char	*append_vars(char *appended, char *str, int *pos)
 		var = expand_var(str, &i);
 	(*pos) += i;
 	if (!var)
-		return (free_alloc(appended, GENERAL), NULL);
+		return (free_alloc(appended), NULL);
 	if (!appended)
 		return (var);
 	tmp = mem_strjoin(appended, var);
-	free_alloc(appended, GENERAL);
-	free_alloc(var, GENERAL);
+	free_alloc(appended);
+	free_alloc(var);
 	return (tmp);
 }
 
@@ -53,12 +53,47 @@ char	*append_regular(char *appended, char *str, int *pos, char *set)
 	if (i > 0)
 		tmp = mem_strndup(str, i);
 	if (!tmp)
-		return (free_alloc(appended, GENERAL), NULL);
+		return (free_alloc(appended), NULL);
 	(*pos) += i;
 	if (!appended)
 		return (tmp);
 	result = mem_strjoin(appended, tmp);
-	free_alloc(appended, GENERAL);
-	free_alloc(tmp, GENERAL);
+	free_alloc(appended);
+	free_alloc(tmp);
 	return (result);
+}
+char	*get_var_values(char *var, int len)
+{
+	char	*key;
+	char	*value;
+
+	key = mem_substr(var, 0, len);
+	if (!key)
+		return (NULL);
+	value = get_env_value(*get_env_list(), key);
+	if (!value)
+		return (NULL);
+	return (mem_strdup(value));
+}
+
+char	*expand_var(char *var, int *pos)
+{
+	int	len;
+
+	var++;
+	(*pos)++;
+	len = 0;
+	if (*var == '?')
+	{
+		len++;
+		(*pos) += len;
+		return (get_var_values(var, len));
+	}
+	if (!ft_isalpha(*var) && *var != '_')
+		return (mem_strdup("$"));
+	len++;
+	while(var[len] && (ft_isalnum(var[len] || var[len] == '_')))
+		len++;
+	(*pos) += len;
+	return (get_var_values(var, len));
 }

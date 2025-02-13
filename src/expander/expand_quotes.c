@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:17:41 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/12 12:35:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 17:41:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*expand_single_quote(char *str, int *i)
 
 	str++;
 	(*i)++;
+	j = 0;
 	while (str &&!(str[j] == '\''))
 		j++;
 	(*i) += j + 1;

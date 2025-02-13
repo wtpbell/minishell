@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:46:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/13 12:30:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 18:05:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "env.h"
 
 
-char	*men_strndup(const char *str, int n)
+char	*mem_strndup(const char *str, int n)
 {
 	char	*new_str;
 	int		min;

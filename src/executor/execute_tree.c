@@ -15,6 +15,7 @@
 #include "parser.h"
 #include "executor.h"
 #include "common.h"
+#include "expander.h"
 #include <fcntl.h>
 
 /*
@@ -127,6 +128,7 @@ int	exec_redir(t_ast_node *node)
 
 	if (!node)
 		return (0);
+	// expander(node);
 	if (node->right && exec_redir(node->right) != 0)
 		return (1);
 	fd = open(node->args[0], get_redirection_flags(node->type), 0644);
