@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/11 17:41:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 15:11:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,29 @@ size_t	count_pipes(t_ast_node *node)
 
 pid_t	launch_pipe(t_ast_node *node)
 {
-	int		input;
-	int		pipe_fd[2];
+	int			input;
+	int			pipe_fd[2];
+	t_ast_node	*current;
 
+	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	while (node && node->left && node->right)
+	current = node;
+	while (current && current->type == TOKEN_PIPE && current->left)
 	{
 		if (pipe(pipe_fd) == -1)
 		{
 			error("pipe", NULL);
 			exit(1);
 		}
-		spawn_process(input, pipe_fd, node->left);
+		spawn_process(input, pipe_fd, current->left);
 		close(pipe_fd[1]);
 		input = pipe_fd[0];
-		node = node->right;
+		current = current->right;
 	}
 	pipe_fd[1] = 1;
 	pipe_fd[0] = 0;
-	return (spawn_process(input, pipe_fd, node));
+	return (spawn_process(input, pipe_fd, current));
 }
 
 pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)
@@ -62,9 +65,18 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)
 
 	output = pipe_fd[1];
 	new_input = pipe_fd[0];
+	printf("Spawning process for command: %s\n", node->args[0]);
 	pid = fork();
 	if (pid == 0)
+	{
+		printf("Executing child process: %s\n", node->args[0]);
 		child_process(node, input, output, new_input);
+	}
+	else if (pid < 0)
+	{
+		error("fork", NULL);
+		exit(1);
+	}
 	if (input != 0)
 		close(input);
 	return (pid);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:44:47 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:46:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:30:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*mem_strjoin(char const *s1, char const *s2)
 		len1 = ft_strlen(s1);
 	if (s2)
 		len2 = ft_strlen(s2);
-	str = (char *)mem_alloc((len1 + len2 + 1), GENERAL);
+	str = (char *)mem_alloc((len1 + len2 + 1));
 	if (!str)
 		return (NULL);
 	ft_memcpy(str, s1, len1);

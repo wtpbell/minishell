@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:43:42 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:48:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:30:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,14 @@ char	**mem_split(char const *s, char *set)
 	char	**arr;
 
 	words = ft_count_words(s, set);
-	arr = (char **)mem_alloc(sizeof(char *) * (words + 1), GENERAL);
+	arr = (char **)mem_alloc(sizeof(char *) * (words + 1));
 	i = 0;
 	k = 0;
 	while (s && s[k] && ft_strchr(set, s[k]))
 		k++;
 	while (i < words)
 	{
-		arr[i] = (char *)mem_alloc(sizeof(char) * (ft_strlen_c(s + k, set) + 1), GENERAL);
+		arr[i] = (char *)mem_alloc(sizeof(char) * (ft_strlen_c(s + k, set) + 1));
 		k += ft_strcpy_k(arr[i], s + k, set);
 		i++;
 	}

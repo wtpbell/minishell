@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mem_subst.c                                        :+:    :+:            */
+/*   mem_substr.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:46:56 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:47:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:30:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*mem_substr(char const *s, unsigned int start, size_t len)
 		len = 0;
 	else if (len > slen || (start + len > slen))
 		len = slen - start;
-	sub = (char *)mem_alloc((len + 1), GENERAL);
+	sub = (char *)mem_alloc((len + 1));
 	if (!sub)
 		return (NULL);
 	while (len && len-- > 0)

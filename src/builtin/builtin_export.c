@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/07 12:48:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:31:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ static void	append_env_value(t_env *env, char **key, char **value)
 	{
 		tmp = key_;
 		*key = mem_substr(key_, 0, (ft_strlen(key_) - 1));
-		free_alloc(tmp, GENERAL);
+		free_alloc(tmp);
 		if (value_ == NULL)
 			return ;
 		tmp = value_;
 		*value = mem_strjoin(get_env_value(env, (*key)), value_);
 		if (tmp != NULL)
-			free_alloc(tmp, GENERAL);
+			free_alloc(tmp);
 		return ;
 	}
 }

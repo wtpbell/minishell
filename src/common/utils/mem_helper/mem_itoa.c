@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:48:00 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:51:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:30:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*mem_itoa(int n)
 		signe = -1;
 	}
 	len += nb_count(nb);
-	nb_str = (char *)mem_alloc(sizeof(char) * (len + 1), GENERAL);
+	nb_str = (char *)mem_alloc(sizeof(char) * (len + 1));
 	nb_str[len] = '\0';
 	if (signe == -1)
 		nb_str[0] = '-';

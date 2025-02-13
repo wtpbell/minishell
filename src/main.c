@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 09:50:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:32:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "parser.h"
 #include "executor.h"
 #include "env.h"
+#include "common.h"
 #include <unistd.h>
 
 int	g_exit_status = 0;
@@ -103,6 +104,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		free(line);
 	}
+	free_all_memory();
 	printf("\nGoodbye!\n");
 	return (EXIT_SUCCESS);
 }
