@@ -6,22 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 12:11:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 14:52:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-/* Check for redirect tokens (<, >, >>, <<) */
-int	is_redirection(t_token *token)
-{
-	if (!token || !token->content)
-		return (0);
-	return (token && (token->type == TOKEN_REDIR_IN
-			|| token->type == TOKEN_REDIR_OUT
-			|| token->type == TOKEN_HEREDOC
-			|| token->type == TOKEN_APPEND));
-}
 
 /* Handling redirect syntax errors */
 static t_ast_node	*handle_redirection_error(t_token **token)
@@ -35,29 +24,49 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 	return (create_ast_node(TOKEN_WORD));
 }
 
+void	add_redirection(t_ast_node *node, t_token_type type, char *file)
+{
+	t_redirection	*new_redir;
+	t_redirection	*curr;
+
+	new_redir = malloc(sizeof(t_redirection));
+	if (!new_redir)
+		return ;
+	new_redir->type = type;
+	new_redir->file = ft_strdup(file);
+	new_redir->next = NULL;
+	if (!node->redirections)
+		node->redirections = new_redir;
+	else
+	{
+		curr = node->redirections;
+		while (curr->next)
+			curr = curr->next;
+		curr->next = new_redir;
+	}
+}
+
 t_ast_node	*parse_redirection(t_token **token)
 {
-	t_ast_node		*redir_node;
-	t_token_type	redir_type;
-	t_ast_node		*next_redir;
+	t_ast_node	*cmd_node;
+	t_token		*current;
 
 	if (!token || !*token || !is_redirection(*token))
 		return (NULL);
-	redir_type = (*token)->type;
-	redir_node = create_ast_node(redir_type);
-	if (!redir_node)
+	cmd_node = create_ast_node(TOKEN_WORD);
+	if (!cmd_node)
 		return (NULL);
-	*token = (*token)->next;
-	if (!*token || (*token)->type != TOKEN_WORD)
-		return (free_ast(redir_node), handle_redirection_error(token));
-	add_arg_to_node(redir_node, (*token)->content);
-	*token = (*token)->next;
-	if (*token && is_redirection(*token))
+	current = *token;
+	while (current && is_redirection(current))
 	{
-		next_redir = parse_redirection(token);
-		if (!next_redir)
-			return (free_ast(redir_node), NULL);
-		redir_node->right = next_redir;
+		if (!current->next || current->next->type != TOKEN_WORD)
+		{
+			free_ast(cmd_node);
+			return (handle_redirection_error(token));
+		}
+		add_redirection(cmd_node, current->type, current->next->content);
+		current = current->next->next;
 	}
-	return (redir_node);
+	*token = current;
+	return (cmd_node);
 }

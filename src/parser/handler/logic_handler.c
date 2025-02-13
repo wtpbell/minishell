@@ -6,12 +6,43 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:26:46 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 14:02:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
+/* Handle logic operation */
+t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
+{
+	t_ast_node	*logic_node;
+	t_ast_node	*right;
+
+	if (!token || !*token)
+		return (NULL);
+	logic_node = create_logic_node(token);
+	if (!logic_node)
+		return (NULL);
+	if (!*token)
+	{
+		free_ast(logic_node);
+		return (NULL);
+	}
+	if ((*token)->type == TOKEN_LPAREN)
+		right = parse_group(token);
+	else
+		right = parse_pipeline(token);
+	if (!right)
+	{
+		free_ast(logic_node);
+		return (NULL);
+	}
+	logic_node->left = left;
+	logic_node->right = right;
+	return (logic_node);
+}
+
+/* Handle logic sequence */
 t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*logic_node;
@@ -37,6 +68,7 @@ t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 	return (logic_node);
 }
 
+/* Parse logic */
 t_ast_node	*parse_logic(t_token **token)
 {
 	t_ast_node	*left;
@@ -55,6 +87,7 @@ t_ast_node	*parse_logic(t_token **token)
 	return (left);
 }
 
+/* Parse complete */
 t_ast_node	*parse_complete_bonus(t_token **token)
 {
 	t_ast_node	*root;

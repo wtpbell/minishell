@@ -39,8 +39,10 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/command_handler.c \
 			   $(PARSER_DIR)/handler/redirection_handler.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
+			   $(PARSER_DIR)/handler/pipeline_sequence_handler.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
+			   $(PARSER_DIR)/handler/sequence_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
 			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
@@ -49,10 +51,11 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
 			   $(PARSER_DIR)/validator/subshell_validator.c \
+			   $(PARSER_DIR)/utils/command_utils.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
 			   $(PARSER_DIR)/utils/error_messages.c \
+			   $(PARSER_DIR)/utils/error_utils.c \
 			   $(PARSER_DIR)/utils/group_utils.c \
-			   $(PARSER_DIR)/utils/group_sequence_utils.c \
 			   $(PARSER_DIR)/utils/logic_utils.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \

@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 
+/* Skip spaces */
 static void	skip_spaces(t_tokenizer *tokenizer)
 {
 	while (tokenizer->input[tokenizer->position]
@@ -19,6 +20,7 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
+/* Extract quoted content */
 static char	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 {
 	int		start;
@@ -36,6 +38,7 @@ static char	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 	return (content);
 }
 
+/* Extract word */
 static char	*extract_word(t_tokenizer *tokenizer)
 {
 	int		start;
@@ -49,6 +52,7 @@ static char	*extract_word(t_tokenizer *tokenizer)
 	return (ft_substr(tokenizer->input, start, tokenizer->position - start));
 }
 
+/* Handle word */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	char	*content;

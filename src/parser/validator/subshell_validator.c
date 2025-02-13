@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 13:42:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 16:33:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/11 15:25:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,29 @@ static int	get_subshell_depth(t_ast_node *node)
 	else
 		max_depth = right_depth;
 	return (1 + max_depth);
+}
+
+/* Validate the parentheses */
+int	validate_parentheses(t_token *tokens)
+{
+	int		depth;
+	t_token	*current;
+
+	depth = 0;
+	current = tokens;
+	while (current)
+	{
+		if (current->type == TOKEN_LPAREN)
+			depth++;
+		else if (current->type == TOKEN_RPAREN)
+		{
+			depth--;
+			if (depth < 0)
+				return (0);
+		}
+		current = current->next;
+	}
+	return (depth == 0);
 }
 
 /* Validate the subshell command */

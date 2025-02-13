@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 
+/* Check if the position is valid */
 int	is_valid_position(t_tokenizer *tokenizer)
 {
 	return (tokenizer && tokenizer->input
@@ -19,6 +20,7 @@ int	is_valid_position(t_tokenizer *tokenizer)
 		&& tokenizer->position < (int)ft_strlen(tokenizer->input));
 }
 
+/* Tokenize the input */
 t_token	*tokenize(char *input)
 {
 	t_tokenizer	tokenizer;

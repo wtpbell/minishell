@@ -1,30 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   redir_validator.c                                  :+:    :+:            */
+/*   command_utils.c                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/29 09:13:33 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:50:05 by spyun         ########   odam.nl         */
+/*   Created: 2025/02/11 15:30:14 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/11 15:35:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Validate redirection syntax */
-t_syntax_error	validate_redir_syntax(t_ast_node *node)
+static int	is_invalid_filename_char(char c)
 {
-	t_redirection	*redir;
+	return (c == '<' || c == '>' || c == '|' || c == '&'
+		|| c == ';' || c == '(' || c == ')');
+}
 
-	if (!node)
-		return (SYNTAX_INVALID_COMBINATION);
-	redir = node->redirections;
-	while (redir)
+int	is_valid_command_name(const char *cmd)
+{
+	int	i;
+
+	if (!cmd || !*cmd)
+		return (0);
+	i = 0;
+	while (cmd[i])
 	{
-		if (!redir->file)
-			return (SYNTAX_INVALID_COMBINATION);
-		redir = redir->next;
+		if (is_invalid_filename_char(cmd[i]))
+			return (0);
+		i++;
 	}
-	return (SYNTAX_OK);
+	return (1);
 }

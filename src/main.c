@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 12:32:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 19:28:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ static void	print_token_list(t_token *tokens)
 
 static void	print_ast_node(t_ast_node *node, int depth)
 {
-	int	i;
+	int				i;
+	t_redirection	*redir;
 
 	if (!node)
 		return ;
@@ -49,6 +50,17 @@ static void	print_ast_node(t_ast_node *node, int depth)
 		{
 			printf("'%s' ", node->args[i]);
 			i++;
+		}
+		printf("\n");
+	}
+	if (node->redirections)
+	{
+		printf("%*sRedirections: ", depth * 2, "");
+		redir = node->redirections;
+		while (redir)
+		{
+			printf("type=%d file='%s' -> ", redir->type, redir->file);
+			redir = redir->next;
 		}
 		printf("\n");
 	}
@@ -84,6 +96,12 @@ int	main(int argc, char **argv, char **env)
 		if (*line)
 		{
 			add_history(line);
+			if (!validate_quotes(line))
+			{
+				g_exit_status = 2;
+				free(line);
+				continue ;
+			}
 			tokens = tokenize(line);
 			if (tokens)
 			{

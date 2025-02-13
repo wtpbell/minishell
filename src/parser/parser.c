@@ -109,28 +109,6 @@ void debug_print_ast_node(t_ast_node *node, int depth, const char *prefix)
 // }
 
 
-static int	validate_parentheses(t_token *tokens)
-{
-	int		depth;
-	t_token	*current;
-
-	depth = 0;
-	current = tokens;
-	while (current)
-	{
-		if (current->type == TOKEN_LPAREN)
-			depth++;
-		else if (current->type == TOKEN_RPAREN)
-		{
-			depth--;
-			if (depth < 0)
-				return (0);
-		}
-		current = current->next;
-	}
-	return (depth == 0);
-}
-
 t_ast_node	*parse(t_token *tokens)
 {
 	t_ast_node			*root;
@@ -140,7 +118,7 @@ t_ast_node	*parse(t_token *tokens)
 
 	if (!tokens)
 		return (NULL);
-		
+
 	if (!validate_parentheses(tokens))
 	{
 		ft_putendl_fd("minishell: syntax error: unmatched parentheses", 2);

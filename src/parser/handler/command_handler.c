@@ -6,66 +6,46 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:26:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/13 19:27:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* check for instruction tokens */
-static int	is_command_token(t_token *token)
+static void	handle_command_args(t_ast_node *node, t_token **token)
 {
-	if (!token)
-		return (0);
-	if (!token->content)
-		return (0);
-	if (token->type != TOKEN_WORD
-		&& token->type != TOKEN_VAR
-		&& token->type != TOKEN_WILDCARD)
-		return (0);
-	return (1);
-}
+	t_token	*current;
 
-/* create and initialise a single instruction node */
-static t_ast_node	*create_command_node(t_token **token)
-{
-	t_ast_node	*node;
-	t_token		*current;
-
-	if (!token || !*token)
-		return (NULL);
+	if ((*token)->type == TOKEN_WORD)
+	{
+		add_arg_to_node(node, (*token)->content);
+		*token = (*token)->next;
+	}
 	current = *token;
-	if (!is_command_token(current))
-		return (NULL);
-	node = create_ast_node(current->type);
-	if (!node)
-		return (NULL);
-	if (current->content)
-		add_arg_to_node(node, current->content);
-	else
+	while (current && current->type == TOKEN_WORD)
 	{
-		free_ast(node);
-		return (NULL);
+		add_arg_to_node(node, current->content);
+		current = current->next;
 	}
-	*token = current->next;
-	return (node);
+	*token = current;
 }
 
-/* Process command arguments */
-static int	process_command_args(t_ast_node *node, t_token **current)
+static int	handle_command_redirs(t_ast_node *node, t_token **token)
 {
-	add_arg_to_node(node, (*current)->content);
-	if (!node->args)
+	t_token	*temp;
+
+	if (*token && is_redirection(*token))
 	{
-		free_ast(node);
-		return (0);
+		temp = *token;
+		while (temp && is_redirection(temp))
+		{
+			if (!temp->next || temp->next->type != TOKEN_WORD)
+				return (0);
+			add_redirection(node, temp->type, temp->next->content);
+			temp = temp->next->next;
+		}
+		*token = temp;
 	}
-	if (!(*current)->next)
-	{
-		*current = NULL;
-		return (0);
-	}
-	*current = (*current)->next;
 	return (1);
 }
 
@@ -73,24 +53,17 @@ static int	process_command_args(t_ast_node *node, t_token **current)
 t_ast_node	*parse_command(t_token **token)
 {
 	t_ast_node	*node;
-	t_token		*current;
 
 	if (!token || !*token)
 		return (NULL);
-	node = create_command_node(token);
+	node = create_ast_node(TOKEN_WORD);
 	if (!node)
 		return (NULL);
-	current = *token;
-	while (current && is_command_token(current))
+	handle_command_args(node, token);
+	if (!handle_command_redirs(node, token))
 	{
-		if (!current->content)
-			break;
-		if (!process_command_args(node, &current))
-		{
-			free_ast(node);
-			return (NULL);
-		}
+		free_ast(node);
+		return (NULL);
 	}
-	*token = current;
 	return (node);
 }
