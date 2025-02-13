@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/13 15:11:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 21:09:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,27 @@ size_t	count_pipes(t_ast_node *node)
 
 pid_t	launch_pipe(t_ast_node *node)
 {
-	int			input;
-	int			pipe_fd[2];
-	t_ast_node	*current;
+	int	input;
+	int	pipe_fd[2];
 
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	current = node;
-	while (current && current->type == TOKEN_PIPE && current->left)
+	while (node && node->left && node->type == TOKEN_PIPE)
 	{
 		if (pipe(pipe_fd) == -1)
 		{
 			error("pipe", NULL);
 			exit(1);
 		}
-		spawn_process(input, pipe_fd, current->left);
+		spawn_process(input, pipe_fd, node->left);
 		close(pipe_fd[1]);
 		input = pipe_fd[0];
-		current = current->right;
+		node = node->right;
 	}
 	pipe_fd[1] = 1;
 	pipe_fd[0] = 0;
-	return (spawn_process(input, pipe_fd, current));
+	return (spawn_process(input, pipe_fd, node));
 }
 
 pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)

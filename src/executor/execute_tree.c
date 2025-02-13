@@ -127,18 +127,20 @@ int	exec_redir(t_ast_node *node)
 
 	if (!node)
 		return (0);
-	if (node->right && exec_redir(node->right) != 0)
-		return (1);
+	// if (node->right && exec_redir(node->right) != 0)
+	// 	return (1);
+	if (!node->redirections)
+		return (set_exit_status(1), 1);
 	fd = open(node->args[0], get_redirection_flags(node->type), 0644);
 	if (fd == -1)
-		return (error(node->args[0], NULL), set_exit_status(1), 1);
+		return (error(node->redirections->file, NULL), set_exit_status(1), 1);
 	saved_fd = dup(get_redirection_fd(node->type));
 	if (saved_fd == -1)
 		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
 	if (dup2(fd, get_redirection_fd(node->type)) == -1)
 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
 	close(fd);
-	status_ = executor_status(node->left);
+	status_ = executor_status(node->redirections->next); //this one
 	if (dup2(saved_fd, get_redirection_fd(node->type)) == -1)
 		return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
 	close(saved_fd);

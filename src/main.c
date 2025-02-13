@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 19:28:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 21:16:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		free(line);
 	}
-	free_all_memory();
+	// free_all_memory();
 	printf("\nGoodbye!\n");
 	return (EXIT_SUCCESS);
 }
