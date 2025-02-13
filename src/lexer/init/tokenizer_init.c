@@ -12,10 +12,7 @@
 
 #include "lexer.h"
 
-/*
-** tokenizer initialisation function
-** Initialise a structure for tokenising input strings
-*/
+/* Initialize the tokenizer */
 void	init_tokenizer(t_tokenizer *tokenizer, char *input)
 {
 	if (!tokenizer || !input)

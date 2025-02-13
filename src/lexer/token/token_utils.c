@@ -12,6 +12,7 @@
 
 #include "lexer.h"
 
+/* Free the tokens */
 void	free_tokens(t_token *token)
 {
 	t_token	*next;

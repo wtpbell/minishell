@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mem_strndup.c                                      :+:    :+:            */
+/*   mem_strjoin.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/06 19:46:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:53:06 by bewong        ########   odam.nl         */
+/*   Created: 2025/02/06 19:44:47 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/13 12:30:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,25 @@
 #include "common.h"
 #include "env.h"
 
-
-char	*men_strndup(const char *str, int n)
+char	*mem_strjoin(char const *s1, char const *s2)
 {
-	char	*new_str;
-	int		min;
+	char	*str;
+	size_t	len1;
+	size_t	len2;
 
-	min = ft_strlen(str);
-	if (n < min)
-		min = n;
-	new_str = (char *)mem_alloc((min + 1), GENERAL);
-	if (!new_str)
+	if (s1 == NULL && s2 == NULL)
 		return (NULL);
-	ft_memcpy(new_str, str, min);
-	new_str[min] = '\0';
-	return (new_str);
+	len1 = 0;
+	len2 = 0;
+	if (s1)
+		len1 = ft_strlen(s1);
+	if (s2)
+		len2 = ft_strlen(s2);
+	str = (char *)mem_alloc((len1 + len2 + 1));
+	if (!str)
+		return (NULL);
+	ft_memcpy(str, s1, len1);
+	ft_memcpy((str + len1), s2, len2);
+	str[len1 + len2] = '\0';
+	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 20:04:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/13 12:31:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	set_underscore(int argc, char **args)
 		i = 1;
 	if (i > 0)
 		set_env(*get_env_list(), "_", splited[i - 1]);
-	free_alloc(splited, GENERAL);
+	free_alloc(splited);
 }
 
 /*
@@ -116,7 +116,7 @@ char	**env_to_arr(t_env *envs)
 		i += (head->hide == 0);
 		head = head->next;
 	}
-	env = (char **)mem_alloc(sizeof(char *) * (i + 1), GENERAL);
+	env = (char **)mem_alloc(sizeof(char *) * (i + 1));
 	if (!env)
 		return (NULL);
 	i = -1;

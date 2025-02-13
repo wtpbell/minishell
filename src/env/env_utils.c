@@ -56,7 +56,7 @@ void	add_env_var(t_env **env, char *key, char *value)
 	t_env	*new_env;
 
 	printf("Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
-	new_env = (t_env *)mem_alloc(sizeof(t_env), GENERAL);
+	new_env = (t_env *)mem_alloc(sizeof(t_env));
 	if(!new_env)
 		return ;
 	new_env->key = key;

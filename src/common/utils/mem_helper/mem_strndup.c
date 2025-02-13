@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mem_subst.c                                        :+:    :+:            */
+/*   mem_strndup.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/06 19:46:56 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:47:20 by bewong        ########   odam.nl         */
+/*   Created: 2025/02/06 19:46:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/13 12:30:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,19 @@
 #include "common.h"
 #include "env.h"
 
-char	*mem_substr(char const *s, unsigned int start, size_t len)
-{
-	char			*sub;
-	unsigned int	i;
-	unsigned int	slen;
 
-	if (!s)
+char	*men_strndup(const char *str, int n)
+{
+	char	*new_str;
+	int		min;
+
+	min = ft_strlen(str);
+	if (n < min)
+		min = n;
+	new_str = (char *)mem_alloc((min + 1));
+	if (!new_str)
 		return (NULL);
-	slen = ft_strlen(s);
-	i = 0;
-	if (start > slen)
-		len = 0;
-	else if (len > slen || (start + len > slen))
-		len = slen - start;
-	sub = (char *)mem_alloc((len + 1), GENERAL);
-	if (!sub)
-		return (NULL);
-	while (len && len-- > 0)
-		sub[i++] = s[start++];
-	sub[i] = '\0';
-	return (sub);
+	ft_memcpy(new_str, str, min);
+	new_str[min] = '\0';
+	return (new_str);
 }

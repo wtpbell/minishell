@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mem_strjoin.c                                      :+:    :+:            */
+/*   mem_substr.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/06 19:44:47 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:46:35 by bewong        ########   odam.nl         */
+/*   Created: 2025/02/06 19:46:56 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/13 12:30:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 #include "common.h"
 #include "env.h"
 
-char	*mem_strjoin(char const *s1, char const *s2)
+char	*mem_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*str;
-	size_t	len1;
-	size_t	len2;
+	char			*sub;
+	unsigned int	i;
+	unsigned int	slen;
 
-	if (s1 == NULL && s2 == NULL)
+	if (!s)
 		return (NULL);
-	len1 = 0;
-	len2 = 0;
-	if (s1)
-		len1 = ft_strlen(s1);
-	if (s2)
-		len2 = ft_strlen(s2);
-	str = (char *)mem_alloc((len1 + len2 + 1), GENERAL);
-	if (!str)
+	slen = ft_strlen(s);
+	i = 0;
+	if (start > slen)
+		len = 0;
+	else if (len > slen || (start + len > slen))
+		len = slen - start;
+	sub = (char *)mem_alloc((len + 1));
+	if (!sub)
 		return (NULL);
-	ft_memcpy(str, s1, len1);
-	ft_memcpy((str + len1), s2, len2);
-	str[len1 + len2] = '\0';
-	return (str);
+	while (len && len-- > 0)
+		sub[i++] = s[start++];
+	sub[i] = '\0';
+	return (sub);
 }

@@ -19,7 +19,7 @@ static t_env	*env_int(char **key_value)
 {
 	t_env	*new;
 
-	new = mem_alloc(sizeof(t_env), GENERAL);
+	new = mem_alloc(sizeof(t_env));
 	new->key = key_value[0];
 	new->value = key_value[1];
 	new->scope = BOTH;

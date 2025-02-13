@@ -6,11 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 09:18:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/11 18:35:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+/* Check if a token is a redirection operator */
 
 /* Get the length of the argument array */
 static int	get_args_length(char **args)
@@ -34,6 +36,7 @@ t_ast_node	*create_ast_node(t_token_type type)
 	node = (t_ast_node *)malloc(sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
+	ft_memset(node, 0, sizeof(t_ast_node));
 	node->type = type;
 	node->args = NULL;
 	node->argc = 0;
@@ -43,10 +46,12 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
+/* Add an argument to the node */
 void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;
 	int		args_len;
+	int		i;
 
 	if (!node || !arg)
 		return ;
@@ -54,19 +59,22 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 	new_args = (char **)malloc(sizeof(char *) * (args_len + 2));
 	if (!new_args)
 		return ;
-	if (node->args)
+	i = 0;
+	while (i < args_len)
 	{
-		while (args_len--)
-			new_args[args_len] = node->args[args_len];
-		free(node->args);
+		new_args[i] = node->args[i];
+		i++;
 	}
-	new_args[node->argc] = ft_strdup(arg);
-	new_args[node->argc + 1] = NULL;
-	if (!new_args[node->argc])
+	new_args[args_len] = ft_strdup(arg);
+	if (!new_args[args_len])
 	{
+		while (--i >= 0)
+			free(new_args[i]);
 		free(new_args);
 		return ;
 	}
+	new_args[args_len + 1] = NULL;
+	free(node->args);
 	node->args = new_args;
 	node->argc++;
 }
