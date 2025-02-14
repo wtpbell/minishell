@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 11:34:40 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 15:11:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void error(char *word, char *msg);
 
 /*execute_tree*/
 int		exec_cmd(t_ast_node *node, t_env **env);
-int		exec_pipe(t_ast_node *node);
+int		exec_pipe(t_ast_node *node, t_env **env);
 int		exec_ctrl(t_ast_node *node, t_env **env);
 int		exec_block(t_ast_node *node, t_env **env);
-int		exec_redir(t_ast_node *node, t_env **env);
+int		exec_redir(t_ast_node *node, t_env **env, t_redirection *redir);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);
@@ -46,9 +46,9 @@ int		executor_status(t_ast_node *node, t_env **env);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
-pid_t	launch_pipe(t_ast_node *node);
-pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node);
-void	child_process(t_ast_node *node, int input, int output, int new_input);
+pid_t	launch_pipe(t_ast_node *node, t_env **env);
+pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env);
+void	child_process(t_ast_node *node, int input, int output, int new_input, t_env **env);
 void	redirect_io(int input, int output, int new_input);
 
 /*utils*/

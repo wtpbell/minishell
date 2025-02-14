@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 10:15:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 15:13:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,33 +17,32 @@
 # include "lexer.h"
 # include "env.h"
 
-typedef struct s_redirection	t_redirection;
+typedef struct s_redir
+{
+	t_token_type			type;
+	char					*file;
+	struct s_redir	*next;
+} t_redir;
+
+typedef struct s_last_redirs
+{
+	t_redir	*in;
+	t_redir	*out;
+	t_redir	*heredoc;
+	t_redir	*append;
+}	t_last_redirs;
 
 typedef struct s_ast_node
 {
 	t_token_type		type;
 	char				**args;
 	int					argc;
-	t_redirection		*redirections;
+	t_redir		*redirections;
 	struct s_ast_node	*left;
 	struct s_ast_node	*right;
 	int					is_subshell;
 }	t_ast_node;
 
-typedef struct s_redirection
-{
-	t_token_type			type;
-	char					*file;
-	struct s_redirection	*next;
-} t_redirection;
-
-typedef struct s_last_redirs
-{
-	t_redirection	*in;
-	t_redirection	*out;
-	t_redirection	*heredoc;
-	t_redirection	*append;
-}	t_last_redirs;
 
 typedef enum e_cmd_valid_error
 {
@@ -96,7 +95,7 @@ void				add_redirection(t_ast_node *node, t_token_type type,
 						char *file);
 t_ast_node			*create_pipe_node(t_ast_node *left, t_ast_node *right);
 t_ast_node			*handle_redirection_in_pipe(t_ast_node *left,
-											t_token **token);
+						t_token **token);
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);

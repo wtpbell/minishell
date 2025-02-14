@@ -91,7 +91,7 @@ int	exec_block(t_ast_node *node, t_env **env)
 	The function waits for the last process in the pipeline to finish, collects 
 	the exit status, and returns it.
 */
-int	exec_pipe(t_ast_node *node)
+int	exec_pipe(t_ast_node *node, t_env **env)
 {
 	pid_t	last_pid;
 	int		status_;
@@ -99,7 +99,7 @@ int	exec_pipe(t_ast_node *node)
 
 	printf("Executing pipe node\n");
 	set_exit_status(0);
-	last_pid = launch_pipe(node);
+	last_pid = launch_pipe(node, env);
 	waitpid(last_pid, &status_, 0);
 	if (WIFEXITED(status_))
 		status_ = WEXITSTATUS(status_);
@@ -119,14 +119,13 @@ int	exec_pipe(t_ast_node *node)
 	It performs the redirection before executing the command and restores
 	the original file descriptor afterward.
 */
-int	exec_redir(t_ast_node *node, t_env **env)
+int	exec_redir(t_ast_node *node, t_env **env, t_redirection *redir)
 {
 	int				fd;
 	int				saved_fd;
 	int				status_;
-	t_redirection	*redir;
 
-	if (!node || !node->redirections)
+	if (!node || !redir)
 		return (0);
 	redir = node->redirections;
 	fd = open(redir->file, get_redirection_flags(redir->type), 0644);
@@ -139,6 +138,7 @@ int	exec_redir(t_ast_node *node, t_env **env)
 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
 	close(fd);
 	printf("%d\n", node->type);
+	node->redirections = NULL;
 	status_ = executor_status(node, env);
 	node->redirections = redir;
 	if (dup2(saved_fd, get_redirection_fd(redir->type)) == -1)
@@ -159,7 +159,7 @@ int	exec_redir(t_ast_node *node, t_env **env)
 */
 int exec_cmd(t_ast_node *node, t_env **env)
 {
-	int	(*builtin)(t_ast_node *node);
+	int	(*builtin)(t_ast_node *node, t_env **env);
 	int	status_;
 
 	if (!node || !node->args || !env)
@@ -172,7 +172,7 @@ int exec_cmd(t_ast_node *node, t_env **env)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
-		return (set_exit_status(builtin(node)), get_exit_status());
+		return (set_exit_status(builtin(node, env)), get_exit_status());
 	status_ = check_cmd(node, env);
 	if (status_ != 0)
 		return (status_);

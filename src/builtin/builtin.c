@@ -6,13 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/04 11:36:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 14:29:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static int	builtin_unset(t_ast_node *node)
+static int	builtin_unset(t_ast_node *node, t_env **env)
 {
 	t_env	*tmp;
 	int		i;
@@ -20,7 +20,7 @@ static int	builtin_unset(t_ast_node *node)
 	i = 1;
 	while (i < node->argc)
 	{
-		tmp = get_env(*(node->env), node->args[i]);
+		tmp = get_env(*env, node->args[i]);
 		if (tmp)
 			tmp->hide = true;
 		i++;
@@ -28,7 +28,7 @@ static int	builtin_unset(t_ast_node *node)
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
-static int	builtin_env(t_ast_node *node)
+static int	builtin_env(t_ast_node *node, t_env **env)
 {
 	t_env	*head;
 
@@ -38,7 +38,7 @@ static int	builtin_env(t_ast_node *node)
 		ft_putendl_fd("Too many args", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	head = *(node->env);
+	head = *env;
 	while (head)
 	{
 		if (head->hide == false && (head->scope & (BOTH | ENVE)))
@@ -51,10 +51,11 @@ static int	builtin_env(t_ast_node *node)
 /*
 	If the getcwd function fails, it return 1, otherwise returns 1.
 */
-static int	builtin_pwd(t_ast_node *node)
+static int	builtin_pwd(t_ast_node *node, t_env **env)
 {
 	char	cwd[PATH_MAX];
 
+	(void)env;
 	if (node->argc != 1)
 		return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), 1);
 	if (getcwd(cwd, PATH_MAX) == NULL)
@@ -71,7 +72,7 @@ static int	builtin_pwd(t_ast_node *node)
 	built-in handler
 	The return type of is_builtin is a function pointer: int (*)(t_ast_node *node)
 */
-int	(*is_builtin(char *args))(t_ast_node *node)
+int	(*is_builtin(char *args))(t_ast_node *node, t_env **)
 {
 	if (!args || !args[0])
 		return (NULL);

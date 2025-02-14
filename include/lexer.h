@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 19:26:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 14:10:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void			free_tokens(t_token *token);
 t_token			*handle_operator(t_tokenizer *tokenizer);
 t_token			*handle_word(t_tokenizer *tokenizer);
 t_token			*handle_wildcard_token(const char *str);
+int				match_pattern(const char *pattern, const char *string);
 
 /* Quote handling */
 void			handle_quote(t_tokenizer *tokenizer);

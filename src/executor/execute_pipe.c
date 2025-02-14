@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/13 21:09:40 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 14:37:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ size_t	count_pipes(t_ast_node *node)
 	return (count);
 }
 
-pid_t	launch_pipe(t_ast_node *node)
+pid_t	launch_pipe(t_ast_node *node, t_env **env)
 {
 	int	input;
 	int	pipe_fd[2];
@@ -45,17 +45,17 @@ pid_t	launch_pipe(t_ast_node *node)
 			error("pipe", NULL);
 			exit(1);
 		}
-		spawn_process(input, pipe_fd, node->left);
+		spawn_process(input, pipe_fd, node->left, env);
 		close(pipe_fd[1]);
 		input = pipe_fd[0];
 		node = node->right;
 	}
 	pipe_fd[1] = 1;
 	pipe_fd[0] = 0;
-	return (spawn_process(input, pipe_fd, node));
+	return (spawn_process(input, pipe_fd, node, env));
 }
 
-pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)
+pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
 {
 	pid_t	pid;
 	int		output;
@@ -68,7 +68,7 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)
 	if (pid == 0)
 	{
 		printf("Executing child process: %s\n", node->args[0]);
-		child_process(node, input, output, new_input);
+		child_process(node, input, output, new_input, env);
 	}
 	else if (pid < 0)
 	{
@@ -80,12 +80,12 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node)
 	return (pid);
 }
 
-void	child_process(t_ast_node *node, int input, int output, int new_input)
+void	child_process(t_ast_node *node, int input, int output, int new_input, t_env **env)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(input, output, new_input);
-	set_exit_status(executor_status(node));
+	set_exit_status(executor_status(node, env));
 	free_all_memory();
 	exit(get_exit_status());
 }

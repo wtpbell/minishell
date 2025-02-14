@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 11:44:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:28:38 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 11:22:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ static char	*process_char(char *result, char c)
 /* Check if the variable needs to be expanded */
 static int	should_expand_var(char c, char next_c, t_quote_state state)
 {
-	return (c == '$' && next_c
-		&& (state.quote_char != '\'' || !state.in_quote));
+	if (state.quote_char == '\'' && state.in_quote)
+		return (0);
+	return (c == '$' && next_c && ft_isalnum(next_c));
 }
 
 /* Handle string expansion */

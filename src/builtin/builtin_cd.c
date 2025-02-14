@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 20:06:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 14:17:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 
 }
 
-static int	cd_dir(t_ast_node *node)
+static int	cd_dir(t_ast_node *node, t_env **env)
 {
 	char	old_pwd[PATH_MAX];
 	char	*tmp;
@@ -44,7 +44,7 @@ static int	cd_dir(t_ast_node *node)
 	tmp = NULL;
 	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
 	{
-		tmp = get_env_value(*(node->env), "HOME");
+		tmp = get_env_value(*env, "HOME");
 		if (!tmp)
 			return (error("cd", "HOME not set"), EXIT_FAILURE);
 		if (chdir(tmp) == -1)
@@ -52,7 +52,7 @@ static int	cd_dir(t_ast_node *node)
 	}
 	else if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0)
 	{
-		tmp = get_env_value(*(node->env), "OLDPWD");
+		tmp = get_env_value(*env, "OLDPWD");
 		if (!tmp)
 			return (error("cd", "OLDPWD not set"), EXIT_FAILURE);
 		tmp = mem_strdup(tmp);
@@ -60,7 +60,7 @@ static int	cd_dir(t_ast_node *node)
 			return (error("cd", NULL), EXIT_FAILURE);
 		ft_putendl_fd(tmp, STDOUT_FILENO);
 	}
-	update_pwd(*(node->env), old_pwd, tmp);
+	update_pwd(*env, old_pwd, tmp);
 	return (EXIT_SUCCESS);
 }
 
@@ -71,7 +71,7 @@ static int	cd_dir(t_ast_node *node)
 	0: Success. The struct stat pointed to by buf is filled with the file's information.
 	-1: Failure. The global variable errno is set to indicate the error 
 */
-int	builtin_cd(t_ast_node *node)
+int	builtin_cd(t_ast_node *node, t_env **env)
 {
 	char		*tmp;
 	char		old_pwd[PATH_MAX];
@@ -81,7 +81,7 @@ int	builtin_cd(t_ast_node *node)
 		return (error("cd", NULL), EXIT_FAILURE);
 	if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0
 		|| ft_strcmp(node->args[1], "~") == 0)
-		return (cd_dir(node));
+		return (cd_dir(node, env));
 	else
 	{
 		if (access(node->args[1], F_OK) == -1)
@@ -96,6 +96,6 @@ int	builtin_cd(t_ast_node *node)
 			return (error("cd", NULL), EXIT_FAILURE);
 		tmp = node->args[1];
 	}	
-	update_pwd(*(node->env), old_pwd, tmp);
+	update_pwd(*env, old_pwd, tmp);
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
