@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 10:31:22 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 15:17:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	print_token_list(t_token *tokens)
 static void	print_ast_node(t_ast_node *node, int depth)
 {
 	int				i;
-	t_redirection	*redir;
+	t_redir	*redir;
 
 	if (!node)
 		return ;

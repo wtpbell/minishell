@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:52:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 15:10:26 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ static t_ast_node	*handle_redirection_error(t_token **token)
 
 void	add_redirection(t_ast_node *node, t_token_type type, char *file)
 {
-	t_redirection	*new_redir;
-	t_redirection	*curr;
+	t_redir	*new_redir;
+	t_redir	*curr;
 
-	new_redir = malloc(sizeof(t_redirection));
+	new_redir = malloc(sizeof(t_redir));
 	if (!new_redir)
 		return ;
 	new_redir->type = type;

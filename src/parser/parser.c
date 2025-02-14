@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 22:29:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 15:17:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void debug_print_ast_node(t_ast_node *node, int depth, const char *prefix)
 		for (i = 0; i < depth; i++)
 			printf("  ");
 		printf("  Redirections: ");
-		t_redirection *redir = node->redirections;
+		t_redir *redir = node->redirections;
 		while (redir)
 		{
 			printf("type=%d file='%s' -> ", redir->type, redir->file);

@@ -6,17 +6,17 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 19:29:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 15:17:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* free redirect list memory */
-void	free_redirections(t_redirection *redir)
+void	free_redirections(t_redir *redir)
 {
-	t_redirection	*current;
-	t_redirection	*next;
+	t_redir	*current;
+	t_redir	*next;
 
 	current = redir;
 	while (current)

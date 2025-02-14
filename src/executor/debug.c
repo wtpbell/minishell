@@ -69,7 +69,7 @@
 // void	executor(t_ast_node *node) // For checking redir
 // {
 // 	int i;
-// 	t_redirection *redir;
+// 	t_redir *redir;
 
 // 	if (!node)
 // 	{
