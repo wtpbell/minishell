@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/07 18:23:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 11:34:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,19 @@
 void error(char *word, char *msg);
 
 /*execute_tree*/
-int		exec_cmd(t_ast_node *node);
+int		exec_cmd(t_ast_node *node, t_env **env);
 int		exec_pipe(t_ast_node *node);
-int		exec_ctrl(t_ast_node *node);
-int		exec_block(t_ast_node *node);
-int		exec_redir(t_ast_node *node);
+int		exec_ctrl(t_ast_node *node, t_env **env);
+int		exec_block(t_ast_node *node, t_env **env);
+int		exec_redir(t_ast_node *node, t_env **env);
 
 /*execute_process*/
-void	child(t_ast_node *node);
+void	child(t_ast_node *node, t_env **env);
 int		parent(t_ast_node *node);
 
 /*executor*/
-void	executor(t_ast_node *node);
-int		executor_status(t_ast_node *node);
+void	executor(t_ast_node *node, t_env **env);
+int		executor_status(t_ast_node *node, t_env **env);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
@@ -59,7 +59,7 @@ int		get_redirection_flags(t_token_type type);
 int		get_redirection_fd(t_token_type type);
 /*utils2*/
 void	append_cwd(t_ast_node *node);
-int		check_cmd(t_ast_node *node);
+int		check_cmd(t_ast_node *node, t_env **env);
 
 /*utils3*/
 int		check_paths(char *full_path);

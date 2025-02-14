@@ -23,7 +23,7 @@
 	AND Operator (&&): The second command runs only if the first one succeeds.
 	OR Operator (||): The second command runs only if the first one fails
 */
-int	exec_ctrl(t_ast_node *node)
+int	exec_ctrl(t_ast_node *node, t_env **env)
 {
 	int	status_;
 
@@ -31,15 +31,15 @@ int	exec_ctrl(t_ast_node *node)
 	if (node->type == TOKEN_AND)
 	{
 		if (node->left)
-			status_ = executor_status(node->left);
+			status_ = executor_status(node->left, env);
 		if (status_ == EXIT_SUCCESS)
-			status_ = executor_status(node->right);
+			status_ = executor_status(node->right, env);
 	}
 	else if (node->type == TOKEN_OR)
 	{
-		status_ = executor_status(node->left);
+		status_ = executor_status(node->left, env);
 		if (status_ != EXIT_SUCCESS)
-			status_ = executor_status(node->right);
+			status_ = executor_status(node->right, env);
 	}
 	set_exit_status(status_);
 	return (status_);
@@ -53,7 +53,7 @@ int	exec_ctrl(t_ast_node *node)
 	The function forks a new child process to execute the commands
 	in the block and waits for it to complete
 */
-int	exec_block(t_ast_node *node)
+int	exec_block(t_ast_node *node, t_env **env)
 {
 	int	status_;
 	pid_t	pid;
@@ -68,7 +68,7 @@ int	exec_block(t_ast_node *node)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		status_ = executor_status(node->left);
+		status_ = executor_status(node->left, env);
 		set_exit_status(status_);
 		free_all_memory();
 		exit(status_);
@@ -119,33 +119,33 @@ int	exec_pipe(t_ast_node *node)
 	It performs the redirection before executing the command and restores
 	the original file descriptor afterward.
 */
-int	exec_redir(t_ast_node *node)
+int	exec_redir(t_ast_node *node, t_env **env)
 {
-	int	fd;
-	int	saved_fd;
-	int	status_;
+	int				fd;
+	int				saved_fd;
+	int				status_;
+	t_redirection	*redir;
 
-	if (!node)
+	if (!node || !node->redirections)
 		return (0);
-	// if (node->right && exec_redir(node->right) != 0)
-	// 	return (1);
-	if (!node->redirections)
-		return (set_exit_status(1), 1);
-	fd = open(node->args[0], get_redirection_flags(node->type), 0644);
+	redir = node->redirections;
+	fd = open(redir->file, get_redirection_flags(redir->type), 0644);
 	if (fd == -1)
-		return (error(node->redirections->file, NULL), set_exit_status(1), 1);
-	saved_fd = dup(get_redirection_fd(node->type));
+		return (error(redir->file, NULL), set_exit_status(1), 1);
+	saved_fd = dup(get_redirection_fd(redir->type));
 	if (saved_fd == -1)
 		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
-	if (dup2(fd, get_redirection_fd(node->type)) == -1)
+	if (dup2(fd, get_redirection_fd(redir->type)) == -1)
 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
 	close(fd);
-	status_ = executor_status(node->redirections->next); //this one
-	if (dup2(saved_fd, get_redirection_fd(node->type)) == -1)
+	printf("%d\n", node->type);
+	status_ = executor_status(node, env);
+	node->redirections = redir;
+	if (dup2(saved_fd, get_redirection_fd(redir->type)) == -1)
 		return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
 	close(saved_fd);
-	if (node->type == TOKEN_HEREDOC)
-		unlink(node->args[0]);
+	if (redir->type == TOKEN_HEREDOC)
+		unlink(redir->file);
 	return (status_);
 }
 
@@ -157,29 +157,29 @@ int	exec_redir(t_ast_node *node)
 	If it's an external command, search for it in the system's executable paths
 	and run it in a child process.
 */
-int exec_cmd(t_ast_node *node)
+int exec_cmd(t_ast_node *node, t_env **env)
 {
 	int	(*builtin)(t_ast_node *node);
 	int	status_;
 
-	if (!node || !node->args)
+	if (!node || !node->args || !env)
 		return (set_exit_status(0), 0);
 	if (node->argc == 0)
 		return (set_exit_status(0), 0);
 	status_ = 0;
-	node->env = get_env_list();
-	if (node->env == 0)
+	env = get_env_list();
+	if (*env == 0)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node)), get_exit_status());
-	status_ = check_cmd(node);
+	status_ = check_cmd(node, env);
 	if (status_ != 0)
 		return (status_);
 	signal(SIGINT, interrupt_w_msg);
 	signal(SIGQUIT, interrupt_w_msg);;
 	if (fork() == 0)
-		child(node);
+		child(node, env);
 	return (parent(node));
 }
 
