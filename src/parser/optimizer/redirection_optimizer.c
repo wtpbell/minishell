@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 13:15:54 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:08:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 15:12:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
 /* Check if the redirection should be removed */
-static int	should_remove_redir(t_redir *curr, t_last_redirs *last)
+static int	should_remove_redir(t_redir *curr, t_last_redir *last)
 {
 	return ((curr->type == TOKEN_REDIR_IN && curr != last->in)
 		|| (curr->type == TOKEN_REDIR_OUT && curr != last->out)
@@ -30,7 +30,7 @@ static void	free_redir_node(t_redir *curr)
 }
 
 /* Remove overridden redirections */
-static void	remove_overridden_redirs(t_redir **redir, t_last_redirs *last)
+static void	remove_overridden_redirs(t_redir **redir, t_last_redir *last)
 {
 	t_redir	*curr;
 	t_redir	*next;
@@ -56,7 +56,7 @@ static void	remove_overridden_redirs(t_redir **redir, t_last_redirs *last)
 }
 
 /* Find the last redirections */
-static void	find_last_redirs(t_redir *redir, t_last_redirs *last)
+static void	find_last_redirs(t_redir *redir, t_last_redir *last)
 {
 	t_redir	*curr;
 
@@ -77,11 +77,11 @@ static void	find_last_redirs(t_redir *redir, t_last_redirs *last)
 
 t_redir	*merge_redirections(t_redir *redir)
 {
-	t_last_redirs	last;
+	t_last_redir	last;
 
 	if (!redir)
 		return (NULL);
-	ft_bzero(&last, sizeof(t_last_redirs));
+	ft_bzero(&last, sizeof(t_last_redir));
 	find_last_redirs(redir, &last);
 	remove_overridden_redirs(&redir, &last);
 	return (redir);

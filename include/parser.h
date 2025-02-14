@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:09:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 15:12:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ typedef struct s_redir
 	struct s_redir	*next;
 }	t_redir;
 
-typedef struct s_last_redirs
+typedef struct s_last_redir
 {
 	t_redir	*in;
 	t_redir	*out;
 	t_redir	*heredoc;
 	t_redir	*append;
-}	t_last_redirs;
+}	t_last_redir;
 
 typedef struct s_ast_node
 {
