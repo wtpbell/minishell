@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:30:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 13:57:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 10:57:39 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ void	handle_quote(t_tokenizer *tokenizer)
 	}
 	current = tokenizer->input[tokenizer->position];
 	if (!handle_nested_quote(tokenizer, current))
-	{
 		tokenizer->position++;
-	}
 }
 
 /* Return the current quote state */
