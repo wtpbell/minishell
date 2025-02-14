@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -MMD -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
 LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
@@ -45,7 +45,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
 			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
-			   $(PARSER_DIR)/validator/redirection_validator.c \
+			   $(PARSER_DIR)/validator/redir_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
 			   $(PARSER_DIR)/validator/subshell_validator.c \
 			   $(PARSER_DIR)/utils/command_utils.c \
