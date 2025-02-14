@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 11:01:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 11:03:29 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static char	*extract_word(t_tokenizer *tokenizer)
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	char	*content;
-	char	quote;
 	t_token	*token;
 
 	if (!tokenizer || !tokenizer->input)
@@ -68,8 +67,8 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 	skip_spaces(tokenizer);
 	if (is_quote(tokenizer->input[tokenizer->position]))
 	{
-		quote = tokenizer->input[tokenizer->position];
-		content = extract_quoted_content(tokenizer, quote);
+		content = extract_quoted_content(tokenizer,
+			tokenizer->input[tokenizer->position]);
 		if (!content)
 			return (NULL);
 		return (create_token(content, TOKEN_WORD));
@@ -77,10 +76,12 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 	content = extract_word(tokenizer);
 	if (!content)
 		return (NULL);
-	if (has_wildcard(content) && !tokenizer->in_quote)
+	if (has_wildcard(content))
 		token = handle_wildcard_token(content);
 	else
-		token = create_token(content, TOKEN_WORD);
+		token = create_token(ft_strdup(content), TOKEN_WORD);
+	if (!token)
+		return (free(content),(NULL));
 	free(content);
 	return (token);
 }
