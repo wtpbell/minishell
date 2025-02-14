@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -MMD -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -MMD -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
 LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
