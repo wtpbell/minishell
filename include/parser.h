@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 09:49:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/14 11:28:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void				add_redirection(t_ast_node *node, t_token_type type,
 						char *file);
 t_ast_node			*create_pipe_node(t_ast_node *left, t_ast_node *right);
 t_ast_node			*handle_redirection_in_pipe(t_ast_node *left,
-											t_token **token);
+						t_token **token);
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
