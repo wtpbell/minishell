@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 19:29:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 18:33:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	copy_and_add_arg(char **new_args, char **old_args,
 	new_args[args_len] = ft_strdup(arg);
 	if (!new_args[args_len])
 	{
-		free(new_args);
+		// free(new_args);
 		return (0);
 	}
 	new_args[args_len + 1] = NULL;
@@ -72,9 +72,7 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 {
 	char	**new_args;
 	int		args_len;
-	int		i;
 
-	i = 0;
 	if (!node || !arg)
 		return ;
 	args_len = get_args_length(node->args);
@@ -83,8 +81,6 @@ void	add_arg_to_node(t_ast_node *node, char *arg)
 		return ;
 	if (!copy_and_add_arg(new_args, node->args, arg, args_len))
 	{
-		while (--i >= 0)
-			free(new_args[i]);
 		free(new_args);
 		return ;
 	}

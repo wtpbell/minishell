@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 10:52:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 18:44:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	resolve_command(t_ast_node *node)
 		set_underscore(node->argc, node->args);
 		return (set_exit_status(127), 127);
 	}
-	free_alloc(node->args[0]);
+	free(node->args[0]);
 	node->args[0] = tmp;
 	return (0);
 }

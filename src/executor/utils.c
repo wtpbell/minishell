@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 15:19:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 19:11:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ static void	ft_swap(t_env *a, t_env *b)
 {
 	t_env	tmp;
 	
+	// tmp = *a;
+	// *a = *b;
+	// *b = tmp;
 	tmp.key = a->key;
 	tmp.value = a->value;
 	tmp.scope = a->scope;

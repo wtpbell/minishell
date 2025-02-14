@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 10:54:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 18:16:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	child(t_ast_node *node, t_env **env)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	printf("Executing: %s\n", node->args[0]);
-	execve(node->args[0], node->args, env_to_arr(*(env)));
+	execve(node->args[0], node->args, env_to_arr(*env));
 	printf("post Executing: %s\n", node->args[0]);
 	error(node->args[0], NULL);
 	set_exit_status(127);

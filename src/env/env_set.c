@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/13 12:31:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 19:23:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,24 @@ void	add_env(t_env **env, t_env *new)
 		while (head->next)
 			head = head->next;
 		head->next = new;
-		new->prev = head;
+		// new->prev = head;
 	}
 }
+
+// void	add_env(t_env **env, t_env *new)
+// {
+// 	t_env *head;
+
+// 	head = *env;
+// 	if (!head)
+// 		*env = new;
+// 	else
+// 	{
+// 		while (head->next)
+// 			head = head->next;
+// 		head->next = new;
+// 	}
+// }
 
 void	set_env(t_env *envs, const char *key, const char *new_value)
 {

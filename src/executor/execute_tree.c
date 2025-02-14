@@ -80,7 +80,7 @@ int	exec_block(t_ast_node *node, t_env **env)
 		status_ = EXIT_FAILURE;
 	set_exit_status(status_);
 	signals_init();
-	printf("print status: %d\n", status_);
+	// printf("print status: %d\n", status_);
 	return (status_);
 }
 
@@ -119,36 +119,86 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	It performs the redirection before executing the command and restores
 	the original file descriptor afterward.
 */
-int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
-{
-	int				fd;
-	int				saved_fd;
-	int				status_;
+// int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
+// {
+// 	int				fd;
+// 	int				saved_fd;
+// 	int				status_;
+// 	t_redir			*curr_redir;
 
-	if (!node || !redir)
-		return (0);
-	redir = node->redirections;
+// 	if (!node || !redir || !env)
+// 		return (0);
+// 	redir = node->redirections;
+// 	fd = open(redir->file, get_redir_flags(redir->type), 0644);
+// 	if (fd == -1)
+// 		return (error(redir->file, NULL), set_exit_status(1), 1);
+// 	saved_fd = dup(get_redir_fd(redir->type));
+// 	if (saved_fd == -1)
+// 		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
+// 	if (dup2(fd, get_redir_fd(redir->type)) == -1)
+// 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
+// 	close(fd);
+// 	curr_redir = node->redirections;
+// 	node->redirections = NULL;
+// 	status_ = executor_status(node, env);
+// 	node->redirections = curr_redir;
+// 	while (curr_redir)
+// 	{
+// 		saved_fd = dup(get_redir_fd(curr_redir->type));
+// 		if (dup2(saved_fd, get_redir_fd(curr_redir->type)) == -1)
+// 			return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
+// 		close(saved_fd);
+// 		if (curr_redir->type == TOKEN_HEREDOC)
+// 			unlink(curr_redir->file);
+// 		curr_redir = curr_redir->next;
+// 	}
+// 	return (status_);
+// }
+
+static int	setup_redirection(t_redir *redir, int *saved_fd)
+{
+	int	fd;
+
 	fd = open(redir->file, get_redir_flags(redir->type), 0644);
 	if (fd == -1)
 		return (error(redir->file, NULL), set_exit_status(1), 1);
-	saved_fd = dup(get_redir_fd(redir->type));
-	if (saved_fd == -1)
+
+	*saved_fd = dup(get_redir_fd(redir->type));
+	if (*saved_fd == -1)
 		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
+
 	if (dup2(fd, get_redir_fd(redir->type)) == -1)
 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
 	close(fd);
-	printf("%d\n", node->type);
-	node->redirections = NULL;
-	status_ = executor_status(node, env);
-	node->redirections = redir;
-	if (dup2(saved_fd, get_redir_fd(redir->type)) == -1)
-		return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
-	close(saved_fd);
-	if (redir->type == TOKEN_HEREDOC)
-		unlink(redir->file);
-	return (status_);
+	return (0);
 }
 
+int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
+{
+	int			saved_fd;
+	int			status_;
+	t_redir		*curr_redir;
+	if (!node || !redir || !env)
+		return (0);
+	redir = node->redirections;
+	if (setup_redirection(redir, &saved_fd) != 0)
+		return (1);
+	curr_redir = node->redirections;
+	node->redirections = NULL;
+	status_ = executor_status(node, env);
+	node->redirections = curr_redir;
+	while (curr_redir)
+	{
+		saved_fd = dup(get_redir_fd(curr_redir->type));
+		if (dup2(saved_fd, get_redir_fd(curr_redir->type)) == -1)
+			return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
+		close(saved_fd);
+		if (curr_redir->type == TOKEN_HEREDOC)
+			unlink(curr_redir->file);
+		curr_redir = curr_redir->next;
+	}
+	return (status_);
+}
 
 /*
 	The exec_cmd() is responsible for executing a single command in the shell,

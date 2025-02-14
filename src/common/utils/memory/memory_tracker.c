@@ -6,13 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 12:30:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/14 18:56:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "common.h"
 #include "minishell.h"
+#include "executor.h"
 #include <stdio.h>
 
 /*
@@ -89,6 +90,7 @@ void	*mem_alloc(size_t size)
 	node =	mem_lstnew(ptr);
 	if (!node)
 	{
+		free(ptr);
 		free_all_memory();
 		perror("Memory allocation failure");
 		exit(EXIT_FAILURE);

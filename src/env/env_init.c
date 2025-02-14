@@ -24,7 +24,8 @@ static t_env	*env_int(char **key_value)
 	new->value = key_value[1];
 	new->scope = BOTH;
 	new->hide = false;
-	new->prev = NULL;
+	// new->prev = NULL;
+	// new->dummy = NULL;
 	new->next = NULL;
 	return (new);
 }

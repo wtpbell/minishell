@@ -1,8 +1,8 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -MMD -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
-LDFLAGS = -fsanitize=address
+CFLAGS = -MMD -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address,undefined
+LDFLAGS = -fsanitize=address,undefined
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer

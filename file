@@ -1,0 +1,9 @@
+hello
+Executing pipe node
+Spawning process for command: cat
+Spawning process for command: grep
+Executing child process: cat
+Executing child process: grep
+[?2004hminishell-parser👾 > [?2004l
+
+Goodbye!
