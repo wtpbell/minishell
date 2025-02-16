@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/13 12:27:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 14:01:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	free_alloc(void *ptr);
 void	free_mem_context(void);
 void	*mem_alloc(size_t size);
 void	free_tab(char **tab);
+void	free_env(t_env **env);
 
 /* utils/memory */
 t_mem_tracker  *mem_lstnew(void *ptr);

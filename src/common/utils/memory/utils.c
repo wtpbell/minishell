@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 16:36:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/10 09:22:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 14:13:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_mem_tracker	*mem_lstnew(void *ptr)
 	t_mem_tracker	*newnode;
 
 	newnode = (t_mem_tracker *)malloc(sizeof(t_mem_tracker));
-	if (newnode == NULL)
+	if (!newnode)
 		return (NULL);
 	newnode->ptr = ptr;
 	newnode->next = NULL;
@@ -30,11 +30,11 @@ bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
 	t_mem_tracker	*curr;
 	t_mem_tracker	*head;
 
-	if (del == NULL || lst == NULL || *lst == NULL)
+	if (!del || !lst || !*lst)
 		return (false);
 	head = *lst;
 	curr = head;
-	while (head != NULL)
+	while (head)
 	{
 		head = head->next;
 		del(curr->ptr);
@@ -49,31 +49,33 @@ bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
 
 void	mem_lstdelone(t_mem_tracker **head, t_mem_tracker *target)
 {
-	t_mem_tracker	*cur = *head;
-	t_mem_tracker	*prev = NULL;
+	t_mem_tracker	*curr;
+	t_mem_tracker	*prev;
 
 	if (!head || !*head || !target)
 		return ;
-	while (cur)
+	curr = *head;
+	prev = NULL;
+	while (curr)
 	{
-		if (cur == target)
+		if (curr == target)
 		{
 			if (prev)
-				prev->next = cur->next;
+				prev->next = curr->next;
 			else
-				*head = cur->next;
-			free(cur->ptr);
-			free(cur);
+				*head = curr->next;
+			free(curr->ptr);
+			free(curr);
 			return ;
 		}
-		prev = cur;
-		cur = cur->next;
+		prev = curr;
+		curr = curr->next;
 	}
 }
 
 static t_mem_tracker	*mem_lstlast(t_mem_tracker *lst)
 {
-	if (lst == NULL)
+	if (!lst)
 		return (NULL);
 	while (lst->next != NULL)
 		lst = lst->next;
@@ -84,7 +86,7 @@ bool	mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node)
 {
 	t_mem_tracker	*last;
 
-	if (new_node == NULL || lst == NULL)
+	if (!new_node || !lst)
 		return (false);
 	if (*lst == NULL)
 	{

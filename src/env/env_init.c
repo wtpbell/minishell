@@ -20,12 +20,13 @@ static t_env	*env_int(char **key_value)
 	t_env	*new;
 
 	new = mem_alloc(sizeof(t_env));
+	if (!new)
+		return (NULL);
 	new->key = key_value[0];
 	new->value = key_value[1];
 	new->scope = BOTH;
 	new->hide = false;
-	// new->prev = NULL;
-	// new->dummy = NULL;
+	new->prev = NULL;
 	new->next = NULL;
 	return (new);
 }
@@ -45,6 +46,8 @@ t_env *create_env(char *env)
 	if (!key_value)
 		return (NULL);
 	new = env_int(key_value);
+	if (!new)
+		return (NULL);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
 		new->value = NULL; //just start, no previous directory
@@ -67,7 +70,8 @@ static void	add_empty_env(t_env **env)
 	int		i;
 
 	i = 0;
-	getcwd(pwd, PATH_MAX);
+	if (getcwd(pwd, PATH_MAX) == NULL)
+		return ;
 	new[0] = create_env("OLDPWD");
 	pwd2 = mem_strjoin("PWD=", pwd);
 	new[1] = create_env(pwd2);
@@ -83,7 +87,7 @@ static void	add_empty_env(t_env **env)
 t_env	*build_env(char **env)
 {
 	t_env	*envs;
-	t_env	*news;
+	t_env	*new;
 	int		i;
 
 	envs = NULL;
@@ -93,8 +97,13 @@ t_env	*build_env(char **env)
 		add_empty_env(&envs);
 	while(env[++i])
 	{
-		news = create_env(env[i]);
-		add_env(&envs, news);
+		new = create_env(env[i]);
+		if (!new)
+		{
+			free_env(&envs);
+			return (NULL);
+		}
+		add_env(&envs, new);
 	}
 	return (envs);
 }
@@ -121,7 +130,7 @@ void	setup_shlvl(t_env *new)
 
 t_env	**get_env_list(void)
 {
-	static t_env	*env = NULL;
+	static t_env	*env;
 
 	return (&env);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 19:11:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 19:24:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	sort_env(t_env **envs)
 /* flags to check for redirection types */
 int	get_redir_flags(t_token_type type)
 {
+	fprintf(stderr,"get_redir_flags : type %d\n", type);
 	if (type == TOKEN_REDIR_IN)
 		return (O_RDONLY);
 	if (type == TOKEN_REDIR_OUT)
@@ -79,6 +80,7 @@ int	get_redir_flags(t_token_type type)
 
 int	get_redir_fd(t_token_type type)
 {
+	fprintf(stderr,"get_redir_fd : type %d\n", type);
 	if (type == TOKEN_REDIR_IN || type == TOKEN_HEREDOC)
 		return (0);
 	if (type == TOKEN_REDIR_OUT || type == TOKEN_APPEND)

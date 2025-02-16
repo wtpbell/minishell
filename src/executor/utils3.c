@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/06 19:56:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 20:40:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	check_paths(char *full_path)
 	paths = mem_split(full_path, "/");
 	joined = NULL;
 	i = 0;
-	printf("start check_leading_paths\n");
 	status_ = check_leading_paths(full_path, paths, &joined, &i);
 	if (status_ != 0)
 		return (status_);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 19:23:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 13:42:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,26 @@
 #include "executor.h"
 #include "common.h"
 
+// Helper function to add new node to env list
 void	add_env(t_env **env, t_env *new)
 {
-	t_env	*head;
+	t_env	*curr;
 
-	head = *env;
-	if (!head)
-		*env = new;
-	else
+	if (!env || !new)
+		return ;
+	if (!*env)
 	{
-		while (head->next)
-			head = head->next;
-		head->next = new;
-		// new->prev = head;
+		*env = new;
+		new->prev = NULL;
+		return ;
 	}
+	curr = *env;
+	while (curr->next)
+		curr = curr->next;
+	curr->next = new;
+	new->prev = curr;
+	new->next = NULL;
 }
-
-// void	add_env(t_env **env, t_env *new)
-// {
-// 	t_env *head;
-
-// 	head = *env;
-// 	if (!head)
-// 		*env = new;
-// 	else
-// 	{
-// 		while (head->next)
-// 			head = head->next;
-// 		head->next = new;
-// 	}
-// }
 
 void	set_env(t_env *envs, const char *key, const char *new_value)
 {

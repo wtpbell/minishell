@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "executor.h"
 #include "env.h"
 #include "minishell.h"
 #include "parser.h"
-#include "executor.h"
 #include "common.h"
 #include <fcntl.h>
 
@@ -97,7 +97,7 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	int		status_;
 	size_t	i;
 
-	printf("Executing pipe node\n");
+	fprintf(stderr,"Executing pipe node\n");
 	set_exit_status(0);
 	last_pid = launch_pipe(node, env);
 	waitpid(last_pid, &status_, 0);
@@ -113,92 +113,77 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	return (status_);
 }
 
-/*
-	The exec_redir() handles input/output redirection.
-	This function must open a file for redirection and updates the file descriptors.
-	It performs the redirection before executing the command and restores
-	the original file descriptor afterward.
-*/
-// int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
-// {
-// 	int				fd;
-// 	int				saved_fd;
-// 	int				status_;
-// 	t_redir			*curr_redir;
-
-// 	if (!node || !redir || !env)
-// 		return (0);
-// 	redir = node->redirections;
-// 	fd = open(redir->file, get_redir_flags(redir->type), 0644);
-// 	if (fd == -1)
-// 		return (error(redir->file, NULL), set_exit_status(1), 1);
-// 	saved_fd = dup(get_redir_fd(redir->type));
-// 	if (saved_fd == -1)
-// 		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
-// 	if (dup2(fd, get_redir_fd(redir->type)) == -1)
-// 		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
-// 	close(fd);
-// 	curr_redir = node->redirections;
-// 	node->redirections = NULL;
-// 	status_ = executor_status(node, env);
-// 	node->redirections = curr_redir;
-// 	while (curr_redir)
-// 	{
-// 		saved_fd = dup(get_redir_fd(curr_redir->type));
-// 		if (dup2(saved_fd, get_redir_fd(curr_redir->type)) == -1)
-// 			return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
-// 		close(saved_fd);
-// 		if (curr_redir->type == TOKEN_HEREDOC)
-// 			unlink(curr_redir->file);
-// 		curr_redir = curr_redir->next;
-// 	}
-// 	return (status_);
-// }
-
-static int	setup_redirection(t_redir *redir, int *saved_fd)
+static void	restore_redirection(int saved_fd[2])
 {
-	int	fd;
-
-	fd = open(redir->file, get_redir_flags(redir->type), 0644);
-	if (fd == -1)
-		return (error(redir->file, NULL), set_exit_status(1), 1);
-
-	*saved_fd = dup(get_redir_fd(redir->type));
-	if (*saved_fd == -1)
-		return (error("dup failed", NULL), close(fd), set_exit_status(1), 1);
-
-	if (dup2(fd, get_redir_fd(redir->type)) == -1)
-		return (error("dup2 failed", NULL), close(fd), set_exit_status(1), 1);
-	close(fd);
-	return (0);
+	if (saved_fd[0] != -1)
+	{
+		dup2(saved_fd[0], STDIN_FILENO);
+		close(saved_fd[0]);
+	}
+	if (saved_fd[1] != -1)
+	{
+		dup2(saved_fd[1], STDOUT_FILENO);
+		close(saved_fd[1]);
+	}
 }
 
 int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 {
-	int			saved_fd;
-	int			status_;
-	t_redir		*curr_redir;
+	int		saved_fd[2] = {-1, -1};
+	int		fd;
+	int		redir_fd;
+	int		status;
+	t_redir	*current_redir;
+
 	if (!node || !redir || !env)
 		return (0);
-	redir = node->redirections;
-	if (setup_redirection(redir, &saved_fd) != 0)
-		return (1);
-	curr_redir = node->redirections;
-	node->redirections = NULL;
-	status_ = executor_status(node, env);
-	node->redirections = curr_redir;
-	while (curr_redir)
+	current_redir = redir;
+	while (current_redir)
 	{
-		saved_fd = dup(get_redir_fd(curr_redir->type));
-		if (dup2(saved_fd, get_redir_fd(curr_redir->type)) == -1)
-			return (error("dup2 restore failed", NULL), close(saved_fd), set_exit_status(1), 1);
-		close(saved_fd);
-		if (curr_redir->type == TOKEN_HEREDOC)
-			unlink(curr_redir->file);
-		curr_redir = curr_redir->next;
+		if (!current_redir->file)
+		{
+			current_redir = current_redir->next;
+			continue;
+		}
+		redir_fd = get_redir_fd(current_redir->type);
+		if (current_redir->type == TOKEN_HEREDOC)
+		{
+			fd = open(current_redir->file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			if (fd < 0)
+				return (error("heredoc failed to open", NULL), set_exit_status(1), 1);
+			if (dup2(fd, STDIN_FILENO) == -1)
+				return (error("dup2 failed for heredoc", NULL), close(fd), set_exit_status(1), 1);
+			close(fd);
+		}
+		else
+		{
+			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
+			if (fd == -1)
+				return (error(current_redir->file, NULL), set_exit_status(1), 1);
+			if (saved_fd[redir_fd] == -1) {
+				saved_fd[redir_fd] = dup(redir_fd);  // Save the original file descriptor
+			}
+			if (dup2(fd, redir_fd) == -1) {
+				close(fd);
+				return (error("dup2 failed", NULL), set_exit_status(1), 1);
+			}
+			close(fd);
+		}
+		current_redir = current_redir->next;
 	}
-	return (status_);
+	status = exec_cmd(node, env);
+	restore_redirection(saved_fd);
+	current_redir = redir;
+	while (current_redir)
+	{
+		if (current_redir->type == TOKEN_HEREDOC)
+			unlink(current_redir->file);
+		current_redir = current_redir->next;
+	}
+	return status;
 }
+
+
 
 /*
 	The exec_cmd() is responsible for executing a single command in the shell,
@@ -207,29 +192,36 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	If it's an external command, search for it in the system's executable paths
 	and run it in a child process.
 */
+
 int exec_cmd(t_ast_node *node, t_env **env)
 {
 	int	(*builtin)(t_ast_node *node, t_env **env);
+	pid_t pid;
 	int	status_;
 
-	if (!node || !node->args || !env)
-		return (set_exit_status(0), 0);
-	if (node->argc == 0)
-		return (set_exit_status(0), 0);
-	status_ = 0;
-	env = get_env_list();
-	if (*env == 0)
+	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
-	if (builtin)
-		return (set_exit_status(builtin(node, env)), get_exit_status());
+	if (builtin) 
+	{
+		set_exit_status(builtin(node, env));
+		return get_exit_status();
+	}
 	status_ = check_cmd(node, env);
 	if (status_ != 0)
-		return (status_);
+		return status_;
 	signal(SIGINT, interrupt_w_msg);
-	signal(SIGQUIT, interrupt_w_msg);;
-	if (fork() == 0)
+	signal(SIGQUIT, interrupt_w_msg);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork failed");
+		return EXIT_FAILURE;
+	}
+	else if (pid == 0)
 		child(node, env);
-	return (parent(node));
+	waitpid(pid, &status_, 0);
+	set_exit_status(WEXITSTATUS(status_));
+	return WEXITSTATUS(status_);
 }
 

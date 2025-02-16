@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 18:56:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 13:42:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,23 @@ static t_mem_tracker	**get_mem_list(void)
 {
 	static t_mem_tracker *heap = NULL;
 	return (&heap);
+}
+
+void	free_env(t_env **env)
+{
+	t_env	*tmp;
+
+	if (!env || !*env)
+		return ;
+	while (*env)
+	{
+		tmp = (*env)->next;
+		free_alloc((*env)->key);
+		free_alloc((*env)->value);
+		free_alloc(*env);
+		*env = tmp;
+	}
+	*env = NULL;
 }
 
 /* Iterate over all memory contexts and free all */
@@ -110,3 +127,5 @@ void	free_tab(char **tab)
 		free_alloc(tab[i++]);
 	free_alloc(tab);
 }
+
+

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 18:16:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 22:07:27 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,28 @@
 	SIG_DFL (default handler for signal), informs the kernel that
 	there is no user signal handler for the given signal, and that
 	the kernel should take default action for it.
-
 */
-void	child(t_ast_node *node, t_env **env)
+void child(t_ast_node *node, t_env **env)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	printf("Executing: %s\n", node->args[0]);
-	execve(node->args[0], node->args, env_to_arr(*env));
-	printf("post Executing: %s\n", node->args[0]);
-	error(node->args[0], NULL);
-	set_exit_status(127);
-	free_all_memory();
-	exit(get_exit_status());
+
+	printf("Executing command: %s\n", node->args[0]);
+	fflush(stdout);
+
+	char **env_arr = env_to_arr(*env);
+	if (!env_arr)
+	{
+		perror("env_to_arr failed");
+		exit(1);
+	}
+
+	execve(node->args[0], node->args, env_arr);
+	perror("execve failed");  // If execve fails, this will be printed
+	exit(127);  // Exit with 127 (command not found)
 }
+
+
 
 int	parent(t_ast_node *node)
 {

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 18:44:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/16 21:59:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	append_cwd(t_ast_node *node)
 		return (error("exec", "Failed to get CWD"));
 	tmp = mem_strjoin(cwd, "/");
 	tmp2 = mem_strjoin(tmp, node->args[0]);
-	free(tmp);
+	free_alloc(tmp);
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
@@ -119,11 +119,11 @@ int	check_cmd(t_ast_node *node, t_env **env)
 {
 	int status_;
 
-	printf("Trying to execute: %s\n", node->args[0]);
+	fprintf(stderr,"Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
-	printf("Executing: %s\n", node->args[0]);
+	fprintf(stderr,"Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);
