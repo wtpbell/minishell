@@ -148,7 +148,7 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 		redir_fd = get_redir_fd(current_redir->type);
 		if (current_redir->type == TOKEN_HEREDOC)
 		{
-			fd = open(current_redir->file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
 			if (fd < 0)
 				return (error("heredoc failed to open", NULL), set_exit_status(1), 1);
 			if (dup2(fd, STDIN_FILENO) == -1)
@@ -160,10 +160,10 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
 			if (fd == -1)
 				return (error(current_redir->file, NULL), set_exit_status(1), 1);
-			if (saved_fd[redir_fd] == -1) {
+			if (saved_fd[redir_fd] == -1)
 				saved_fd[redir_fd] = dup(redir_fd);  // Save the original file descriptor
-			}
-			if (dup2(fd, redir_fd) == -1) {
+			if (dup2(fd, redir_fd) == -1)
+			{
 				close(fd);
 				return (error("dup2 failed", NULL), set_exit_status(1), 1);
 			}

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 11:40:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/17 16:56:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,19 @@
 	ENVE: Local to the current shell session.
 	EXPORT: Exported to child processes.
 	BOTH: Both local and exported.
-	SPECIAL: These may have a unique or internal role, such as handling shell-specific behavior.
+	SPECIAL: These may have a unique or internal role, 
+	such as handling shell-specific behavior.
 */
 
-typedef enum	e_scope
+typedef enum e_scope
 {
-	ENVE = 1 << 0,   // Environment only = VAR=value
+	ENVE = 1 << 0, // Environment only = VAR=value
 	EXPORT = 1 << 1, // Exported variables = export VAR=value
-	BOTH = 1 << 2,   // Visible in both env and export
+	BOTH = 1 << 2, // Visible in both env and export
 	SPECIAL = 1 << 3 // Special variables like "?" OLDWD, _, SHLVL
-} t_scope;
+}	t_scope;
 
-typedef struct	s_env
+typedef struct s_env
 {
 	char				*key;
 	char				*value;
@@ -41,7 +42,6 @@ typedef struct	s_env
 	struct s_env		*prev;
 	struct s_env		*next;
 }	t_env;
-
 
 /*env_init.c*/
 t_env	*create_env(char *env);
