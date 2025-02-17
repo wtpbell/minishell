@@ -70,7 +70,7 @@ int	exec_block(t_ast_node *node, t_env **env)
 		signal(SIGQUIT, SIG_DFL);
 		status_ = executor_status(node->left, env);
 		set_exit_status(status_);
-		free_all_memory();
+		// free_all_memory();
 		exit(status_);
 	}
 	wait(&status_);

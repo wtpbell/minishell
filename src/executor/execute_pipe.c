@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 19:55:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/17 16:06:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	child_process(t_ast_node *node, int input, int output, int new_input, t_env
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(input, output, new_input);
 	set_exit_status(executor_status(node, env));
-	free_all_memory();
+	// free_all_memory();
 	exit(get_exit_status());
 }
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 22:07:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/17 16:06:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@
 */
 void child(t_ast_node *node, t_env **env)
 {
+	char **env_arr;
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-
-	printf("Executing command: %s\n", node->args[0]);
-	fflush(stdout);
-
-	char **env_arr = env_to_arr(*env);
+	env_arr = env_to_arr(*env);
 	if (!env_arr)
 	{
 		perror("env_to_arr failed");
 		exit(1);
 	}
-
-	execve(node->args[0], node->args, env_arr);
-	perror("execve failed");  // If execve fails, this will be printed
-	exit(127);  // Exit with 127 (command not found)
+	// printf("Executing: %s\n", node->args[0]);	
+	if (execve(node->args[0], node->args, env_arr) == -1)
+		error(node->args[0], NULL);
+	set_exit_status(127);
+	free_all_memory();
+	exit(get_exit_status());
 }
 
-
+	
 
 int	parent(t_ast_node *node)
 {
