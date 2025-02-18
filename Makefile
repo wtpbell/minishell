@@ -30,7 +30,7 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/utils/char_check.c \
 			  $(LEXER_DIR)/utils/expansion_utils.c \
-			  $$(LEXER_DIR)/utils/quote_utils.c \
+			  $(LEXER_DIR)/utils/quote_utils.c \
 			  $(LEXER_DIR)/utils/word_utils.c \
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
