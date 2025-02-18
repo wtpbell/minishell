@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 11:05:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 15:26:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int				is_in_quotes(t_tokenizer *tokenizer);
 t_quote_state	get_quote_state(t_tokenizer *tokenizer);
 int				validate_quotes(const char *input);
 char			*extract_quoted_content_with_expansion(t_tokenizer *tokenizer, char quote);
-
+char			*extract_quote_content(t_tokenizer *tokenizer,
+					char quote, int start);
 /* Expansion handling */
 char			*handle_expansion(t_tokenizer *tokenizer, char *word);
 char			*handle_braced_expansion(char *str, int *pos,
@@ -78,6 +79,5 @@ int				is_valid_position(t_tokenizer *tokenizer);
 char			*join_words(char *s1, char *s2);
 char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
-char			*extract_quoted_content(t_tokenizer *tokenizer, char quote);
 
 #endif
