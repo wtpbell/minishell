@@ -6,11 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 17:25:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 09:28:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "env.h"
 
 /* Check environment variable characters
 ** (alphabets, numbers, _ starting with $) */
@@ -27,7 +28,8 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	char	*var_name;
 	char	*value;
 
-	(void)state;
+	if (state.quote_char == '\'' && state.in_quote)
+		return (ft_strdup("$"));
 	if (!str || !pos)
 		return (NULL);
 	start = *pos + 1;
@@ -40,11 +42,11 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	var_name = ft_substr(str, start, len);
 	if (!var_name)
 		return (NULL);
-	value = handle_extended_expansion(var_name, NULL, NULL);
+	value = get_env_value(*get_env_list(), var_name);
 	free(var_name);
-	if (!value)
-		return (ft_strdup(""));
-	return (value);
+	if (value)
+		return (ft_strdup(value));
+	return (ft_strdup(""));
 }
 
 /* Handles special parameter expansion */
@@ -53,6 +55,8 @@ static char	*handle_special_param(char *str, int *pos, t_quote_state state)
 	char	*param;
 	char	*result;
 
+	if (state.quote_char == '\'' && state.in_quote)
+		return (ft_strdup("$"));
 	if (str[*pos + 1] == '?' || str[*pos + 1] == '$' || str[*pos + 1] == '#')
 	{
 		param = ft_substr(str, *pos + 1, 1);
