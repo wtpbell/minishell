@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:25:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 11:01:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 11:28:40 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,34 @@ char	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 {
 	int		start;
 	char	*content;
+	char	*result;
+	int		i;
 
 	tokenizer->position++;
 	start = tokenizer->position;
+	result = ft_strdup("");
 	while (tokenizer->input[tokenizer->position]
 		&& tokenizer->input[tokenizer->position] != quote)
-		tokenizer->position++;
-	if (!tokenizer->input[tokenizer->position])
-		return (NULL);
-	content = ft_substr(tokenizer->input, start, tokenizer->position - start);
+	{
+		if (tokenizer->input[tokenizer->position] == '\\'
+			&& tokenizer->input[tokenizer->position + 1] == quote)
+		{
+			content = ft_substr(tokenizer->input, start,
+				tokenizer->position - start);
+			result = ft_strjoin_free(result, content);
+			result = ft_strjoin_char(result, quote);
+			tokenizer->position += 2;
+			start = tokenizer->position;
+		}
+		else
+			tokenizer->position++;
+	}
+	if (start < tokenizer->position)
+	{
+		content = ft_substr(tokenizer->input, start,
+			tokenizer->position - start);
+		result = ft_strjoin_free(result, content);
+	}
 	tokenizer->position++;
-	return (content);
+	return (result);
 }
