@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:30:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 10:57:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 10:52:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,30 @@ t_quote_state	get_quote_state(t_tokenizer *tokenizer)
 	state.in_quote = tokenizer->in_quote;
 	state.quote_char = tokenizer->quote_char;
 	return (state);
+}
+
+char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer, char quote)
+{
+	int		start;
+	char	*content;
+
+	tokenizer->position++;
+	start = tokenizer->position;
+	while (tokenizer->input[tokenizer->position]
+		&& tokenizer->input[tokenizer->position] != quote)
+		tokenizer->position++;
+
+	if (!tokenizer->input[tokenizer->position])
+		return (NULL);
+
+	content = ft_substr(tokenizer->input, start, tokenizer->position - start);
+	tokenizer->position++;
+	if (quote == '"' && ft_strchr(content, '$'))
+	{
+		char *expanded = handle_expansion(tokenizer, content);
+		free(content);
+		content = expanded;
+	}
+
+	return (content);
 }
