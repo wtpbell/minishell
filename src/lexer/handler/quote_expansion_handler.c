@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 15:24:00 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 15:24:10 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 15:32:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,3 @@ char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
 	return (result);
 }
 
-t_quote_state	get_quote_state(t_tokenizer *tokenizer)
-{
-	t_quote_state	state;
-
-	state.in_quote = tokenizer->in_quote;
-	state.quote_char = tokenizer->quote_char;
-	return (state);
-}
