@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 10:53:34 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 10:58:35 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ static t_token	*analyze_and_create_token(char *content)
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	char	*content;
-	char	*expanded_content;
+	char	*temp;
+	char	*quoted;
 
 	if (!tokenizer || !tokenizer->input)
 		return (NULL);
@@ -71,14 +72,11 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 		content = ft_strdup("");
 		while (is_quote(tokenizer->input[tokenizer->position]))
 		{
-			char	*quoted = extract_quoted_content_with_expansion(tokenizer,
+			quoted = extract_quoted_content_with_expansion(tokenizer,
 					tokenizer->input[tokenizer->position]);
 			if (!quoted)
-			{
-				free(content);
-				return (NULL);
-			}
-			char *temp = join_words(content, quoted);
+				return (free(content), NULL);
+			temp = join_words(content, quoted);
 			content = temp;
 		}
 	}

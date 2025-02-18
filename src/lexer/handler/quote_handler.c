@@ -6,17 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:30:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 10:52:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 11:02:48 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-/* Check if you are currently inside quotes */
-int	is_in_quotes(t_tokenizer *tokenizer)
-{
-	return (tokenizer->in_quote);
-}
 
 /* Handle nested quotes */
 static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
@@ -35,14 +29,6 @@ static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
 		tokenizer->quote_char = 0;
 		return (1);
 	}
-	return (0);
-}
-
-/* Check for characters that require special handling within double quotes */
-int	is_special_in_quotes(char c, char quote_char)
-{
-	if (quote_char == '"')
-		return (c == '$' || c == '`' || c == '\\');
 	return (0);
 }
 
@@ -71,28 +57,27 @@ t_quote_state	get_quote_state(t_tokenizer *tokenizer)
 	return (state);
 }
 
-char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer, char quote)
+char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
+											char quote)
 {
 	int		start;
 	char	*content;
+	char	*expanded;
 
 	tokenizer->position++;
 	start = tokenizer->position;
 	while (tokenizer->input[tokenizer->position]
 		&& tokenizer->input[tokenizer->position] != quote)
 		tokenizer->position++;
-
 	if (!tokenizer->input[tokenizer->position])
 		return (NULL);
-
 	content = ft_substr(tokenizer->input, start, tokenizer->position - start);
 	tokenizer->position++;
 	if (quote == '"' && ft_strchr(content, '$'))
 	{
-		char *expanded = handle_expansion(tokenizer, content);
+		expanded = handle_expansion(tokenizer, content);
 		free(content);
 		content = expanded;
 	}
-
 	return (content);
 }

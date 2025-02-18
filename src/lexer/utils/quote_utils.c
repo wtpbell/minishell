@@ -6,12 +6,27 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:25:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 10:26:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/18 11:01:51 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
+/* Check for characters that require special handling within double quotes */
+int	is_special_in_quotes(char c, char quote_char)
+{
+	if (quote_char == '"')
+		return (c == '$' || c == '`' || c == '\\');
+	return (0);
+}
+
+/* Check if you are currently inside quotes */
+int	is_in_quotes(t_tokenizer *tokenizer)
+{
+	return (tokenizer->in_quote);
+}
+
+/* Get the current quote state */
 char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result)
 {
 	char	*quoted;
@@ -25,6 +40,7 @@ char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result)
 	return (joined);
 }
 
+/* Handle characters inside a word */
 char	*handle_char_in_word(t_tokenizer *tokenizer, char *result)
 {
 	char	*temp;
@@ -38,6 +54,7 @@ char	*handle_char_in_word(t_tokenizer *tokenizer, char *result)
 	return (joined);
 }
 
+/* Extract content inside quotes */
 char	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 {
 	int		start;
