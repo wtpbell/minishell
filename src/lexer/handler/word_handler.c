@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 10:58:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/20 10:53:23 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,11 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 		content = extract_word(tokenizer);
 	if (!content)
 		return (NULL);
+	if (ft_strchr(content, '$'))
+	{
+		temp = handle_expansion(tokenizer, content);
+		free(content);
+		content = temp;
+	}
 	return (analyze_and_create_token(content));
 }
