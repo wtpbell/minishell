@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:25:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 15:20:28 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/20 09:29:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ char	*handle_char_in_word(t_tokenizer *tokenizer, char *result)
 	tokenizer->position++;
 	return (joined);
 }
-
