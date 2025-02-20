@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 14:31:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/20 10:32:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,15 @@ int	builtin_echo(t_ast_node *node, t_env **env)
 	i = verify_args(node->args);
 	while (i < node->argc)
 	{
-		if (ft_strcmp(node->args[i], "$?") == 0)
+		if (node->args[i][0] == '\\')
+			printf("%s", node->args[i] + 1);
+		else if (ft_strncmp(node->args[i], "$?", 2) == 0)
 		{
 			printf("%d", get_exit_status());
 			set_exit_status(0);
-			i++;
-			continue ;
 		}
-		printf("%s", node->args[i]);
+		else
+			printf("%s", node->args[i]);
 		i++;
 		if (i < node->argc)
 			printf(" ");
