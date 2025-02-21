@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 17:01:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 17:42:36 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ static int	has_unescaped_dollar(const char *content)
 	while (content[i])
 	{
 		if (content[i] == '\\' && content[i + 1] == '$')
-		i += 2;
+		{
+			if (content[i + 2] == '?')
+				i += 3;
+			else
+				i += 2;
+		}
 		else if (content[i] == '$')
 			return (1);
 		else
