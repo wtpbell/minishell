@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:47:29 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 11:11:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,20 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 }
 
 /* Analyze and create token */
-static t_token	*analyze_and_create_token(char *content)
+static t_token	*analyze_and_create_token(char *content,
+									t_tokenizer *tokenizer)
 {
-	t_token	*token;
+	t_token		*token;
+	char		*expanded_content;
 
-	if (has_wildcard(content))
+	if (ft_strchr(content, '$') && !tokenizer->in_quote)
+	{
+		expanded_content = handle_expansion(tokenizer, content);
+		if (!expanded_content)
+			return (free(content), NULL);
+		token = create_token(expanded_content, TOKEN_WORD);
+	}
+	else if (has_wildcard(content))
 		token = handle_wildcard_token(content);
 	else
 		token = create_token(ft_strdup(content), TOKEN_WORD);
@@ -46,5 +55,5 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 	content = extract_word(tokenizer);
 	if (!content)
 		return (NULL);
-	return (analyze_and_create_token(content));
+	return (analyze_and_create_token(content, tokenizer));
 }

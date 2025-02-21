@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:51:28 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 11:11:38 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,5 @@ char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
 char			*expand_exit_status(void);
 int				is_exit_status_var(const char *str);
+char			*extract_word(t_tokenizer *tokenizer);
 #endif

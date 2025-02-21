@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:52:46 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 11:10:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,11 @@ char	*get_var_value(char *str, int *pos, t_quote_state state)
 {
 	if (state.quote_char == '\'' && state.in_quote)
 		return (ft_strdup("$"));
+	if (str[*pos + 1] == '?')
+	{
+		(*pos)++;
+		return (expand_exit_status());
+	}
 	if (str[*pos + 1] == '{')
 		return (handle_braced_expansion(str, pos, state));
 	return (handle_special_param(str, pos, state));

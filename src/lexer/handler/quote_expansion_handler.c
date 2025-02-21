@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 15:24:00 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:39:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 11:10:24 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	is_escaped_var(const char *str)
 }
 
 static char	*handle_double_quote_expansion(t_tokenizer *tokenizer,
-	char *result)
+										char *result)
 {
 	char	*expanded;
 
@@ -29,15 +29,11 @@ static char	*handle_double_quote_expansion(t_tokenizer *tokenizer,
 	if (is_escaped_var(result))
 	{
 		if (result[2] == '?' && result[3] == '\0')
-		{
-			expanded = ft_strdup(result + 1);
-			free(result);
-			return (expanded);
-		}
+			return (ft_strdup("$?"));
 		return (result);
 	}
 	if (ft_strncmp(result, "$?", 2) == 0)
-		return (free(result), ft_itoa(g_exit_status));
+		return (free(result), expand_exit_status());
 	if (ft_strchr(result, '$'))
 	{
 		expanded = handle_expansion(tokenizer, result);
