@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/20 10:32:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 08:40:29 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ static int	verify_args(char **args)
 	return (i);
 }
 
+static int	is_escaped_var(const char *str)
+{
+	return (str[0] == '\\' && str[1] == '$' && str[2] == '?');
+}
+
 int	builtin_echo(t_ast_node *node, t_env **env)
 {
 	int	i;
@@ -49,13 +54,10 @@ int	builtin_echo(t_ast_node *node, t_env **env)
 	i = verify_args(node->args);
 	while (i < node->argc)
 	{
-		if (node->args[i][0] == '\\')
+		if (is_escaped_var(node->args[i]))
+			printf("%s", node->args[i]);
+		else if (node->args[i][0] == '\\')
 			printf("%s", node->args[i] + 1);
-		else if (ft_strncmp(node->args[i], "$?", 2) == 0)
-		{
-			printf("%d", get_exit_status());
-			set_exit_status(0);
-		}
 		else
 			printf("%s", node->args[i]);
 		i++;
