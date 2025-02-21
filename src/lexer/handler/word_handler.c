@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 17:42:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 17:53:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_token	*analyze_and_create_token(char *content,
 	int		should_expand;
 
 	should_expand = (has_unescaped_dollar(content)
-		&& (!tokenizer->in_quote
+			&& (!tokenizer->in_quote
 				|| (tokenizer->in_quote && tokenizer->quote_char == '"')));
 	if (should_expand)
 	{
