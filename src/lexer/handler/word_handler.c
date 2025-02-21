@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 12:57:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 17:01:15 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,23 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
-/* Analyze and create token */
+static int	has_unescaped_dollar(const char *content)
+{
+	int	i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '\\' && content[i + 1] == '$')
+		i += 2;
+		else if (content[i] == '$')
+			return (1);
+		else
+			i++;
+	}
+	return (0);
+}
+
 static t_token	*analyze_and_create_token(char *content,
 										t_tokenizer *tokenizer)
 {
@@ -28,8 +44,8 @@ static t_token	*analyze_and_create_token(char *content,
 	char	*expanded_content;
 	int		should_expand;
 
-	should_expand = (ft_strchr(content, '$')
-			&& (!tokenizer->in_quote
+	should_expand = (has_unescaped_dollar(content)
+		&& (!tokenizer->in_quote
 				|| (tokenizer->in_quote && tokenizer->quote_char == '"')));
 	if (should_expand)
 	{
