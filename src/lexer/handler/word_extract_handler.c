@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/21 09:46:58 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:53:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 12:56:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,22 @@
 static char	*get_next_word_part(t_tokenizer *tokenizer)
 {
 	char	*part;
+	char	quote;
 
 	if (is_quote(tokenizer->input[tokenizer->position]))
 	{
-		part = extract_quoted_content_with_expansion(tokenizer,
-				tokenizer->input[tokenizer->position]);
+		quote = tokenizer->input[tokenizer->position];
+		if (!tokenizer->in_quote)
+		{
+			tokenizer->quote_char = quote;
+			tokenizer->in_quote = 1;
+		}
+		else if (tokenizer->quote_char == quote)
+		{
+			tokenizer->in_quote = 0;
+			tokenizer->quote_char = 0;
+		}
+		part = extract_quoted_content_with_expansion(tokenizer, quote);
 	}
 	else
 	{
