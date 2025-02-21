@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:39:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 09:51:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ char			*handle_extended_expansion(char *var_name,
 					char *operator, char *word);
 char			*expand_special_param(const char *param);
 char			*get_var_value(char *str, int *pos, t_quote_state state);
-
+char			*handle_special_param(char *str, int *pos, t_quote_state state);
+char			*get_env_var_value(char *str, int start, int len);
+int				is_valid_var_char(char c);
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
 int				get_operator_len(t_token_type type);
