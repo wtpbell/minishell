@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 11:27:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 08:47:13 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,68 +20,87 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
-/* Extract quoted content */
-static char	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
+static int	is_exit_status_var(char *str)
 {
-	int		start;
-	char	*content;
-
-	tokenizer->position++;
-	start = tokenizer->position;
-	while (tokenizer->input[tokenizer->position]
-		&& tokenizer->input[tokenizer->position] != quote)
-		tokenizer->position++;
-	if (!tokenizer->input[tokenizer->position])
-		return (NULL);
-	content = ft_substr(tokenizer->input, start, tokenizer->position - start);
-	tokenizer->position++;
-	return (content);
+	return (str && str[0] == '$' && str[1] == '?'
+		&& (!str[2] || ft_isspace(str[2]) || is_operator(&str[2])));
 }
+
 
 /* Extract word */
 static char	*extract_word(t_tokenizer *tokenizer)
 {
-	int		start;
-	char	*word;
+	char	*result;
+	char	*temp;
 
-	start = tokenizer->position;
+	result = ft_strdup("");
+	if (!result)
+		return (NULL);
 	while (tokenizer->input[tokenizer->position]
 		&& !ft_isspace(tokenizer->input[tokenizer->position])
-		&& !is_operator(&tokenizer->input[tokenizer->position])
-		&& !is_quote(tokenizer->input[tokenizer->position]))
-		tokenizer->position++;
-	word = ft_substr(tokenizer->input, start, tokenizer->position - start);
-	if (!word)
-		return (NULL);
-	return (word);
+		&& !is_operator(&tokenizer->input[tokenizer->position]))
+	{
+		if (is_exit_status_var(&tokenizer->input[tokenizer->position])
+			&& !tokenizer->in_quote)
+		{
+			temp = expand_exit_status();
+			if (!temp)
+				return (free(result), NULL);
+			result = join_words(result, temp);
+			tokenizer->position += 2;
+			continue ;
+		}
+		if (is_quote(tokenizer->input[tokenizer->position]))
+			result = handle_quote_in_word(tokenizer, result);
+		else
+			result = handle_char_in_word(tokenizer, result);
+		if (!result)
+			return (NULL);
+	}
+	return (result);
+}
+
+/* Analyze and create token */
+static t_token	*analyze_and_create_token(char *content)
+{
+	t_token	*token;
+
+	if (has_wildcard(content))
+		token = handle_wildcard_token(content);
+	else
+		token = create_token(ft_strdup(content), TOKEN_WORD);
+	if (!token)
+		return (free(content), NULL);
+	free(content);
+	return (token);
 }
 
 /* Handle word */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	char	*content;
-	t_token	*token;
+	char	*temp;
+	char	*quoted;
 
 	if (!tokenizer || !tokenizer->input)
 		return (NULL);
 	skip_spaces(tokenizer);
 	if (is_quote(tokenizer->input[tokenizer->position]))
 	{
-		content = extract_quoted_content(tokenizer,
-				tokenizer->input[tokenizer->position]);
-		if (!content)
-			return (NULL);
-		return (create_token(content, TOKEN_WORD));
+		content = ft_strdup("");
+		while (is_quote(tokenizer->input[tokenizer->position]))
+		{
+			quoted = extract_quoted_content_with_expansion(tokenizer,
+					tokenizer->input[tokenizer->position]);
+			if (!quoted)
+				return (free(content), NULL);
+			temp = join_words(content, quoted);
+			content = temp;
+		}
 	}
-	content = extract_word(tokenizer);
+	else
+		content = extract_word(tokenizer);
 	if (!content)
 		return (NULL);
-	if (has_wildcard(content))
-		token = handle_wildcard_token(content);
-	else
-		token = create_token(ft_strdup(content), TOKEN_WORD);
-	if (!token)
-		return (free(content), (NULL));
-	free(content);
-	return (token);
+	return (analyze_and_create_token(content));
 }
