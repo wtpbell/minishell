@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 15:24:00 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/20 11:21:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 09:39:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,9 @@
 
 static int	is_escaped_var(const char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\\' && str[i + 1] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
+	if (!str || !*str)
+		return (0);
+	return (str[0] == '\\' && str[1] == '$');
 }
 
 static char	*handle_double_quote_expansion(t_tokenizer *tokenizer,
@@ -34,12 +27,17 @@ static char	*handle_double_quote_expansion(t_tokenizer *tokenizer,
 	if (!result || !tokenizer)
 		return (NULL);
 	if (is_escaped_var(result))
-		return (result);
-	if (ft_strncmp(result, "$?", 2) == 0)
 	{
-		free(result);
-		return (ft_itoa(g_exit_status));
+		if (result[2] == '?' && result[3] == '\0')
+		{
+			expanded = ft_strdup(result + 1);
+			free(result);
+			return (expanded);
+		}
+		return (result);
 	}
+	if (ft_strncmp(result, "$?", 2) == 0)
+		return (free(result), ft_itoa(g_exit_status));
 	if (ft_strchr(result, '$'))
 	{
 		expanded = handle_expansion(tokenizer, result);
@@ -48,7 +46,6 @@ static char	*handle_double_quote_expansion(t_tokenizer *tokenizer,
 	}
 	return (result);
 }
-
 
 char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
 	char quote)
@@ -64,6 +61,3 @@ char	*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
 		result = handle_double_quote_expansion(tokenizer, result);
 	return (result);
 }
-
-
-

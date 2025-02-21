@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 08:43:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 09:39:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int				is_special_in_quotes(char c, char quote_char);
 int				is_in_quotes(t_tokenizer *tokenizer);
 t_quote_state	get_quote_state(t_tokenizer *tokenizer);
 int				validate_quotes(const char *input);
-char			*extract_quoted_content_with_expansion(t_tokenizer *tokenizer, char quote);
+char			*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
+					char quote);
 char			*extract_quoted_content(t_tokenizer *tokenizer, char quote);
 char			*extract_quote_content(t_tokenizer *tokenizer,
 					char quote, int start);
@@ -82,4 +83,5 @@ char			*join_words(char *s1, char *s2);
 char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
 char			*expand_exit_status(void);
+int				is_exit_status_var(const char *str);
 #endif

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:12:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 09:40:34 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
-	struct s_redir	*next;
+	struct s_redir			*next;
 }	t_redir;
 
 typedef struct s_last_redir

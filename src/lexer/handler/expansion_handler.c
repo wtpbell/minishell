@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 08:42:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 09:41:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char	*expand_exit_status(void)
 	return (expanded);
 }
 
-
 /* Extract environment variable names and return their values */
 static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 {
@@ -45,10 +44,7 @@ static char	*handle_simple_expansion(char *str, int *pos, t_quote_state state)
 	if (!str || !pos)
 		return (NULL);
 	if (str[*pos + 1] == '?')
-	{
-		(*pos)++;
-		return (expand_exit_status());
-	}
+		return ((*pos)++, expand_exit_status());
 	start = *pos + 1;
 	len = 0;
 	while (str[start + len] && is_valid_var_char(str[start + len]))
