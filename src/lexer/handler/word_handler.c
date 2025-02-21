@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 08:43:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 08:47:13 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,12 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
-static int	has_unescaped_var(const char *str)
+static int	is_exit_status_var(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$' && (i == 0 || str[i - 1] != '\\'))
-			return (1);
-		i++;
-	}
-	return (0);
+	return (str && str[0] == '$' && str[1] == '?'
+		&& (!str[2] || ft_isspace(str[2]) || is_operator(&str[2])));
 }
+
 
 /* Extract word */
 static char	*extract_word(t_tokenizer *tokenizer)
