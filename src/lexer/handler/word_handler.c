@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/20 11:21:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/21 08:43:33 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	has_unescaped_var(const char *str)
 static char	*extract_word(t_tokenizer *tokenizer)
 {
 	char	*result;
+	char	*temp;
 
 	result = ft_strdup("");
 	if (!result)
@@ -46,6 +47,16 @@ static char	*extract_word(t_tokenizer *tokenizer)
 		&& !ft_isspace(tokenizer->input[tokenizer->position])
 		&& !is_operator(&tokenizer->input[tokenizer->position]))
 	{
+		if (is_exit_status_var(&tokenizer->input[tokenizer->position])
+			&& !tokenizer->in_quote)
+		{
+			temp = expand_exit_status();
+			if (!temp)
+				return (free(result), NULL);
+			result = join_words(result, temp);
+			tokenizer->position += 2;
+			continue ;
+		}
 		if (is_quote(tokenizer->input[tokenizer->position]))
 			result = handle_quote_in_word(tokenizer, result);
 		else
@@ -98,11 +109,5 @@ t_token	*handle_word(t_tokenizer *tokenizer)
 		content = extract_word(tokenizer);
 	if (!content)
 		return (NULL);
-	if (has_unescaped_var(content))
-	{
-		temp = handle_expansion(tokenizer, content);
-		free(content);
-		content = temp;
-	}
 	return (analyze_and_create_token(content));
 }
