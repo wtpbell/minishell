@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 13:03:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 23:34:07 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,50 +101,4 @@ void	set_last(char **args, int argc)
 		set_env(*get_env_list(), "_", args[argc - 1]);
 	else
 		set_env(*get_env_list(), "_", "");
-}
-
-/*
-	Convert env variables into an arrray of strings, formatted as
-	"key=value" for execve() as executing a new process with execve(),
-	we need to pass environment variables as a char ** array
-*/
-char	**env_to_arr(t_env *envs)
-{
-	char	**env;
-	int		i;
-	t_env	*head;
-	char	*tmp;
-	char	*full_entry;
-
-	if (!envs)
-		return (NULL);
-	head = envs;
-	i = 0;
-	while (head)
-	{
-		i += (head->hide == 0);
-		head = head->next;
-	}
-	env = (char **)mem_alloc(sizeof(char *) * (i + 1));
-	if (!env)
-		return (NULL);
-	i = -1;
-	head = envs;
-	while (head)
-	{
-		if (head->hide == 0)
-		{
-			tmp = mem_strjoin(head->key, "=");
-			if (head->value)
-			{
-				full_entry = mem_strjoin(tmp, head->value);
-				free(tmp);
-				tmp = full_entry;
-			}
-			env[++i] = tmp;
-		}
-		head = head->next;
-	}
-	env[++i] = NULL;
-	return (env);
 }

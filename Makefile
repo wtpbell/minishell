@@ -1,8 +1,8 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -MMD -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address,undefined
-LDFLAGS = -fsanitize=address,undefined
+CFLAGS = -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
+LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
@@ -25,14 +25,20 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/token/token_utils.c \
 			  $(LEXER_DIR)/handler/expansion_braced_handler.c \
 			  $(LEXER_DIR)/handler/expansion_handler.c \
+			  $(LEXER_DIR)/handler/expansion_param_handler.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
+			  $(LEXER_DIR)/handler/quote_content_handler.c \
+			  $(LEXER_DIR)/handler/quote_expansion_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
 			  $(LEXER_DIR)/handler/var_expansion_handler.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
+			  $(LEXER_DIR)/handler/word_extract_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/utils/char_check.c \
 			  $(LEXER_DIR)/utils/expansion_utils.c \
+			  $(LEXER_DIR)/utils/quote_utils.c \
+			  $(LEXER_DIR)/utils/word_utils.c \
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/core/ast.c \
@@ -60,6 +66,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
 			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_utils1.c \
 			   $(ENV_DIR)/env_set.c \
 
 BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \

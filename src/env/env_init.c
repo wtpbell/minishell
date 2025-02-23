@@ -110,7 +110,7 @@ t_env	*build_env(char **env)
 
 t_env	**get_env_list(void)
 {
-	static t_env	*env;
+	static t_env	*env = NULL;
 
 	return (&env);
 }

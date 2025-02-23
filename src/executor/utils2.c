@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 12:20:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 21:57:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ char	*get_cmd_path(char *cmd)
 	if (!paths)
 		return (NULL);
 	i = 0;
-	while (paths[i++])
+	while (paths[i])
 	{
-		tmp = mem_strjoin(paths[i], "/");
+		tmp = mem_strjoin(paths[i++], "/");
 		full_path = mem_strjoin(tmp, cmd);
 		if (access(full_path, F_OK) == 0)
 			return (free_tab(paths), free_alloc(tmp), full_path);

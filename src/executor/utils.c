@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 12:21:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 23:17:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,14 @@ int	get_redir_fd(t_token_type type)
 	if (type == TOKEN_REDIR_OUT || type == TOKEN_APPEND)
 		return (1);
 	return (-1);
+}
+
+void	cleanup_heredocs(t_redir *redir)
+{
+	while (redir)
+	{
+		if (redir->type == TOKEN_HEREDOC && redir->file)
+			unlink(redir->file);
+		redir = redir->next;
+	}
 }

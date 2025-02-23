@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 00:42:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 13:18:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	builtin_exit(t_ast_node *node, t_env **env)
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required",
 			STDERR_FILENO);
-		exit(255);
+		exit(2);
 	}
 	if (node->argc > 2)
 	{

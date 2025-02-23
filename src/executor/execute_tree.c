@@ -130,21 +130,12 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	{
 		launch_redir(cur_redir, saved_fd);
 		if (get_exit_status() == 1)
-			break ;
+			return (restore_redirection(saved_fd), 1);
 		cur_redir = cur_redir->next;
 	}
-	if (get_exit_status() != 1)
-		status = exec_cmd(node, env);
-	else
-		status = 1;
+	status = exec_cmd(node, env);
 	restore_redirection(saved_fd);
-	cur_redir = redir;
-	while (cur_redir)
-	{
-		if (cur_redir->type == TOKEN_HEREDOC && cur_redir->file)
-			unlink(cur_redir->file);
-		cur_redir = cur_redir->next;
-	}
+	cleanup_heredocs(redir);
 	return (status);
 }
 
@@ -166,10 +157,7 @@ int	exec_cmd(t_ast_node *node, t_env **env)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
-	{
-		set_exit_status(builtin(node, env));
-		return (get_exit_status());
-	}
+		return (set_exit_status(builtin(node, env)), get_exit_status());
 	status_ = check_cmd(node, env);
 	if (status_ != 0)
 		return (status_);
@@ -177,11 +165,8 @@ int	exec_cmd(t_ast_node *node, t_env **env)
 	signal(SIGQUIT, interrupt_w_msg);
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork failed");
-		return (EXIT_FAILURE);
-	}
-	else if (pid == 0)
+		return (perror("fork failed"), EXIT_FAILURE);
+	if (pid == 0)
 		child(node, env);
 	waitpid(pid, &status_, 0);
 	set_exit_status(WEXITSTATUS(status_));

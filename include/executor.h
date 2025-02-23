@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/23 12:42:40 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 23:18:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,12 @@
 # include <sys/wait.h>
 
 # define MAX_STATUS_LEN 20
-# define EXIT_ERROR_CODE 255
+# define ERR_NO_FILE 127
+# define ERR_NOT_DIR 126
+# define ERR_ACCESS EXIT_FAILURE
+# define ERR_MALLOC EXIT_FAILURE
+# define ERR_CHDIR EXIT_FAILURE
+# define ERR_ENV EXIT_FAILURE
 
 /*error*/
 void	error(char *word, char *msg);
@@ -64,6 +69,8 @@ int		get_exit_status(void);
 void	sort_env(t_env **envs);
 int		get_flags(t_token_type type);
 int		get_redir_fd(t_token_type type);
+void	cleanup_heredocs(t_redir *redir);
+
 /*utils2*/
 void	append_cwd(t_ast_node *node);
 int		check_cmd(t_ast_node *node, t_env **env);
