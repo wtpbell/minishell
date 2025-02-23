@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 00:33:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 12:58:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,11 @@ int	check_last_path(char *full_path, char **paths, char **joined, int i)
 	if (last_char(full_path) == '/')
 	{
 		(*joined) = mem_strjoin((*joined), "/");
+		if (!(*joined))
+			return (NULL);
 		(*joined) = mem_strjoin((*joined), paths[i]);
+		if (!(*joined))
+			return (NULL);
 		if (access((*joined), F_OK) == -1)
 			return (error(full_path, "No such file or directory"), 127);
 		stat((*joined), &info);
@@ -80,6 +84,8 @@ int	check_paths(char *full_path)
 	if (full_path[0] == '/' && full_path[1] == '\0')
 		return (0);
 	paths = mem_split(full_path, "/");
+	if (!paths)
+		return (NULL);
 	joined = NULL;
 	i = 0;
 	status_ = check_leading_paths(full_path, paths, &joined, &i);

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/23 00:21:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 12:42:40 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 /*error*/
 void	error(char *word, char *msg);
+void	error_heredoc(char *delimiter);
 
 /*execute_tree*/
 int		exec_cmd(t_ast_node *node, t_env **env);
@@ -50,11 +51,18 @@ pid_t	spawn_process(int input, int pipe_fd[2], \
 		t_ast_node *node, t_env **env);
 void	redirect_io(int input, int output, int new_input);
 
+/*execute_heredoc*/
+void	handle_all_heredocs(t_redir *redir, int saved_fd[2]);
+
+/*execute_redir*/
+void	launch_redir(t_redir *current_redir, int saved_fd[2]);
+void	restore_redirection(int saved_fd[2]);
+
 /*utils*/
 void	set_exit_status(int status);
 int		get_exit_status(void);
 void	sort_env(t_env **envs);
-int		get_redir_flags(t_token_type type);
+int		get_flags(t_token_type type);
 int		get_redir_fd(t_token_type type);
 /*utils2*/
 void	append_cwd(t_ast_node *node);

@@ -112,74 +112,38 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	return (status_);
 }
 
-static void	restore_redirection(int saved_fd[2])
-{
-	if (saved_fd[0] != -1)
-	{
-		dup2(saved_fd[0], STDIN_FILENO);
-		close(saved_fd[0]);
-	}
-	if (saved_fd[1] != -1)
-	{
-		dup2(saved_fd[1], STDOUT_FILENO);
-		close(saved_fd[1]);
-	}
-}
-
 int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 {
 	int		saved_fd[2];
-	int		fd;
-	int		redir_fd;
 	int		status;
-	t_redir	*current_redir;
+	t_redir	*cur_redir;
 
 	if (!node || !redir || !env)
 		return (0);
+	saved_fd[0] = -1;
 	saved_fd[1] = -1;
-	saved_fd[2] = -1;
-	current_redir = redir;
-	while (current_redir)
+	handle_all_heredocs(redir, saved_fd);
+	if (get_exit_status() == 130)
+		return (130);
+	cur_redir = redir;
+	while (cur_redir)
 	{
-		if (!current_redir->file)
-		{
-			current_redir = current_redir->next;
-			continue ;
-		}
-		redir_fd = get_redir_fd(current_redir->type);
-		if (current_redir->type == TOKEN_HEREDOC)
-		{
-			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
-			if (fd < 0)
-				return (error("heredoc failed to open", NULL), set_exit_status(1), 1);
-			if (dup2(fd, STDIN_FILENO) == -1)
-				return (error("dup2 failed for heredoc", NULL), close(fd), set_exit_status(1), 1);
-			close(fd);
-		}
-		else
-		{
-			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
-			if (fd == -1)
-				return (error(current_redir->file, NULL), set_exit_status(1), 1);
-			if (saved_fd[redir_fd] == -1)
-				saved_fd[redir_fd] = dup(redir_fd);// Save the original file descriptor
-			if (dup2(fd, redir_fd) == -1)
-			{
-				close(fd);
-				return (error("dup2 failed", NULL), set_exit_status(1), 1);
-			}
-			close(fd);
-		}
-		current_redir = current_redir->next;
+		launch_redir(cur_redir, saved_fd);
+		if (get_exit_status() == 1)
+			break ;
+		cur_redir = cur_redir->next;
 	}
-	status = exec_cmd(node, env);
+	if (get_exit_status() != 1)
+		status = exec_cmd(node, env);
+	else
+		status = 1;
 	restore_redirection(saved_fd);
-	current_redir = redir;
-	while (current_redir)
+	cur_redir = redir;
+	while (cur_redir)
 	{
-		if (current_redir->type == TOKEN_HEREDOC)
-			unlink(current_redir->file);
-		current_redir = current_redir->next;
+		if (cur_redir->type == TOKEN_HEREDOC && cur_redir->file)
+			unlink(cur_redir->file);
+		cur_redir = cur_redir->next;
 	}
 	return (status);
 }

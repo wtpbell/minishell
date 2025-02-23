@@ -77,9 +77,12 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/error/error.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
+				 $(EXECUTOR_DIR)/execute_heredoc.c \
+				 $(EXECUTOR_DIR)/execute_redir.c \
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
-				$(COMMON_DIR)/utils/memory/memory_tracker.c \
+				$(COMMON_DIR)/utils/memory/mem_tracker.c \
+				$(COMMON_DIR)/utils/memory/mem_free.c \
 				$(COMMON_DIR)/utils/memory/utils.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_split.c \

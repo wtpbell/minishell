@@ -50,8 +50,8 @@ t_env	*create_env(char *env)
 		return (NULL);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
-		new->value = NULL; //just start, no previous directory
-		new->scope = EXPORT; //exported to child processes when creating new shell
+		new->value = NULL;
+		new->scope = EXPORT;
 	}
 	else if (ft_strcmp(new->key, "SHLVL") == 0)
 		setup_shlvl(new);
@@ -106,26 +106,6 @@ t_env	*build_env(char **env)
 		add_env(&envs, new);
 	}
 	return (envs);
-}
-
-void	setup_shlvl(t_env *new)
-{
-	int	old_shlvl;
-
-	if (new->value)
-	{
-		old_shlvl = ft_atoi(new->value);
-		if (old_shlvl < 0)
-			new->value = mem_itoa(0);
-		else if (old_shlvl >= 999)
-		{
-			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
-			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = mem_itoa(1);
-		}
-		else
-			new->value = mem_itoa(++old_shlvl);
-	}
 }
 
 t_env	**get_env_list(void)
