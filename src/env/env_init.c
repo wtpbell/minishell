@@ -30,17 +30,17 @@ static t_env	*env_int(char **key_value)
 	new->next = NULL;
 	return (new);
 }
+
 /*
 	OLDPWD: Initialized with NULL value and scope set to EXPORT.
-	- cd /new/path, then cd -, it uses OLDPWD to return to the previous directory.
-	SHLVL: tracks how many nested shells are currently active and is incremented or reset if missing.
+	SHLVL: tracks how many nested shells are currently active
 	_: Represents the last executed command; its scope is set to ENVE.
 	?: Special variable representing the exit status of the last command.
 */
-t_env *create_env(char *env)
+t_env	*create_env(char *env)
 {
-	t_env *new;
-	char **key_value;
+	t_env	*new;
+	char	**key_value;
 
 	key_value = mem_split(env, "=");
 	if (!key_value)
@@ -95,7 +95,7 @@ t_env	*build_env(char **env)
 	add_env(&envs, create_env("?=0"));
 	if (!env[0])
 		add_empty_env(&envs);
-	while(env[++i])
+	while (env[++i])
 	{
 		new = create_env(env[i]);
 		if (!new)

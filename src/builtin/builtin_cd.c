@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 14:17:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:52:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 {
 	set_env(envs, "OLDPWD", old_pwd);
 	set_env(envs, "PWD", pwd);
-
 }
 
 static int	cd_dir(t_ast_node *node, t_env **env)
@@ -39,7 +38,7 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 	char	old_pwd[PATH_MAX];
 	char	*tmp;
 
-	if(getcwd(old_pwd, PATH_MAX) == NULL)
+	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	tmp = NULL;
 	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
@@ -66,9 +65,9 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 
 /* 
 	int stat(const char *path, struct stat *buf);
-	- path: A string representing the path to the file or directory you want to query.
-	- buf: A pointer to a struct stat, where the file's information will be stored.
-	0: Success. The struct stat pointed to by buf is filled with the file's information.
+	- path:the path to the file or directory you want to query.
+	- buf:  where the file's information will be stored.
+	0: Success. The struct stat pointed to by buf is filled with the file's info.
 	-1: Failure. The global variable errno is set to indicate the error 
 */
 int	builtin_cd(t_ast_node *node, t_env **env)
@@ -77,7 +76,7 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 	char		old_pwd[PATH_MAX];
 	struct stat	info;
 
-	if (getcwd(old_pwd, PATH_MAX) == NULL)
+	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0
 		|| ft_strcmp(node->args[1], "~") == 0)
@@ -86,7 +85,7 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 	{
 		if (access(node->args[1], F_OK) == -1)
 			return (error("cd", "No such file or directory"), EXIT_FAILURE);
-		if (stat(node->args[1],&info) == -1)
+		if (stat(node->args[1], &info) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		if (!S_ISDIR(info.st_mode))
 			return (error("cd", "Is not a directory"), EXIT_FAILURE);
@@ -95,7 +94,7 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 		if (chdir(node->args[1]) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		tmp = node->args[1];
-	}	
+	}
 	update_pwd(*env, old_pwd, tmp);
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }

@@ -55,9 +55,9 @@ void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
-	 fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
+	fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
 	new_env = (t_env *)mem_alloc(sizeof(t_env));
-	if(!new_env)
+	if (!new_env)
 		return ;
 	new_env->key = key;
 	if (value)
@@ -72,7 +72,6 @@ void	add_env_var(t_env **env, char *key, char *value)
 	new_env->prev = NULL;
 	if (exist_key(*(env), key))
 		set_env(*(env), key, value);
-	else 
+	else
 		add_env(env, new_env);
 }
-

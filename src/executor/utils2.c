@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 21:59:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:30:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	append_cwd(t_ast_node *node)
 	char	*tmp;
 	char	*tmp2;
 
-	if(!getcwd(cwd, PATH_MAX))
+	if (!getcwd(cwd, PATH_MAX))
 		return (error("exec", "Failed to get CWD"));
 	tmp = mem_strjoin(cwd, "/");
 	tmp2 = mem_strjoin(tmp, node->args[0]);
@@ -30,8 +30,6 @@ void	append_cwd(t_ast_node *node)
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
-
-
 
 char	*get_cmd_path(char *cmd)
 {
@@ -50,7 +48,7 @@ char	*get_cmd_path(char *cmd)
 	if (!paths)
 		return (NULL);
 	i = 0;
-	while (paths[i])
+	while (paths[i++])
 	{
 		tmp = mem_strjoin(paths[i], "/");
 		full_path = mem_strjoin(tmp, cmd);
@@ -59,7 +57,6 @@ char	*get_cmd_path(char *cmd)
 			return (free_tab(paths), free_alloc(tmp), full_path);
 		free_alloc(full_path);
 		free_alloc(tmp);
-		i++;
 	}
 	return (free_tab(paths), NULL);
 }
@@ -117,13 +114,13 @@ static int	validate_executable(t_ast_node *node)
 
 int	check_cmd(t_ast_node *node, t_env **env)
 {
-	int status_;
+	int	status_;
 
-	fprintf(stderr,"Trying to execute: %s\n", node->args[0]);
+	fprintf(stderr, "Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
-	fprintf(stderr,"Executing: %s\n", node->args[0]);
+	fprintf(stderr, "Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);
@@ -180,5 +177,3 @@ int	check_cmd(t_ast_node *node, t_env **env)
 // 	printf("==================\n\n");
 // 		return (0);
 // }
-
-

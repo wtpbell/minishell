@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 13:55:52 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/17 16:56:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:14:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_env
 {
 	char				*key;
 	char				*value;
-	bool				hide; // hide from env, handle "unset" without removing them
+	bool				hide;
 	t_scope				scope;
 	struct s_env		*prev;
 	struct s_env		*next;

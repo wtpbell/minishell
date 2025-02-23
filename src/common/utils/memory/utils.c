@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 16:36:51 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 14:13:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:58:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ bool	mem_lstclear(t_mem_tracker **lst, void (*del)(void *))
 	*lst = NULL;
 	return (true);
 }
-
 
 void	mem_lstdelone(t_mem_tracker **head, t_mem_tracker *target)
 {

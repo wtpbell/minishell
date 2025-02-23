@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 20:40:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:33:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ static int	last_char(char *str)
 	return (str[i - 1]);
 }
 
-static int	check_leading_paths(char *full_path, char **paths, char **joined, int *i)
+static int	check_leading_paths(char *full_path, char **paths, \
+								char **joined, int *i)
 {
-	struct stat info;
+	struct stat	info;
 
 	if (*joined == NULL)
 		*joined = mem_strdup("");
@@ -41,7 +42,7 @@ static int	check_leading_paths(char *full_path, char **paths, char **joined, int
 		if ((*i) > 0 || full_path[0] == '/')
 			*joined = mem_strjoin(*joined, "/");
 		*joined = mem_strjoin(*joined, paths[*i]);
-		if (access(*joined, F_OK) == -1) 
+		if (access(*joined, F_OK) == -1)
 			return (error(full_path, "No such file or directory"), 127);
 		if (stat(*joined, &info) == -1)
 			return (error(full_path, NULL), 1);
@@ -51,7 +52,6 @@ static int	check_leading_paths(char *full_path, char **paths, char **joined, int
 	}
 	return (0);
 }
-
 
 int	check_last_path(char *full_path, char **paths, char **joined, int i)
 {

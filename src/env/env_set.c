@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 13:42:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:56:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	set_underscore(int argc, char **args)
 	if ((argc - 1) != 0)
 	{
 		set_env(*get_env_list(), "_", args[argc - 1]);
-		return	;
+		return ;
 	}
 	splited = mem_split(args[argc - 1], "/");
 	if (!splited)

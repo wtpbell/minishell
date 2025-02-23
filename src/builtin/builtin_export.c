@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/14 14:27:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:47:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static void	print_envs(t_env *env)
 		env = env->next;
 	}
 }
+
 /*
 	check if a valid variable name starts with a letter (A-Z or a-z) or
 	an underscore (_) but cannot start with a number or special character.
@@ -54,15 +55,15 @@ static bool	is_valid_key(char *key)
 }
 
 /*
-	This function appends a new value to an existing environment variable 
-	if the key ends with +. If the key does not end with +, nothing special happens.
+	This function appends a new value to an existing env variable 
+	if the key ends with +. If not, nothing special happens.
 */
 static void	append_env_value(t_env *env, char **key, char **value)
 {
 	char	*key_;
 	char	*value_;
 	char	*tmp;
-	
+
 	key_ = *key;
 	value_ = *value;
 	if (!key_ || !value_)
@@ -89,9 +90,6 @@ static void	modify_env(t_env **env, char *args)
 	split = mem_split(args, "=");
 	if (!split)
 		return ;
-	// printf("Debug - export args: %s\n", args); //debug
-	// if (split[0])
-	// 	printf("Debug - key: %s. value: %s\n", split[0], split[1]); //debug
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
 	if (!is_valid_key(split[0]) || args[0] == '=')
@@ -100,7 +98,7 @@ static void	modify_env(t_env **env, char *args)
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		return ;
 	}
-	if (args[ft_strlen(args) - 1] == '=') 
+	if (args[ft_strlen(args) - 1] == '=')
 		add_env_var(env, split[0], "");
 	else if (split[0] && !split[1])
 		add_env_var(env, split[0], NULL);
@@ -121,7 +119,7 @@ int	builtin_export(t_ast_node *node, t_env **env)
 	}
 	else
 	{
-		while(++i < node->argc)
+		while (++i < node->argc)
 			modify_env(env, node->args[i]);
 		return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 	}

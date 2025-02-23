@@ -13,7 +13,7 @@
 #include "executor.h"
 
 int	executor_status(t_ast_node *node, t_env **env)
-{	
+{
 	t_redir	*redir;
 
 	if (!node || !env)
@@ -22,7 +22,7 @@ int	executor_status(t_ast_node *node, t_env **env)
 	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_ctrl(node, env));
 	else if (redir)
-			return (exec_redir(node, env, redir));
+		return (exec_redir(node, env, redir));
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node, env));
 	else if (node->type == TOKEN_BLOCK)
@@ -38,4 +38,3 @@ void	executor(t_ast_node *node, t_env **env)
 		return ;
 	set_exit_status(executor_status(node, env));
 }
-

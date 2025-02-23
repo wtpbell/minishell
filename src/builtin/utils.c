@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/01/31 14:30:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:41:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@
 static void	ft_swap(t_env *a, t_env *b)
 {
 	t_env	tmp;
-	
+
 	tmp.key = a->key;
 	tmp.value = a->value;
 	tmp.scope = a->scope;
 	tmp.hide = a->hide;
-
 	a->key = b->key;
 	a->value = b->value;
 	a->scope = b->scope;
 	a->hide = b->hide;
-
 	b->key = tmp.key;
 	b->value = tmp.value;
 	b->scope = tmp.scope;
@@ -37,13 +35,13 @@ void	sort_env(t_env **envs)
 {
 	t_env	*env;
 	bool	did_swap;
-	
+
 	if (!envs || !*envs || !(*envs)->next)
 		return ;
 	while (true)
 	{
-			env = *envs;
-			did_swap = 0;
+		env = *envs;
+		did_swap = 0;
 		while (env->next)
 		{
 			if (ft_strcmp(env->key, env->next->key) > 0)

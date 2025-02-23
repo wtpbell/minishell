@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/17 16:53:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:21:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ size_t	count_pipes(t_ast_node *node);
 pid_t	launch_pipe(t_ast_node *node, t_env **env);
 pid_t	spawn_process(int input, int pipe_fd[2], \
 		t_ast_node *node, t_env **env);
-void	child_process(t_ast_node *node, int input, \
-		int output, int new_input, t_env **env);
 void	redirect_io(int input, int output, int new_input);
 
 /*utils*/

@@ -6,10 +6,9 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:37:32 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/16 13:42:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 01:00:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "common.h"
 #include "minishell.h"
@@ -22,7 +21,8 @@
 */
 static t_mem_tracker	**get_mem_list(void)
 {
-	static t_mem_tracker *heap = NULL;
+	static t_mem_tracker	*heap = NULL;
+
 	return (&heap);
 }
 
@@ -46,7 +46,7 @@ void	free_env(t_env **env)
 /* Iterate over all memory contexts and free all */
 void	free_all_memory(void)
 {
-	t_mem_tracker **head;
+	t_mem_tracker	**head;
 
 	head = get_mem_list();
 	mem_lstclear(head, free);
@@ -78,7 +78,7 @@ void	free_alloc(void *ptr)
 void	free_mem_context(void)
 {
 	t_mem_tracker	**head;
-	
+
 	head = get_mem_list();
 	mem_lstclear(head, free);
 }
@@ -86,7 +86,7 @@ void	free_mem_context(void)
 /*
 	Create a node to store the allocated ptr.
 	Use Selective Cleanup :
-	- Shell runs continuously (like a real shell) and processes multiple commands.
+	- Shell runs continuously (like a real shell) & processes multiple cmds.
 	- Some parts of memory should be freed while keeping others.
 	- Prevent memory leaks in a long-running shell
 */
@@ -104,7 +104,7 @@ void	*mem_alloc(size_t size)
 		perror("Memory allocation failure");
 		exit(EXIT_FAILURE);
 	}
-	node =	mem_lstnew(ptr);
+	node = mem_lstnew(ptr);
 	if (!node)
 	{
 		free(ptr);
@@ -117,7 +117,6 @@ void	*mem_alloc(size_t size)
 	return (ptr);
 }
 
-
 void	free_tab(char **tab)
 {
 	size_t	i;
@@ -127,5 +126,3 @@ void	free_tab(char **tab)
 		free_alloc(tab[i++]);
 	free_alloc(tab);
 }
-
-

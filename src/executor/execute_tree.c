@@ -55,14 +55,14 @@ int	exec_ctrl(t_ast_node *node, t_env **env)
 */
 int	exec_block(t_ast_node *node, t_env **env)
 {
-	int	status_;
+	int		status_;
 	pid_t	pid;
 
 	status_ = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
 	pid = fork();
-	if (pid== -1)
+	if (pid == -1)
 		return (error("fork() failed", NULL), EXIT_FAILURE);
 	else if (pid == 0)
 	{
@@ -70,7 +70,6 @@ int	exec_block(t_ast_node *node, t_env **env)
 		signal(SIGQUIT, SIG_DFL);
 		status_ = executor_status(node->left, env);
 		set_exit_status(status_);
-		// free_all_memory();
 		exit(status_);
 	}
 	wait(&status_);
@@ -80,14 +79,14 @@ int	exec_block(t_ast_node *node, t_env **env)
 		status_ = EXIT_FAILURE;
 	set_exit_status(status_);
 	signals_init();
-	// printf("print status: %d\n", status_);
 	return (status_);
 }
 
 /*
 	The exec_pipe() is responsible for handling pipelines of commands
 	where the output of one command becomes the input of the next.
-	This function sets up a pipeline, forks processes, and connects them via pipes.
+	This function sets up a pipeline, forks processes, 
+	and connects them via pipes.
 	The function waits for the last process in the pipeline to finish, collects 
 	the exit status, and returns it.
 */
@@ -97,7 +96,7 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	int		status_;
 	size_t	i;
 
-	fprintf(stderr,"Executing pipe node\n");
+	fprintf(stderr, "Executing pipe node\n");
 	set_exit_status(0);
 	last_pid = launch_pipe(node, env);
 	waitpid(last_pid, &status_, 0);
@@ -129,7 +128,7 @@ static void	restore_redirection(int saved_fd[2])
 
 int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 {
-	int		saved_fd[2] = {-1, -1};
+	int		saved_fd[2];
 	int		fd;
 	int		redir_fd;
 	int		status;
@@ -137,13 +136,15 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 
 	if (!node || !redir || !env)
 		return (0);
+	saved_fd[1] = -1;
+	saved_fd[2] = -1;
 	current_redir = redir;
 	while (current_redir)
 	{
 		if (!current_redir->file)
 		{
 			current_redir = current_redir->next;
-			continue;
+			continue ;
 		}
 		redir_fd = get_redir_fd(current_redir->type);
 		if (current_redir->type == TOKEN_HEREDOC)
@@ -161,7 +162,7 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 			if (fd == -1)
 				return (error(current_redir->file, NULL), set_exit_status(1), 1);
 			if (saved_fd[redir_fd] == -1)
-				saved_fd[redir_fd] = dup(redir_fd);  // Save the original file descriptor
+				saved_fd[redir_fd] = dup(redir_fd);// Save the original file descriptor
 			if (dup2(fd, redir_fd) == -1)
 			{
 				close(fd);
@@ -180,10 +181,8 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 			unlink(current_redir->file);
 		current_redir = current_redir->next;
 	}
-	return status;
+	return (status);
 }
-
-
 
 /*
 	The exec_cmd() is responsible for executing a single command in the shell,
@@ -193,35 +192,34 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	and run it in a child process.
 */
 
-int exec_cmd(t_ast_node *node, t_env **env)
+int	exec_cmd(t_ast_node *node, t_env **env)
 {
-	int	(*builtin)(t_ast_node *node, t_env **env);
-	pid_t pid;
-	int	status_;
+	int		(*builtin)(t_ast_node *node, t_env **env);
+	pid_t	pid;
+	int		status_;
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
-	if (builtin) 
+	if (builtin)
 	{
 		set_exit_status(builtin(node, env));
-		return get_exit_status();
+		return (get_exit_status());
 	}
 	status_ = check_cmd(node, env);
 	if (status_ != 0)
-		return status_;
+		return (status_);
 	signal(SIGINT, interrupt_w_msg);
 	signal(SIGQUIT, interrupt_w_msg);
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork failed");
-		return EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 	else if (pid == 0)
 		child(node, env);
 	waitpid(pid, &status_, 0);
 	set_exit_status(WEXITSTATUS(status_));
-	return WEXITSTATUS(status_);
+	return (WEXITSTATUS(status_));
 }
-
