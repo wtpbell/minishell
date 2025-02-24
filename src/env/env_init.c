@@ -47,7 +47,7 @@ t_env	*create_env(char *env)
 		return (NULL);
 	new = env_int(key_value);
 	if (!new)
-		return (NULL);
+		return (free_tab(key_value), NULL);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
 		new->value = NULL;
@@ -83,6 +83,7 @@ static void	add_empty_env(t_env **env)
 	while (i < 5)
 		add_env(env, new[i++]);
 }
+
 
 t_env	*build_env(char **env)
 {
