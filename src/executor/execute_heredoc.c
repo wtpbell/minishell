@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 13:01:49 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/24 09:41:52 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ static char	*process_heredoc(char *delimiter)
 
 static void	cleanup_temp(t_redir *current, char *temp_file)
 {
+	if (!temp_file)
+		return ;
 	if (*heredoc_error() != -1)
 		unlink(temp_file);
-	if (current->file != temp_file)
-	{
-		free_alloc(current->file);
-		current->file = temp_file;
-	}
+	if (current->file && current->file != temp_file)
+		free(current->file);
+	current->file = temp_file;
 }
 
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
