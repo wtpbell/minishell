@@ -84,21 +84,23 @@ void	setup_shlvl(t_env *new)
 	int	old_shlvl;
 
 	if (new->value)
+	{
 		old_shlvl = ft_atoi(new->value);
-	if (old_shlvl < 0)
-		new->value = mem_itoa(0);
-	else if (old_shlvl >= 999)
-	{
-		ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
-		ft_putendl_fd("too high, resetting to 1", 2);
-		new->value = mem_itoa(1);
-		if (!new->value)
-			return ;
-	}
-	else
-	{
-		new->value = mem_itoa(++old_shlvl);
-		if (!new->value)
-			return ;
+		if (old_shlvl < 0)
+			new->value = mem_itoa(0);
+		else if (old_shlvl >= 999)
+		{
+			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
+			ft_putendl_fd("too high, resetting to 1", 2);
+			new->value = mem_itoa(1);
+			if (!new->value)
+				return ;
+		}
+		else
+		{
+			new->value = mem_itoa(++old_shlvl);
+			if (!new->value)
+				return ;
+		}
 	}
 }
