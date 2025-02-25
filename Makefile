@@ -21,7 +21,6 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/token/token_type.c \
 			  $(LEXER_DIR)/token/token_utils.c \
 			  $(LEXER_DIR)/handler/expansion_braced_handler.c \
-			  $(LEXER_DIR)/handler/expansion_handler.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
 			  $(LEXER_DIR)/handler/quote_validator.c \
@@ -29,7 +28,6 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/utils/char_check.c \
-			  $(LEXER_DIR)/utils/expansion_utils.c \
 			  $(LEXER_DIR)/utils/quote_utils.c \
 			  $(LEXER_DIR)/utils/word_utils.c \
 
