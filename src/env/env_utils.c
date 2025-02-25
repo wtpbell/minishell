@@ -28,7 +28,6 @@ t_env	*get_env(t_env *envs, const char *key)
 
 char	*get_env_value(t_env *envs, const char *key)
 {
-	// printf("Debug - searching for key: %s\n", key); // Debug
 	while (envs)
 	{
 		// printf("Debug - checking env: key=%s, value=%s, hide=%d\n", 
@@ -55,13 +54,17 @@ void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
-	 fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
+	fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
 	new_env = (t_env *)mem_alloc(sizeof(t_env));
-	if(!new_env)
+	if (!new_env)
 		return ;
 	new_env->key = key;
 	if (value)
+	{
 		new_env->value = mem_strdup(value);
+		if (!new_env->value)
+			return ;
+	}
 	else
 		new_env->value = NULL;
 	new_env->hide = false;
@@ -72,7 +75,32 @@ void	add_env_var(t_env **env, char *key, char *value)
 	new_env->prev = NULL;
 	if (exist_key(*(env), key))
 		set_env(*(env), key, value);
-	else 
+	else
 		add_env(env, new_env);
 }
 
+void	setup_shlvl(t_env *new)
+{
+	int	old_shlvl;
+
+	if (new->value)
+	{
+		old_shlvl = ft_atoi(new->value);
+		if (old_shlvl < 0)
+			new->value = mem_itoa(0);
+		else if (old_shlvl >= 999)
+		{
+			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
+			ft_putendl_fd("too high, resetting to 1", 2);
+			new->value = mem_itoa(1);
+			if (!new->value)
+				return ;
+		}
+		else
+		{
+			new->value = mem_itoa(++old_shlvl);
+			if (!new->value)
+				return ;
+		}
+	}
+}

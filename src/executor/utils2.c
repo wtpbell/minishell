@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 21:59:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 21:57:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	append_cwd(t_ast_node *node)
 	char	*tmp;
 	char	*tmp2;
 
-	if(!getcwd(cwd, PATH_MAX))
+	if (!getcwd(cwd, PATH_MAX))
 		return (error("exec", "Failed to get CWD"));
 	tmp = mem_strjoin(cwd, "/");
 	tmp2 = mem_strjoin(tmp, node->args[0]);
@@ -30,8 +30,6 @@ void	append_cwd(t_ast_node *node)
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
-
-
 
 char	*get_cmd_path(char *cmd)
 {
@@ -52,14 +50,12 @@ char	*get_cmd_path(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		tmp = mem_strjoin(paths[i], "/");
+		tmp = mem_strjoin(paths[i++], "/");
 		full_path = mem_strjoin(tmp, cmd);
-		// printf("print full_path: %s\n", full_path);
 		if (access(full_path, F_OK) == 0)
 			return (free_tab(paths), free_alloc(tmp), full_path);
 		free_alloc(full_path);
 		free_alloc(tmp);
-		i++;
 	}
 	return (free_tab(paths), NULL);
 }
@@ -69,7 +65,6 @@ static int	resolve_command(t_ast_node *node)
 	char	*tmp;
 
 	tmp = get_cmd_path(node->args[0]);
-	// printf("print tmp: %s\n", tmp);
 	if (!tmp)
 	{
 		error(node->args[0], "Command not found");
@@ -92,19 +87,19 @@ static int	validate_executable(t_ast_node *node)
 	if (access(node->args[0], F_OK) == -1)
 	{
 		error(node->args[0], "No such file or directory");
-		return (set_last_arg_env(node->args, node->argc), set_exit_status(127), 127);
+		return (set_last(node->args, node->argc), set_exit_status(127), 127);
 	}
 	if (stat(node->args[0], &info) == -1)
 		return (printf("Stat failed on file: %s\n", node->args[0]), 1);
 	if (S_ISDIR(info.st_mode))
 	{
 		error(node->args[0], "Is a directory");
-		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
+		return (set_last(node->args, node->argc), set_exit_status(126), 126);
 	}
 	if (access(node->args[0], R_OK | X_OK) == -1)
 	{
 		error(node->args[0], "Permission denied");
-		return (set_last_arg_env(node->args, node->argc), set_exit_status(126), 126);
+		return (set_last(node->args, node->argc), set_exit_status(126), 126);
 	}
 	return (0);
 }
@@ -117,13 +112,13 @@ static int	validate_executable(t_ast_node *node)
 
 int	check_cmd(t_ast_node *node, t_env **env)
 {
-	int status_;
+	int	status_;
 
-	fprintf(stderr,"Trying to execute: %s\n", node->args[0]);
+	fprintf(stderr, "Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
-	fprintf(stderr,"Executing: %s\n", node->args[0]);
+	fprintf(stderr, "Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);
@@ -138,47 +133,3 @@ int	check_cmd(t_ast_node *node, t_env **env)
 	}
 	return (0);
 }
-
-// int	check_cmd(t_ast_node *node) //for debug
-// {
-// 	int	status_;
-
-// 	printf("\n=== Command Check ===\n");
-// 	printf("PID: %d - Checking command: %s\n", getpid(), node->args[0]);
-//     // Handle PATH=NULL case
-// 	if (get_env_value(*node->env, "PATH") == NULL && 
-// 		node->args[0][0] != '/' && node->args[0][0] != '.')
-// 	{
-// 		append_cwd(node);
-// 		printf("PID: %d - No PATH, appended CWD: %s\n", getpid(), node->args[0]);
-// 	}
-// 	printf("PID: %d - Processing command: %s\n", getpid(), node->args[0]);
-
-//     // Handle relative/absolute paths vs PATH resolution
-// 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
-// 	{
-// 		printf("PID: %d - Resolving command via PATH: %s\n", getpid(), node->args[0]);
-// 		status_ = resolve_command(node);
-// 		if (status_ != 0)
-// 		{
-// 			printf("PID: %d - Command resolution failed: %s\n", getpid(), node->args[0]);
-// 			return (status_);
-// 		}
-//         printf("PID: %d - Resolved to: %s\n", getpid(), node->args[0]);
-// 	}
-// 	else
-// 	{
-// 		printf("PID: %d - Validating executable: %s\n", getpid(), node->args[0]);
-// 		status_ = validate_executable(node);
-// 		if (status_ != 0)
-// 		{
-// 			printf("PID: %d - Executable validation failed: %s\n", getpid(), node->args[0]);
-// 			return (status_);
-// 		}
-// 	}
-// 	printf("PID: %d - Command check successful: %s\n", getpid(), node->args[0]);
-// 	printf("==================\n\n");
-// 		return (0);
-// }
-
-

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/17 16:06:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:21:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ size_t	count_pipes(t_ast_node *node)
 
 	count = 0;
 	while (node)
-	{	
+	{
 		if (node->type == TOKEN_PIPE)
-			count++;	
+			count++;
 		node = node->right;
 	}
 	return (count);
@@ -63,12 +63,16 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
 
 	output = pipe_fd[1];
 	new_input = pipe_fd[0];
-	fprintf(stderr,"Spawning process for command: %s\n", node->args[0]);
+	fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
 	pid = fork();
 	if (pid == 0)
 	{
-		fprintf(stderr,"Executing child process: %s\n", node->args[0]);
-		child_process(node, input, output, new_input, env);
+		fprintf(stderr, "Executing child process: %s\n", node->args[0]);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		redirect_io(input, output, new_input);
+		set_exit_status(executor_status(node, env));
+		exit(get_exit_status());
 	}
 	else if (pid < 0)
 	{
@@ -78,16 +82,6 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
 	if (input != 0)
 		close(input);
 	return (pid);
-}
-
-void	child_process(t_ast_node *node, int input, int output, int new_input, t_env **env)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	redirect_io(input, output, new_input);
-	set_exit_status(executor_status(node, env));
-	// free_all_memory();
-	exit(get_exit_status());
 }
 
 void	redirect_io(int input, int output, int new_input)

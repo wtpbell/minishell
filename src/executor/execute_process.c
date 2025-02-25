@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/17 16:06:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 12:35:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 	there is no user signal handler for the given signal, and that
 	the kernel should take default action for it.
 */
-void child(t_ast_node *node, t_env **env)
+void	child(t_ast_node *node, t_env **env)
 {
-	char **env_arr;
+	char	**env_arr;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -34,15 +34,12 @@ void child(t_ast_node *node, t_env **env)
 		perror("env_to_arr failed");
 		exit(1);
 	}
-	// printf("Executing: %s\n", node->args[0]);	
 	if (execve(node->args[0], node->args, env_arr) == -1)
 		error(node->args[0], NULL);
 	set_exit_status(127);
 	free_all_memory();
 	exit(get_exit_status());
 }
-
-	
 
 int	parent(t_ast_node *node)
 {

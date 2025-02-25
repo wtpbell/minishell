@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/21 08:40:29 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/23 00:47:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,32 +39,42 @@ static int	verify_args(char **args)
 	return (i);
 }
 
-static int	is_escaped_var(const char *str)
+static void	print_escaped_string(const char *str)
 {
-	return (str[0] == '\\' && str[1] == '$' && str[2] == '?');
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\\' && str[i + 1] == '$')
+		{
+			printf("$");
+			i += 2;
+		}
+		else
+			printf("%c", str[i++]);
+	}
 }
 
+/* echo 명령어를 구현합니다 */
 int	builtin_echo(t_ast_node *node, t_env **env)
 {
 	int	i;
+	int	print_newline;
 
 	(void)env;
 	if (node->argc == 1)
 		return (printf("\n"), EXIT_SUCCESS);
 	i = verify_args(node->args);
+	print_newline = (i == 1);
 	while (i < node->argc)
 	{
-		if (is_escaped_var(node->args[i]))
-			printf("%s", node->args[i]);
-		else if (node->args[i][0] == '\\')
-			printf("%s", node->args[i] + 1);
-		else
-			printf("%s", node->args[i]);
-		i++;
-		if (i < node->argc)
+		print_escaped_string(node->args[i]);
+		if (i + 1 < node->argc)
 			printf(" ");
+		i++;
 	}
-	if (verify_args(node->args) == 1)
+	if (print_newline)
 		printf("\n");
 	return (EXIT_SUCCESS);
 }

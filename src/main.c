@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/17 16:41:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/24 14:05:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "env.h"
 #include "common.h"
 #include <unistd.h>
+
 
 int	g_exit_status = 0;
 
@@ -37,7 +38,7 @@ static void	print_token_list(t_token *tokens)
 static void	print_ast_node(t_ast_node *node, int depth)
 {
 	int				i;
-	t_redir	*redir;
+	t_redir			*redir;
 
 	if (!node)
 		return ;
@@ -87,6 +88,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	env_ = get_env_list();
 	*env_ = build_env(env);
+	signals_init();
 	print_banner();
 	while (1)
 	{
@@ -126,4 +128,3 @@ int	main(int argc, char **argv, char **env)
 	printf("\nGoodbye!\n");
 	return (EXIT_SUCCESS);
 }
-

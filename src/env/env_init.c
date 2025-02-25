@@ -30,28 +30,28 @@ static t_env	*env_int(char **key_value)
 	new->next = NULL;
 	return (new);
 }
+
 /*
 	OLDPWD: Initialized with NULL value and scope set to EXPORT.
-	- cd /new/path, then cd -, it uses OLDPWD to return to the previous directory.
-	SHLVL: tracks how many nested shells are currently active and is incremented or reset if missing.
+	SHLVL: tracks how many nested shells are currently active
 	_: Represents the last executed command; its scope is set to ENVE.
 	?: Special variable representing the exit status of the last command.
 */
-t_env *create_env(char *env)
+t_env	*create_env(char *env)
 {
-	t_env *new;
-	char **key_value;
+	t_env	*new;
+	char	**key_value;
 
 	key_value = mem_split(env, "=");
 	if (!key_value)
 		return (NULL);
 	new = env_int(key_value);
 	if (!new)
-		return (NULL);
+		return (free_tab(key_value), NULL);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
-		new->value = NULL; //just start, no previous directory
-		new->scope = EXPORT; //exported to child processes when creating new shell
+		new->value = NULL;
+		new->scope = EXPORT;
 	}
 	else if (ft_strcmp(new->key, "SHLVL") == 0)
 		setup_shlvl(new);
@@ -84,6 +84,7 @@ static void	add_empty_env(t_env **env)
 		add_env(env, new[i++]);
 }
 
+
 t_env	*build_env(char **env)
 {
 	t_env	*envs;
@@ -95,7 +96,7 @@ t_env	*build_env(char **env)
 	add_env(&envs, create_env("?=0"));
 	if (!env[0])
 		add_empty_env(&envs);
-	while(env[++i])
+	while (env[++i])
 	{
 		new = create_env(env[i]);
 		if (!new)
@@ -108,29 +109,9 @@ t_env	*build_env(char **env)
 	return (envs);
 }
 
-void	setup_shlvl(t_env *new)
-{
-	int	old_shlvl;
-
-	if (new->value)
-	{
-		old_shlvl = ft_atoi(new->value);
-		if (old_shlvl < 0)
-			new->value = mem_itoa(0);
-		else if (old_shlvl >= 999)
-		{
-			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
-			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = mem_itoa(1);
-		}
-		else
-			new->value = mem_itoa(++old_shlvl);
-	}
-}
-
 t_env	**get_env_list(void)
 {
-	static t_env	*env;
+	static t_env	*env = NULL;
 
 	return (&env);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/16 12:09:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 00:45:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,14 @@ static int	builtin_pwd(t_ast_node *node, t_env **env)
 }
 
 /*
-	This function is responsible for checking whether the command (represented by args)
-	corresponds to a built-in shell command like pwd, env, cd, etc
-	is_builtin() takes a string (the command name) as an argument (char *args), checks it
-	against a list of known built-ins, and returns a function pointer to the corresponding
-	built-in handler
-	The return type of is_builtin is a function pointer: int (*)(t_ast_node *node)
+	This function is responsible for checking whether the command
+	(represented by args) corresponds to a built-in shell command
+	is_builtin() takes a string (the command name) checks it
+	against a list of known built-ins, and returns a function pointer
+	to the corresponding built-in handler
+	The return type of is_builtin is a function pointer
 */
-int	(*is_builtin(char *args))(t_ast_node *node, t_env **)
+int	(*is_builtin(char *args))(t_ast_node *node, t_env **env)
 {
 	if (!args || !args[0])
 		return (NULL);

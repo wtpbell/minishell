@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/17 23:33:10 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 13:18:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static bool	is_within_long_range(char *arg)
 	}
 	while (arg[i] && ft_isdigit(arg[i]))
 	{
-		if ((num > LLONG_MAX / 10) ||
+		if ((num > LLONG_MAX / 10) || \
 			(num == LLONG_MAX / 10 && (arg[i] - '0') > LLONG_MAX % 10))
 			return (false);
 		num = num * 10 + (arg[i] - '0');
@@ -73,6 +73,7 @@ static bool	is_within_long_range(char *arg)
 	Single Non-Numeric Argument: Displays an error and exits with status 2.
 	Multiple Arguments: Displays an error and does not exit.
 */
+
 int	builtin_exit(t_ast_node *node, t_env **env)
 {
 	char	**args;
@@ -87,13 +88,14 @@ int	builtin_exit(t_ast_node *node, t_env **env)
 	}
 	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
 	{
-		ft_putendl_fd("minishell: exit: numeric argument required", STDERR_FILENO);
-		// free_all_memory();
-		exit(255);
+		ft_putendl_fd("minishell: exit: numeric argument required",
+			STDERR_FILENO);
+		exit(2);
 	}
 	if (node->argc > 2)
 	{
-		ft_putendl_fd("minishell: exit: Too many arguments", STDERR_FILENO);
+		ft_putendl_fd("minishell: exit: Too many arguments",
+			STDERR_FILENO);
 		return (1);
 	}
 	exit((int)((unsigned char)ft_atoi(node->args[1])));

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/21 09:31:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/25 10:37:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int				is_special_in_quotes(char c, char quote_char);
 int				is_in_quotes(t_tokenizer *tokenizer);
 t_quote_state	get_quote_state(t_tokenizer *tokenizer);
 int				validate_quotes(const char *input);
-char			*extract_quoted_content_with_expansion(t_tokenizer *tokenizer, char quote);
+char			*extract_quoted_content_with_expansion(t_tokenizer *tokenizer,
+					char quote);
 char			*extract_quoted_content(t_tokenizer *tokenizer, char quote);
 char			*extract_quote_content(t_tokenizer *tokenizer,
 					char quote, int start);
@@ -69,7 +70,9 @@ char			*handle_extended_expansion(char *var_name,
 					char *operator, char *word);
 char			*expand_special_param(const char *param);
 char			*get_var_value(char *str, int *pos, t_quote_state state);
-
+char			*handle_special_param(char *str, int *pos, t_quote_state state);
+char			*get_env_var_value(char *str, int start, int len);
+int				is_valid_var_char(char c);
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
 int				get_operator_len(t_token_type type);
@@ -82,4 +85,6 @@ char			*join_words(char *s1, char *s2);
 char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
 char			*expand_exit_status(void);
+int				is_exit_status_var(const char *str);
+char			*extract_word(t_tokenizer *tokenizer);
 #endif

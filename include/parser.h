@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:16:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/23 21:30:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
-	struct s_redir	*next;
+	struct s_redir			*next;
 }	t_redir;
 
 typedef struct s_last_redir
@@ -42,7 +42,6 @@ typedef struct s_ast_node
 	struct s_ast_node	*right;
 	int					is_subshell;
 }	t_ast_node;
-
 
 typedef enum e_cmd_valid_error
 {

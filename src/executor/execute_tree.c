@@ -55,14 +55,14 @@ int	exec_ctrl(t_ast_node *node, t_env **env)
 */
 int	exec_block(t_ast_node *node, t_env **env)
 {
-	int	status_;
+	int		status_;
 	pid_t	pid;
 
 	status_ = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
 	pid = fork();
-	if (pid== -1)
+	if (pid == -1)
 		return (error("fork() failed", NULL), EXIT_FAILURE);
 	else if (pid == 0)
 	{
@@ -70,7 +70,6 @@ int	exec_block(t_ast_node *node, t_env **env)
 		signal(SIGQUIT, SIG_DFL);
 		status_ = executor_status(node->left, env);
 		set_exit_status(status_);
-		// free_all_memory();
 		exit(status_);
 	}
 	wait(&status_);
@@ -80,14 +79,14 @@ int	exec_block(t_ast_node *node, t_env **env)
 		status_ = EXIT_FAILURE;
 	set_exit_status(status_);
 	signals_init();
-	// printf("print status: %d\n", status_);
 	return (status_);
 }
 
 /*
 	The exec_pipe() is responsible for handling pipelines of commands
 	where the output of one command becomes the input of the next.
-	This function sets up a pipeline, forks processes, and connects them via pipes.
+	This function sets up a pipeline, forks processes, 
+	and connects them via pipes.
 	The function waits for the last process in the pipeline to finish, collects 
 	the exit status, and returns it.
 */
@@ -97,7 +96,7 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	int		status_;
 	size_t	i;
 
-	fprintf(stderr,"Executing pipe node\n");
+	fprintf(stderr, "Executing pipe node\n");
 	set_exit_status(0);
 	last_pid = launch_pipe(node, env);
 	waitpid(last_pid, &status_, 0);
@@ -113,77 +112,33 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	return (status_);
 }
 
-static void	restore_redirection(int saved_fd[2])
-{
-	if (saved_fd[0] != -1)
-	{
-		dup2(saved_fd[0], STDIN_FILENO);
-		close(saved_fd[0]);
-	}
-	if (saved_fd[1] != -1)
-	{
-		dup2(saved_fd[1], STDOUT_FILENO);
-		close(saved_fd[1]);
-	}
-}
-
 int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 {
-	int		saved_fd[2] = {-1, -1};
-	int		fd;
-	int		redir_fd;
+	int		saved_fd[2];
 	int		status;
-	t_redir	*current_redir;
+	t_redir	*cur_redir;
 
 	if (!node || !redir || !env)
 		return (0);
-	current_redir = redir;
-	while (current_redir)
+	saved_fd[0] = -1;
+	saved_fd[1] = -1;
+	handle_all_heredocs(redir, saved_fd);
+	if (get_exit_status() == 130)
+		return (130);
+	cur_redir = redir;
+	while (cur_redir)
 	{
-		if (!current_redir->file)
-		{
-			current_redir = current_redir->next;
-			continue;
-		}
-		redir_fd = get_redir_fd(current_redir->type);
-		if (current_redir->type == TOKEN_HEREDOC)
-		{
-			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
-			if (fd < 0)
-				return (error("heredoc failed to open", NULL), set_exit_status(1), 1);
-			if (dup2(fd, STDIN_FILENO) == -1)
-				return (error("dup2 failed for heredoc", NULL), close(fd), set_exit_status(1), 1);
-			close(fd);
-		}
-		else
-		{
-			fd = open(current_redir->file, get_redir_flags(current_redir->type), 0644);
-			if (fd == -1)
-				return (error(current_redir->file, NULL), set_exit_status(1), 1);
-			if (saved_fd[redir_fd] == -1)
-				saved_fd[redir_fd] = dup(redir_fd);  // Save the original file descriptor
-			if (dup2(fd, redir_fd) == -1)
-			{
-				close(fd);
-				return (error("dup2 failed", NULL), set_exit_status(1), 1);
-			}
-			close(fd);
-		}
-		current_redir = current_redir->next;
+		launch_redir(cur_redir, saved_fd);
+		if (get_exit_status() == 1)
+			// return (restore_redirection(saved_fd), 1);
+			break;
+		cur_redir = cur_redir->next;
 	}
 	status = exec_cmd(node, env);
 	restore_redirection(saved_fd);
-	current_redir = redir;
-	while (current_redir)
-	{
-		if (current_redir->type == TOKEN_HEREDOC)
-			unlink(current_redir->file);
-		current_redir = current_redir->next;
-	}
-	return status;
+	cleanup_heredocs(redir);
+	return (status);
 }
-
-
 
 /*
 	The exec_cmd() is responsible for executing a single command in the shell,
@@ -193,35 +148,28 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	and run it in a child process.
 */
 
-int exec_cmd(t_ast_node *node, t_env **env)
+int	exec_cmd(t_ast_node *node, t_env **env)
 {
-	int	(*builtin)(t_ast_node *node, t_env **env);
-	pid_t pid;
-	int	status_;
+	int		(*builtin)(t_ast_node *node, t_env **env);
+	pid_t	pid;
+	int		status_;
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
-	if (builtin) 
-	{
-		set_exit_status(builtin(node, env));
-		return get_exit_status();
-	}
+	if (builtin)
+		return (set_exit_status(builtin(node, env)), get_exit_status());
 	status_ = check_cmd(node, env);
 	if (status_ != 0)
-		return status_;
+		return (status_);
 	signal(SIGINT, interrupt_w_msg);
 	signal(SIGQUIT, interrupt_w_msg);
 	pid = fork();
 	if (pid == -1)
-	{
-		perror("fork failed");
-		return EXIT_FAILURE;
-	}
-	else if (pid == 0)
+		return (perror("fork failed"), EXIT_FAILURE);
+	if (pid == 0)
 		child(node, env);
 	waitpid(pid, &status_, 0);
 	set_exit_status(WEXITSTATUS(status_));
-	return WEXITSTATUS(status_);
+	return (WEXITSTATUS(status_));
 }
-
