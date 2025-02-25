@@ -21,19 +21,20 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 }
 
 /* Extract word */
-static char	*extract_word(t_tokenizer *tokenizer)
+static char *extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 {
-	char	*result;
+	char *result;
 
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
+
 	while (tokenizer->input[tokenizer->position]
 		&& !ft_isspace(tokenizer->input[tokenizer->position])
 		&& !is_operator(&tokenizer->input[tokenizer->position]))
 	{
 		if (is_quote(tokenizer->input[tokenizer->position]))
-			result = handle_quote_in_word(tokenizer, result);
+			result = handle_quote_in_word(tokenizer, result, quote_type);
 		else
 			result = handle_char_in_word(tokenizer, result);
 		if (!result)
@@ -58,15 +59,21 @@ static t_token	*analyze_and_create_token(char *content)
 }
 
 /* Handle word */
-t_token	*handle_word(t_tokenizer *tokenizer)
+t_token *handle_word(t_tokenizer *tokenizer)
 {
-	char	*content;
+	char			*content;
+	t_token			*token;
+	t_quote_type	quote_type;
 
+	quote_type = QUOTE_NONE;
 	if (!tokenizer || !tokenizer->input)
 		return (NULL);
 	skip_spaces(tokenizer);
-	content = extract_word(tokenizer);
+	content = extract_word(tokenizer, &quote_type);
 	if (!content)
 		return (NULL);
-	return (analyze_and_create_token(content));
+	token = analyze_and_create_token(content);
+	if (token)
+		token->quote_type = quote_type;
+	return (token);
 }
