@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:23:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/18 10:25:42 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/25 14:28:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,3 @@ char	*join_words(char *s1, char *s2)
 	free(s2);
 	return (result);
 }
-
