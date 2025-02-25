@@ -1,13 +1,17 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
-LDFLAGS = -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -Wunused-function
+# -g3 -fsanitize=address
+# LDFLAGS = -fsanitize=address
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
 COMMON_DIR = $(SRC_DIR)/common
+EXECUTOR_DIR = $(SRC_DIR)/executor
+BUITLIN_DIR = $(SRC_DIR)/builtin
+ENV_DIR = $(SRC_DIR)/env
 OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
@@ -54,19 +58,55 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/group_utils.c \
 			   $(PARSER_DIR)/utils/logic_utils.c \
 
-COMMON_FILES = $(COMMON_DIR)/utils.c
+ENV_FILES 	 = $(ENV_DIR)/env_init.c \
+			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_utils1.c \
+			   $(ENV_DIR)/env_set.c \
+
+BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
+				 $(BUITLIN_DIR)/builtin_echo.c \
+				 $(BUITLIN_DIR)/builtin_export.c \
+				 $(BUITLIN_DIR)/builtin_cd.c \
+				 $(BUITLIN_DIR)/builtin.c \
+
+EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
+				 $(EXECUTOR_DIR)/execute_tree.c \
+				 $(EXECUTOR_DIR)/exit_update.c \
+				 $(EXECUTOR_DIR)/utils.c \
+				 $(EXECUTOR_DIR)/utils2.c \
+				 $(EXECUTOR_DIR)/utils3.c \
+				 $(EXECUTOR_DIR)/error/error.c \
+				 $(EXECUTOR_DIR)/execute_process.c \
+				 $(EXECUTOR_DIR)/execute_pipe.c \
+				 $(EXECUTOR_DIR)/execute_heredoc.c \
+				 $(EXECUTOR_DIR)/execute_redir.c \
+
+COMMON_FILES = $(COMMON_DIR)/signal.c \
+				$(COMMON_DIR)/utils/memory/mem_tracker.c \
+				$(COMMON_DIR)/utils/memory/mem_free.c \
+				$(COMMON_DIR)/utils/memory/utils.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_split.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strjoin.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strndup.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_strdup.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 PARSER_OBJ = $(PARSER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+ENV_OBJ = $(ENV_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+EXECUTOR_OBJ = $(EXECUTOR_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+BUILTIN_OBJ = $(BUILTIN_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+COMMON_OBJ = $(COMMON_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBS = -L$(LIBFT_DIR) -lft -lreadline
 
 INCLUDES = -I$(INCLUDE_DIR) -I$(LIBFT_DIR)
 
-ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ)
-ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES)
+ALL_OBJ = $(OBJ_FILES) $(LEXER_OBJ) $(PARSER_OBJ) $(ENV_OBJ) $(BUILTIN_OBJ) $(EXECUTOR_OBJ) $(COMMON_OBJ)
+ALL_SRC = $(SRC_FILES) $(LEXER_FILES) $(PARSER_FILES) $(ENV_FILES) $(BUILTIN_FILES) $(EXECUTOR_FILES) $(COMMON_FILES)
 
 all: $(NAME)
 
@@ -82,6 +122,13 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/parser/optimizer
 	@mkdir -p $(OBJ_DIR)/parser/utils
 	@mkdir -p $(OBJ_DIR)/parser/validator
+	@mkdir -p $(OBJ_DIR)/env
+	@mkdir -p $(OBJ_DIR)/executor
+	@mkdir -p $(OBJ_DIR)/executor/error
+	@mkdir -p $(OBJ_DIR)/builtin
+	@mkdir -p $(OBJ_DIR)/common
+	@mkdir -p $(OBJ_DIR)/common/utils/memory
+
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)

@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.h                                            :+:    :+:            */
+/*   mem_strdup.c                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: spyun <spyun@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/28 12:40:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/28 15:36:22 by spyun         ########   odam.nl         */
+/*   Created: 2025/02/06 20:01:19 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/13 12:30:34 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "builtin.h"
+#include "common.h"
+#include "env.h"
 
-# include "parser.h"
-
-typedef struct s_mem_tracker
+char	*mem_strdup(const char *str)
 {
-	void					*ptr;
-	struct s_mem_tracker	*next;
-}	t_mem_tracker;
+	char	*nstr;
 
-typedef struct s_mem_context
-{
-	t_mem_tracker	*head;
-	int				count;
-}	t_mem_context;
-
-#endif
+	nstr = (char *)mem_alloc((ft_strlen(str) + 1));
+	if (!nstr)
+		return (NULL);
+	ft_memcpy(nstr, str, (ft_strlen(str) + 1));
+	return (nstr);
+}

@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin.h                                          :+:    :+:            */
+/*   mem_strndup.c                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/23 18:36:55 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 19:36:33 by bewong        ########   odam.nl         */
+/*   Created: 2025/02/06 19:46:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/23 01:01:50 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-# define BUILTIN_H
+#include "builtin.h"
+#include "common.h"
+#include "env.h"
 
-# include "minishell.h"
-# include "parser.h"
-# include "env.h"
-# include "executor.h"
+char	*men_strndup(const char *str, int n)
+{
+	char	*new_str;
+	int		min;
 
-/*buitin_c.c*/
-int		builtin_export(t_ast_node *node, t_env **env);
-int		builtin_exit(t_ast_node *node, t_env **env);
-int		builtin_cd(t_ast_node *node, t_env **env);
-int		builtin_echo(t_ast_node *node, t_env **env);
-int		(*is_builtin(char *args))(t_ast_node *node, t_env **);
-#endif
+	min = ft_strlen(str);
+	if (n < min)
+		min = n;
+	new_str = (char *)mem_alloc((min + 1));
+	if (!new_str)
+		return (NULL);
+	ft_memcpy(new_str, str, min);
+	new_str[min] = '\0';
+	return (new_str);
+}

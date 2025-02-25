@@ -6,13 +6,18 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:09:58 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/24 14:05:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "lexer.h"
 #include "parser.h"
+#include "executor.h"
+#include "env.h"
+#include "common.h"
+#include <unistd.h>
+
 
 int	g_exit_status = 0;
 
@@ -33,7 +38,7 @@ static void	print_token_list(t_token *tokens)
 static void	print_ast_node(t_ast_node *node, int depth)
 {
 	int				i;
-	t_redir	*redir;
+	t_redir			*redir;
 
 	if (!node)
 		return ;
@@ -72,12 +77,18 @@ static void	print_ast_node(t_ast_node *node, int depth)
 	}
 }
 
-int	main(void)
+int	main(int argc, char **argv, char **env)
 {
-	char		*line;
-	t_token		*tokens;
-	t_ast_node	*ast;
+	char			*line;
+	t_token			*tokens;
+	t_ast_node		*ast;
+	t_env			**env_;
 
+	(void)argc;
+	(void)argv;
+	env_ = get_env_list();
+	*env_ = build_env(env);
+	signals_init();
 	print_banner();
 	while (1)
 	{
@@ -105,6 +116,7 @@ int	main(void)
 					printf("\nAST Structure:\n");
 					print_ast_node(ast, 0);
 					printf("\033[0m");
+					executor(ast, env_);
 					free_ast(ast);
 				}
 				free_tokens(tokens);
@@ -112,6 +124,7 @@ int	main(void)
 		}
 		free(line);
 	}
+	free_env(env_);
 	printf("\nGoodbye!\n");
 	return (EXIT_SUCCESS);
 }
