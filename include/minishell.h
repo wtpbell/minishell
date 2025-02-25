@@ -62,14 +62,19 @@ typedef enum e_token_type
 	TOKEN_CTRL = TOKEN_AND | TOKEN_OR
 }	t_token_type;
 
+typedef enum e_quote_type {
+	QUOTE_NONE,
+	QUOTE_SINGLE,
+	QUOTE_DOUBLE
+}	t_quote_type;
+
 typedef struct s_token
 {
 	char			*content;
-	struct s_token	*next;
 	t_token_type	type;
+	t_quote_type	quote_type;
+	struct s_token	*next;
 }	t_token;
-
-void	print_banner(void);
 
 void	print_banner(void);
 
