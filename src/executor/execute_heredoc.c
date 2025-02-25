@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/24 09:41:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/25 14:49:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	process_line(char *line, char *delimiter, int fd)
 	free(line);
 	return (1);
 }
-
+ 
 static char	*process_heredoc(char *delimiter)
 {
 	char	*filename;

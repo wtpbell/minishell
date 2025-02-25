@@ -22,13 +22,19 @@ int	executor_status(t_ast_node *node, t_env **env)
 	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_ctrl(node, env));
 	else if (redir)
+	{
+		printf("did i come to redir\n");
 		return (exec_redir(node, env, redir));
+	}
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node, env));
 	else if (node->type == TOKEN_BLOCK)
 		return (exec_block(node, env));
 	else if (node->type == TOKEN_EXEC)
+	{
+		printf("did i come to exec_cmd\n");
 		return (exec_cmd(node, env));
+	}
 	return (EXIT_FAILURE);
 }
 

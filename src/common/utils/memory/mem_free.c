@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 12:38:14 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 12:38:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/25 14:19:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	free_env(t_env **env)
 	while (*env)
 	{
 		tmp = (*env)->next;
+		if (tmp)
+			tmp->prev = NULL;
 		free_alloc((*env)->key);
 		free_alloc((*env)->value);
 		free_alloc(*env);
