@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:46:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 18:27:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ typedef enum e_syntax_error
 	SYNTAX_NESTED_TOO_DEEP,
 	SYNTAX_INVALID_COMMAND
 }	t_syntax_error;
+
+typedef struct s_arg_data
+{
+	char			**new_args;
+	t_quote_type	*new_quote_types;
+	int				args_len;
+	t_quote_type	quote_type;
+}	t_arg_data;
 
 /* Main parsing functions */
 t_ast_node			*parse(t_token *tokens);

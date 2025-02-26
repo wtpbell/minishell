@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/25 16:31:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 18:27:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,61 +45,63 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
-// static int	copy_and_add_arg(char **new_args, char **old_args,
-// 					char *arg, int args_len)
-// {
-// 	int	i;
+/* Copy existing args and add new arg */
+static int	copy_args_and_add(t_ast_node *node, t_arg_data *data, char *arg)
+{
+	int	i;
 
-// 	i = 0;
-// 	while (i < args_len)
-// 	{
-// 		new_args[i] = old_args[i];
-// 		i++;
-// 	}
-// 	new_args[args_len] = ft_strdup(arg);
-// 	if (!new_args[args_len])
-// 	{
-// 		free(new_args);
-// 		return (0);
-// 	}
-// 	new_args[args_len + 1] = NULL;
-// 	return (1);
-// }
+	i = 0;
+	while (i < data->args_len)
+	{
+		data->new_args[i] = node->args[i];
+		if (node->arg_quote_types)
+			data->new_quote_types[i] = node->arg_quote_types[i];
+		else
+			data->new_quote_types[i] = QUOTE_NONE;
+		i++;
+	}
+	data->new_args[data->args_len] = ft_strdup(arg);
+	if (!data->new_args[data->args_len])
+	{
+		free(data->new_args);
+		free(data->new_quote_types);
+		return (0);
+	}
+	return (1);
+}
+
+/* Complete the argument addition process */
+static void	complete_arg_addition(t_ast_node *node, t_arg_data *data)
+{
+	data->new_quote_types[data->args_len] = data->quote_type;
+	data->new_args[data->args_len + 1] = NULL;
+	data->new_quote_types[data->args_len + 1] = QUOTE_NONE;
+	free(node->args);
+	free(node->arg_quote_types);
+	node->args = data->new_args;
+	node->arg_quote_types = data->new_quote_types;
+	node->argc++;
+}
 
 /* Add an argument to the node */
 void	add_arg_to_node(t_ast_node *node, char *arg, t_quote_type quote_type)
 {
-	char		**new_args;
-	t_quote_type	*new_quote_types;
-	int		args_len;
-	int		i;
+	t_arg_data	data;
 
 	if (!node || !arg)
 		return ;
-	args_len = get_args_length(node->args);
-	new_args = (char **)malloc(sizeof(char *) * (args_len + 2));
-	if (!new_args)
+	data.args_len = get_args_length(node->args);
+	data.new_args = (char **)malloc(sizeof(char *) * (data.args_len + 2));
+	if (!data.new_args)
 		return ;
-	new_quote_types = (t_quote_type *)malloc(sizeof(t_quote_type) * (args_len + 2));
-	if (!new_quote_types)
+	data.new_quote_types = malloc(sizeof(t_quote_type) * (data.args_len + 2));
+	if (!data.new_quote_types)
 	{
-		free(new_args);
+		free(data.new_args);
 		return ;
 	}
-	i = 0;
-	while (i < args_len)
-	{
-		new_args[i] = node->args[i];
-		new_quote_types[i] = node->arg_quote_types ? node->arg_quote_types[i] : QUOTE_NONE;
-		i++;
-	}
-	new_args[args_len] = ft_strdup(arg);
-	new_quote_types[args_len] = quote_type;
-	new_args[args_len + 1] = NULL;
-	new_quote_types[args_len + 1] = QUOTE_NONE;
-	free(node->args);
-	free(node->arg_quote_types);
-	node->args = new_args;
-	node->arg_quote_types = new_quote_types;
-	node->argc++;
+	data.quote_type = quote_type;
+	if (!copy_args_and_add(node, &data, arg))
+		return ;
+	complete_arg_addition(node, &data);
 }
