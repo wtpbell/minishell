@@ -6,7 +6,19 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 10:35:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/26 13:34:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 14:28:15 by spyun         ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   expander.c                                         :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2025/02/10 10:35:01 by bewong        #+#    #+#                 */
+/*   Updated: 2025/02/26 14:24:42 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,85 +26,39 @@
 #include "parser.h"
 #include "expander.h"
 
-// Expands environment variables (e.g., $VAR -> VAR value)
-static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
+/* Checks if expansion should be skipped based on quote types */
+int	should_skip_expansion(t_ast_node *node, int i, int dollar_exp)
 {
-	char	*var_name;
-	char	*env_value;
-
-	var_name = node->args[i] + 1;  // Skip the '$' character
-	env_value = get_env_value(*env_list, var_name);
-	if (env_value)
-	{
-		free(node->args[i]);
-		node->args[i] = mem_strdup(env_value);
-	}
-	else
-	{
-		free(node->args[i]);
-		node->args[i] = mem_strdup("");
-	}
+	if (!node->arg_quote_types)
+		return (0);
+	if (dollar_exp && node->arg_quote_types[i] == QUOTE_SINGLE)
+		return (1);
+	if (!dollar_exp && (node->arg_quote_types[i] == QUOTE_SINGLE
+			|| node->arg_quote_types[i] == QUOTE_DOUBLE))
+		return (1);
+	return (0);
 }
 
-// Handles argument expansion when a $ is inside the string
-static void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer, int i)
+static void	expander_process_args(t_ast_node *node, t_env **env_list,
+			t_tokenizer *tokenizer)
 {
-	char	*expanded_arg;
+	int	i;
 
-	expanded_arg = handle_expansion(tokenizer, node->args[i]);
-	if (expanded_arg)
-	{
-		free(node->args[i]);
-		node->args[i] = expanded_arg;
-	}
-}
-
-// Expands wildcards if present in the argument
-static void	handle_wildcards(t_ast_node *node)
-{
-	expand_wildcards(node);
-}
-
-// Main expander function with the logic split
-void expander(t_ast_node *node, t_env **env_list)
-{
-	int i;
-	t_tokenizer tokenizer;
-	if (!node || !node->args)
-		return;
-	ft_memset(&tokenizer, 0, sizeof(t_tokenizer));
 	i = 0;
 	while (i < node->argc && node->args[i])
 	{
-		if (node->args[i][0] == '$' && node->args[i][1])
-		{
-			if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_SINGLE)
-			{
-				i++;
-				continue;
-			}
-			expand_env_var(node, env_list, i);
-		}
-		else if (strchr(node->args[i], '$') != NULL)
-		{
-			if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_SINGLE)
-			{
-				printf("Skipping dollar expansion for '%s' due to single quotes\n", node->args[i]);
-				i++;
-				continue;
-			}
-			handle_dollar_in_string(node, &tokenizer, i);
-		}
-		else if (has_wildcard(node->args[i]))
-		{
-			if (node->arg_quote_types &&(node->arg_quote_types[i] == QUOTE_SINGLE
-			|| node->arg_quote_types[i] == QUOTE_DOUBLE))
-			{
-				i++;
-				continue;
-			}
-			handle_wildcards(node);
-		}
+		handle_arg_expansion(node, env_list, tokenizer, i);
 		i++;
 	}
+}
+
+/* Main expander function */
+void	expander(t_ast_node *node, t_env **env_list)
+{
+	t_tokenizer	tokenizer;
+
+	if (!node || !node->args)
+		return ;
+	ft_memset(&tokenizer, 0, sizeof(t_tokenizer));
+	expander_process_args(node, env_list, &tokenizer);
 }

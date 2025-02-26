@@ -96,10 +96,13 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
-				$(EXPANDER_DIR)/expansion_handler.c \
-				$(EXPANDER_DIR)/expand_wildcard.c \
-				$(EXPANDER_DIR)/expand_wildcard_utils.c \
-
+				$(EXPANDER_DIR)/expander_args_processor.c \
+				$(EXPANDER_DIR)/expander_variables.c \
+				$(EXPANDER_DIR)/expander_quotes.c \
+				$(EXPANDER_DIR)/wildcard_expander.c \
+				$(EXPANDER_DIR)/wildcard_replacement.c \
+				$(EXPANDER_DIR)/wildcard_array_utils.c \
+				$(EXPANDER_DIR)/wildcard_filesystem.c \
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 LEXER_OBJ = $(LEXER_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

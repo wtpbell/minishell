@@ -1,0 +1,45 @@
+Makefile
+parser_check.sh
+Type: 0, Content: 'a'
+Type: 0, Content: 'cat'
+[0;33mBefore parsing: Token Chain: [0:'ls'] -> [1:'|'] -> [0:'grep'] -> [0:'a'] -> [3:'>'] -> [0:'output'] -> [6:'&&'] -> [0:'cat'] -> [0:'output'] -> [1:'|'] -> [0:'wc'] -> [0:'-l'] -> NULL
+[0mStarting pipeline parse with token: type=0, content='ls'
+Starting pipeline parse with token: type=0, content='cat'
+[0;36mAfter parse_complete_bonus:Node(0x6060000005c0): type=6, is_subshell=0
+After parse_complete_bonus:  Left:
+[0;36mAfter parse_complete_bonus:  Node(0x606000000560): type=1, is_subshell=0
+After parse_complete_bonus:    Left:
+[0;36mAfter parse_complete_bonus:    Node(0x6060000004a0): type=0, is_subshell=0
+After parse_complete_bonus:      Args: 'ls' 
+[0mAfter parse_complete_bonus:    Right:
+[0;36mAfter parse_complete_bonus:    Node(0x606000000500): type=0, is_subshell=0
+After parse_complete_bonus:      Args: 'grep' 'a' 
+After parse_complete_bonus:      Redirections: type=3 file='output' -> 
+[0m[0mAfter parse_complete_bonus:  Right:
+[0;36mAfter parse_complete_bonus:  Node(0x6060000006e0): type=1, is_subshell=0
+After parse_complete_bonus:    Left:
+[0;36mAfter parse_complete_bonus:    Node(0x606000000620): type=0, is_subshell=0
+After parse_complete_bonus:      Args: 'cat' 'output' 
+[0mAfter parse_complete_bonus:    Right:
+[0;36mAfter parse_complete_bonus:    Node(0x606000000680): type=0, is_subshell=0
+After parse_complete_bonus:      Args: 'wc' '-l' 
+[0m[0m[0m[0;36mAfter optimization:Node(0x6060000005c0): type=6, is_subshell=0
+After optimization:  Left:
+[0;36mAfter optimization:  Node(0x606000000560): type=1, is_subshell=0
+After optimization:    Left:
+[0;36mAfter optimization:    Node(0x6060000004a0): type=0, is_subshell=0
+After optimization:      Args: 'ls' 
+[0mAfter optimization:    Right:
+[0;36mAfter optimization:    Node(0x606000000500): type=0, is_subshell=0
+After optimization:      Args: 'grep' 'a' 
+After optimization:      Redirections: type=3 file='output' -> 
+[0m[0mAfter optimization:  Right:
+[0;36mAfter optimization:  Node(0x6060000006e0): type=1, is_subshell=0
+After optimization:    Left:
+[0;36mAfter optimization:    Node(0x606000000620): type=0, is_subshell=0
+After optimization:      Args: 'cat' 'output' 
+[0mAfter optimization:    Right:
+[0;36mAfter optimization:    Node(0x606000000680): type=0, is_subshell=0
+After optimization:      Args: 'wc' '-l' 
+    Args: 'grep' 'a' 
+    Args: 'cat' 'output' 

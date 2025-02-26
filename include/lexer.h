@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/25 13:56:30 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 14:47:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int				is_quote(char c);
 int				has_wildcard(const char *str);
 int				is_valid_position(t_tokenizer *tokenizer);
 char			*join_words(char *s1, char *s2);
-char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result, t_quote_type *current_quote_type);
+char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
+					t_quote_type *current_quote_type);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
 t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote);
 #endif

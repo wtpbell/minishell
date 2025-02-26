@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expansion_handler.c                                :+:    :+:            */
+/*   expander_variables.c                               :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/26 13:34:12 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 13:35:02 by spyun         ########   odam.nl         */
+/*   Created: 2025/02/26 14:18:19 by spyun         #+#    #+#                 */
+/*   Updated: 2025/02/26 14:32:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 #include "expander.h"
-
 
 static char	*expand_env_var_in_str(char *var_name, t_env *env_list)
 {
@@ -58,8 +57,8 @@ static char	*extract_var_name(const char *str, int *pos)
 	return (var_name);
 }
 
-static char	*process_dollar(const char *str, int *i, t_env *env_list,
-							t_quote_type quote_type)
+char	*process_dollar(const char *str, int *i, t_env *env_list,
+			t_quote_type quote_type)
 {
 	char	*var_name;
 	char	*value;
@@ -80,53 +79,4 @@ static char	*process_dollar(const char *str, int *i, t_env *env_list,
 	value = expand_env_var_in_str(var_name, env_list);
 	free(var_name);
 	return (value);
-}
-
-char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
-{
-	int			i;
-	char		*result;
-	char		*tmp;
-	char		*tmp2;
-	char		*expanded;
-	t_quote_type	current_quote;
-	t_env		*env_list;
-
-	(void)*tokenizer;
-	env_list = *get_env_list();
-	if (!arg)
-		return (NULL);
-	result = ft_strdup("");
-	if (!result)
-		return (NULL);
-	i = 0;
-	current_quote = QUOTE_NONE;
-	while (arg[i])
-	{
-		if (arg[i] == '\'' && current_quote != QUOTE_DOUBLE)
-			current_quote = (current_quote == QUOTE_SINGLE) ? QUOTE_NONE : QUOTE_SINGLE;
-		else if (arg[i] == '\"' && current_quote != QUOTE_SINGLE)
-			current_quote = (current_quote == QUOTE_DOUBLE) ? QUOTE_NONE : QUOTE_DOUBLE;
-		else if (arg[i] == '$' && current_quote != QUOTE_SINGLE)
-		{
-			tmp = ft_substr(arg, 0, i);
-			tmp2 = ft_strjoin(result, tmp);
-			free(tmp);
-			free(result);
-			result = tmp2;
-			expanded = process_dollar(arg, &i, env_list, current_quote);
-			tmp = ft_strjoin(result, expanded);
-			free(expanded);
-			free(result);
-			result = tmp;
-			continue ;
-		}
-		tmp = ft_substr(arg, i, 1);
-		tmp2 = ft_strjoin(result, tmp);
-		free(tmp);
-		free(result);
-		result = tmp2;
-		i++;
-	}
-	return (result);
 }
