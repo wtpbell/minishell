@@ -1,9 +1,11 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -Wunused-function
-# -g3 -fsanitize=address
-# LDFLAGS = -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -Wunused-function -g3 -fsanitize=address
+LDFLAGS = -fsanitize=address
+
+CFLAGS += -I$(shell brew --prefix readline)/include
+LDFLAGS += -L$(shell brew --prefix readline)/lib -lreadline
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer

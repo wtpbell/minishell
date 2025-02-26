@@ -85,9 +85,9 @@ int	exec_block(t_ast_node *node, t_env **env)
 /*
 	The exec_pipe() is responsible for handling pipelines of commands
 	where the output of one command becomes the input of the next.
-	This function sets up a pipeline, forks processes, 
+	This function sets up a pipeline, forks processes,
 	and connects them via pipes.
-	The function waits for the last process in the pipeline to finish, collects 
+	The function waits for the last process in the pipeline to finish, collects
 	the exit status, and returns it.
 */
 int	exec_pipe(t_ast_node *node, t_env **env)
