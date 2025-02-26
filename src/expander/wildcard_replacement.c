@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 13:48:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:38:06 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 14:56:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,29 +44,42 @@ static void	update_node_args(t_ast_node *node, char **new_args, char **old_args,
 	free(old_args);
 }
 
-/* Handles the replacement of a wildcard argument with its matches */
+static void	perform_copy_operations(t_copy_params params)
+{
+	int	dest_idx;
+	int	ranges[2][2];
+
+	ranges[0][0] = 0;
+	ranges[0][1] = params.arg_idx;
+	ranges[1][0] = params.arg_idx + 1;
+	ranges[1][1] = params.node_argc;
+	dest_idx = 0;
+	copy_args_range(params.new_args, params.node_args, ranges[0], &dest_idx);
+	copy_matches(params.new_args, params.matches,
+		params.match_count, &dest_idx);
+	copy_args_range(params.new_args, params.node_args, ranges[1], &dest_idx);
+}
+
 bool	replace_wildcard_arg(t_ast_node *node, int arg_idx, char **matches,
 		int match_count)
 {
-	int		new_argc;
-	char	**new_args;
-	int		dest_idx;
-	char	**old_args;
-	int range1[2] = {0, arg_idx};
-	int range2[2] = {arg_idx + 1, node->argc};
+	int				new_argc;
+	char			**new_args;
+	char			**old_args;
+	t_copy_params	params;
 
 	if (!prepare_replacement(node, arg_idx, match_count, &new_argc))
 		return (false);
 	new_args = allocate_replacement_args(new_argc);
 	if (!new_args)
-	{
-		free_matches(matches, match_count);
-		return (false);
-	}
-	dest_idx = 0;
-	copy_args_range(new_args, node->args, range1, &dest_idx);
-	copy_matches(new_args, matches, match_count, &dest_idx);
-	copy_args_range(new_args, node->args, range2, &dest_idx);
+		return (free_matches(matches, match_count), false);
+	params.new_args = new_args;
+	params.node_args = node->args;
+	params.arg_idx = arg_idx;
+	params.matches = matches;
+	params.match_count = match_count;
+	params.node_argc = node->argc;
+	perform_copy_operations(params);
 	free(node->args[arg_idx]);
 	free(matches);
 	old_args = node->args;

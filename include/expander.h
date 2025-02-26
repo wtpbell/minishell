@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/26 14:47:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 14:55:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@ typedef struct s_dir_info
 	int		*capacity;
 	char	*pattern;
 }	t_dir_info;
+
+typedef struct s_copy_params
+{
+	char	**new_args;
+	char	**node_args;
+	int		arg_idx;
+	char	**matches;
+	int		match_count;
+	int		node_argc;
+}	t_copy_params;
 
 void	expander(t_ast_node *node, t_env **env_list);
 int		should_skip_expansion(t_ast_node *node, int i, int dollar_exp);
