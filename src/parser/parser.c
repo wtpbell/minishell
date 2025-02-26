@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 21:12:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 21:16:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 
 static t_ast_node	*validate_ast(t_ast_node *root)
 {
-	t_syntax_error	syntax_status;
+	t_syntax_error		syntax_status;
 	t_cmd_valid_error	cmd_status;
 
 	syntax_status = validate_syntax_tree(root);
