@@ -96,6 +96,7 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
+				$(EXPANDER_DIR)/expansion_handler.c \
 				$(EXPANDER_DIR)/expand_wildcard.c \
 				$(EXPANDER_DIR)/expand_wildcard_utils.c \
 
