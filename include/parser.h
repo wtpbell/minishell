@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:12:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 18:27:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
-	struct s_redir	*next;
+	struct s_redir			*next;
 }	t_redir;
 
 typedef struct s_last_redir
@@ -35,6 +35,7 @@ typedef struct s_ast_node
 {
 	t_token_type		type;
 	char				**args;
+	t_quote_type		*arg_quote_types;
 	int					argc;
 	t_redir				*redirections;
 	struct s_ast_node	*left;
@@ -65,6 +66,14 @@ typedef enum e_syntax_error
 	SYNTAX_INVALID_COMMAND
 }	t_syntax_error;
 
+typedef struct s_arg_data
+{
+	char			**new_args;
+	t_quote_type	*new_quote_types;
+	int				args_len;
+	t_quote_type	quote_type;
+}	t_arg_data;
+
 /* Main parsing functions */
 t_ast_node			*parse(t_token *tokens);
 t_ast_node			*parse_complete_bonus(t_token **token);
@@ -77,7 +86,8 @@ t_ast_node			*parse_pipe_sequence(t_token **token);
 
 /* AST node manipulation */
 t_ast_node			*create_ast_node(t_token_type type);
-void				add_arg_to_node(t_ast_node *node, char *arg);
+void				add_arg_to_node(t_ast_node *node, char *arg,
+						t_quote_type quote_type);
 void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */

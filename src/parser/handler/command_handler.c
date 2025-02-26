@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 11:28:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/25 16:33:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@ static void	handle_command_args(t_ast_node *node, t_token **token)
 
 	if ((*token)->type == TOKEN_WORD || (*token)->type == TOKEN_WILDCARD)
 	{
-		add_arg_to_node(node, (*token)->content);
+		add_arg_to_node(node, (*token)->content, (*token)->quote_type);
 		*token = (*token)->next;
 	}
 	current = *token;
 	while (current && (current->type == TOKEN_WORD
 			|| current->type == TOKEN_WILDCARD))
 	{
-		add_arg_to_node(node, current->content);
+		add_arg_to_node(node, current->content, current->quote_type);
 		current = current->next;
 	}
 	*token = current;

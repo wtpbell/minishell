@@ -26,6 +26,7 @@ t_token	*create_token(char *content, t_token_type type)
 	ft_memset(token, 0, sizeof(t_token) + 8);
 	token->type = type;
 	token->content = content;
+	token->quote_type = QUOTE_NONE;
 	token->next = NULL;
 	return (token);
 }

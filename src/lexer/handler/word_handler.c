@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/25 14:28:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 14:50:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 }
 
 /* Extract word */
-static char	*extract_word(t_tokenizer *tokenizer)
+static char	*extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 {
 	char	*result;
 
@@ -33,7 +33,7 @@ static char	*extract_word(t_tokenizer *tokenizer)
 		&& !is_operator(&tokenizer->input[tokenizer->position]))
 	{
 		if (is_quote(tokenizer->input[tokenizer->position]))
-			result = handle_quote_in_word(tokenizer, result);
+			result = handle_quote_in_word(tokenizer, result, quote_type);
 		else
 			result = handle_char_in_word(tokenizer, result);
 		if (!result)
@@ -60,13 +60,19 @@ static t_token	*analyze_and_create_token(char *content)
 /* Handle word */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
-	char	*content;
+	char			*content;
+	t_token			*token;
+	t_quote_type	quote_type;
 
+	quote_type = QUOTE_NONE;
 	if (!tokenizer || !tokenizer->input)
 		return (NULL);
 	skip_spaces(tokenizer);
-	content = extract_word(tokenizer);
+	content = extract_word(tokenizer, &quote_type);
 	if (!content)
 		return (NULL);
-	return (analyze_and_create_token(content));
+	token = analyze_and_create_token(content);
+	if (token)
+		token->quote_type = quote_type;
+	return (token);
 }
