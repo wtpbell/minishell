@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:10:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 18:30:30 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	free_ast(t_ast_node *node)
 			free(node->args[i++]);
 		free(node->args);
 	}
+	if (node->arg_quote_types)
+		free(node->arg_quote_types);
 	if (node->redirections)
 		free_redirections(node->redirections);
 	free(node);
