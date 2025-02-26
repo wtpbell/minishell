@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   expansion_handler_2.c                              :+:    :+:            */
+/*   expander_quotes.c                                  :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:15:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:25:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 15:25:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,37 @@ static char	*process_expansion(const char *arg, int *i, char *result,
 	return (tmp);
 }
 
-/* Main function to handle expansion of variables in a string */
+/* Handle escape characters and expansions in string */
+static char	*process_escapes_and_expansion(const char *arg, int *i,
+			char *result, t_quote_type current_quote)
+{
+	if (arg[*i] == '\\')
+	{
+		if (arg[*i + 1] && (arg[*i + 1] == '$' || arg[*i + 1] == '\"'
+				|| arg[*i + 1] == '\\') && current_quote != QUOTE_SINGLE)
+		{
+			result = process_string_char('\\', result);
+			result = process_string_char(arg[*i + 1], result);
+			*i += 2;
+			return (result);
+		}
+	}
+	else if (arg[*i] == '$' && current_quote != QUOTE_SINGLE)
+	{
+		if (*i > 0 && arg[*i - 1] == '\\')
+			result = process_string_char('$', result);
+		else
+		{
+			result = process_expansion(arg, i, result, current_quote);
+			return (result);
+		}
+	}
+	else
+		result = process_string_char(arg[*i], result);
+	(*i)++;
+	return (result);
+}
+
 char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
 {
 	int				i;
@@ -86,14 +116,14 @@ char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
 	while (arg[i])
 	{
 		if (arg[i] == '\'' || arg[i] == '\"')
-			handle_quote_char(arg[i], &current_quote);
-		else if (arg[i] == '$' && current_quote != QUOTE_SINGLE)
 		{
-			result = process_expansion(arg, &i, result, current_quote);
-			continue ;
+			handle_quote_char(arg[i], &current_quote);
+			result = process_string_char(arg[i], result);
+			i++;
 		}
-		result = process_string_char(arg[i], result);
-		i++;
+		else
+			result = process_escapes_and_expansion(arg, &i, result,
+					current_quote);
 	}
 	return (result);
 }

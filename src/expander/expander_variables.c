@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:18:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:32:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/26 15:21:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ char	*process_dollar(const char *str, int *i, t_env *env_list,
 	char	*value;
 	int		var_pos;
 
+	if (*i > 0 && str[*i - 1] == '\\' && quote_type == QUOTE_DOUBLE)
+	{
+		(*i)++;
+		return (ft_strdup("$"));
+	}
 	(*i)++;
 	if (!str[*i] || str[*i] == ' ' || str[*i] == '\t')
 		return (ft_strdup("$"));

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 00:47:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/26 15:16:29 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,22 @@ static int	verify_args(char **args)
 	return (i);
 }
 
-static void	print_escaped_string(const char *str)
+static void    print_escaped_string(const char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '\\' && str[i + 1] == '$')
+		if (str[i] == '\\')
 		{
-			printf("$");
-			i += 2;
+			if (str[i + 1])
+			{
+				printf("%c", str[i + 1]);
+				i += 2;
+			}
+			else
+				printf("%c", str[i++]);
 		}
 		else
 			printf("%c", str[i++]);
