@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 13:18:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/26 17:20:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,7 @@ int	builtin_exit(t_ast_node *node, t_env **env)
 	args = node->args;
 	ft_putendl_fd("exit", STDIN_FILENO);
 	if (node->argc == 1)
-	{
-		free_all_memory();
 		exit((int)((unsigned char)get_exit_status()));
-	}
 	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
 	{
 		ft_putendl_fd("minishell: exit: numeric argument required",
