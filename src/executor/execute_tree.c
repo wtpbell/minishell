@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "expander.h"
 #include "executor.h"
 #include "env.h"
 #include "minishell.h"
@@ -156,6 +157,7 @@ int	exec_cmd(t_ast_node *node, t_env **env)
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
+	expander(node, env);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node, env)), get_exit_status());
