@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:40:42 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 12:54:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,29 @@
 #include "parser.h"
 #include "expander.h"
 
-/* Expands environment variables (e.g., $VAR -> VAR value) */
-static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
+/* Handle the $? special case expansion */
+static void	handle_exit_status_expansion(t_ast_node *node, int i)
+{
+	char	*status;
+	char	*result;
+
+	status = ft_itoa(g_exit_status);
+	if (node->args[i][2] != '\0')
+	{
+		result = ft_strjoin(status, node->args[i] + 2);
+		free(status);
+		free(node->args[i]);
+		node->args[i] = result;
+	}
+	else
+	{
+		free(node->args[i]);
+		node->args[i] = status;
+	}
+}
+
+/* Handle regular environment variable expansion */
+static void	handle_regular_env_var(t_ast_node *node, t_env **env_list, int i)
 {
 	char	*var_name;
 	char	*env_value;
@@ -32,6 +53,15 @@ static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
 		free(node->args[i]);
 		node->args[i] = mem_strdup("");
 	}
+}
+
+/* Expands environment variables (e.g., $VAR -> VAR value) */
+static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
+{
+	if (node->args[i][1] == '?')
+		handle_exit_status_expansion(node, i);
+	else
+		handle_regular_env_var(node, env_list, i);
 }
 
 /* Handles argument expansion when a $ is inside the string */
