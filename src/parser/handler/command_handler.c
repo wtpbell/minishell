@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/25 16:33:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 09:28:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,16 @@ t_ast_node	*parse_command(t_token **token)
 	{
 		free_ast(node);
 		return (NULL);
+	}
+	if (*token && ((*token)->type == TOKEN_WORD || (*token)->type == TOKEN_WILDCARD))
+	{
+		t_token *temp = *token;
+		while (temp && (temp->type == TOKEN_WORD || temp->type == TOKEN_WILDCARD))
+		{
+			add_arg_to_node(node, temp->content, temp->quote_type);
+			temp = temp->next;
+		}
+		*token = temp;
 	}
 	return (node);
 }

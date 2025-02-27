@@ -151,9 +151,29 @@ echo -e "\n${BLUE}Don't forget to check for memory leaks:${NC}"
 echo "Run: valgrind --leak-check=full ./minishell"
 
 
-echo "\$PATH"'$PATH'
-echo "${HOME}${PWD}"
-echo "'"'
-echo '"'"
-echo "$?"'$?'
-echo 'hello\'world'
+
+$EMPTY echo hi
+
+cat <"1""2""3""4""5"
+cat <missing
+cat <missing | cat
+
+
+Test 134: ❌ $EMPTY
+mini exit code = 127
+bash exit code = 0
+
+
+export HELLO-=123
+mini exit code = 0
+bash exit code = 1
+
+
+export =
+mini exit code = 0
+bash exit code = 1
+
+export 123
+mini exit code = 0
+bash exit code = 1
+

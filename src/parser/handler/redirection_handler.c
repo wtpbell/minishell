@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:10:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 09:28:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ t_ast_node	*parse_redirection(t_token **token)
 		}
 		add_redirection(cmd_node, current->type, current->next->content);
 		current = current->next->next;
+	}
+	while (current && current->type == TOKEN_WORD)
+	{
+		add_arg_to_node(cmd_node, current->content, current->quote_type);
+		current = current->next;
 	}
 	*token = current;
 	return (cmd_node);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 00:21:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/27 09:21:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
 
 	output = pipe_fd[1];
 	new_input = pipe_fd[0];
-	fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
+	// /fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
 	pid = fork();
 	if (pid == 0)
 	{
-		fprintf(stderr, "Executing child process: %s\n", node->args[0]);
+		// fprintf(stderr, "Executing child process: %s\n", node->args[0]);
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		redirect_io(input, output, new_input);

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 21:15:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 09:06:36 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main(int argc, char **argv, char **env)
 	env_ = get_env_list();
 	*env_ = build_env(env);
 	signals_init();
-	print_banner();
+	// print_banner();
 	while (1)
 	{
 		line = readline("minishell👾 > ");
@@ -67,6 +67,6 @@ int	main(int argc, char **argv, char **env)
 		free(line);
 	}
 	free_env(env_);
-	printf("\nGoodbye!\n");
+	// printf("\nGoodbye!\n");
 	return (EXIT_SUCCESS);
 }
