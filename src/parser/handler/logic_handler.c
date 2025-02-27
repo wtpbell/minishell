@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 09:49:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:33:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 }
 
 /* Parse logic */
-t_ast_node	*parse_logic(t_token **token)
+static t_ast_node	*parse_logic(t_token **token)
 {
 	t_ast_node	*left;
 	t_ast_node	*result;

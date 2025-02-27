@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 10:34:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:37:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static t_cmd_valid_error	validate_children(t_ast_node *node)
 	return (VALID_SUCCESS);
 }
 
-t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs)
+static t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs)
 {
 	t_redir	*curr;
 
