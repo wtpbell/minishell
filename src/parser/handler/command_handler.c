@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 09:28:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 09:47:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static int	handle_command_redirs(t_ast_node *node, t_token **token)
 t_ast_node	*parse_command(t_token **token)
 {
 	t_ast_node	*node;
+	t_token		*temp;
 
 	if (!token || !*token)
 		return (NULL);
@@ -62,14 +63,13 @@ t_ast_node	*parse_command(t_token **token)
 		return (NULL);
 	handle_command_args(node, token);
 	if (!handle_command_redirs(node, token))
+		return (free_ast(node), NULL);
+	if (*token && ((*token)->type == TOKEN_WORD
+			|| (*token)->type == TOKEN_WILDCARD))
 	{
-		free_ast(node);
-		return (NULL);
-	}
-	if (*token && ((*token)->type == TOKEN_WORD || (*token)->type == TOKEN_WILDCARD))
-	{
-		t_token *temp = *token;
-		while (temp && (temp->type == TOKEN_WORD || temp->type == TOKEN_WILDCARD))
+		temp = *token;
+		while (temp && (temp->type == TOKEN_WORD
+				|| temp->type == TOKEN_WILDCARD))
 		{
 			add_arg_to_node(node, temp->content, temp->quote_type);
 			temp = temp->next;
