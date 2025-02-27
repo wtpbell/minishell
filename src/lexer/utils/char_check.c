@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:20:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 11:53:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:31:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,6 @@ int	is_operator(char *str)
 		|| (*str == '|' && *(str + 1) == '|'))
 		return (1);
 	return (0);
-}
-
-/* Check if the character is a special character */
-int	is_special_char(char c)
-{
-	return (c == '|' || c == '<' || c == '>'
-		|| c == '(' || c == ')' || c == '&'
-		|| c == '\'' || c == '\"' || c == ' '
-		|| c == '\t' || c == '\n' );
 }
 
 /* Check if the character is a quote */
