@@ -84,7 +84,6 @@ static void	add_empty_env(t_env **env)
 		add_env(env, new[i++]);
 }
 
-
 t_env	*build_env(char **env)
 {
 	t_env	*envs;

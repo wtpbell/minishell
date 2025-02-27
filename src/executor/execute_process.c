@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 12:35:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/27 20:51:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	child(t_ast_node *node, t_env **env)
 	if (execve(node->args[0], node->args, env_arr) == -1)
 		error(node->args[0], NULL);
 	set_exit_status(127);
-	free_all_memory();
+	// free_all_memory();
 	exit(get_exit_status());
 }
 
