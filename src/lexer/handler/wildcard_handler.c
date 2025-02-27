@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 14:54:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:27:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,4 @@ int	match_pattern(const char *pattern, const char *string)
 		i++;
 	return (pattern[i] == '\0');
 }
+

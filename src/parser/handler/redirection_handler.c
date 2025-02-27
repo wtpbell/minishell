@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:17:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:22:29 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static int	is_valid_filename_token(t_token *token)
 {
-	return (token && (token->type == TOKEN_WORD || token->type == TOKEN_WILDCARD));
+	return (token && (token->type == TOKEN_WORD
+			|| token->type == TOKEN_WILDCARD));
 }
 
 static t_ast_node	*handle_redirection_error(t_token **token)
@@ -95,7 +96,8 @@ t_ast_node	*parse_redirection(t_token **token)
 		add_redirection(cmd_node, current->type, current->next->content);
 		current = current->next->next;
 	}
-	while (current && (current->type == TOKEN_WORD || current->type == TOKEN_WILDCARD))
+	while (current && (current->type == TOKEN_WORD
+			|| current->type == TOKEN_WILDCARD))
 	{
 		add_arg_to_node(cmd_node, current->content, current->quote_type);
 		current = current->next;
