@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:40:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:35:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:41:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ t_ast_node	*optimize_ast(t_ast_node *root)
 	root = remove_empty_nodes(root);
 	if (!root)
 		return (NULL);
-	// if (root->type == TOKEN_WORD && root->redirections)
-	// 	root->redirections = merge_redirections(root->redirections);
 	root->left = optimize_ast(root->left);
 	root->right = optimize_ast(root->right);
 	return (root);
