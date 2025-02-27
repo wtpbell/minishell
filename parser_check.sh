@@ -150,3 +150,6 @@ echo "Success rate: $(( (PASSED * 100) / TOTAL ))%"
 echo -e "\n${BLUE}Don't forget to check for memory leaks:${NC}"
 echo "Run: valgrind --leak-check=full ./minishell"
 
+
+
+echo $?HELLO
