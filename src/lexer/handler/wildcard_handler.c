@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:27:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 16:09:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,42 +37,47 @@ t_token	*handle_wildcard_token(const char *str)
 	return (create_token(ft_strdup(str), type));
 }
 
-/* Match pattern with wildcard */
+static int	handle_star(const char *pattern, t_match_state *state)
+{
+	if (pattern[state->i] == '*')
+	{
+		state->star_idx = state->i;
+		state->str_star_idx = state->j;
+		(state->i)++;
+		return (1);
+	}
+	else if (state->star_idx != -1)
+	{
+		state->i = state->star_idx + 1;
+		(state->str_star_idx)++;
+		state->j = state->str_star_idx;
+		return (1);
+	}
+	return (0);
+}
+
 int	match_pattern(const char *pattern, const char *string)
 {
-	int		i;
-	int		j;
-	int		star_idx;
-	int		string_star_idx;
+	t_match_state	state;
 
-	i = 0;
-	j = 0;
-	star_idx = -1;
-	string_star_idx = -1;
-	while (string[j])
+	state.i = 0;
+	state.j = 0;
+	state.star_idx = -1;
+	state.str_star_idx = -1;
+	while (string[state.j])
 	{
-		if (pattern[i] && (pattern[i] == string[j] || pattern[i] == '?'))
+		if (pattern[state.i] && (pattern[state.i] == string[state.j]
+				|| pattern[state.i] == '?'))
 		{
-			i++;
-			j++;
+			state.i++;
+			state.j++;
 		}
-		else if (pattern[i] == '*')
-		{
-			star_idx = i;
-			string_star_idx = j;
-			i++;
-		}
-		else if (star_idx != -1)
-		{
-			i = star_idx + 1;
-			string_star_idx++;
-			j = string_star_idx;
-		}
+		else if (handle_star(pattern, &state))
+			continue ;
 		else
 			return (0);
 	}
-	while (pattern[i] == '*')
-		i++;
-	return (pattern[i] == '\0');
+	while (pattern[state.i] == '*')
+		state.i++;
+	return (pattern[state.i] == '\0');
 }
-
