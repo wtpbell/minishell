@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/12 11:16:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 11:09:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,39 @@ static t_ast_node	*handle_pipe_left(t_token **token)
 	return (left);
 }
 
+static t_ast_node	*handle_pipe_redirection(t_token **token)
+{
+	t_ast_node	*cmd_node;
+	t_token		*current;
+
+	cmd_node = create_ast_node(TOKEN_WORD);
+	if (!cmd_node)
+		return (NULL);
+	current = *token;
+	while (current && is_redirection(current))
+	{
+		if (!current->next || current->next->type != TOKEN_WORD)
+		{
+			free_ast(cmd_node);
+			return (NULL);
+		}
+		add_redirection(cmd_node, current->type, current->next->content);
+		current = current->next->next;
+	}
+	*token = current;
+	return (cmd_node);
+}
+
 static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*right;
 	t_ast_node	*pipe_node;
 
 	*token = (*token)->next;
-	right = parse_pipe_sequence(token);
+	if (*token && is_redirection(*token))
+		right = handle_pipe_redirection(token);
+	else
+		right = parse_pipe_sequence(token);
 	if (!right)
 	{
 		free_ast(left);

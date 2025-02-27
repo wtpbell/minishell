@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/26 15:16:29 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:08:58 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	verify_args(char **args)
 	return (i);
 }
 
-static void    print_escaped_string(const char *str)
+static void	print_escaped_string(const char *str)
 {
 	int i;
 
@@ -61,7 +61,6 @@ static void    print_escaped_string(const char *str)
 	}
 }
 
-/* echo 명령어를 구현합니다 */
 int	builtin_echo(t_ast_node *node, t_env **env)
 {
 	int	i;

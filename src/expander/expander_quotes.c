@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:15:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 15:25:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:06:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,20 +47,14 @@ static char	*process_string_char(char c, char *result)
 }
 
 /* Process expansion part when '$' is found */
-static char	*process_expansion(const char *arg, int *i, char *result,
-			t_quote_type current_quote)
+static char	*process_expansion(const char *arg, int *i,
+							char *result, t_quote_type current_quote)
 {
 	char	*tmp;
-	char	*tmp2;
 	char	*expanded;
 	t_env	*env_list;
 
 	env_list = *get_env_list();
-	tmp = ft_substr(arg, 0, *i);
-	tmp2 = ft_strjoin(result, tmp);
-	free(tmp);
-	free(result);
-	result = tmp2;
 	expanded = process_dollar(arg, i, env_list, current_quote);
 	tmp = ft_strjoin(result, expanded);
 	free(expanded);
