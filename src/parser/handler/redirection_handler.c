@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 10:22:55 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:39:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,14 @@ void	add_redirection(t_ast_node *node, t_token_type type, char *file)
 	t_redir	*new_redir;
 	t_redir	*curr;
 
+	if (!file)
+		return ;
 	new_redir = malloc(sizeof(t_redir));
 	if (!new_redir)
 		return ;
 	new_redir->type = type;
 	new_redir->file = ft_strdup(file);
-	new_redir->fd = -1;
+	new_redir->next = NULL;
 	set_redir_flags_and_fd(new_redir, type);
 	if (!node->redirections)
 		node->redirections = new_redir;

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:09:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:34:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs)
 {
 	t_redir	*curr;
 
+	if (!redirs)
+		return (VALID_SUCCESS);
 	curr = redirs;
 	while (curr)
 	{

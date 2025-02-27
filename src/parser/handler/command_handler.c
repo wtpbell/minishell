@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 09:47:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:36:06 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static int	handle_command_redirs(t_ast_node *node, t_token **token)
 		temp = *token;
 		while (temp && is_redirection(temp))
 		{
-			if (!temp->next || temp->next->type != TOKEN_WORD)
+			if (!temp->next || temp->next->type != TOKEN_WORD
+					|| !temp->next->content)
 				return (0);
 			add_redirection(node, temp->type, temp->next->content);
 			temp = temp->next->next;
