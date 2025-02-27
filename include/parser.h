@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 10:32:07 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:37:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ typedef struct s_arg_data
 /* Main parsing functions */
 t_ast_node			*parse(t_token *tokens);
 t_ast_node			*parse_complete_bonus(t_token **token);
-t_ast_node			*parse_logic(t_token **token);
 t_ast_node			*parse_pipeline(t_token **token);
 t_ast_node			*parse_command(t_token **token);
 t_ast_node			*parse_group(t_token **token);
@@ -109,7 +108,6 @@ t_ast_node			*handle_redirection_in_pipe(t_ast_node *left,
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
-t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs);
 t_syntax_error		validate_syntax_tree(t_ast_node *root);
 t_syntax_error		validate_redir_syntax(t_ast_node *node);
 t_syntax_error		validate_subshell_syntax(t_ast_node *node);

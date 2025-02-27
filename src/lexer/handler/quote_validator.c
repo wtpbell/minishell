@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 10:01:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 15:16:11 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 15:30:23 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,4 @@ int	validate_quotes(const char *input)
 		i++;
 	}
 	return (1);
-}
-
-/* Set rules for handling special characters inside quotes */
-int	should_expand_in_quotes(char c, char quote_type)
-{
-	if (quote_type == '\'')
-		return (0);
-	if (quote_type == '\"')
-	{
-		if (c == '$' || c == '`' || c == '\\')
-			return (1);
-	}
-	return (0);
 }
