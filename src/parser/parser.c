@@ -6,11 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 12:40:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 13:49:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "executor.h"
 
 static int	is_valid_token_sequence(t_token *tokens)
 {
@@ -72,7 +73,7 @@ t_ast_node	*parse(t_token *tokens)
 	current = tokens;
 	root = parse_tokens_to_ast(&current);
 	if (!root)
-		return (NULL);
+		return (set_exit_status(2), NULL);
 	root = validate_ast(root);
 	if (!root)
 		return (NULL);
@@ -212,6 +213,7 @@ t_ast_node	*parse(t_token *tokens)
 // 	if (!root)
 // 	{
 // 		ft_putendl_fd("Parse failed to create AST", STDERR_FILENO);
+// 		set_exit_status(2);
 // 		return (NULL);
 // 	}
 // 	debug_print_ast_node(root, 0, "After parse_complete_bonus:");

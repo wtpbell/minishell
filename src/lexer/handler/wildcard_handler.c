@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 11:00:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 14:54:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,36 +37,41 @@ t_token	*handle_wildcard_token(const char *str)
 	return (create_token(ft_strdup(str), type));
 }
 
-/* Match one character with pattern */
-static int	match_one(char pattern, char string)
-{
-	if (pattern == '?')
-		return (1);
-	return (pattern == string);
-}
-
 /* Match pattern with wildcard */
 int	match_pattern(const char *pattern, const char *string)
 {
-	if (!pattern || !string)
-		return (0);
-	if (*pattern == '*')
+	int		i;
+	int		j;
+	int		star_idx;
+	int		string_star_idx;
+
+	i = 0;
+	j = 0;
+	star_idx = -1;
+	string_star_idx = -1;
+	while (string[j])
 	{
-		while (*pattern == '*')
-			pattern++;
-		if (!*pattern)
-			return (1);
-		while (*string)
+		if (pattern[i] && (pattern[i] == string[j] || pattern[i] == '?'))
 		{
-			if (match_pattern(pattern, string))
-				return (1);
-			string++;
+			i++;
+			j++;
 		}
-		return (0);
+		else if (pattern[i] == '*')
+		{
+			star_idx = i;
+			string_star_idx = j;
+			i++;
+		}
+		else if (star_idx != -1)
+		{
+			i = star_idx + 1;
+			string_star_idx++;
+			j = string_star_idx;
+		}
+		else
+			return (0);
 	}
-	if (!*string)
-		return (0);
-	if (match_one(*pattern, *string))
-		return (match_pattern(pattern + 1, string + 1));
-	return (0);
+	while (pattern[i] == '*')
+		i++;
+	return (pattern[i] == '\0');
 }

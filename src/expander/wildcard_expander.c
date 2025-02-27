@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 10:43:34 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 14:55:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	free_matches(char **matches, int match_count)
 	free(matches);
 }
 
-static void	process_wildcard_arg(t_ast_node *node, int i)
+void	process_wildcard_arg(t_ast_node *node, int i)
 {
 	int		match_count;
 	char	**matches;

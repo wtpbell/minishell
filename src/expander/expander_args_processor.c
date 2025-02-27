@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 12:54:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 14:48:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,6 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 	{
 		if (should_skip_expansion(node, i, 0))
 			return ;
-		expand_wildcards(node);
+		process_wildcard_arg(node, i);
 	}
 }
