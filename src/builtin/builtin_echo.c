@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/26 15:16:29 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 10:01:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	verify_args(char **args)
 	return (i);
 }
 
-static void    print_escaped_string(const char *str)
+static void	print_escaped_string(const char *str)
 {
 	int i;
 
@@ -61,25 +61,52 @@ static void    print_escaped_string(const char *str)
 	}
 }
 
-/* echo 명령어를 구현합니다 */
-int	builtin_echo(t_ast_node *node, t_env **env)
-{
-	int	i;
-	int	print_newline;
+// int	builtin_echo(t_ast_node *node, t_env **env)
+// {
+// 	int	i;
+// 	int	print_newline;
 
-	(void)env;
-	if (node->argc == 1)
-		return (printf("\n"), EXIT_SUCCESS);
-	i = verify_args(node->args);
-	print_newline = (i == 1);
-	while (i < node->argc)
-	{
-		print_escaped_string(node->args[i]);
-		if (i + 1 < node->argc)
-			printf(" ");
-		i++;
-	}
-	if (print_newline)
-		printf("\n");
-	return (EXIT_SUCCESS);
+// 	(void)env;
+// 	if (node->argc == 1)
+// 		return (printf("\n"), EXIT_SUCCESS);
+// 	i = verify_args(node->args);
+// 	print_newline = (i == 1);
+// 	while (i < node->argc)
+// 	{
+// 		print_escaped_string(node->args[i]);
+// 		if (i + 1 < node->argc)
+// 			printf(" ");
+// 		i++;
+// 	}
+// 	if (print_newline)
+// 		printf("\n");
+// 	return (EXIT_SUCCESS);
+// }
+
+int builtin_echo(t_ast_node *node, t_env **env)
+{
+    int i;
+    int print_newline;
+
+    fprintf(stderr, "DEBUG: builtin_echo called with %d args\n", node->argc);
+    for (i = 0; i < node->argc; i++) {
+        fprintf(stderr, "DEBUG: arg[%d]='%s'\n", i, node->args[i]);
+    }
+
+    (void)env;
+    if (node->argc == 1)
+        return (printf("\n"), EXIT_SUCCESS);
+    i = verify_args(node->args);
+    print_newline = (i == 1);
+    while (i < node->argc)
+    {
+        fprintf(stderr, "DEBUG: Printing arg[%d]='%s'\n", i, node->args[i]);
+        print_escaped_string(node->args[i]);
+        if (i + 1 < node->argc)
+            printf(" ");
+        i++;
+    }
+    if (print_newline)
+        printf("\n");
+    return (EXIT_SUCCESS);
 }

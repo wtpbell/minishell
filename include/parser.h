@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 18:27:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 09:49:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void				add_arg_to_node(t_ast_node *node, char *arg,
 void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
-t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
 t_ast_node			*parse_command_sequence(t_token **token,
 						t_token_type end_type);
 t_ast_node			*handle_logic_operation(t_token **token,
