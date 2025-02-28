@@ -53,6 +53,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/validator/redirection_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
 			   $(PARSER_DIR)/validator/subshell_validator.c \
+			   $(PARSER_DIR)/validator/token_validator.c \
 			   $(PARSER_DIR)/utils/command_utils.c \
 			   $(PARSER_DIR)/utils/free_utils.c \
 			   $(PARSER_DIR)/utils/error_messages.c \
