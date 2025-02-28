@@ -72,7 +72,7 @@ static void	add_empty_env(t_env **env)
 	i = 0;
 	if (getcwd(pwd, PATH_MAX) == NULL)
 		return ;
-	new[0] = create_env("OLDPWD=");
+	new[0] = create_env("OLDPWD");
 	pwd2 = mem_strjoin("PWD=", pwd);
 	new[1] = create_env(pwd2);
 	new[2] = create_env("SHLVL=0");

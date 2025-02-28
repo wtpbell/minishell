@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 10:03:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/28 15:44:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	handle_prev_dir(t_env **env)
 	char	*prev_path;
 
 	old_pwd = get_env_value(*env, "OLDPWD");
-	printf("%s\n", old_pwd);
 	if (!old_pwd)
 		return (error("cd", "OLDPWD not set"), ERR_ENV);
 	prev_path = mem_strdup(old_pwd);
@@ -76,7 +75,7 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 
 	if (getcwd(old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), ERR_CHDIR);
-	printf("old_pwd: %s\n", old_pwd);
+	set_env(*env, "OLDPWD", old_pwd);
 	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
 		status = handle_home_dir(env);
 	else if (ft_strcmp(node->args[1], "-") == 0)

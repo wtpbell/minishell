@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 09:27:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/28 15:44:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ static int	builtin_pwd(t_ast_node *node, t_env **env)
 	char	cwd[PATH_MAX];
 
 	(void)env;
-	// if (node->argc != 1)
-	// 	return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), 1);
 	if (getcwd(cwd, PATH_MAX) == NULL)
 		return (ft_putendl_fd(NON_EXIST_DIR, STDERR_FILENO), 1);
 	printf("%s\n", cwd);

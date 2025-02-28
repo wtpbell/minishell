@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 10:10:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/28 15:40:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 			envs->value = NULL;
 			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = BOTH;
-			printf("new_value: %s\n", envs->value);
 			if (new_value)
 			{
 				envs->value = mem_strdup(new_value);
