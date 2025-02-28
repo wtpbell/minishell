@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 09:19:09 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 10:09:09 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static t_ast_node	*handle_pipe_left(t_token **token)
 	t_ast_node	*left;
 	t_ast_node	*redir;
 
-	if ((*token)->type != TOKEN_WORD)
+	if ((*token)->type != TOKEN_WORD && (*token)->type != TOKEN_WILDCARD)
 		return (NULL);
 	left = parse_command(token);
 	if (!left)
@@ -54,8 +54,8 @@ static t_ast_node	*handle_pipe_redirection(t_token **token)
 		return (NULL);
 	current = *token;
 	has_command = 0;
-	while (current && (is_redirection(current) ||
-		current->type == TOKEN_WORD || current->type == TOKEN_WILDCARD))
+	while (current && (is_redirection(current)
+			|| current->type == TOKEN_WORD || current->type == TOKEN_WILDCARD))
 	{
 		if (is_redirection(current))
 			process_redirection(cmd_node, &current);

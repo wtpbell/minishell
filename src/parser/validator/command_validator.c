@@ -6,11 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:37:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 10:07:45 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "executor.h"
 
 static t_cmd_valid_error	validate_node_args(t_ast_node *node)
 {
@@ -20,11 +21,20 @@ static t_cmd_valid_error	validate_node_args(t_ast_node *node)
 			return (VALID_SYNTAX_ERROR);
 		if (node->left->argc > 1024)
 			return (VALID_TOO_MANY_ARGS);
+		if (ft_strcmp(node->left->args[0], "&") == 0)
+			return (VALID_SYNTAX_ERROR);
 	}
 	else if (!node->args || !node->args[0])
 	{
 		if (!node->redirections)
 			return (VALID_EMPTY_CMD);
+	}
+	else if (node->args && node->args[0] && ft_strcmp(node->args[0], "&") == 0)
+	{
+		ft_putendl_fd("minishell: syntax error near unexpected token '|'",
+			STDERR_FILENO);
+		set_exit_status(2);
+		return (VALID_SYNTAX_ERROR);
 	}
 	return (VALID_SUCCESS);
 }

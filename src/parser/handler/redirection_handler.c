@@ -6,17 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 09:20:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 10:08:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static int	is_valid_filename_token(t_token *token)
-{
-	return (token && (token->type == TOKEN_WORD
-			|| token->type == TOKEN_WILDCARD));
-}
 
 static t_ast_node	*handle_redirection_error(t_token **token)
 {

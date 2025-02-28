@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 09:21:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 10:11:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,25 @@ t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 											t_token **token)
 {
-	t_ast_node	*redir;
+	t_ast_node		*redir;
+	int				i;
+	t_quote_type	quote_type;
 
 	redir = parse_redirection(token);
 	if (!redir)
-	{
-		free_ast(left);
-		return (NULL);
-	}
+		return (free_ast(left), NULL);
 	if (!redir->args || !redir->args[0])
 	{
 		if (left->args && left->args[0])
 		{
-			int i = 0;
+			i = 0;
 			while (left->args[i])
 			{
-				add_arg_to_node(redir, left->args[i],
-					left->arg_quote_types ? left->arg_quote_types[i] : QUOTE_NONE);
+				if (left->arg_quote_types)
+					quote_type = left->arg_quote_types[i];
+				else
+					quote_type = QUOTE_NONE;
+				add_arg_to_node(redir, left->args[i], quote_type);
 				i++;
 			}
 		}
