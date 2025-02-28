@@ -6,39 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:46:55 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 23:15:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "parser.h"
-
-static int	open_heredoc_file(char *file)
-{
-	int	fd;
-
-	fd = open(file, O_RDONLY);
-	if (fd == -1)
-	{
-		error(file, NULL);
-		set_exit_status(1);
-	}
-	return (fd);
-}
-
-static int	open_redir_file(char *file, int redir_type)
-{
-	int	fd;
-
-	fd = open(file, get_flags(redir_type), 0644);
-	if (fd == -1)
-	{
-		error(file, NULL);
-		set_exit_status(1);
-		return (-1);
-	}
-	return (fd);
-}
 
 static void	perform_dup2(int fd, int redir_fd)
 {
@@ -55,30 +28,29 @@ static void	perform_dup2(int fd, int redir_fd)
 void	launch_redir(t_redir *current_redir, int saved_fd[2])
 {
 	int	fd;
-	int	redir_fd;
 
 	if (!current_redir->file)
 		return ;
-	redir_fd = get_redir_fd(current_redir->type);
+	
 	if (current_redir->type == TOKEN_HEREDOC)
 	{
-		//printf("Handling heredoc: %s\n", current_redir->file);
-		fd = open_heredoc_file(current_redir->file);
-		if (saved_fd[0] == -1)
-			saved_fd[0] = dup(STDIN_FILENO);
+		fd = open(current_redir->file, current_redir->flags, 0644);
+		if (saved_fd[current_redir->fd] == -1)
+			saved_fd[current_redir->fd] = dup(current_redir->fd);
 	}
 	else
 	{
-		fd = open_redir_file(current_redir->file, current_redir->type);
+		fd = open(current_redir->file, current_redir->flags, 0644);
 		if (fd == -1)
 		{
+			error(current_redir->file, NULL);
 			set_exit_status(1);
 			return ;
 		}
-		if (saved_fd[redir_fd] == -1)
-			saved_fd[redir_fd] = dup(redir_fd);
+		if (saved_fd[current_redir->fd] == -1)
+			saved_fd[current_redir->fd] = dup(current_redir->fd);
 	}
-	perform_dup2(fd, redir_fd);
+	perform_dup2(fd, current_redir->fd);
 }
 
 void	restore_redirection(int saved_fd[2])
