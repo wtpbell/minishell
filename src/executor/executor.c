@@ -38,32 +38,32 @@ int	executor_status(t_ast_node *node, t_env **env)
 	return (EXIT_FAILURE);
 }
 
-// void	executor(t_ast_node *node, t_env **env)
-// {
-// 	if (!node || !env)
-// 		return ;
-// 	set_exit_status(executor_status(node, env));
-// }
-
-void executor(t_ast_node *node, t_env **env) //for checking
+void	executor(t_ast_node *node, t_env **env)
 {
-	int i;
-
-	if (!node)
-	{
-		printf("executor: received NULL node\n");
-		return ;
-	}
-	printf("executor: processing node of type %d\n", node->type);
-	if (node->args)
-	{
-		printf("executor: command = %s\n", node->args[0]);
-		printf("executor: arguments = ");
-		for (i = 0; node->args[i]; i++)
-		printf("\"%s\" ", node->args[i]);
-		printf("\n");
-	}
 	if (!node || !env)
 		return ;
 	set_exit_status(executor_status(node, env));
 }
+
+// void executor(t_ast_node *node, t_env **env) //for checking
+// {
+// 	int i;
+
+// 	if (!node)
+// 	{
+// 		printf("executor: received NULL node\n");
+// 		return ;
+// 	}
+// 	printf("executor: processing node of type %d\n", node->type);
+// 	if (node->args)
+// 	{
+// 		printf("executor: command = %s\n", node->args[0]);
+// 		printf("executor: arguments = ");
+// 		for (i = 0; node->args[i]; i++)
+// 		printf("\"%s\" ", node->args[i]);
+// 		printf("\n");
+// 	}
+// 	if (!node || !env)
+// 		return ;
+// 	set_exit_status(executor_status(node, env));
+// }
