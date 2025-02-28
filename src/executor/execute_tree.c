@@ -131,8 +131,7 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	{
 		launch_redir(cur_redir, saved_fd);
 		if (get_exit_status() == 1)
-			// return (restore_redirection(saved_fd), 1);
-			break;
+			return (1);
 		cur_redir = cur_redir->next;
 	}
 	status = exec_cmd(node, env);

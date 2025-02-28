@@ -22,6 +22,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <dirent.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 

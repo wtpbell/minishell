@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/25 14:49:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/27 17:53:34 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,30 @@ static char	*gen_filename(void)
 
 static int	process_line(char *line, char *delimiter, int fd)
 {
+	size_t	len;
+
 	if (!line)
 	{
 		error_heredoc(delimiter);
 		return (0);
 	}
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
 	if (ft_strcmp(line, delimiter) == 0)
 	{
 		free(line);
 		return (0);
 	}
-	write(fd, line, ft_strlen(line));
-	write(fd, "\n", 1);
+	if (len > 0)
+	{
+		write(fd, line, len);
+		write(fd, "\n", 1);
+	}
 	free(line);
 	return (1);
 }
- 
+
 static char	*process_heredoc(char *delimiter)
 {
 	char	*filename;

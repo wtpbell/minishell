@@ -35,6 +35,7 @@ static int	open_redir_file(char *file, int redir_type)
 	{
 		error(file, NULL);
 		set_exit_status(1);
+		return (-1);
 	}
 	return (fd);
 }
@@ -46,6 +47,7 @@ static void	perform_dup2(int fd, int redir_fd)
 		close(fd);
 		error("dup2 failed", NULL);
 		set_exit_status(1);
+		return ;
 	}
 	close(fd);
 }
@@ -68,6 +70,11 @@ void	launch_redir(t_redir *current_redir, int saved_fd[2])
 	else
 	{
 		fd = open_redir_file(current_redir->file, current_redir->type);
+		if (fd == -1)
+		{
+			set_exit_status(1);
+			return ;
+		}
 		if (saved_fd[redir_fd] == -1)
 			saved_fd[redir_fd] = dup(redir_fd);
 	}

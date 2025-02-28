@@ -69,7 +69,7 @@ static int	resolve_command(t_ast_node *node)
 	{
 		error(node->args[0], "Command not found");
 		set_underscore(node->argc, node->args);
-		return (set_exit_status(127), 127);
+		return (set_exit_status(0), 0);
 	}
 	free(node->args[0]);
 	node->args[0] = tmp;
