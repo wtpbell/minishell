@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 13:25:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 15:38:20 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "common.h"
 #include <unistd.h>
 
-int	g_exit_status = 0;
+int	g_signal_received = 0;
 
 static int	process_command_line(char *line, t_env **env_)
 {
@@ -27,7 +27,7 @@ static int	process_command_line(char *line, t_env **env_)
 
 	if (!validate_quotes(line))
 	{
-		g_exit_status = 2;
+		set_exit_status(2);
 		return (0);
 	}
 	tokens = tokenize(line);

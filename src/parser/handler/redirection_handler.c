@@ -6,28 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 16:19:42 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:40:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static int	is_valid_filename_token(t_token *token)
-{
-	return (token && (token->type == TOKEN_WORD
-			|| token->type == TOKEN_WILDCARD));
-}
-
-static t_ast_node	*handle_redirection_error(t_token **token)
-{
-	if (!*token || !is_valid_filename_token(*token))
-	{
-		ft_putendl_fd("minishell: syntax error near unexpected token",
-			STDERR_FILENO);
-		return (NULL);
-	}
-	return (create_ast_node(TOKEN_WORD));
-}
+#include "executor.h"
 
 static void	set_redir_flags_and_fd(t_redir *redir, t_token_type type)
 {
@@ -78,6 +62,28 @@ void	add_redirection(t_ast_node *node, t_token_type type, char *file)
 	}
 }
 
+static void	add_args_to_cmd_node(t_ast_node *cmd_node, t_token **current)
+{
+	t_token	*temp;
+
+	temp = *current;
+	while (temp && (temp->type == TOKEN_WORD
+			|| temp->type == TOKEN_WILDCARD))
+	{
+		add_arg_to_node(cmd_node, temp->content, temp->quote_type);
+		temp = temp->next;
+	}
+	*current = temp;
+}
+
+static int	handle_redirection_error(t_ast_node *cmd_node, t_token **token)
+{
+	free_ast(cmd_node);
+	*token = NULL;
+	set_exit_status(2);
+	return (1);
+}
+
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node	*cmd_node;
@@ -92,16 +98,16 @@ t_ast_node	*parse_redirection(t_token **token)
 	while (current && is_redirection(current))
 	{
 		if (!current->next || !is_valid_filename_token(current->next))
-			return (free_ast(cmd_node), handle_redirection_error(token));
+		{
+			if (handle_redirection_error(cmd_node, token))
+				return (NULL);
+		}
 		add_redirection(cmd_node, current->type, current->next->content);
 		current = current->next->next;
 	}
-	while (current && (current->type == TOKEN_WORD
+	if (current && (current->type == TOKEN_WORD
 			|| current->type == TOKEN_WILDCARD))
-	{
-		add_arg_to_node(cmd_node, current->content, current->quote_type);
-		current = current->next;
-	}
+		add_args_to_cmd_node(cmd_node, &current);
 	*token = current;
 	return (cmd_node);
 }

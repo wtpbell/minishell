@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:22:59 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 09:30:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static void	handle_command_args(t_ast_node *node, t_token **token)
 static int	handle_command_redirs(t_ast_node *node, t_token **token)
 {
 	t_token	*temp;
+	t_token	*next_token;
 
 	if (*token && is_redirection(*token))
 	{
@@ -44,28 +45,19 @@ static int	handle_command_redirs(t_ast_node *node, t_token **token)
 					&& temp->next->type != TOKEN_WILDCARD)
 				|| !temp->next->content)
 				return (0);
-			add_redirection(node, temp->type, temp->next->content);
-			temp = temp->next->next;
+			next_token = temp->next;
+			add_redirection(node, temp->type, next_token->content);
+			temp = next_token->next;
 		}
 		*token = temp;
 	}
 	return (1);
 }
 
-/* Parse command */
-t_ast_node	*parse_command(t_token **token)
+static void	handle_more_args(t_ast_node *node, t_token **token)
 {
-	t_ast_node	*node;
-	t_token		*temp;
+	t_token	*temp;
 
-	if (!token || !*token)
-		return (NULL);
-	node = create_ast_node(TOKEN_WORD);
-	if (!node)
-		return (NULL);
-	handle_command_args(node, token);
-	if (!handle_command_redirs(node, token))
-		return (free_ast(node), NULL);
 	if (*token && ((*token)->type == TOKEN_WORD
 			|| (*token)->type == TOKEN_WILDCARD))
 	{
@@ -77,6 +69,31 @@ t_ast_node	*parse_command(t_token **token)
 			temp = temp->next;
 		}
 		*token = temp;
+	}
+}
+
+/* Parse command */
+t_ast_node	*parse_command(t_token **token)
+{
+	t_ast_node	*node;
+
+	if (!token || !*token)
+		return (NULL);
+	node = create_ast_node(TOKEN_WORD);
+	if (!node)
+		return (NULL);
+	if ((*token)->type == TOKEN_WORD || (*token)->type == TOKEN_WILDCARD)
+		handle_command_args(node, token);
+	if (!handle_command_redirs(node, token))
+	{
+		free_ast(node);
+		return (NULL);
+	}
+	handle_more_args(node, token);
+	if (!node->args || !node->args[0])
+	{
+		free_ast(node);
+		return (NULL);
 	}
 	return (node);
 }
