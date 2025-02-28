@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 16:06:29 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:16:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 	root = parse_complete_bonus(tokens);
 	if (!root)
 	{
-		if (*tokens && (*tokens)->type == TOKEN_REDIR_IN && !(*tokens)->next)
-			ft_putendl_fd("minishell: syntax error near unexpected token `newline'", STDERR_FILENO);
-		else if (!current)
+		if (current && is_redirection(current))
+			handle_redirection_error(current);
+		else
 			ft_putendl_fd("minishell: syntax error", STDERR_FILENO);
 		set_exit_status(2);
 		return (NULL);

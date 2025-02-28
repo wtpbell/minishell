@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 10:08:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:15:58 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int					is_valid_command_name(const char *cmd);
 int					is_valid_token_sequence(t_token *tokens);
 int					validate_first_token(t_token *token);
 int					is_valid_filename_token(t_token *token);
+void				handle_redirection_error(t_token *current);
 
 /* Error messages */
 char				*get_validation_error_msg(t_cmd_valid_error error);
