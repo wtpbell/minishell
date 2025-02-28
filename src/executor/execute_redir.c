@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 09:21:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 15:46:55 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	launch_redir(t_redir *current_redir, int saved_fd[2])
 	redir_fd = get_redir_fd(current_redir->type);
 	if (current_redir->type == TOKEN_HEREDOC)
 	{
-		// printf("Handling heredoc: %s\n", current_redir->file);
+		//printf("Handling heredoc: %s\n", current_redir->file);
 		fd = open_heredoc_file(current_redir->file);
 		if (saved_fd[0] == -1)
 			saved_fd[0] = dup(STDIN_FILENO);

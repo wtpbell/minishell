@@ -97,7 +97,7 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	int		status_;
 	size_t	i;
 
-	// fprintf(stderr, "Executing pipe node\n");
+	//fprintf(stderr, "Executing pipe node\n");
 	set_exit_status(0);
 	last_pid = launch_pipe(node, env);
 	waitpid(last_pid, &status_, 0);

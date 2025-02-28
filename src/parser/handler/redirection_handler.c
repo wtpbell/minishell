@@ -6,22 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 10:08:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:09:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-static t_ast_node	*handle_redirection_error(t_token **token)
-{
-	if (!*token || !is_valid_filename_token(*token))
-	{
-		ft_putendl_fd("minishell: syntax error near unexpected token",
-			STDERR_FILENO);
-		return (NULL);
-	}
-	return (create_ast_node(TOKEN_WORD));
-}
+#include "executor.h"
 
 static void	set_redir_flags_and_fd(t_redir *redir, t_token_type type)
 {
@@ -86,6 +76,15 @@ static void	add_args_to_cmd_node(t_ast_node *cmd_node, t_token **current)
 	*current = temp;
 }
 
+static int	handle_redirection_error(t_ast_node *cmd_node, t_token **token)
+{
+	free_ast(cmd_node);
+	ft_putendl_fd("minishell: syntax error near unexpected token", STDERR_FILENO);
+	*token = NULL;
+	set_exit_status(2);
+	return (1);
+}
+
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node	*cmd_node;
@@ -101,8 +100,8 @@ t_ast_node	*parse_redirection(t_token **token)
 	{
 		if (!current->next || !is_valid_filename_token(current->next))
 		{
-			free_ast(cmd_node);
-			return (handle_redirection_error(token));
+			if (handle_redirection_error(cmd_node, token))
+				return (NULL);
 		}
 		add_redirection(cmd_node, current->type, current->next->content);
 		current = current->next->next;
