@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 16:19:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 09:21:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,27 @@ t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 		free_ast(left);
 		return (NULL);
 	}
-	redir->left = left;
+	if (!redir->args || !redir->args[0])
+	{
+		if (left->args && left->args[0])
+		{
+			int i = 0;
+			while (left->args[i])
+			{
+				add_arg_to_node(redir, left->args[i],
+					left->arg_quote_types ? left->arg_quote_types[i] : QUOTE_NONE);
+				i++;
+			}
+		}
+	}
+	free_ast(left);
 	return (redir);
 }
 
-/* Parse pipeline */
-t_ast_node	*parse_pipeline(t_token **token)
+static int	validate_pipeline_structure(t_ast_node *root)
 {
-	t_ast_node	*root;
 	t_ast_node	*current;
 
-	if (!token || !*token)
-		return (NULL);
-	root = parse_pipe_sequence(token);
-	if (!root)
-		return (NULL);
 	current = root;
 	while (current)
 	{
@@ -62,10 +68,27 @@ t_ast_node	*parse_pipeline(t_token **token)
 		{
 			ft_putendl_fd("minishell: syntax error near unexpected token '|'",
 				STDERR_FILENO);
-			free_ast(root);
-			return (NULL);
+			return (0);
 		}
 		current = current->right;
+	}
+	return (1);
+}
+
+/* Parse pipeline */
+t_ast_node	*parse_pipeline(t_token **token)
+{
+	t_ast_node	*root;
+
+	if (!token || !*token)
+		return (NULL);
+	root = parse_pipe_sequence(token);
+	if (!root)
+		return (NULL);
+	if (!validate_pipeline_structure(root))
+	{
+		free_ast(root);
+		return (NULL);
 	}
 	return (root);
 }

@@ -6,13 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 11:09:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 09:19:09 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-t_ast_node	*parse_pipe_sequence(t_token **token);
 
 static t_ast_node	*handle_pipe_left(t_token **token)
 {
@@ -37,25 +35,39 @@ static t_ast_node	*handle_pipe_left(t_token **token)
 	return (left);
 }
 
+static void	process_redirection(t_ast_node *cmd_node, t_token **current)
+{
+	if (!*current || !(*current)->next || (*current)->next->type != TOKEN_WORD)
+		return ;
+	add_redirection(cmd_node, (*current)->type, (*current)->next->content);
+	*current = (*current)->next->next;
+}
+
 static t_ast_node	*handle_pipe_redirection(t_token **token)
 {
 	t_ast_node	*cmd_node;
 	t_token		*current;
+	int			has_command;
 
 	cmd_node = create_ast_node(TOKEN_WORD);
 	if (!cmd_node)
 		return (NULL);
 	current = *token;
-	while (current && is_redirection(current))
+	has_command = 0;
+	while (current && (is_redirection(current) ||
+		current->type == TOKEN_WORD || current->type == TOKEN_WILDCARD))
 	{
-		if (!current->next || current->next->type != TOKEN_WORD)
+		if (is_redirection(current))
+			process_redirection(cmd_node, &current);
+		else
 		{
-			free_ast(cmd_node);
-			return (NULL);
+			has_command = 1;
+			add_arg_to_node(cmd_node, current->content, current->quote_type);
+			current = current->next;
 		}
-		add_redirection(cmd_node, current->type, current->next->content);
-		current = current->next->next;
 	}
+	if (!has_command && !cmd_node->redirections)
+		return (free_ast(cmd_node), NULL);
 	*token = current;
 	return (cmd_node);
 }
@@ -92,8 +104,19 @@ t_ast_node	*parse_pipe_sequence(t_token **token)
 
 	if (!token || !*token)
 		return (NULL);
-	left = handle_pipe_left(token);
-	if (!left)
+	if ((*token)->type == TOKEN_WORD)
+	{
+		left = handle_pipe_left(token);
+		if (!left)
+			return (NULL);
+	}
+	else if (is_redirection(*token))
+	{
+		left = handle_pipe_redirection(token);
+		if (!left)
+			return (NULL);
+	}
+	else
 		return (NULL);
 	if (!*token || (*token)->type != TOKEN_PIPE)
 		return (left);
