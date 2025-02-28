@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:18:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 12:51:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 15:40:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,12 @@ static char	*expand_env_var_in_str(char *var_name, t_env *env_list)
 	char	*env_value;
 
 	if (ft_strcmp(var_name, "?") == 0)
-		return (ft_itoa(g_exit_status));
+	{
+		env_value = get_env_value(env_list, "?");
+		if (!env_value)
+			return ft_strdup("0");
+		return ft_strdup(env_value);
+	}
 	env_value = get_env_value(env_list, var_name);
 	if (env_value)
 		return (ft_strdup(env_value));

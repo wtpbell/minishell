@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 10:04:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:38:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,19 @@
 static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 {
 	t_ast_node	*root;
+	t_token		*current;
 
+	current = *tokens;
 	root = parse_complete_bonus(tokens);
 	if (!root)
-		return (set_exit_status(2), NULL);
+	{
+		if (current && is_redirection(current))
+			handle_redirection_error_message(current);
+		else
+			ft_putendl_fd("minishell: syntax error", STDERR_FILENO);
+		set_exit_status(2);
+		return (NULL);
+	}
 	if (*tokens)
 	{
 		ft_putendl_fd("minishell: syntax error: unexpected token", STDERR_FILENO);

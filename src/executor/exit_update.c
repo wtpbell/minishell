@@ -28,11 +28,15 @@
 
 void	set_exit_status(int status)
 {
-	g_exit_status = status;
 	set_env(*get_env_list(), "?", mem_itoa(status));
 }
 
-int	get_exit_status(void)
+int get_exit_status(void)
 {
-	return (g_exit_status);
+	char *status_str;
+
+	status_str = get_env_value(*get_env_list(), "?");
+	if (!status_str)
+		return (0);
+	return	(ft_atoi(status_str));
 }
