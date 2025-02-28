@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 16:22:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:40:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,6 @@ static void	add_args_to_cmd_node(t_ast_node *cmd_node, t_token **current)
 static int	handle_redirection_error(t_ast_node *cmd_node, t_token **token)
 {
 	free_ast(cmd_node);
-	ft_putendl_fd("minishell: syntax error near unexpected token",
-		STDERR_FILENO);
 	*token = NULL;
 	set_exit_status(2);
 	return (1);

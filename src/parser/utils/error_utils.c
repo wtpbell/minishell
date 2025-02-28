@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/11 08:54:30 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 16:15:38 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 16:38:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_ast_node	*handle_group_error(char *msg)
 	return (NULL);
 }
 
-void	handle_redirection_error(t_token *current)
+void	handle_redirection_error_message(t_token *current)
 {
 	if (!current->next)
 		ft_putendl_fd("minishell: syntax error near unexpected token `newline'",
