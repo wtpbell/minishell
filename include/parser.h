@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 20:50:50 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/27 15:37:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 
 # include "minishell.h"
 # include "lexer.h"
+# include <fcntl.h>
 
 typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
+	int						fd;
+	int						flags;
 	struct s_redir			*next;
 }	t_redir;
 
@@ -35,6 +38,7 @@ typedef struct s_ast_node
 {
 	t_token_type		type;
 	char				**args;
+	t_quote_type		*arg_quote_types;
 	int					argc;
 	t_redir				*redirections;
 	struct s_ast_node	*left;
@@ -65,10 +69,17 @@ typedef enum e_syntax_error
 	SYNTAX_INVALID_COMMAND
 }	t_syntax_error;
 
+typedef struct s_arg_data
+{
+	char			**new_args;
+	t_quote_type	*new_quote_types;
+	int				args_len;
+	t_quote_type	quote_type;
+}	t_arg_data;
+
 /* Main parsing functions */
 t_ast_node			*parse(t_token *tokens);
 t_ast_node			*parse_complete_bonus(t_token **token);
-t_ast_node			*parse_logic(t_token **token);
 t_ast_node			*parse_pipeline(t_token **token);
 t_ast_node			*parse_command(t_token **token);
 t_ast_node			*parse_group(t_token **token);
@@ -77,11 +88,11 @@ t_ast_node			*parse_pipe_sequence(t_token **token);
 
 /* AST node manipulation */
 t_ast_node			*create_ast_node(t_token_type type);
-void				add_arg_to_node(t_ast_node *node, char *arg);
+void				add_arg_to_node(t_ast_node *node, char *arg,
+						t_quote_type quote_type);
 void				free_ast(t_ast_node *node);
 
 /* Logic operation handling */
-t_ast_node			*handle_logic_sequence(t_token **token, t_ast_node *left);
 t_ast_node			*parse_command_sequence(t_token **token,
 						t_token_type end_type);
 t_ast_node			*handle_logic_operation(t_token **token,
@@ -97,7 +108,6 @@ t_ast_node			*handle_redirection_in_pipe(t_ast_node *left,
 
 /* Syntax validation */
 t_cmd_valid_error	validate_command_syntax(t_ast_node *node);
-t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs);
 t_syntax_error		validate_syntax_tree(t_ast_node *root);
 t_syntax_error		validate_redir_syntax(t_ast_node *node);
 t_syntax_error		validate_subshell_syntax(t_ast_node *node);

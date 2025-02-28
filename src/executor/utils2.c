@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 10:31:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/02/27 09:19:24 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,11 @@ int	check_cmd(t_ast_node *node, t_env **env)
 {
 	int	status_;
 
-	fprintf(stderr, "Trying to execute: %s\n", node->args[0]);
+	// fprintf(stderr, "Trying to execute: %s\n", node->args[0]);
 	if (get_env_value(*env, "PATH") == NULL && node->args[0][0] != '/'
 			&& node->args[0][0] != '.')
 		append_cwd(node);
-	fprintf(stderr, "Executing: %s\n", node->args[0]);
+	// fprintf(stderr, "Executing: %s\n", node->args[0]);
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/12 11:18:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/27 16:19:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ t_ast_node	*parse_pipeline(t_token **token)
 
 	if (!token || !*token)
 		return (NULL);
-	printf("Starting pipeline parse with token: type=%d, content='%s'\n",
-		(*token)->type, (*token)->content);
 	root = parse_pipe_sequence(token);
 	if (!root)
 		return (NULL);
