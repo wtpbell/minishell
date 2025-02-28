@@ -6,24 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 16:20:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 10:04:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "executor.h"
-
-static int	is_valid_token_sequence(t_token *tokens)
-{
-	if (!tokens)
-		return (0);
-	if (!validate_parentheses(tokens))
-	{
-		ft_putendl_fd("minishell: syntax error: unmatched parentheses", STDERR_FILENO);
-		return (0);
-	}
-	return (1);
-}
 
 static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 {
@@ -68,6 +56,8 @@ t_ast_node	*parse(t_token *tokens)
 	t_ast_node	*root;
 	t_token		*current;
 
+	if (!tokens || !validate_first_token(tokens))
+		return (NULL);
 	if (!is_valid_token_sequence(tokens))
 		return (NULL);
 	current = tokens;
@@ -214,6 +204,9 @@ t_ast_node	*parse(t_token *tokens)
 // 	if (!root)
 // 	{
 // 		ft_putendl_fd("Parse failed to create AST", STDERR_FILENO);
+// 		printf("Failed token type: %d, content: %s\n",
+// 			current ? current->type : -1,
+// 			current ? current->content : "NULL");
 // 		set_exit_status(2);
 // 		return (NULL);
 // 	}

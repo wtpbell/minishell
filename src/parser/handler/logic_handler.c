@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:38:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/02/28 09:42:46 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,18 @@ t_ast_node	*parse_complete_bonus(t_token **token)
 
 	if (!token || !*token)
 		return (NULL);
-	root = parse_group(token);
-	if (!root)
-		return (NULL);
+	if ((*token)->type == TOKEN_WILDCARD)
+	{
+		root = parse_command(token);
+		if (!root)
+			return (NULL);
+	}
+	else
+	{
+		root = parse_group(token);
+		if (!root)
+			return (NULL);
+	}
 	while (*token && is_logic_operator(*token))
 	{
 		logic_node = handle_logic_sequence(token, root);
