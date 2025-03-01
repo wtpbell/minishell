@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:09:58 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 12:55:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
+	char					*delimiter;
+    char					*heredoc_file;
 	int						fd;
 	int						flags;
 	t_quote_type			quote_type;
