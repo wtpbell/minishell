@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 09:43:08 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 11:51:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		data.delimiter = delimiter;
 		data.fd = fd;
 		data.env_list = env_list;
-		data.should_expand = (quote_type != QUOTE_SINGLE);
+		data.should_expand = (quote_type == QUOTE_NONE);
 		continue_reading = process_line(&data);
 		if (continue_reading == 0)
 			break ;
