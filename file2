@@ -1,0 +1,13 @@
+Makefile
+file1
+file2
+file3
+include
+lib
+minishell
+nopermission
+nopermissionfile
+note.md
+obj
+parser_check.sh
+src
