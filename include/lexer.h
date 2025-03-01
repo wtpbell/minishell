@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 16:09:13 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 10:47:10 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,11 @@ typedef struct s_tokenizer
 	char	quote_char;
 }	t_tokenizer;
 
-typedef struct s_quote_state
-{
-	int		in_quote;
-	char	quote_char;
-}	t_quote_state;
-
 typedef struct s_quoted_result
 {
 	char			*content;
 	t_quote_type	quote_type;
 }	t_quoted_result;
-
-typedef struct s_param_exp
-{
-	char	*var_name;
-	char	*operator;
-	char	*word;
-}	t_param_exp;
 
 typedef struct s_match_state
 {
