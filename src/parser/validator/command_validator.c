@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 10:07:45 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 13:39:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,18 @@ static t_cmd_valid_error	validate_redirection_syntax(t_redir *redirs)
 	curr = redirs;
 	while (curr)
 	{
-		if (!curr->file)
-			return (VALID_MISSING_FILENAME);
-		if (!is_valid_command_name(curr->file))
-			return (VALID_INVALID_REDIR);
+		if (curr->type == TOKEN_HEREDOC)
+		{
+			if (!curr->delimiter)
+				return (VALID_MISSING_FILENAME);
+		}
+		else
+		{
+			if (!curr->file)
+				return (VALID_MISSING_FILENAME);
+			if (!is_valid_command_name(curr->file))
+				return (VALID_INVALID_REDIR);
+		}
 		curr = curr->next;
 	}
 	return (VALID_SUCCESS);
