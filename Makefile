@@ -60,6 +60,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/error_utils.c \
 			   $(PARSER_DIR)/utils/group_utils.c \
 			   $(PARSER_DIR)/utils/logic_utils.c \
+			   $(PARSER_DIR)/utils/redirection_utils.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
 			   $(ENV_DIR)/env_utils.c \
