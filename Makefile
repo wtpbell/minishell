@@ -78,6 +78,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils.c \
 				 $(EXECUTOR_DIR)/utils2.c \
 				 $(EXECUTOR_DIR)/utils3.c \
+				 $(EXECUTOR_DIR)/heredoc_utils.c \
 				 $(EXECUTOR_DIR)/error/error.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
@@ -99,6 +100,7 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
 				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
+				$(EXPANDER_DIR)/heredoc_expander.c \
 				$(EXPANDER_DIR)/wildcard_expander.c \
 				$(EXPANDER_DIR)/wildcard_replacement.c \
 				$(EXPANDER_DIR)/wildcard_array_utils.c \

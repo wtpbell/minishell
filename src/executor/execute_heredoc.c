@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 09:14:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 09:43:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,125 +14,58 @@
 #include "expander.h"
 #include "common.h"
 
-//strace -f bash -c
-static char	*gen_filename(void)
+static int	open_heredoc_file(char **filename)
 {
-	static int	heredoc_count = 1;
-	char		*filename;
-	char		*index_str;
+	int	fd;
 
-	index_str = mem_itoa(heredoc_count++);
-	if (!index_str)
-		return (NULL);
-	filename = mem_strjoin("/tmp/heredoc_", index_str);
-	free_alloc(index_str);
-	index_str = NULL;
-	return (filename);
+	*filename = gen_filename();
+	if (!*filename)
+		return (-1);
+	fd = open(*filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd == -1)
+	{
+		error("open heredoc", NULL);
+		free_alloc(*filename);
+		*filename = NULL;
+		return (-1);
+	}
+	return (fd);
 }
 
-static char	*expand_heredoc_line(char *line, t_env *env_list)
+static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
+		t_quote_type quote_type)
 {
-	int				i;
-	char			*result;
-	char			*expanded;
-	t_quote_type	quote_type;
+	char			*line;
+	int				continue_reading;
+	t_heredoc_data	data;
 
-	if (!line || !ft_strchr(line, '$'))
-		return (line);
-	result = ft_strdup("");
-	if (!result)
-		return (line);
-	i = 0;
-	quote_type = QUOTE_NONE;
-	while (line[i])
+	while (1)
 	{
-		if (line[i] == '$')
-		{
-			expanded = process_dollar(line, &i, env_list, quote_type);
-			if (expanded)
-			{
-				char *temp = result;
-				result = ft_strjoin(result, expanded);
-				free(temp);
-				free(expanded);
-				if (!result)
-					return (line);
-			}
-		}
-		else
-		{
-			char *temp = result;
-			char c[2] = {line[i], '\0'};
-			result = ft_strjoin(result, c);
-			free(temp);
-			if (!result)
-				return (line);
-			i++;
-		}
+		if (get_exit_status() == 130)
+			break ;
+		line = readline("heredoc> ");
+		data.line = line;
+		data.delimiter = delimiter;
+		data.fd = fd;
+		data.env_list = env_list;
+		data.should_expand = (quote_type != QUOTE_SINGLE);
+		continue_reading = process_line(&data);
+		if (continue_reading == 0)
+			break ;
 	}
-	free(line);
-	return (result);
-}
-
-static int	process_line(char *line, char *delimiter, int fd, t_env *env_list,
-					int should_expand)
-{
-	size_t	len;
-	char	*expanded_line;
-
-	if (!line)
-		return (error_heredoc(delimiter), 0);
-	len = ft_strlen(line);
-	if (len > 0 && line[len - 1] == '\n')
-		line[len - 1] = '\0';
-	if (ft_strcmp(line, delimiter) == 0)
-		return (free(line), 0);
-	if (should_expand)
-		expanded_line = expand_heredoc_line(line, env_list);
-	else
-		expanded_line = line;
-	len = ft_strlen(expanded_line);
-	if (len > 0)
-	{
-		write(fd, expanded_line, len);
-		write(fd, "\n", 1);
-	}
-	if (should_expand && expanded_line != line)
-		free(expanded_line);
-	else if (!should_expand)
-		free(line);
-	return (1);
 }
 
 static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
 {
 	char	*filename;
 	int		fd;
-	char	*line;
-	int		continue_reading;
 	t_env	*env_list;
-	int		should_expand;
 
 	env_list = *get_env_list();
-	filename = gen_filename();
-	if (!filename)
-		return (NULL);
-	fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	fd = open_heredoc_file(&filename);
 	if (fd == -1)
-	{
-		error("open heredoc", NULL);
-		return (free_alloc(filename), filename = NULL, NULL);
-	}
-	should_expand = (quote_type != QUOTE_SINGLE);
-	while (1)
-	{
-		if (get_exit_status() == 130)
-			break;
-		line = readline("heredoc> ");
-		continue_reading = process_line(line, delimiter, fd, env_list, should_expand);
-		if (continue_reading == 0)
-			break;
-	}
+		return (NULL);
+	read_heredoc_lines(fd, delimiter, env_list, quote_type);
 	close(fd);
 	return (filename);
 }
@@ -150,8 +83,8 @@ static void	cleanup_temp(t_redir *current, char *temp_file)
 
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
-	t_redir	*current;
-	char	*temp_file;
+	t_redir			*current;
+	char			*temp_file;
 	t_quote_type	quote_type;
 
 	current = redir;
