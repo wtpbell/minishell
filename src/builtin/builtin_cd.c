@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:44:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/01 09:49:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,12 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 	return (status);
 }
 
-/* 
+/*
 	int stat(const char *path, struct stat *buf);
 	- path:the path to the file or dir you want to query.
 	- buf:  where the file's information will be stored.
 	0: Success. The struct stat pointed to by buf is filled with the file's info.
-	-1: Failure. The global variable errno is set to indicate the error 
+	-1: Failure. The global variable errno is set to indicate the error
 */
 int	builtin_cd(t_ast_node *node, t_env **env)
 {
@@ -112,7 +112,7 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 	else
 	{
 		if (access(node->args[1], F_OK) == -1)
-			return (error("cd", "No such file or dir"), EXIT_FAILURE);
+			return (error("cd", "No such file or directory"), EXIT_FAILURE);
 		if (stat(node->args[1], &info) == -1)
 			return (error("cd", NULL), EXIT_FAILURE);
 		if (!S_ISDIR(info.st_mode))
