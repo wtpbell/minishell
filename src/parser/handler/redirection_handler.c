@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:06:28 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 12:56:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,20 @@ void	add_redirection(t_ast_node *node, t_token_type type, char *file,
 	if (!new_redir)
 		return ;
 	new_redir->type = type;
-	new_redir->file = ft_strdup(file);
 	new_redir->quote_type = quote_type;
 	new_redir->next = NULL;
+	if (type == TOKEN_HEREDOC)
+	{
+		new_redir->delimiter = ft_strdup(file);
+		new_redir->file = NULL;
+		new_redir->heredoc_file = NULL;
+	}
+	else
+	{
+		new_redir->file = ft_strdup(file);
+		new_redir->delimiter = NULL;
+		new_redir->heredoc_file = NULL;
+	}
 	set_redir_flags_and_fd(new_redir, type);
 	if (!node->redirections)
 		node->redirections = new_redir;

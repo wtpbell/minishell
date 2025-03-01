@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 09:13:33 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 10:32:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 12:59:39 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_syntax_error	validate_redir_syntax(t_ast_node *node)
 	redir = node->redirections;
 	while (redir)
 	{
-		if (!redir->file)
+		if ((redir->type == TOKEN_HEREDOC && !redir->delimiter)
+			|| (redir->type != TOKEN_HEREDOC && !redir->file))
 			return (SYNTAX_INVALID_COMBINATION);
 		redir = redir->next;
 	}
