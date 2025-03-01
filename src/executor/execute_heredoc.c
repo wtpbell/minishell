@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 17:53:34 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/01 08:47:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "expander.h"
 #include "common.h"
 
 //strace -f bash -c
@@ -29,9 +30,54 @@ static char	*gen_filename(void)
 	return (filename);
 }
 
-static int	process_line(char *line, char *delimiter, int fd)
+static char	*expand_heredoc_line(char *line, t_env *env_list)
+{
+	int				i;
+	char			*result;
+	char			*expanded;
+	t_quote_type	quote_type;
+
+	if (!line || !ft_strchr(line, '$'))
+		return (line);
+	result = ft_strdup("");
+	if (!result)
+		return (line);
+	i = 0;
+	quote_type = QUOTE_NONE;
+	while (line[i])
+	{
+		if (line[i] == '$')
+		{
+			expanded = process_dollar(line, &i, env_list, quote_type);
+			if (expanded)
+			{
+				char *temp = result;
+				result = ft_strjoin(result, expanded);
+				free(temp);
+				free(expanded);
+				if (!result)
+					return (line);
+			}
+		}
+		else
+		{
+			char *temp = result;
+			char c[2] = {line[i], '\0'};
+			result = ft_strjoin(result, c);
+			free(temp);
+			if (!result)
+				return (line);
+			i++;
+		}
+	}
+	free(line);
+	return (result);
+}
+
+static int	process_line(char *line, char *delimiter, int fd, t_env *env_list)
 {
 	size_t	len;
+	char	*expanded_line;
 
 	if (!line)
 	{
@@ -46,12 +92,14 @@ static int	process_line(char *line, char *delimiter, int fd)
 		free(line);
 		return (0);
 	}
+	expanded_line = expand_heredoc_line(line, env_list);
+	len = ft_strlen(expanded_line);
 	if (len > 0)
 	{
-		write(fd, line, len);
+		write(fd, expanded_line, len);
 		write(fd, "\n", 1);
 	}
-	free(line);
+	free(expanded_line);
 	return (1);
 }
 
@@ -61,7 +109,9 @@ static char	*process_heredoc(char *delimiter)
 	int		fd;
 	char	*line;
 	int		continue_reading;
+	t_env	*env_list;
 
+	env_list = *get_env_list();
 	filename = gen_filename();
 	if (!filename)
 		return (NULL);
@@ -76,7 +126,7 @@ static char	*process_heredoc(char *delimiter)
 		if (get_exit_status() == 130)
 			break ;
 		line = readline("heredoc> ");
-		continue_reading = process_line(line, delimiter, fd);
+		continue_reading = process_line(line, delimiter, fd, env_list);
 		if (continue_reading == 0)
 			break ;
 	}
