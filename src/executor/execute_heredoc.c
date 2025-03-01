@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 08:47:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 09:14:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,42 +74,44 @@ static char	*expand_heredoc_line(char *line, t_env *env_list)
 	return (result);
 }
 
-static int	process_line(char *line, char *delimiter, int fd, t_env *env_list)
+static int	process_line(char *line, char *delimiter, int fd, t_env *env_list,
+					int should_expand)
 {
 	size_t	len;
 	char	*expanded_line;
 
 	if (!line)
-	{
-		error_heredoc(delimiter);
-		return (0);
-	}
+		return (error_heredoc(delimiter), 0);
 	len = ft_strlen(line);
 	if (len > 0 && line[len - 1] == '\n')
 		line[len - 1] = '\0';
 	if (ft_strcmp(line, delimiter) == 0)
-	{
-		free(line);
-		return (0);
-	}
-	expanded_line = expand_heredoc_line(line, env_list);
+		return (free(line), 0);
+	if (should_expand)
+		expanded_line = expand_heredoc_line(line, env_list);
+	else
+		expanded_line = line;
 	len = ft_strlen(expanded_line);
 	if (len > 0)
 	{
 		write(fd, expanded_line, len);
 		write(fd, "\n", 1);
 	}
-	free(expanded_line);
+	if (should_expand && expanded_line != line)
+		free(expanded_line);
+	else if (!should_expand)
+		free(line);
 	return (1);
 }
 
-static char	*process_heredoc(char *delimiter)
+static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
 {
 	char	*filename;
 	int		fd;
 	char	*line;
 	int		continue_reading;
 	t_env	*env_list;
+	int		should_expand;
 
 	env_list = *get_env_list();
 	filename = gen_filename();
@@ -121,14 +123,15 @@ static char	*process_heredoc(char *delimiter)
 		error("open heredoc", NULL);
 		return (free_alloc(filename), filename = NULL, NULL);
 	}
+	should_expand = (quote_type != QUOTE_SINGLE);
 	while (1)
 	{
 		if (get_exit_status() == 130)
-			break ;
+			break;
 		line = readline("heredoc> ");
-		continue_reading = process_line(line, delimiter, fd, env_list);
+		continue_reading = process_line(line, delimiter, fd, env_list, should_expand);
 		if (continue_reading == 0)
-			break ;
+			break;
 	}
 	close(fd);
 	return (filename);
@@ -149,6 +152,7 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
 	t_redir	*current;
 	char	*temp_file;
+	t_quote_type	quote_type;
 
 	current = redir;
 	if (saved_fd[0] == -1)
@@ -159,7 +163,8 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 	{
 		if (current->type == TOKEN_HEREDOC)
 		{
-			temp_file = process_heredoc(current->file);
+			quote_type = current->quote_type;
+			temp_file = process_heredoc(current->file, quote_type);
 			cleanup_temp(current, temp_file);
 		}
 		current = current->next;
