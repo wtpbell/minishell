@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:09:58 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 13:33:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ typedef struct s_redir
 {
 	t_token_type			type;
 	char					*file;
+	char					*delimiter;
+    char					*heredoc_file;
 	int						fd;
 	int						flags;
 	t_quote_type			quote_type;
@@ -89,6 +91,9 @@ t_ast_node			*parse_pipe_sequence(t_token **token);
 
 /* AST node manipulation */
 t_ast_node			*create_ast_node(t_token_type type);
+t_redir				*init_redir_node(t_token_type type, char *file,
+						t_quote_type quote_type);
+void				set_redir_flags_and_fd(t_redir *redir, t_token_type type);
 void				add_arg_to_node(t_ast_node *node, char *arg,
 						t_quote_type quote_type);
 void				free_ast(t_ast_node *node);

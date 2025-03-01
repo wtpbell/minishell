@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 11:51:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 13:10:55 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,6 @@ static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
 	return (filename);
 }
 
-static void	cleanup_temp(t_redir *current, char *temp_file)
-{
-	if (!temp_file)
-		return ;
-	if (*heredoc_error() != -1)
-		unlink(temp_file);
-	if (current->file && current->file != temp_file)
-		free(current->file);
-	current->file = temp_file;
-}
-
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
 	t_redir			*current;
@@ -97,8 +86,13 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 		if (current->type == TOKEN_HEREDOC)
 		{
 			quote_type = current->quote_type;
-			temp_file = process_heredoc(current->file, quote_type);
-			cleanup_temp(current, temp_file);
+			temp_file = process_heredoc(current->delimiter, quote_type);
+			if (temp_file)
+			{
+				if (current->heredoc_file)
+					free(current->heredoc_file);
+				current->heredoc_file = temp_file;
+			}
 		}
 		current = current->next;
 	}

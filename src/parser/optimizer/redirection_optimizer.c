@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 13:15:54 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 15:12:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 12:58:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ static void	free_redir_node(t_redir *curr)
 {
 	if (curr->file)
 		free(curr->file);
+	if (curr->delimiter)
+		free(curr->delimiter);
+	if (curr->heredoc_file)
+		free(curr->heredoc_file);
 	free(curr);
 }
 
