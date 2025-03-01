@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 16:38:13 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 09:09:58 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_redir
 	char					*file;
 	int						fd;
 	int						flags;
+	t_quote_type			quote_type;
 	struct s_redir			*next;
 }	t_redir;
 
@@ -101,7 +102,7 @@ int					is_logic_operator(t_token *token);
 t_ast_node			*create_logic_node(t_token **token);
 t_ast_node			*handle_logic_error(void);
 void				add_redirection(t_ast_node *node, t_token_type type,
-						char *file);
+						char *file, t_quote_type quote_type);
 t_ast_node			*create_pipe_node(t_ast_node *left, t_ast_node *right);
 t_ast_node			*handle_redirection_in_pipe(t_ast_node *left,
 						t_token **token);
