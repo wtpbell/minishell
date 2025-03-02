@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 14:48:23 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 09:38:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,6 @@ int		add_matching_file(char ***matches, int *count, int *capacity,
 			const char *filename);
 int		process_dir_entries(DIR *dir, t_dir_info *info);
 char	**get_matching_files(const char *pattern, int *num_matches);
+
+char	*expand_heredoc_line(char *line, t_env *env_list);
 #endif

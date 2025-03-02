@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 23:30:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 01:45:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,6 @@ size_t	count_pipes(t_ast_node *node)
 	return (count);
 }
 
-static int	handle_heredocs(t_redir *redirections)
-{
-	int saved_fd[2];
-
-	saved_fd[0] = -1;
-	saved_fd[1] = -1;
-	handle_all_heredocs(redirections, saved_fd);
-	if (get_exit_status() == 130)
-		return (-1);
-	restore_redirection(saved_fd);
-	return (0);
-}
-
 static void	handle_redirections(t_redir *curr, int saved_fd[2])
 {
 	int	fd;
@@ -53,14 +40,17 @@ static void	handle_redirections(t_redir *curr, int saved_fd[2])
 			launch_redir(curr, saved_fd);
 		else
 		{
-			fd = open(curr->file, curr->flags, 0644);
+			fprintf(stderr, "before temp_file: %s\n", curr->heredoc_file);
+			fd = open(curr->heredoc_file, curr->flags, 0644);
 			if (fd != -1)
 			{
 				if (saved_fd[curr->fd] == -1)
 					saved_fd[curr->fd] = dup(curr->fd);
 				dup2(fd, curr->fd);
 				close(fd);
-			}
+ 			}
+			else
+				error("Failed to open heredoc file", curr->heredoc_file);
 		}
 		curr = curr->next;
 	}
@@ -103,48 +93,28 @@ void	redirect_io(int input, int output, int new_input)
 pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
 {
 	pid_t	pid;
-	int		output;
-	int		new_input;
 
-	output = pipe_fd[1];
-	new_input = pipe_fd[0];
+	fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
 	pid = fork();
+
 	if (pid == 0)
 	{
-		handle_child_process(input, output, new_input, node, env);
+		fprintf(stderr, "Executing child process: %s\n", node->args[0]);
+		handle_child_process(input, pipe_fd[1], pipe_fd[0], node, env);
 		exit(get_exit_status());
-	}
+	} 
 	else if (pid < 0)
 	{
 		error("fork", NULL);
 		exit(1);
 	}
-	if (input != 0)
-		close(input);
+
+	close(pipe_fd[1]);
 	return (pid);
 }
 
-static int	handle_all_heredocs_for_pipes(t_ast_node *temp_node)
-{
-	while (temp_node && temp_node->type == TOKEN_PIPE)
-	{
-		if (temp_node->left && temp_node->left->redirections)
-		{
-			if (handle_heredocs(temp_node->left->redirections) == -1)
-				return (-1);
-		}
-		temp_node = temp_node->right;
-	}
-	if (temp_node && temp_node->redirections)
-	{
-		if (handle_heredocs(temp_node->redirections) == -1)
-			return (-1);
-	}
-	return (0);
-}
 
-static pid_t	handle_pipe_chain(int input, int pipe_fd[2], \
-					t_ast_node *temp_node, t_env **env)
+pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env)
 {
 	while (temp_node && temp_node->left && temp_node->type == TOKEN_PIPE)
 	{
@@ -163,18 +133,5 @@ static pid_t	handle_pipe_chain(int input, int pipe_fd[2], \
 	return (spawn_process(input, pipe_fd, temp_node, env));
 }
 
-pid_t	launch_pipe(t_ast_node *node, t_env **env)
-{
-	int			input;
-	int			pipe_fd[2];
-	t_ast_node	*temp_node;
 
-	input = 0;
-	signal(SIGINT, interrput_silence);
-	signal(SIGQUIT, interrput_silence);
-	temp_node = node;
-	if (handle_all_heredocs_for_pipes(temp_node) == -1)
-		return (-1);
-	return (handle_pipe_chain(input, pipe_fd, temp_node, env));
-}
 

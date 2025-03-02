@@ -6,14 +6,14 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 16:40:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/01 13:37:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "executor.h"
 
-static void	set_redir_flags_and_fd(t_redir *redir, t_token_type type)
+void	set_redir_flags_and_fd(t_redir *redir, t_token_type type)
 {
 	if (type == TOKEN_REDIR_IN)
 	{
@@ -37,20 +37,17 @@ static void	set_redir_flags_and_fd(t_redir *redir, t_token_type type)
 	}
 }
 
-void	add_redirection(t_ast_node *node, t_token_type type, char *file)
+void	add_redirection(t_ast_node *node, t_token_type type, char *file,
+				t_quote_type quote_type)
 {
 	t_redir	*new_redir;
 	t_redir	*curr;
 
 	if (!file)
 		return ;
-	new_redir = malloc(sizeof(t_redir));
+	new_redir = init_redir_node(type, file, quote_type);
 	if (!new_redir)
 		return ;
-	new_redir->type = type;
-	new_redir->file = ft_strdup(file);
-	new_redir->next = NULL;
-	set_redir_flags_and_fd(new_redir, type);
 	if (!node->redirections)
 		node->redirections = new_redir;
 	else
@@ -102,7 +99,8 @@ t_ast_node	*parse_redirection(t_token **token)
 			if (handle_redirection_error(cmd_node, token))
 				return (NULL);
 		}
-		add_redirection(cmd_node, current->type, current->next->content);
+		add_redirection(cmd_node, current->type, current->next->content,
+			current->next->quote_type);
 		current = current->next->next;
 	}
 	if (current && (current->type == TOKEN_WORD

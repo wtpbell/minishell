@@ -1,0 +1,3 @@
+Redirecting heredoc to fd: 1
+Redirection type: 4, file: NULL, heredoc_file: /tmp/heredoc_3, fd: 0
+Redirecting heredoc to fd: 0

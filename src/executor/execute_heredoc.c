@@ -6,99 +6,79 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 23:12:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 00:58:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "expander.h"
 #include "common.h"
 
-//strace -f bash -c
-static char	*gen_filename(void)
+static int	open_heredoc_file(char **filename)
 {
-	static int	heredoc_count = 1;
-	char		*filename;
-	char		*index_str;
+	int	fd;
 
-	index_str = mem_itoa(heredoc_count++);
-	if (!index_str)
-		return (NULL);
-	filename = mem_strjoin("/tmp/heredoc_", index_str);
-	free_alloc(index_str);
-	index_str = NULL;
-	return (filename);
-}
-
-static int	process_line(char *line, char *delimiter, int fd)
-{
-	size_t	len;
-
-	if (!line)
-	{
-		error_heredoc(delimiter);
-		return (0);
-	}
-	len = ft_strlen(line);
-	if (len > 0 && line[len - 1] == '\n')
-		line[len - 1] = '\0';
-	if (ft_strcmp(line, delimiter) == 0)
-	{
-		free(line);
-		return (0);
-	}
-	if (len > 0)
-	{
-		write(fd, line, len);
-		write(fd, "\n", 1);
-	}
-	free(line);
-	return (1);
-}
-
-static char	*process_heredoc(char *delimiter)
-{
-	char	*filename;
-	int		fd;
-	char	*line;
-	int		continue_reading;
-
-	filename = gen_filename();
-	if (!filename)
-		return (NULL);
-	fd = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	*filename = gen_filename();
+	if (!*filename)
+		return (-1);
+	fd = open(*filename, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd == -1)
 	{
 		error("open heredoc", NULL);
-		return (free_alloc(filename), filename = NULL, NULL);
+		free_alloc(*filename);
+		*filename = NULL;
+		return (-1);
 	}
+	return (fd);
+}
+
+static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
+		t_quote_type quote_type)
+{
+	char			*line;
+	int				continue_reading;
+	t_heredoc_data	data;
+
 	while (1)
 	{
 		if (get_exit_status() == 130)
 			break ;
 		line = readline("heredoc> ");
-		continue_reading = process_line(line, delimiter, fd);
+		if (!line)
+			break ;
+		data.line = line;
+		printf("Writing to heredoc: %s\n", data.line);
+		data.delimiter = delimiter;
+		data.fd = fd;
+		data.env_list = env_list;
+		data.should_expand = (quote_type == QUOTE_NONE);
+		continue_reading = process_line(&data);
 		if (continue_reading == 0)
 			break ;
+		free(line);
 	}
+}
+
+static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
+{
+	char	*filename;
+	int		fd;
+	t_env	*env_list;
+
+	env_list = *get_env_list();
+	fd = open_heredoc_file(&filename);
+	if (fd == -1)
+		return (NULL);
+	read_heredoc_lines(fd, delimiter, env_list, quote_type);
 	close(fd);
 	return (filename);
 }
 
-static void	cleanup_temp(t_redir *current, char *temp_file)
-{
-	if (!temp_file)
-		return ;
-	if (*heredoc_error() != -1)
-		unlink(temp_file);
-	if (current->file && current->file != temp_file)
-		free(current->file);
-	current->file = temp_file;
-}
-
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
-	t_redir	*current;
-	char	*temp_file;
+	t_redir			*current;
+	char			*temp_file;
+	t_quote_type	quote_type;
 
 	current = redir;
 	if (saved_fd[0] == -1)
@@ -109,8 +89,17 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 	{
 		if (current->type == TOKEN_HEREDOC)
 		{
-			temp_file = process_heredoc(current->file);
-			cleanup_temp(current, temp_file);
+			quote_type = current->quote_type;
+			temp_file = process_heredoc(current->delimiter, quote_type);
+			printf("before temp_file: %s\n", temp_file);
+			if (temp_file)
+			{
+				if (current->heredoc_file)
+					free(current->heredoc_file);
+				current->heredoc_file = temp_file;
+			}
+			else
+				*heredoc_error() = 1;
 		}
 		current = current->next;
 	}

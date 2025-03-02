@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 23:15:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 01:52:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,22 @@ static void	perform_dup2(int fd, int redir_fd)
 void	launch_redir(t_redir *current_redir, int saved_fd[2])
 {
 	int	fd;
-
-	if (!current_redir->file)
-		return ;
-	
 	if (current_redir->type == TOKEN_HEREDOC)
 	{
-		fd = open(current_redir->file, current_redir->flags, 0644);
-		if (saved_fd[current_redir->fd] == -1)
-			saved_fd[current_redir->fd] = dup(current_redir->fd);
+		if (!current_redir->heredoc_file)
+			return ;
+		fd = open(current_redir->heredoc_file, O_RDONLY, 0644);
+		if (fd == -1)
+		{
+			error("heredoc file", NULL);
+			set_exit_status(1);
+			return ;
+		}
 	}
 	else
 	{
+		if (!current_redir->file)
+			return ;
 		fd = open(current_redir->file, current_redir->flags, 0644);
 		if (fd == -1)
 		{
@@ -47,10 +51,11 @@ void	launch_redir(t_redir *current_redir, int saved_fd[2])
 			set_exit_status(1);
 			return ;
 		}
-		if (saved_fd[current_redir->fd] == -1)
-			saved_fd[current_redir->fd] = dup(current_redir->fd);
 	}
+	if (saved_fd[current_redir->fd] == -1)
+		saved_fd[current_redir->fd] = dup(current_redir->fd);
 	perform_dup2(fd, current_redir->fd);
+	printf("Redirecting heredoc to fd: %d\n", current_redir->fd);
 }
 
 void	restore_redirection(int saved_fd[2])

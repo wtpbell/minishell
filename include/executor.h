@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/23 23:18:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/01 23:04:23 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,15 @@
 # define ERR_CHDIR EXIT_FAILURE
 # define ERR_ENV EXIT_FAILURE
 
+typedef struct s_heredoc_data
+{
+	char	*line;
+	char	*delimiter;
+	int		fd;
+	t_env	*env_list;
+	int		should_expand;
+}	t_heredoc_data;
+
 /*error*/
 void	error(char *word, char *msg);
 void	error_heredoc(char *delimiter);
@@ -51,7 +60,7 @@ int		executor_status(t_ast_node *node, t_env **env);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
-pid_t	launch_pipe(t_ast_node *node, t_env **env);
+pid_t launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env);
 pid_t	spawn_process(int input, int pipe_fd[2], \
 		t_ast_node *node, t_env **env);
 void	redirect_io(int input, int output, int new_input);
@@ -78,4 +87,8 @@ int		check_cmd(t_ast_node *node, t_env **env);
 /*utils3*/
 int		check_paths(char *full_path);
 
+/*heredoc utils*/
+char	*gen_filename(void);
+int		write_expanded_line(char *expanded_line, int fd);
+int		process_line(t_heredoc_data *data);
 #endif
