@@ -98,19 +98,19 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 	size_t		i;
 	int			input;
 	int			pipe_fd[2];
-	t_ast_node	*temp_node;
 
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	temp_node = node;
-	last_pid = launch_pipe(input, pipe_fd, temp_node, env);
+	if (node->left->redirections && \
+		node->left->redirections->type == TOKEN_HEREDOC)
+		input = node->left->redirections->fd;
+	last_pid = launch_pipe(input, pipe_fd, node, env);
 	waitpid(last_pid, &status_, 0);
 	if (WIFEXITED(status_))
 		status_ = WEXITSTATUS(status_);
 	else
 		status_ = EXIT_FAILURE;
-
 	i = 0;
 	while (i++ < count_pipes(node) - 1)
 		wait(NULL);
@@ -129,24 +129,26 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 		return (0);
 	saved_fd[0] = -1;
 	saved_fd[1] = -1;
+	expand_redir_wildcards(redir);
 	if (get_exit_status() == 130)
 		return (130);
 	cur_redir = redir;
 	while (cur_redir)
 	{
-		printf("Redirection type: %d, file: %s, heredoc_file: %s, fd: %d\n", 
-				cur_redir->type, 
-				cur_redir->file ? cur_redir->file : "NULL", 
-				cur_redir->heredoc_file ? cur_redir->heredoc_file : "NULL", 
-				cur_redir->fd);
+		// printf("Redirection type: %d, file: %s, heredoc_file: %s, fd: %d\n", 
+		// 		cur_redir->type, 
+		// 		cur_redir->file ? cur_redir->file : "NULL", 
+		// 		cur_redir->heredoc_file ? cur_redir->heredoc_file : "NULL", 
+		// 		cur_redir->fd);
 		launch_redir(cur_redir, saved_fd);
 		if (get_exit_status() == 1)
-			break ;
+			return (1);
 		cur_redir = cur_redir->next;
 	}
 	status = exec_cmd(node, env);
 	restore_redirection(saved_fd);
 	cleanup_heredocs(redir);
+	signals_init();
 	return (status);
 }
 
@@ -181,6 +183,8 @@ int	exec_cmd(t_ast_node *node, t_env **env)
 	if (pid == 0)
 		child(node, env);
 	waitpid(pid, &status_, 0);
-	set_exit_status(WEXITSTATUS(status_));
-	return (WEXITSTATUS(status_));
+	if (WIFEXITED(status_))
+		return (WEXITSTATUS(status_));
+	else
+		return (EXIT_FAILURE);
 }

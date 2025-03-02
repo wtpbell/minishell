@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 01:45:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 21:20:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,54 +16,73 @@
 #include "executor.h"
 #include "common.h"
 
-size_t	count_pipes(t_ast_node *node)
+static void	handle_heredoc(t_redir *curr, \
+			t_redir *last_heredoc, int saved_fd[2])
 {
-	size_t	count;
+	int	fd;
 
-	count = 0;
-	while (node)
+	fd = open(curr->heredoc_file, O_RDONLY);
+	if (fd == -1)
 	{
-		if (node->type == TOKEN_PIPE)
-			count++;
-		node = node->right;
+		error("Failed to open heredoc file", NULL);
+		return ;
 	}
-	return (count);
+	if (curr == last_heredoc)
+	{
+		if (saved_fd[STDIN_FILENO] == -1)
+			saved_fd[STDIN_FILENO] = dup(STDIN_FILENO);
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			perror("Failed to redirect stdin to heredoc");
+			close(fd);
+			return ;
+		}
+	}
+	close(fd);
 }
 
 static void	handle_redirections(t_redir *curr, int saved_fd[2])
 {
-	int	fd;
+	t_redir	*last_heredoc;
+	t_redir	*tmp;
 
+	last_heredoc = NULL;
+	tmp = curr;
+	while (tmp)
+	{
+		if (tmp->type == TOKEN_HEREDOC)
+			last_heredoc = tmp;
+		tmp = tmp->next;
+	}
 	while (curr)
 	{
 		if (curr->type != TOKEN_HEREDOC)
 			launch_redir(curr, saved_fd);
-		else
-		{
-			fprintf(stderr, "before temp_file: %s\n", curr->heredoc_file);
-			fd = open(curr->heredoc_file, curr->flags, 0644);
-			if (fd != -1)
-			{
-				if (saved_fd[curr->fd] == -1)
-					saved_fd[curr->fd] = dup(curr->fd);
-				dup2(fd, curr->fd);
-				close(fd);
- 			}
-			else
-				error("Failed to open heredoc file", curr->heredoc_file);
-		}
+		else if (curr->heredoc_processed)
+			handle_heredoc(curr, last_heredoc, saved_fd);
 		curr = curr->next;
 	}
 }
 
-static void	handle_child_process(int input, int output, int new_input, t_ast_node *node, t_env **env)
+static void	handle_child_process(t_child_info *child, t_ast_node *node, t_env **env)
 {
 	int		saved_fd[2];
 	t_redir	*curr;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	redirect_io(input, output, new_input);
+	if (child->new_input != 0)
+		close(child->new_input);
+	if (child->input != 0)
+	{
+		dup2(child->input, STDIN_FILENO);
+		close(child->input);
+	}
+	if (child->output != 1)
+	{
+		dup2(child->output, STDOUT_FILENO);
+		close(child->output);
+	}
 	if (node->redirections)
 	{
 		saved_fd[0] = -1;
@@ -74,54 +93,47 @@ static void	handle_child_process(int input, int output, int new_input, t_ast_nod
 	set_exit_status(executor_status(node, env));
 }
 
-void	redirect_io(int input, int output, int new_input)
+pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, \
+					t_env **env)
 {
-	if (new_input != 0)
-		close(new_input);
-	if (input != 0)
-	{
-		dup2(input, STDIN_FILENO);
-		close(input);
-	}
-	if (output != 1)
-	{
-		dup2(output, STDOUT_FILENO);
-		close(output);
-	}
-}
+	pid_t			pid;
+	int				status_;
+	t_child_info	child;
 
-pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
-{
-	pid_t	pid;
-
-	fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
+	child.input = input;
+	child.output = pipe_fd[1];
+	child.new_input = pipe_fd[0];
 	pid = fork();
-
 	if (pid == 0)
 	{
-		fprintf(stderr, "Executing child process: %s\n", node->args[0]);
-		handle_child_process(input, pipe_fd[1], pipe_fd[0], node, env);
+		// fprintf(stderr, "Executing child process: %s\n", node->args[0]);
+		// printf("Pipe created: pipe_fd[0] = %d, pipe_fd[1] = %d\n", pipe_fd[0], pipe_fd[1]);
+		handle_child_process(&child, node, env);
 		exit(get_exit_status());
 	} 
 	else if (pid < 0)
 	{
+		// printf("Error fork in spawn: %d\n", get_exit_status());
 		error("fork", NULL);
-		exit(1);
+		return (-1);
 	}
-
 	close(pipe_fd[1]);
+	// printf("Parent: Waiting for child process to finish\n");
+	// printf("Waiting for child process (pid: %d)\n", pid);
+	waitpid(pid, &status_, 0);
+	// printf("Parent: Child process finished\n");
 	return (pid);
 }
 
-
 pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env)
 {
+	// printf("Entering launch_pipe with input: %d\n", input);
 	while (temp_node && temp_node->left && temp_node->type == TOKEN_PIPE)
 	{
 		if (pipe(pipe_fd) == -1)
 		{
 			error("pipe", NULL);
-			exit(1);
+			return (-1);
 		}
 		spawn_process(input, pipe_fd, temp_node->left, env);
 		close(pipe_fd[1]);
@@ -130,6 +142,7 @@ pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env)
 	}
 	pipe_fd[1] = 1;
 	pipe_fd[0] = 0;
+	close(pipe_fd[0]);
 	return (spawn_process(input, pipe_fd, temp_node, env));
 }
 

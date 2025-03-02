@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 09:49:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/02 19:30:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,23 +106,22 @@ int	builtin_cd(t_ast_node *node, t_env **env)
 
 	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
+	if (node->argc > 2)
+		return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), 1);
 	if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0
 		|| ft_strcmp(node->args[1], "~") == 0)
 		return (cd_dir(node, env));
-	else
-	{
-		if (access(node->args[1], F_OK) == -1)
-			return (error("cd", "No such file or directory"), EXIT_FAILURE);
-		if (stat(node->args[1], &info) == -1)
-			return (error("cd", NULL), EXIT_FAILURE);
-		if (!S_ISDIR(info.st_mode))
-			return (error("cd", "Is not a dir"), EXIT_FAILURE);
-		if (access(node->args[1], R_OK | X_OK) == -1)
-			return (error("cd", "Permission denied"), EXIT_FAILURE);
-		if (chdir(node->args[1]) == -1)
-			return (error("cd", NULL), EXIT_FAILURE);
-		tmp = node->args[1];
-	}
+	if (access(node->args[1], F_OK) == -1)
+		return (error("cd", "No such file or directory"), EXIT_FAILURE);
+	if (stat(node->args[1], &info) == -1)
+		return (error("cd", NULL), EXIT_FAILURE);
+	if (!S_ISDIR(info.st_mode))
+		return (error("cd", "Is not a directory"), EXIT_FAILURE);
+	if (access(node->args[1], R_OK | X_OK) == -1)
+		return (error("cd", "Permission denied"), EXIT_FAILURE);
+	if (chdir(node->args[1]) == -1)
+		return (error("cd", NULL), EXIT_FAILURE);
+	tmp = node->args[1];
 	update_pwd(*env, old_pwd, tmp);
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }

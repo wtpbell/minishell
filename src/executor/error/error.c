@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 00:39:29 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 00:17:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 18:53:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,6 @@ void	error(char *word, char *msg)
 	}
 	ft_putstr_fd(RESET, STDERR_FILENO);
 	set_exit_status(EXIT_FAILURE);
-}
-
-int	*heredoc_error(void)
-{
-	static int	fd = -1;
-
-	return (&fd);
 }
 
 void	error_heredoc(char *delimiter)

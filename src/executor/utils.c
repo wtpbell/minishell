@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 13:06:13 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/02 21:21:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,31 +57,6 @@ void	sort_env(t_env **envs)
 	}
 }
 
-/* flags to check for redirection types */
-int	get_flags(t_token_type type)
-{
-	//fprintf(stderr, "get_redir_flags : type %d\n", type);
-	if (type == TOKEN_REDIR_IN)
-		return (O_RDONLY);
-	if (type == TOKEN_REDIR_OUT)
-		return (O_WRONLY | O_CREAT | O_TRUNC);
-	if (type == TOKEN_APPEND)
-		return (O_WRONLY | O_CREAT | O_APPEND);
-	if (type == TOKEN_HEREDOC)
-		return (O_RDONLY);
-	return (0);
-}
-
-int	get_redir_fd(t_token_type type)
-{
-	//fprintf(stderr, "get_redir_fd : type %d\n", type);
-	if (type == TOKEN_REDIR_IN || type == TOKEN_HEREDOC)
-		return (0);
-	if (type == TOKEN_REDIR_OUT || type == TOKEN_APPEND)
-		return (1);
-	return (-1);
-}
-
 void	cleanup_heredocs(t_redir *redir)
 {
 	while (redir)
@@ -90,4 +65,18 @@ void	cleanup_heredocs(t_redir *redir)
 			unlink(redir->heredoc_file);
 		redir = redir->next;
 	}
+}
+
+size_t	count_pipes(t_ast_node *node)
+{
+	size_t	count;
+
+	count = 0;
+	while (node)
+	{
+		if (node->type == TOKEN_PIPE)
+			count++;
+		node = node->right;
+	}
+	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 13:33:14 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/02 16:43:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_redir
 	int						fd;
 	int						flags;
 	t_quote_type			quote_type;
+	int						heredoc_processed;
 	struct s_redir			*next;
 }	t_redir;
 

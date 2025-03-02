@@ -214,3 +214,4 @@ unset VAR						# Remove VAR entirely(both local variables and environment)
 	- SIGCHLD (Child process terminated signal, sent to the parent when a child finishes)
 	- SIGSEGV (Segmentation fault)
 	- SIGKILL (Forceful kill signal, cannot be caught or ignored)
+

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 23:04:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/02 21:15:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,14 @@ typedef struct s_heredoc_data
 	t_env	*env_list;
 	int		should_expand;
 }	t_heredoc_data;
+
+typedef struct s_child_info
+{
+	int	input;
+	int	output;
+	int	new_input;
+}	t_child_info;
+
 
 /*error*/
 void	error(char *word, char *msg);

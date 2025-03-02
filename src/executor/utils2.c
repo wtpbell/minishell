@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:46:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/02 19:19:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	resolve_command(t_ast_node *node)
 	{
 		error(node->args[0], "Command not found");
 		set_underscore(node->argc, node->args);
-		return (set_exit_status(0), 0);
+		return (set_exit_status(127), 127);
 	}
 	free(node->args[0]);
 	node->args[0] = tmp;
