@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 15:40:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/03 12:27:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void			free_mem_context(void);
 void			*mem_alloc(size_t size);
 void			free_tab(char **tab);
 void			free_env(t_env **env);
+void			free_exit_memory(t_ast_node *node, t_env **env);
 
 /* utils/memory */
 t_mem_tracker	*mem_lstnew(void *ptr);
@@ -39,10 +40,11 @@ bool			mem_lstadd_back(t_mem_tracker **lst, t_mem_tracker *new_node);
 char			*mem_itoa(int n);
 char			**mem_split(char const *s, char *set);
 char			*mem_strjoin(char const *s1, char const *s2);
-char			*mem_strndup(const char *str, int n);
+char			*men_strndup(const char *str, int n);
 char			*mem_strdup(const char *str);
 char			*mem_substr(char const *s, unsigned int start, size_t len);
 t_mem_tracker	**get_mem_list(void);
+void			*mem_realloc(void *ptr, size_t new_size, size_t old_size);
 
 /*signal*/
 

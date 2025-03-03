@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 17:22:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 12:33:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "minishell.h"
 #include "common.h"
 #include <limits.h>
 #include <stdbool.h>
@@ -82,19 +83,22 @@ int	builtin_exit(t_ast_node *node, t_env **env)
 	args = node->args;
 	ft_putendl_fd("exit", STDIN_FILENO);
 	if (node->argc == 1)
+	{
+		free_exit_memory(node, env);
 		exit((int)((unsigned char)get_exit_status()));
+	}
 	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
 	{
-		ft_putendl_fd("minishell: exit: numeric argument required",
-			STDERR_FILENO);
-		exit(255);
+		ft_putendl_fd(SHELL_ERROR NUM_ARGS_REQUIRED, STDERR_FILENO);
+		free_exit_memory(node, env);
+		exit(2);
 	}
 	if (node->argc > 2)
 	{
-		ft_putendl_fd("minishell: exit: Too many arguments",
-			STDERR_FILENO);
+		ft_putendl_fd(SHELL_ERROR MANY_ARGS_ERROR, STDERR_FILENO);
 		return (1);
 	}
+	free_exit_memory(node, env);
 	exit((int)((unsigned char)ft_atoi(node->args[1])));
 	return (0);
 }

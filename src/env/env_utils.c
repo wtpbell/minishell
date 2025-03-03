@@ -30,8 +30,6 @@ char	*get_env_value(t_env *envs, const char *key)
 {
 	while (envs)
 	{
-		// printf("Debug - checking env: key=%s, value=%s, hide=%d\n",
-		// envs->key, envs->value ? envs->value : "NULL", envs->hide); //debug
 		if (ft_strcmp(envs->key, key) == 0 && envs->hide == false)
 			return (envs->value);
 		envs = envs->next;
@@ -54,7 +52,6 @@ void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
-	//fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
 	new_env = (t_env *)mem_alloc(sizeof(t_env));
 	if (!new_env)
 		return ;

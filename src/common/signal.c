@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 21:26:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 11:50:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	interrput_silence(int sig)
 void	heredoc_signals(int sig)
 {
 	int	saved_stdin;
-	(void)sig;
 
+	(void)sig;
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	rl_on_new_line();
 	rl_replace_line("", 0);

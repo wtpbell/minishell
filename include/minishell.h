@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 15:37:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/03 12:35:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@
 # include <readline/history.h>
 
 # define SHELL_ERROR "minishell: "
-# define MANY_ARGS_ERROR "Too many argument!"
+# define MANY_ARGS_ERROR "too many arguments"
+# define NUM_ARGS_REQUIRED "numeric argument required"
 # define NON_EXIST_DIR "Nonexistent directory"
 # define PATH_MAX 4096  //getconf PATH_MAX /
 # define DECLARE "declare -x "

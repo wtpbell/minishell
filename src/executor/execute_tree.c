@@ -95,7 +95,6 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 {
 	pid_t		last_pid;
 	int			status_;
-	// size_t		i;
 	int			input;
 	int			pipe_fd[2];
 
@@ -107,20 +106,17 @@ int	exec_pipe(t_ast_node *node, t_env **env)
 		input = node->left->redirections->fd;
 	last_pid = launch_pipe(input, pipe_fd, node, env);
 	waitpid(last_pid, &status_, 0);
-    if (WIFEXITED(status_))
-        status_ = WEXITSTATUS(status_);
-    else if (WIFSIGNALED(status_))
-        status_ = 128 + WTERMSIG(status_);
-    else
-        status_ = EXIT_FAILURE;
-    
-    // Wait for any remaining child processes
-    while (wait(NULL) > 0)
-        ; // Wait for all remaining child processes
-    
-    set_exit_status(status_);
-    signals_init();
-    return (status_);
+	if (WIFEXITED(status_))
+		status_ = WEXITSTATUS(status_);
+	else if (WIFSIGNALED(status_))
+		status_ = 128 + WTERMSIG(status_);
+	else
+		status_ = EXIT_FAILURE;
+	while (wait(NULL) > 0)
+		;
+	set_exit_status(status_);
+	signals_init();
+	return (status_);
 }
 
 int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
@@ -139,11 +135,6 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir)
 	cur_redir = redir;
 	while (cur_redir)
 	{
-		// printf("Redirection type: %d, file: %s, heredoc_file: %s, fd: %d\n", 
-		// 		cur_redir->type, 
-		// 		cur_redir->file ? cur_redir->file : "NULL", 
-		// 		cur_redir->heredoc_file ? cur_redir->heredoc_file : "NULL", 
-		// 		cur_redir->fd);
 		launch_redir(cur_redir, saved_fd);
 		if (get_exit_status() == 1)
 			return (1);

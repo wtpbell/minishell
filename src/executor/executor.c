@@ -49,7 +49,6 @@ int	executor_status(t_ast_node *node, t_env **env)
 	if (!node || !env)
 		return (EXIT_FAILURE);
 	redir = node->redirections;
-	printf("Processing node of type: %d\n", node->type);
 	if (process_all_heredocs_in_ast(node) != 0)
 		return (130);
 	if (node->type == TOKEN_AND || node->type == TOKEN_OR)

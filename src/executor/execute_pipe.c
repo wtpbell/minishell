@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 00:42:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 11:49:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,31 +58,21 @@ static void	handle_redirections(t_redir *curr, int saved_fd[2])
 	{
 		if (curr->type != TOKEN_HEREDOC)
 			launch_redir(curr, saved_fd);
-		else if (curr->heredoc_processed)
+		if (curr->heredoc_processed)
 			handle_heredoc(curr, last_heredoc, saved_fd);
 		curr = curr->next;
 	}
 }
 
-static void	handle_child_process(t_child_info *child, t_ast_node *node, t_env **env)
+static void	handle_child_process(t_child_info *child, \
+			t_ast_node *node, t_env **env)
 {
 	int		saved_fd[2];
 	t_redir	*curr;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (child->new_input != 0)
-		close(child->new_input);
-	if (child->input != 0)
-	{
-		dup2(child->input, STDIN_FILENO);
-		close(child->input);
-	}
-	if (child->output != 1)
-	{
-		dup2(child->output, STDOUT_FILENO);
-		close(child->output);
-	}
+	redirect_io(child->input, child->output, child->new_input);
 	if (node->redirections)
 	{
 		saved_fd[0] = -1;
@@ -107,7 +97,7 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, \
 	{
 		handle_child_process(&child, node, env);
 		exit(get_exit_status());
-	} 
+	}
 	else if (pid < 0)
 	{
 		error("fork", NULL);
@@ -118,31 +108,17 @@ pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, \
 	return (pid);
 }
 
-static pid_t	final_process(int input, t_ast_node *temp_node, t_env **env)
-{
-	pid_t	last_pid;
-	int		final_pipe[2];
-
-	final_pipe[1] = STDOUT_FILENO;
-	final_pipe[0] = 0;
-	last_pid = spawn_process(input, final_pipe, temp_node, env);
-	if (input != 0)
-		close(input);
-	return last_pid;
-}
-
-pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env)
+pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp, t_env **env)
 {
 	pid_t	pid;
 	pid_t	last_pid;
-	int		final_pipe[2];
 
 	last_pid = -1;
-	while (temp_node && temp_node->left && temp_node->type == TOKEN_PIPE)
+	while (temp && temp->left && temp->type == TOKEN_PIPE)
 	{
 		if (pipe(pipe_fd) == -1)
 			return (error("pipe", NULL), -1);
-		pid = spawn_process(input, pipe_fd, temp_node->left, env);
+		pid = spawn_process(input, pipe_fd, temp->left, env);
 		if (pid == -1)
 		{
 			close(pipe_fd[0]);
@@ -153,10 +129,10 @@ pid_t	launch_pipe(int input, int pipe_fd[2], t_ast_node *temp_node, t_env **env)
 			close(input);
 		close(pipe_fd[1]);
 		input = pipe_fd[0];
-		temp_node = temp_node->right;
+		temp = temp->right;
 		last_pid = pid;
 	}
-	if (temp_node)
-		last_pid = spawn_process(input, final_pipe, temp_node, env);
+	if (temp)
+		last_pid = final_process(input, temp, env);
 	return (last_pid);
 }

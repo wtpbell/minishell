@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 20:57:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 12:05:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	open_heredoc_file(char **filename)
 		*filename = NULL;
 		return (-1);
 	}
-	fprintf(stderr, "Heredoc file created: %s with fd: %d\n", *filename, fd);
 	return (fd);
 }
 
@@ -49,7 +48,6 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		{
 			if (get_exit_status() != 130)
 				error_heredoc(delimiter);
-			set_exit_status(0);
 			break ;
 		}
 		data.line = line;
@@ -60,6 +58,7 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		continue_reading = process_line(&data);
 		if (continue_reading == 0)
 			break ;
+		free(line);
 	}
 }
 

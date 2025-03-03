@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 19:32:41 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/26 14:46:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/03 11:51:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ char	**grow_matches_array(char **matches, int *capacity)
 	char	**new_matches;
 
 	new_capacity = (*capacity) * 2;
-	new_matches = realloc(matches, sizeof(char *) * new_capacity);
+	new_matches = (char **)mem_realloc(matches, sizeof(char *) * new_capacity,
+			sizeof(char *) * (*capacity));
 	if (new_matches)
 		*capacity = new_capacity;
 	return (new_matches);

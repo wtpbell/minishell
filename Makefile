@@ -81,6 +81,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/utils2.c \
 				 $(EXECUTOR_DIR)/utils3.c \
 				 $(EXECUTOR_DIR)/heredoc_utils.c \
+				 $(EXECUTOR_DIR)/pipe_utils.c \
 				 $(EXECUTOR_DIR)/error/error.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
@@ -93,6 +94,7 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/utils/memory/utils.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_split.c \
+				$(COMMON_DIR)/utils/mem_helper/mem_realloc.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_strjoin.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_strndup.c \
 				$(COMMON_DIR)/utils/mem_helper/mem_strdup.c \

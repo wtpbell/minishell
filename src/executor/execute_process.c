@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 18:21:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 11:21:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,9 @@ void	child(t_ast_node *node, t_env **env)
 		perror("env_to_arr failed");
 		error(node->args[0], NULL);
 	}
-	// printf("Executing command: %s with args: %s\n", node->args[0], node->args[1]);
 	if (execve(node->args[0], node->args, env_arr) == -1)
 		error(node->args[0], NULL);
 	set_exit_status(127);
-	// free_all_memory();
-	fprintf(stderr, "Child exit status: %d\n", get_exit_status());
 	exit(get_exit_status());
 }
 
