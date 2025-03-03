@@ -39,13 +39,7 @@ char	*get_env_value(t_env *envs, const char *key)
 
 static bool	exist_key(t_env *env, char *key)
 {
-	while (env)
-	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (true);
-		env = env->next;
-	}
-	return (false);
+	return (get_env(env, key) != NULL);
 }
 
 void	add_env_var(t_env **env, char *key, char *value)
@@ -90,14 +84,10 @@ void	setup_shlvl(t_env *new)
 			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
 			ft_putendl_fd("too high, resetting to 1", 2);
 			new->value = mem_itoa(1);
-			if (!new->value)
-				return ;
 		}
 		else
-		{
 			new->value = mem_itoa(++old_shlvl);
-			if (!new->value)
-				return ;
-		}
+		if (!new->value)
+			return ;
 	}
 }

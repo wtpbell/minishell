@@ -104,8 +104,8 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	if (node->left->redirections && \
 		node->left->redirections->type == TOKEN_HEREDOC)
 		input = node->left->redirections->fd;
-	child_init(&child, input, pipe_fd);
-	last_pid = launch_pipe(&child, node, env, tokens);
+	child_init(&child, input, tokens);
+	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	waitpid(last_pid, &status_, 0);
 	if (WIFEXITED(status_))
 		status_ = WEXITSTATUS(status_);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 18:46:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 22:38:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,4 @@ size_t	count_pipes(t_ast_node *node)
 	return (count);
 }
 
-void	child_init(t_child_info *child, int input, int pipe_fd[2])
-{
-	child->input = input;
-	child->output = pipe_fd[1];
-	child->new_input = pipe_fd[0];
-}
+

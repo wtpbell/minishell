@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 17:18:14 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 00:31:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void			free_mem_context(void);
 void			*mem_alloc(size_t size);
 void			free_tab(char **tab);
 void			free_env(t_env **env);
-void			free_exit_memory(t_ast_node *node, t_token *tokens);
+void			free_exit_memory(t_ast_node *node, t_env **env, t_token *tokens);
 
 /* utils/memory */
 t_mem_tracker	*mem_lstnew(void *ptr);
@@ -45,6 +45,7 @@ char			*mem_strdup(const char *str);
 char			*mem_substr(char const *s, unsigned int start, size_t len);
 t_mem_tracker	**get_mem_list(void);
 void			*mem_realloc(void *ptr, size_t new_size, size_t old_size);
+void			free_split(char **arr, int i);
 
 /*signal*/
 
@@ -53,5 +54,4 @@ void			interrupt_w_msg(int sig);
 void			interrput_silence(int sig);
 int				*heredoc_error(void);
 void			heredoc_signals(int sig);
-void			restore_stdin_after_heredoc(void);
 #endif

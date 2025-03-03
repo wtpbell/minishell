@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 18:41:49 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 23:14:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ typedef struct s_heredoc_data
 
 typedef struct s_child_info
 {
-	int	input;
-	int	output;
-	int	new_input;
+	int		input;
+	int		output;
+	int		new_input;
+	t_token *tokens;
 }	t_child_info;
 
 /*error*/
@@ -67,10 +68,10 @@ int		executor_status(t_ast_node *node, t_env **env, t_token *toekns);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
-pid_t	launch_pipe(int input, int pipe_fd[2], \
-		t_ast_node *temp_node, t_env **env, t_token *tokens);
-pid_t	spawn_process(int input, int pipe_fd[2], \
-		t_ast_node *node, t_env **env, t_token *tokens);
+pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
+		t_ast_node *temp_node, t_env **env);
+pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
+		t_ast_node *node, t_env **env);
 void	redirect_io(int input, int output, int new_input);
 
 /*execute_heredoc*/
@@ -100,5 +101,6 @@ int		process_line(t_heredoc_data *data);
 
 /*pipe_utils.c*/
 void	redirect_io(int input, int output, int new_input);
-pid_t	final_process(int input, t_ast_node *temp_node, t_env **env, t_token *tokens);
+void	child_init(t_child_info *child, int input, t_token *tokens);
+pid_t	final_process(t_child_info *child, t_ast_node *temp, t_env **env);
 #endif

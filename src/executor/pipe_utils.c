@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 17:42:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 00:12:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,42 @@ void	redirect_io(int input, int output, int new_input)
 		close(new_input);
 	if (input != 0)
 	{
-		dup2(input, STDIN_FILENO);
+		if (dup2(input, STDIN_FILENO) == -1)
+		{
+			perror("dup2 failed on input");
+			exit(EXIT_FAILURE);
+		}
 		close(input);
 	}
 	if (output != 1)
 	{
-		dup2(output, STDOUT_FILENO);
+		if (dup2(output, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 failed on output");
+			exit(EXIT_FAILURE);
+		}
 		close(output);
 	}
 }
 
-pid_t	final_process(int input, t_ast_node *temp_node, t_env **env, t_token *tokens)
+pid_t	final_process(t_child_info *child, \
+		t_ast_node *temp, t_env **env)
 {
 	pid_t	last_pid;
 	int		final_pipe[2];
 
 	final_pipe[1] = STDOUT_FILENO;
 	final_pipe[0] = 0;
-	last_pid = spawn_process(input, final_pipe, temp_node, env, tokens);
-	if (input != 0)
-		close(input);
+	last_pid = spawn_process(child, final_pipe, temp, env);
+	if (child->input != 0)
+		close(child->input);
 	return (last_pid);
+}
+
+void	child_init(t_child_info *child, int input, t_token *tokens)
+{
+	child->input = input;
+	child->output = -1;
+	child->new_input = -1;
+	child->tokens = tokens;
 }

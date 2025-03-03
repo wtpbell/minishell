@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 12:38:14 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 18:15:56 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 00:32:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,15 @@ void	free_tab(char **tab)
 	free_alloc(tab);
 }
 
-void	free_exit_memory(t_ast_node *node, t_token *tokens)
+void	free_exit_memory(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	if (node)
+	{
+		free_all_memory();
 		free_ast(node);
+	}
+	if (env)
+		free_env(env);
 	if (tokens)
 		free_tokens(tokens);
 	rl_clear_history();

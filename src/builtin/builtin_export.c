@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 17:21:16 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 23:46:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static void	modify_env(t_env **env, char *args)
 		ft_putstr_fd(args, STDERR_FILENO);
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		set_exit_status(1);
+		free(split);
 		return ;
 	}
 	if (args[ft_strlen(args) - 1] == '=')
@@ -105,6 +106,7 @@ static void	modify_env(t_env **env, char *args)
 		add_env_var(env, split[0], NULL);
 	else
 		add_env_var(env, split[0], split[1]);
+	free(split);
 }
 
 int	builtin_export(t_ast_node *node, t_env **env, t_token *tokens)

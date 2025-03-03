@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:43:42 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 01:01:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 23:42:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 #include "common.h"
 #include "env.h"
 
-static int	ft_count_words(char const *s, char *set)
+static int	count_words(char const *str, char *set)
 {
 	int	words;
 	int	i;
 
-	if (!s)
+	if (!str)
 		return (0);
 	words = 0;
 	i = 0;
-	while (s[i] && ft_strchr(set, s[i]))
+	while (str[i] && ft_strchr(set, str[i]))
 		i++;
-	if (!s[i])
+	if (!str[i])
 		return (0);
-	while (s[i])
+	while (str[i])
 	{
-		if (!ft_strchr(set, s[i]))
+		if (!ft_strchr(set, str[i]))
 		{
 			words++;
-			while (s[i] && !ft_strchr(set, s[i]))
+			while (str[i] && !ft_strchr(set, str[i]))
 				i++;
 		}
 		else
@@ -41,17 +41,17 @@ static int	ft_count_words(char const *s, char *set)
 	return (words);
 }
 
-static size_t	ft_strlen_c(char const *s, char *set)
+static size_t	mem_strlen(char const *str, char *set)
 {
 	size_t	len;
 
 	len = 0;
-	while (s[len] && !ft_strchr(set, s[len]))
+	while (str[len] && !ft_strchr(set, str[len]))
 		len++;
 	return (len);
 }
 
-static int	ft_strcpy_k(char *dest, char const *src, char *set)
+static int	mem_strcpy(char *dest, char const *src, char *set)
 {
 	int	i;
 
@@ -67,24 +67,34 @@ static int	ft_strcpy_k(char *dest, char const *src, char *set)
 	return (i);
 }
 
-char	**mem_split(char const *s, char *set)
+void	free_split(char **arr, int i)
+{
+	while (i > 0)
+		free(arr[--i]);
+	free(arr);
+}
+
+char	**mem_split(char const *str, char *set)
 {
 	int		words;
 	int		i;
-	int		k;
+	int		j;
 	char	**arr;
 
-	words = ft_count_words(s, set);
+	words = count_words(str, set);
 	arr = (char **)mem_alloc(sizeof(char *) * (words + 1));
+	if (!arr)
+		return (NULL);
 	i = 0;
-	k = 0;
-	while (s && s[k] && ft_strchr(set, s[k]))
-		k++;
+	j = 0;
+	while (str && str[j] && ft_strchr(set, str[j]))
+		j++;
 	while (i < words)
 	{
-		arr[i] = (char *)mem_alloc(sizeof(char) * \
-				(ft_strlen_c(s + k, set) + 1));
-		k += ft_strcpy_k(arr[i], s + k, set);
+		arr[i] = (char *)mem_alloc(sizeof(char) * (mem_strlen(str + j, set) + 1));
+		if (!arr[i])
+			return (free_split(arr, i), NULL);
+		j += mem_strcpy(arr[i], str + j, set);
 		i++;
 	}
 	arr[i] = 0;
