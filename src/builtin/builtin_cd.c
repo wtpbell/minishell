@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 19:30:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:20:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,13 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 	0: Success. The struct stat pointed to by buf is filled with the file's info.
 	-1: Failure. The global variable errno is set to indicate the error
 */
-int	builtin_cd(t_ast_node *node, t_env **env)
+int	builtin_cd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char		*tmp;
 	char		old_pwd[PATH_MAX];
 	struct stat	info;
 
+	(void) tokens;
 	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	if (node->argc > 2)

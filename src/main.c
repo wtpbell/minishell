@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 15:38:20 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/03 17:53:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	process_command_line(char *line, t_env **env_)
 	ast = parse(tokens);
 	if (ast)
 	{
-		executor(ast, env_);
+		executor(ast, env_, tokens);
 		free_ast(ast);
 	}
 	free_tokens(tokens);

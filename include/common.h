@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 12:27:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:18:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void			free_mem_context(void);
 void			*mem_alloc(size_t size);
 void			free_tab(char **tab);
 void			free_env(t_env **env);
-void			free_exit_memory(t_ast_node *node, t_env **env);
+void			free_exit_memory(t_ast_node *node, t_token *tokens);
 
 /* utils/memory */
 t_mem_tracker	*mem_lstnew(void *ptr);

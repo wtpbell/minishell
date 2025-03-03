@@ -42,7 +42,7 @@ static int	process_all_heredocs_in_ast(t_ast_node *node)
 	return (0);
 }
 
-int	executor_status(t_ast_node *node, t_env **env)
+int	executor_status(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	t_redir	*redir;
 
@@ -52,21 +52,21 @@ int	executor_status(t_ast_node *node, t_env **env)
 	if (process_all_heredocs_in_ast(node) != 0)
 		return (130);
 	if (node->type == TOKEN_AND || node->type == TOKEN_OR)
-		return (exec_ctrl(node, env));
+		return (exec_ctrl(node, env, tokens));
 	else if (redir)
-		return (exec_redir(node, env, redir));
+		return (exec_redir(node, env, redir, tokens));
 	else if (node->type == TOKEN_PIPE)
-		return (exec_pipe(node, env));
+		return (exec_pipe(node, env, tokens));
 	else if (node->type == TOKEN_BLOCK)
-		return (exec_block(node, env));
+		return (exec_block(node, env, tokens));
 	else if (node->type == TOKEN_EXEC)
-		return (exec_cmd(node, env));
+		return (exec_cmd(node, env, tokens));
 	return (EXIT_FAILURE);
 }
 
-void	executor(t_ast_node *node, t_env **env)
+void	executor(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	if (!node || !env)
 		return ;
-	set_exit_status(executor_status(node, env));
+	set_exit_status(executor_status(node, env, tokens));
 }

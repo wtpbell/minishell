@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 12:33:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:54:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,30 +75,33 @@ static bool	is_within_long_range(char *arg)
 	Multiple Arguments: Displays an error and does not exit.
 */
 
-int	builtin_exit(t_ast_node *node, t_env **env)
+int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char	**args;
 
 	(void)env;
+	(void)tokens;
 	args = node->args;
 	ft_putendl_fd("exit", STDIN_FILENO);
 	if (node->argc == 1)
 	{
-		free_exit_memory(node, env);
+		free_exit_memory(node, tokens);
 		exit((int)((unsigned char)get_exit_status()));
 	}
 	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
 	{
 		ft_putendl_fd(SHELL_ERROR NUM_ARGS_REQUIRED, STDERR_FILENO);
-		free_exit_memory(node, env);
+		free_exit_memory(node, tokens);
 		exit(2);
 	}
 	if (node->argc > 2)
 	{
 		ft_putendl_fd(SHELL_ERROR MANY_ARGS_ERROR, STDERR_FILENO);
+		free_exit_memory(node, tokens);
 		return (1);
 	}
-	free_exit_memory(node, env);
+	free_exit_memory(node, tokens);
 	exit((int)((unsigned char)ft_atoi(node->args[1])));
 	return (0);
 }
+

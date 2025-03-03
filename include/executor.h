@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 11:52:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 18:41:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,26 +51,26 @@ void	error(char *word, char *msg);
 void	error_heredoc(char *delimiter);
 
 /*execute_tree*/
-int		exec_cmd(t_ast_node *node, t_env **env);
-int		exec_pipe(t_ast_node *node, t_env **env);
-int		exec_ctrl(t_ast_node *node, t_env **env);
-int		exec_block(t_ast_node *node, t_env **env);
-int		exec_redir(t_ast_node *node, t_env **env, t_redir *redir);
+int		exec_cmd(t_ast_node *node, t_env **env, t_token *tokens);
+int		exec_pipe(t_ast_node *node, t_env **env, t_token *tokens);
+int		exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens);
+int		exec_block(t_ast_node *node, t_env **env, t_token *tokens);
+int		exec_redir(t_ast_node *node, t_env **env, t_redir *redir, t_token *tokens);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);
 int		parent(t_ast_node *node);
 
 /*executor*/
-void	executor(t_ast_node *node, t_env **env);
-int		executor_status(t_ast_node *node, t_env **env);
+void	executor(t_ast_node *node, t_env **env, t_token *toekns);
+int		executor_status(t_ast_node *node, t_env **env, t_token *toekns);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
 pid_t	launch_pipe(int input, int pipe_fd[2], \
-		t_ast_node *temp_node, t_env **env);
+		t_ast_node *temp_node, t_env **env, t_token *tokens);
 pid_t	spawn_process(int input, int pipe_fd[2], \
-		t_ast_node *node, t_env **env);
+		t_ast_node *node, t_env **env, t_token *tokens);
 void	redirect_io(int input, int output, int new_input);
 
 /*execute_heredoc*/
@@ -84,8 +84,6 @@ void	restore_redirection(int saved_fd[2]);
 void	set_exit_status(int status);
 int		get_exit_status(void);
 void	sort_env(t_env **envs);
-int		get_flags(t_token_type type);
-int		get_redir_fd(t_token_type type);
 void	cleanup_heredocs(t_redir *redir);
 
 /*utils2*/
@@ -102,5 +100,5 @@ int		process_line(t_heredoc_data *data);
 
 /*pipe_utils.c*/
 void	redirect_io(int input, int output, int new_input);
-pid_t	final_process(int input, t_ast_node *temp_node, t_env **env);
+pid_t	final_process(int input, t_ast_node *temp_node, t_env **env, t_token *tokens);
 #endif

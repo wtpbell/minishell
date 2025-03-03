@@ -1,0 +1,9 @@
+include
+lib
+Makefile
+minishell
+note.md
+obj
+parser_check.sh
+src
+test_files

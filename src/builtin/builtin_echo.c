@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 21:26:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:20:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,13 @@ static void	print_escaped_string(const char *str)
 	}
 }
 
-int	builtin_echo(t_ast_node *node, t_env **env)
+int	builtin_echo(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int	i;
 	int	print_newline;
 
 	(void)env;
+	(void)tokens; 
 	if (node->argc == 1)
 		return (printf("\n"), EXIT_SUCCESS);
 	i = verify_args(node->args);

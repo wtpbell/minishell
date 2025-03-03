@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 11:49:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:42:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ void	redirect_io(int input, int output, int new_input)
 	}
 }
 
-pid_t	final_process(int input, t_ast_node *temp_node, t_env **env)
+pid_t	final_process(int input, t_ast_node *temp_node, t_env **env, t_token *tokens)
 {
 	pid_t	last_pid;
 	int		final_pipe[2];
 
 	final_pipe[1] = STDOUT_FILENO;
 	final_pipe[0] = 0;
-	last_pid = spawn_process(input, final_pipe, temp_node, env);
+	last_pid = spawn_process(input, final_pipe, temp_node, env, tokens);
 	if (input != 0)
 		close(input);
 	return (last_pid);

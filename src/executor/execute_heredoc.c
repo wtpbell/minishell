@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 12:05:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 14:09:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		continue_reading = process_line(&data);
 		if (continue_reading == 0)
 			break ;
-		free(line);
+		// free(line);
 	}
 }
 

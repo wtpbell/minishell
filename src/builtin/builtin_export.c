@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 10:32:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/03 17:21:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,11 @@ static void	modify_env(t_env **env, char *args)
 		add_env_var(env, split[0], split[1]);
 }
 
-int	builtin_export(t_ast_node *node, t_env **env)
+int	builtin_export(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int	i;
 
+	(void)tokens;
 	i = 0;
 	sort_env(env);
 	if (node->argc == 1)
