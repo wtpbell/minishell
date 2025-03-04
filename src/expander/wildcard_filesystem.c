@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:14:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/02 20:53:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:32:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	add_matching_file(char ***matches, int *count, int *capacity,
 			return (0);
 		*matches = new_matches;
 	}
-	(*matches)[*count] = mem_strdup(filename);
+	(*matches)[*count] = ft_strdup(filename);
 	if (!(*matches)[*count])
 		return (0);
 	(*count)++;
@@ -97,7 +97,7 @@ void	expand_redir_wildcards(t_redir *redir)
 			if (matches && match_count > 0)
 			{
 				free(redir->file);
-				redir->file = mem_strdup(matches[0]);
+				redir->file = ft_strdup(matches[0]);
 			}
 			free_matches(matches, match_count);
 		}

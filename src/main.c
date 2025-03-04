@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 17:53:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:37:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static int	process_command_line(char *line, t_env **env_)
 		executor(ast, env_, tokens);
 		free_ast(ast);
 	}
-	free_tokens(tokens);
+	if (tokens)
+		free_tokens(tokens);
 	return (1);
 }
 

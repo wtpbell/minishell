@@ -46,13 +46,13 @@ void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
-	new_env = (t_env *)mem_alloc(sizeof(t_env));
+	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
 		return ;
 	new_env->key = key;
 	if (value)
 	{
-		new_env->value = mem_strdup(value);
+		new_env->value = ft_strdup(value);
 		if (!new_env->value)
 			return ;
 	}
@@ -78,15 +78,15 @@ void	setup_shlvl(t_env *new)
 	{
 		old_shlvl = ft_atoi(new->value);
 		if (old_shlvl < 0)
-			new->value = mem_itoa(0);
+			new->value = ft_itoa(0);
 		else if (old_shlvl >= 999)
 		{
 			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
 			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = mem_itoa(1);
+			new->value = ft_itoa(1);
 		}
 		else
-			new->value = mem_itoa(++old_shlvl);
+			new->value = ft_itoa(++old_shlvl);
 		if (!new->value)
 			return ;
 	}

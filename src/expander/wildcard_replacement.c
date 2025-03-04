@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 13:48:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:56:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 21:23:00 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static char	**allocate_replacement_args(int size)
 {
 	char	**new_args;
 
-	new_args = mem_alloc(sizeof(char *) * (size + 1));
+	new_args = malloc(sizeof(char *) * (size + 1));
 	if (new_args)
 		new_args[size] = NULL;
 	return (new_args);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 17:20:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:46:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	handle_prev_dir(t_env **env)
 	old_pwd = get_env_value(*env, "OLDPWD");
 	if (!old_pwd)
 		return (error("cd", "OLDPWD not set"), ERR_ENV);
-	prev_path = mem_strdup(old_pwd);
+	prev_path = ft_strdup(old_pwd);
 	if (!prev_path)
 		return (error("cd", "malloc failed"), ERR_MALLOC);
 	if (chdir(prev_path) == -1)

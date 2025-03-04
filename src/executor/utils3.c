@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 10:12:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:31:35 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ static int	join_path(char **joined, char *to_append, bool add_slash)
 	temp = *joined;
 	if (add_slash)
 	{
-		*joined = mem_strjoin(temp, "/");
+		*joined = ft_strjoin(temp, "/");
 		if (!*joined)
 			return (ERR_MALLOC);
 	}
 	temp = *joined;
-	*joined = mem_strjoin(temp, to_append);
+	*joined = ft_strjoin(temp, to_append);
 	if (!*joined)
 	{
 		free(temp);
@@ -56,7 +56,7 @@ static int	check_prefix(char *full_path, char **paths, char **joined, int *i)
 
 	if (*joined == NULL)
 	{
-		*joined = mem_strdup("");
+		*joined = ft_strdup("");
 		if (!*joined)
 			return (ERR_MALLOC);
 	}

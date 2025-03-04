@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 23:30:20 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/23 23:32:31 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:30:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ static char	*create_env_entry(t_env *envs)
 	char	*tmp;
 	char	*full_entry;
 
-	tmp = mem_strjoin(envs->key, "=");
+	tmp = ft_strjoin(envs->key, "=");
 	if (!tmp)
 		return (NULL);
 	if (!envs->value)
 		return (tmp);
-	full_entry = mem_strjoin(tmp, envs->value);
+	full_entry = ft_strjoin(tmp, envs->value);
 	free(tmp);
 	return (full_entry);
 }
@@ -56,7 +56,7 @@ char	**env_to_arr(t_env *envs)
 
 	if (!envs)
 		return (NULL);
-	env = (char **)mem_alloc(sizeof(char *) * (count_visible_envs(envs) + 1));
+	env = (char **)malloc(sizeof(char *) * (count_visible_envs(envs) + 1));
 	if (!env)
 		return (NULL);
 	i = 0;

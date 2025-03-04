@@ -28,7 +28,7 @@
 
 void	set_exit_status(int status)
 {
-	set_env(*get_env_list(), "?", mem_itoa(status));
+	set_env(*get_env_list(), "?", ft_itoa(status));
 }
 
 int	get_exit_status(void)

@@ -89,16 +89,9 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_redir.c \
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
-				$(COMMON_DIR)/utils/memory/mem_tracker.c \
-				$(COMMON_DIR)/utils/memory/mem_free.c \
-				$(COMMON_DIR)/utils/memory/utils.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_split.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_realloc.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strjoin.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strndup.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strdup.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
+				$(COMMON_DIR)/mem_split.c \
+				$(COMMON_DIR)/mem_realloc.c \
+				$(COMMON_DIR)/mem_free.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \

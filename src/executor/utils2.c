@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 11:21:45 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:42:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	append_cwd(t_ast_node *node)
 
 	if (!getcwd(cwd, PATH_MAX))
 		return (error("exec", "Failed to get CWD"));
-	tmp = mem_strjoin(cwd, "/");
-	tmp2 = mem_strjoin(tmp, node->args[0]);
-	free_alloc(tmp);
+	tmp = ft_strjoin(cwd, "/");
+	tmp2 = ft_strjoin(tmp, node->args[0]);
+	free(tmp);
 	free(node->args[0]);
 	node->args[0] = tmp2;
 }
@@ -50,12 +50,12 @@ char	*get_cmd_path(char *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		tmp = mem_strjoin(paths[i++], "/");
-		full_path = mem_strjoin(tmp, cmd);
+		tmp = ft_strjoin(paths[i++], "/");
+		full_path = ft_strjoin(tmp, cmd);
 		if (access(full_path, F_OK) == 0)
-			return (free_tab(paths), free_alloc(tmp), full_path);
-		free_alloc(full_path);
-		free_alloc(tmp);
+			return (free_tab(paths), free(tmp), full_path);
+		free(full_path);
+		free(tmp);
 	}
 	return (free_tab(paths), NULL);
 }

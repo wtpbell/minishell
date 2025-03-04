@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:34:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:42:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 21:42:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ char	*gen_filename(void)
 	char		*filename;
 	char		*index_str;
 
-	index_str = mem_itoa(heredoc_count++);
+	index_str = ft_itoa(heredoc_count++);
 	if (!index_str)
 		return (NULL);
-	filename = mem_strjoin("/tmp/heredoc_", index_str);
-	free_alloc(index_str);
+	filename = ft_strjoin("/tmp/heredoc_", index_str);
+	free(index_str);
 	index_str = NULL;
 	return (filename);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:43:42 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 23:42:20 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:33:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	**mem_split(char const *str, char *set)
 	char	**arr;
 
 	words = count_words(str, set);
-	arr = (char **)mem_alloc(sizeof(char *) * (words + 1));
+	arr = (char **)malloc(sizeof(char *) * (words + 1));
 	if (!arr)
 		return (NULL);
 	i = 0;
@@ -91,7 +91,7 @@ char	**mem_split(char const *str, char *set)
 		j++;
 	while (i < words)
 	{
-		arr[i] = (char *)mem_alloc(sizeof(char) * (mem_strlen(str + j, set) + 1));
+		arr[i] = (char *)malloc(sizeof(char) * (mem_strlen(str + j, set) + 1));
 		if (!arr[i])
 			return (free_split(arr, i), NULL);
 		j += mem_strcpy(arr[i], str + j, set);

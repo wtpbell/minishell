@@ -19,7 +19,7 @@ static t_env	*env_int(char **key_value)
 {
 	t_env	*new;
 
-	new = mem_alloc(sizeof(t_env));
+	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
 	new->key = key_value[0];
@@ -73,7 +73,7 @@ static void	add_empty_env(t_env **env)
 	if (getcwd(pwd, PATH_MAX) == NULL)
 		return ;
 	new[0] = create_env("OLDPWD");
-	pwd2 = mem_strjoin("PWD=", pwd);
+	pwd2 = ft_strjoin("PWD=", pwd);
 	new[1] = create_env(pwd2);
 	new[2] = create_env("SHLVL=0");
 	new[3] = create_env("PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin");

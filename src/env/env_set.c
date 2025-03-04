@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:40:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:45:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 				envs->scope = BOTH;
 			if (new_value)
 			{
-				envs->value = mem_strdup(new_value);
+				envs->value = ft_strdup(new_value);
 				if (!envs->value)
 					return ;
 			}
@@ -85,7 +85,7 @@ void	set_underscore(int argc, char **args)
 		i = 1;
 	if (i > 0)
 		set_env(*get_env_list(), "_", splited[i - 1]);
-	free_alloc(splited);
+	free(splited);
 }
 
 /*

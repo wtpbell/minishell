@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 14:09:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 21:43:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	open_heredoc_file(char **filename)
 	if (fd == -1)
 	{
 		error("open heredoc", NULL);
-		free_alloc(*filename);
+		free(*filename);
 		*filename = NULL;
 		return (-1);
 	}
