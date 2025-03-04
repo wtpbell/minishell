@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 22:38:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 00:07:50 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,5 @@ void	cleanup_heredocs(t_redir *redir)
 	}
 }
 
-size_t	count_pipes(t_ast_node *node)
-{
-	size_t	count;
-
-	count = 0;
-	while (node)
-	{
-		if (node->type == TOKEN_PIPE)
-			count++;
-		node = node->right;
-	}
-	return (count);
-}
 
 

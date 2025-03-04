@@ -96,9 +96,10 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	pid_t			last_pid;
 	int				status_;
 	int				input;
-	int				pipe_fd[2]
-;	t_child_info	child;
+	int				pipe_fd[2];
+	t_child_info	child;
 
+	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
 	if (node->left->redirections && \

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 00:12:25 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/04 23:53:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,18 @@ void	child_init(t_child_info *child, int input, t_token *tokens)
 	child->output = -1;
 	child->new_input = -1;
 	child->tokens = tokens;
+}
+
+size_t	count_pipes(t_ast_node *node)
+{
+	size_t	count;
+
+	count = 0;
+	while (node)
+	{
+		if (node->type == TOKEN_PIPE)
+			count++;
+		node = node->right;
+	}
+	return (count);
 }
