@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:16:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 10:32:53 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 	t_ast_node	*right;
 	t_ast_node	*pipe_node;
 
+	if (!token || !*token)
+		return (free_ast(left), NULL);
 	*token = (*token)->next;
 	if (*token && is_redirection(*token))
 		right = handle_pipe_redirection(token);

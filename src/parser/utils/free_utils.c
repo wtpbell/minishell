@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 12:57:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 10:33:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,10 @@ void	free_ast(t_ast_node *node)
 
 	if (!node)
 		return ;
-	free_ast(node->left);
-	free_ast(node->right);
+	if (node->left)
+		free_ast(node->left);
+	if (node->right)
+		free_ast(node->right);
 	if (node->args)
 	{
 		i = 0;
