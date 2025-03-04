@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 10:33:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 18:12:33 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,9 @@ t_ast_node	*create_ast_node(t_token_type type)
 {
 	t_ast_node	*node;
 
-	node = (t_ast_node *)malloc(sizeof(t_ast_node));
+	node = (t_ast_node *)ft_calloc(1, sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
-	ft_memset(node, 0, sizeof(t_ast_node));
 	node->type = type;
 	node->args = NULL;
 	node->arg_quote_types = NULL;
@@ -91,10 +90,10 @@ void	add_arg_to_node(t_ast_node *node, char *arg, t_quote_type quote_type)
 	if (!node || !arg)
 		return ;
 	data.args_len = get_args_length(node->args);
-	data.new_args = (char **)malloc(sizeof(char *) * (data.args_len + 2));
+	data.new_args = (char **)ft_calloc((data.args_len + 2), sizeof(char *));
 	if (!data.new_args)
 		return ;
-	data.new_quote_types = malloc(sizeof(t_quote_type) * (data.args_len + 2));
+	data.new_quote_types = ft_calloc((data.args_len + 2), sizeof(t_quote_type));
 	if (!data.new_quote_types)
 	{
 		free(data.new_args);
