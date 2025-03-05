@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 10:32:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/05 09:16:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv, char **env)
 	env_ = get_env_list();
 	*env_ = build_env(env);
 	signals_init();
-	// print_banner();
+	print_banner();
 	while (1)
 	{
 		line = readline("minishell👾 > ");
