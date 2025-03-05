@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:25:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:51:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 18:10:38 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 	int				len;
 	t_quoted_result	*result;
 
-	result = (t_quoted_result *)malloc(sizeof(t_quoted_result));
+	result = (t_quoted_result *)ft_calloc(1, sizeof(t_quoted_result));
 	if (!result)
 		return (NULL);
 	tokenizer->position++;
