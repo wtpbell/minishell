@@ -48,11 +48,15 @@ void	add_env_var(t_env **env, char *key, char *value)
 
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
+	{
+		free(key);
 		return ;
+	}
 	new_env->key = key;
 	if (value)
 	{
 		new_env->value = ft_strdup(value);
+		free(value);
 		if (!new_env->value)
 			return ;
 	}
@@ -65,7 +69,11 @@ void	add_env_var(t_env **env, char *key, char *value)
 	new_env->next = NULL;
 	new_env->prev = NULL;
 	if (exist_key(*(env), key))
+	{
 		set_env(*(env), key, value);
+		free(new_env);
+		return ;
+	}
 	else
 		add_env(env, new_env);
 }
@@ -77,6 +85,7 @@ void	setup_shlvl(t_env *new)
 	if (new->value)
 	{
 		old_shlvl = ft_atoi(new->value);
+		free(new->value);
 		if (old_shlvl < 0)
 			new->value = ft_itoa(0);
 		else if (old_shlvl >= 999)

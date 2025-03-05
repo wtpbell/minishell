@@ -21,13 +21,23 @@ static t_env	*env_int(char **key_value)
 
 	new = malloc(sizeof(t_env));
 	if (!new)
-		return (NULL);
-	new->key = key_value[0];
-	new->value = key_value[1];
+		return (free(key_value), NULL);
+	new->key = ft_strdup(key_value[0]);
+	if (!new->key)
+		return (free(key_value), free(new), NULL);
+	if (key_value[1])
+	{
+		new->value = ft_strdup(key_value[1]);
+		if (!new->value)
+			return (free(new->key), free(new), NULL);
+	}
+	else
+		new->value = key_value[1];
 	new->scope = BOTH;
 	new->hide = false;
 	new->prev = NULL;
 	new->next = NULL;
+	free_tab(key_value);
 	return (new);
 }
 
@@ -43,13 +53,14 @@ t_env	*create_env(char *env)
 	char	**key_value;
 
 	key_value = mem_split(env, "=");
-	if (!key_value)
-		return (NULL);
+	if (!key_value || !key_value[0])
+		return (free_tab(key_value), NULL);
 	new = env_int(key_value);
 	if (!new)
-		return (free_tab(key_value), NULL);
+		return (NULL);
 	if (ft_strcmp(new->key, "OLDPWD") == 0)
 	{
+		free(new->value);
 		new->value = NULL;
 		new->scope = EXPORT;
 	}

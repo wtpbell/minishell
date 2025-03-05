@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 21:45:13 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 15:49:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 		if (ft_strcmp(envs->key, key) == 0)
 		{
 			envs->hide = false;
+			if (envs->value)
+				free(envs->value);
 			envs->value = NULL;
 			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
 				envs->scope = BOTH;
