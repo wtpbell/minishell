@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 00:31:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 17:38:05 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,28 +78,29 @@ static bool	is_within_long_range(char *arg)
 int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char	**args;
-
+	int		exit_status;
+	
 	args = node->args;
+	exit_status = get_exit_status();
 	ft_putendl_fd("exit", STDIN_FILENO);
-	if (node->argc == 1)
+	if (node->argc > 1)
 	{
-		free_exit_memory(node, env, tokens);
-		exit((int)((unsigned char)get_exit_status()));
-	}
-	if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
-	{
-		ft_putendl_fd(SHELL_ERROR NUM_ARGS_REQUIRED, STDERR_FILENO);
-		free_exit_memory(node, env, tokens);
-		exit(2);
-	}
-	if (node->argc > 2)
-	{
-		ft_putendl_fd(SHELL_ERROR MANY_ARGS_ERROR, STDERR_FILENO);
-		free_exit_memory(node, env, tokens);
-		return (1);
+		if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
+		{
+			ft_putendl_fd(SHELL_ERROR NUM_ARGS_REQUIRED, STDERR_FILENO);
+			exit(2);
+		}
+		else if (node->argc > 2)
+		{
+			ft_putendl_fd(SHELL_ERROR MANY_ARGS_ERROR, STDERR_FILENO);
+			return (1);
+		}
+		else 
+		{
+			exit_status = ft_atoi(args[1]);
+		}
 	}
 	free_exit_memory(node, env, tokens);
-	exit((int)((unsigned char)ft_atoi(node->args[1])));
+	exit(exit_status);
 	return (0);
 }
-
