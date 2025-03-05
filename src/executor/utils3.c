@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 17:07:04 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 19:02:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	validate_path(char *path, char *full_path)
 	struct stat	info;
 
 	if (access(path, F_OK) == -1)
-		return (error(full_path, "No such file or directory"), ERR_NO_FILE);
+		return (error(full_path, NULL), ERR_NO_FILE);
 	if (stat(path, &info) == -1)
 		return (error(full_path, NULL), ERR_ACCESS);
 	if (!S_ISDIR(info.st_mode))

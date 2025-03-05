@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 17:21:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 18:36:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,12 @@ static void	append_env_value(t_env *env, char **key, char **value)
 static void	modify_env(t_env **env, char *args)
 {
 	char	**split;
+	char	*key;
+	char	*value;
 
 	split = mem_split(args, "=");
+	key = NULL;
+	value = NULL;
 	if (!split)
 		return ;
 	if (split[0])
@@ -100,12 +104,28 @@ static void	modify_env(t_env **env, char *args)
 		free_tab(split);
 		return ;
 	}
+	if (split[0])
+	{
+		key = split[0];
+		split[0] = NULL;
+	}
+	if (split[1])
+	{
+		value = split[1];
+		split[1] = NULL;
+	}
 	if (args[ft_strlen(args) - 1] == '=')
-		add_env_var(env, split[0], "");
-	else if (split[0] && !split[1])
-		add_env_var(env, split[0], NULL);
+	{
+		free(value);
+		add_env_var(env, key, "");
+	}
+	else if (key && !value)
+	{
+		free(value);
+		add_env_var(env, key, NULL);
+	}
 	else
-		add_env_var(env, split[0], split[1]);
+		add_env_var(env, key, value);
 	free_tab(split);
 }
 

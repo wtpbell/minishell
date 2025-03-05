@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 17:38:05 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 17:38:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,8 @@ int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 			ft_putendl_fd(SHELL_ERROR MANY_ARGS_ERROR, STDERR_FILENO);
 			return (1);
 		}
-		else 
-		{
+		else
 			exit_status = ft_atoi(args[1]);
-		}
 	}
 	free_exit_memory(node, env, tokens);
 	exit(exit_status);

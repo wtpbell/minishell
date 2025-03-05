@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 14:10:27 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 18:52:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static void	handle_regular_redirection(t_redir *current_redir, int saved_fd[2])
 	{
 		error(current_redir->file, NULL);
 		set_exit_status(1);
-		
 		return ;
 	}
 	if (saved_fd[current_redir->fd] == -1)
