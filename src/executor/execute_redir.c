@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 18:52:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 20:59:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static void	perform_dup2(int fd, int redir_fd)
 		set_exit_status(1);
 		return ;
 	}
-	close(fd);
+	if (fd != redir_fd)
+		close(fd);
 }
 
 // Function to handle heredoc redirection
@@ -32,14 +33,12 @@ static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 	int	fd;
 
 	if (!current_redir->heredoc_processed || !current_redir->heredoc_file)
-	{
-		error("Heredoc not properly processed", NULL);
 		return ;
-	}
 	fd = open(current_redir->heredoc_file, O_RDONLY);
 	if (fd == -1)
 	{
-		error("Failed to open heredoc file", NULL);
+		error(current_redir->heredoc_file, NULL);
+		set_exit_status(1);
 		return ;
 	}
 	if (saved_fd[current_redir->fd] == -1)
@@ -58,7 +57,8 @@ static void	handle_regular_redirection(t_redir *current_redir, int saved_fd[2])
 	fd = open(current_redir->file, current_redir->flags, 0644);
 	if (fd == -1)
 	{
-		error(current_redir->file, NULL);
+		if (get_exit_status() == 0)
+			error(current_redir->file, NULL);
 		set_exit_status(1);
 		return ;
 	}

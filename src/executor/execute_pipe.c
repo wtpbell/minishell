@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 23:16:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 21:00:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,17 @@ static void	handle_redirections(t_redir *curr, int saved_fd[2])
 	}
 	while (curr)
 	{
-		if (curr->type != TOKEN_HEREDOC)
-			launch_redir(curr, saved_fd);
-		if (curr->heredoc_processed)
-			handle_heredoc(curr, last_heredoc, saved_fd);
+		if (curr->type == TOKEN_HEREDOC)
+			last_heredoc = curr;
+		else
+		{
+			if (get_exit_status() == 0)
+				launch_redir(curr, saved_fd);
+		}
 		curr = curr->next;
 	}
+	if (last_heredoc && last_heredoc->heredoc_processed && get_exit_status() == 0)
+		handle_heredoc(last_heredoc, last_heredoc, saved_fd);
 }
 
 static void	handle_child_process(t_child_info *child, \
@@ -94,7 +99,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	if (pid == 0)
 	{
 		handle_child_process(child, node, env, child->tokens);
-		exit(get_exit_status());
+		exit_shell(get_exit_status(), node, env, child->tokens);
 	}
 	else if (pid < 0)
 	{

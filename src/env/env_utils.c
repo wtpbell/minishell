@@ -48,15 +48,11 @@ void	add_env_var(t_env **env, char *key, char *value)
 
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
-	{
-		free(key);
 		return ;
-	}
 	new_env->key = key;
 	if (value)
 	{
 		new_env->value = ft_strdup(value);
-		free(value);
 		if (!new_env->value)
 			return ;
 	}
