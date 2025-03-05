@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 15:49:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 16:12:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	set_underscore(int argc, char **args)
 		i = 1;
 	if (i > 0)
 		set_env(*get_env_list(), "_", splited[i - 1]);
-	free(splited);
+	free_tab(splited);
 }
 
 /*

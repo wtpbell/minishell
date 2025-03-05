@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 12:35:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 16:04:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@
 # define YELLOW "\033[33m"
 # define BLUE "\033[34m"
 # define RESET "\033[0m"
-
-extern int	g_signal_received;
 
 typedef enum e_token_type
 {

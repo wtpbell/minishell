@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 21:37:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 16:04:03 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 #include "env.h"
 #include "common.h"
 #include <unistd.h>
-
-int	g_signal_received = 0;
 
 static int	process_command_line(char *line, t_env **env_)
 {

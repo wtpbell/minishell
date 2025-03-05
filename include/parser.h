@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/03 11:19:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 16:04:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void				set_redir_flags_and_fd(t_redir *redir, t_token_type type);
 void				add_arg_to_node(t_ast_node *node, char *arg,
 						t_quote_type quote_type);
 void				free_ast(t_ast_node *node);
+void				free_redirections(t_redir *redir);
 
 /* Logic operation handling */
 t_ast_node			*parse_command_sequence(t_token **token,

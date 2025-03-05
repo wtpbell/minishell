@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 10:11:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 10:35:02 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,13 @@ t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
 	t_ast_node	*pipe_node;
 
+	if (!left || !right)
+		return (NULL);
 	pipe_node = create_ast_node(TOKEN_PIPE);
 	if (!pipe_node)
 	{
 		free_ast(left);
+		free_ast(right);
 		return (NULL);
 	}
 	pipe_node->left = left;
@@ -62,19 +65,28 @@ t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 static int	validate_pipeline_structure(t_ast_node *root)
 {
 	t_ast_node	*current;
+	int			valid;
 
+	if (!root)
+		return (0);
 	current = root;
-	while (current)
+	valid = 1;
+	while (current && valid)
 	{
-		if (current->type == TOKEN_PIPE && (!current->left || !current->right))
+		if (current->type == TOKEN_PIPE)
 		{
-			ft_putendl_fd("minishell: syntax error near unexpected token '|'",
-				STDERR_FILENO);
-			return (0);
+			if (!current->left || !current->right)
+			{
+				ft_putendl_fd(
+					"minishell: syntax error near unexpected token '|'",
+					STDERR_FILENO);
+				valid = 0;
+				break ;
+			}
 		}
 		current = current->right;
 	}
-	return (1);
+	return (valid);
 }
 
 /* Parse pipeline */

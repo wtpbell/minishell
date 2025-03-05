@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 21:31:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/05 17:07:04 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,24 @@
 static int	join_path(char **joined, char *to_append, bool add_slash)
 {
 	char	*temp;
+	char	*new_str;
 
+	new_str = NULL;
 	temp = *joined;
 	if (add_slash)
 	{
-		*joined = ft_strjoin(temp, "/");
+		new_str = ft_strjoin(temp, "/");
 		if (!*joined)
 			return (ERR_MALLOC);
+		free(temp);
+		*joined = new_str;
 	}
 	temp = *joined;
-	*joined = ft_strjoin(temp, to_append);
-	if (!*joined)
-	{
-		free(temp);
-		return (ERR_MALLOC);
-	}
+	new_str = ft_strjoin(temp, to_append);
+	if (!new_str)
+		return (free(temp), ERR_MALLOC);
+	free(temp);
+	*joined = new_str;
 	return (0);
 }
 
@@ -113,6 +116,12 @@ int	check_paths(char *full_path)
 	i = 0;
 	status_ = check_prefix(full_path, paths, &joined, &i);
 	if (status_ != 0)
-		return (status_);
-	return (check_last_path(full_path, paths, &joined, i));
+	{
+		free(joined);
+		return (free_tab(paths), status_);
+	}
+	status_ = check_last_path(full_path, paths, &joined, i);
+	free(joined);
+	free_tab(paths);
+	return (status_);
 }
