@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 13:39:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 18:16:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ static t_cmd_valid_error	validate_node_args(t_ast_node *node)
 	}
 	else if (node->args && node->args[0] && ft_strcmp(node->args[0], "&") == 0)
 	{
-		ft_putendl_fd("minishell: syntax error near unexpected token '|'",
-			STDERR_FILENO);
+		ft_putstr_fd(RED, STDERR_FILENO);
+		ft_putstr_fd(RESET, STDERR_FILENO);
 		set_exit_status(2);
 		return (VALID_SYNTAX_ERROR);
 	}
