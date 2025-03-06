@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 21:00:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 12:03:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,27 +46,28 @@ static void	handle_redirections(t_redir *curr, int saved_fd[2])
 	t_redir	*last_heredoc;
 	t_redir	*tmp;
 
+	printf("try to handle redirections in pipe\n");
 	last_heredoc = NULL;
 	tmp = curr;
 	while (tmp)
 	{
+		printf("tmp->type: %d, tmp->file: %s\n", tmp->type, tmp->file ? tmp->file : "NULL");
 		if (tmp->type == TOKEN_HEREDOC)
 			last_heredoc = tmp;
 		tmp = tmp->next;
 	}
 	while (curr)
 	{
-		if (curr->type == TOKEN_HEREDOC)
-			last_heredoc = curr;
-		else
+		printf("curr->type: %d, curr->file: %s\n", curr->type, curr->file ? curr->file : "NULL");
+		if (curr->type != TOKEN_HEREDOC)
+			launch_redir(curr, saved_fd);
+		if (curr->heredoc_processed)
 		{
-			if (get_exit_status() == 0)
-				launch_redir(curr, saved_fd);
+			printf("curr->heredoc_processed: %d\n", curr->heredoc_processed);
+			handle_heredoc(curr, last_heredoc, saved_fd);
 		}
 		curr = curr->next;
 	}
-	if (last_heredoc && last_heredoc->heredoc_processed && get_exit_status() == 0)
-		handle_heredoc(last_heredoc, last_heredoc, saved_fd);
 }
 
 static void	handle_child_process(t_child_info *child, \
@@ -78,11 +79,14 @@ static void	handle_child_process(t_child_info *child, \
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(child->input, child->output, child->new_input);
+	// printf("1curr->type: %d, 1curr->file: %s\n", curr->type, curr->file ? curr->file : "NULL");
 	if (node->redirections)
 	{
+		printf("node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
 		saved_fd[0] = -1;
 		saved_fd[1] = -1;
 		curr = node->redirections;
+		printf("2curr->type: %d, 2curr->file: %s\n", curr->type, curr->file ? curr->file : "NULL");
 		handle_redirections(curr, saved_fd);
 	}
 	set_exit_status(executor_status(node, env, tokens));
@@ -98,6 +102,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	pid = fork();
 	if (pid == 0)
 	{
+		printf("in spawn node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
 		handle_child_process(child, node, env, child->tokens);
 		exit_shell(get_exit_status(), node, env, child->tokens);
 	}

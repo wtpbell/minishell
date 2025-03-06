@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 20:59:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 11:39:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ static void	perform_dup2(int fd, int redir_fd)
 {
 	if (dup2(fd, redir_fd) == -1)
 	{
-		close(fd);
 		error("dup2 failed", NULL);
+		close(fd);
 		set_exit_status(1);
 		return ;
 	}
@@ -44,7 +44,7 @@ static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 	if (saved_fd[current_redir->fd] == -1)
 		saved_fd[current_redir->fd] = dup(current_redir->fd);
 	perform_dup2(fd, current_redir->fd);
-	close(fd);
+	// close(fd);
 }
 
 // Function to handle regular file redirection
@@ -52,29 +52,39 @@ static void	handle_regular_redirection(t_redir *current_redir, int saved_fd[2])
 {
 	int	fd;
 
+	printf("am i even in launch regular_redirection\n");
 	if (!current_redir->file)
+	{
+		printf("Skipping redirection, no file\n");
 		return ;
+	}
 	fd = open(current_redir->file, current_redir->flags, 0644);
+	printf("Processing redirection: %s (type: %d, flags: %d, fd: %d)\n",
+	current_redir->file, current_redir->type, current_redir->flags, current_redir->fd);
 	if (fd == -1)
 	{
-		if (get_exit_status() == 0)
-			error(current_redir->file, NULL);
+		perror("open failed");
+		error(current_redir->file, NULL);
 		set_exit_status(1);
 		return ;
 	}
 	if (saved_fd[current_redir->fd] == -1)
 		saved_fd[current_redir->fd] = dup(current_redir->fd);
 	perform_dup2(fd, current_redir->fd);
-	close(fd);
+	// close(fd);
 }
 
 // Main function to launch the redirection
 void	launch_redir(t_redir *current_redir, int saved_fd[2])
 {
+	printf("Inside launch_redir: %s (Type: %d)\n", current_redir->file, current_redir->type);
 	if (current_redir->type == TOKEN_HEREDOC)
 		handle_heredoc_redirection(current_redir, saved_fd);
 	else
+	{
+		printf("am i even in launch redir\n");
 		handle_regular_redirection(current_redir, saved_fd);
+	}
 }
 
 void	restore_redirection(int saved_fd[2])

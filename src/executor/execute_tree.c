@@ -102,6 +102,7 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
+	// printf("node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
 	if (node->left->redirections && \
 		node->left->redirections->type == TOKEN_HEREDOC)
 		input = node->left->redirections->fd;
