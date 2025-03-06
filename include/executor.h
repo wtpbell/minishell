@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 16:02:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 23:36:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int		exec_pipe(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_block(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_redir(t_ast_node *node, t_env **env, \
-		t_redir *redir, t_token *tokens);
+		t_redir *redir, t_token *tokens, bool error_);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);
@@ -65,7 +65,7 @@ int		parent(t_ast_node *node);
 
 /*executor*/
 void	executor(t_ast_node *node, t_env **env, t_token *toekns);
-int		executor_status(t_ast_node *node, t_env **env, t_token *toekns);
+int		executor_status(t_ast_node *node, t_env **env, t_token *tokens, bool error);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
@@ -79,8 +79,9 @@ void	redirect_io(int input, int output, int new_input);
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2]);
 
 /*execute_redir*/
-void	launch_redir(t_redir *current_redir, int saved_fd[2]);
+void	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_);
 void	restore_redirection(int saved_fd[2]);
+void	handle_redirections(t_redir *curr, int saved_fd[2], int error_);
 
 /*utils*/
 void	set_exit_status(int status);
@@ -104,4 +105,9 @@ int		process_line(t_heredoc_data *data);
 void	redirect_io(int input, int output, int new_input);
 void	child_init(t_child_info *child, int input, t_token *tokens);
 pid_t	final_process(t_child_info *child, t_ast_node *temp, t_env **env);
+
+/*wait_utils.c*/
+int		wait_for_child(void);
+int		wait_for_pid(pid_t pid);
+void	wait_for_remain(void);
 #endif

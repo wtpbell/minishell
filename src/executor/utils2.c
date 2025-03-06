@@ -1,133 +1,127 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils2.c                                           :+:    :+:            */
+/*   utils3.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:47:01 by bewong        ########   odam.nl         */
+/*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
+/*   Updated: 2025/03/06 16:42:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 #include "env.h"
-#include "parser.h"
 #include "common.h"
 #include <sys/stat.h>
 
-void	append_cwd(t_ast_node *node)
+static int	join_path(char **joined, char *to_append, bool add_slash)
 {
-	char	cwd[PATH_MAX];
-	char	*tmp;
-	char	*tmp2;
+	char	*temp;
+	char	*new_str;
 
-	if (!getcwd(cwd, PATH_MAX))
-		return (error("exec", "Failed to get CWD"));
-	tmp = ft_strjoin(cwd, "/");
-	tmp2 = ft_strjoin(tmp, node->args[0]);
-	free(tmp);
-	free(node->args[0]);
-	node->args[0] = tmp2;
-}
-
-char	*get_cmd_path(char *cmd)
-{
-	char	*path_var;
-	char	**paths;
-	char	*full_path;
-	char	*tmp;
-	size_t	i;
-
-	if (ft_strcmp(cmd, "") == 0)
-		return (NULL);
-	path_var = get_env_value(*get_env_list(), "PATH");
-	if (!path_var)
-		return (NULL);
-	paths = mem_split(path_var, ":");
-	if (!paths)
-		return (NULL);
-	i = 0;
-	while (paths[i])
+	new_str = NULL;
+	temp = *joined;
+	if (add_slash)
 	{
-		tmp = ft_strjoin(paths[i++], "/");
-		full_path = ft_strjoin(tmp, cmd);
-		if (access(full_path, F_OK) == 0)
-			return (free_tab(paths), free(tmp), full_path);
-		free(full_path);
-		free(tmp);
+		new_str = ft_strjoin(temp, "/");
+		if (!*joined)
+			return (ERR_MALLOC);
+		free(temp);
+		*joined = new_str;
 	}
-	return (free_tab(paths), NULL);
-}
-
-static int	resolve_command(t_ast_node *node)
-{
-	char	*tmp;
-
-	tmp = get_cmd_path(node->args[0]);
-	if (!tmp)
-	{
-		// error(node->args[0], "Command not found");
-		set_underscore(node->argc, node->args);
-		return (set_exit_status(0), 0);
-	}
-	free(node->args[0]);
-	node->args[0] = tmp;
+	temp = *joined;
+	new_str = ft_strjoin(temp, to_append);
+	if (!new_str)
+		return (free(temp), ERR_MALLOC);
+	free(temp);
+	*joined = new_str;
 	return (0);
 }
 
-static int	validate_executable(t_ast_node *node)
+// Helper function to check if path exists and is a directory
+static int	validate_path(char *path, char *full_path)
 {
-	int			i;
 	struct stat	info;
 
-	i = check_paths(node->args[0]);
-	if (i != 0)
-		return (set_underscore(node->argc, node->args), set_exit_status(i), i);
-	if (access(node->args[0], F_OK) == -1)
+	if (access(path, F_OK) == -1)
+		return (error(full_path, NULL), ERR_NO_FILE);
+	if (stat(path, &info) == -1)
+		return (error(full_path, NULL), ERR_ACCESS);
+	if (!S_ISDIR(info.st_mode))
+		return (error(full_path, "Not a directory"), ERR_NOT_DIR);
+	return (0);
+}
+
+static int	check_prefix(char *full_path, char **paths, char **joined, int *i)
+{
+	int	status;
+
+	if (*joined == NULL)
 	{
-		error(node->args[0], "No such file or directory");
-		return (set_last(node->args, node->argc), set_exit_status(127), 127);
+		*joined = ft_strdup("");
+		if (!*joined)
+			return (ERR_MALLOC);
 	}
-	if (stat(node->args[0], &info) == -1)
-		return (printf("Stat failed on file: %s\n", node->args[0]), 1);
-	if (S_ISDIR(info.st_mode))
+	while (paths[(*i) + 1])
 	{
-		error(node->args[0], "Is a directory");
-		return (set_last(node->args, node->argc), set_exit_status(126), 126);
-	}
-	if (access(node->args[0], R_OK | X_OK) == -1)
-	{
-		error(node->args[0], "Permission denied");
-		return (set_last(node->args, node->argc), set_exit_status(126), 126);
+		if ((*i) > 0 || full_path[0] == '/')
+		{
+			status = join_path(joined, "/", false);
+			if (status != 0)
+				return (status);
+		}
+		status = join_path(joined, paths[*i], false);
+		if (status != 0)
+			return (status);
+		status = validate_path(*joined, full_path);
+		if (status != 0)
+			return (status);
+		(*i)++;
 	}
 	return (0);
 }
-/*
-	check_cmd() handles cmd resolution
-	1. No PATH and not an absolute/relative command
-	2. Not an absolute/relative
-	3. Absolute/relative path
-*/
 
-int	check_cmd(t_ast_node *node, t_env **env)
+int	check_last_path(char *full_path, char **paths, char **joined, int i)
 {
-	int	status_;
+	int	status;
+	int	len;
 
-	if (get_env_value(*env, "PATH") == NULL && node->args[0][0] != '/'
-			&& node->args[0][0] != '.')
-		append_cwd(node);
-	if (node->args[0][0] != '/' && node->args[0][0] != '.')
+	if (!full_path || full_path[0] == '\0')
+		return (0);
+	len = 0;
+	while (full_path[len])
+		len++;
+	if (full_path[len - 1] != '/')
+		return (0);
+	status = join_path(joined, paths[i], true);
+	if (status != 0)
+		return (status);
+	return (validate_path(*joined, full_path));
+}
+
+int	check_paths(char *full_path)
+{
+	char	**paths;
+	int		i;
+	char	*joined;
+	int		status_;
+
+	if (full_path[0] == '/' && full_path[1] == '\0')
+		return (0);
+	paths = mem_split(full_path, "/");
+	if (!paths)
+		return (-1);
+	joined = NULL;
+	i = 0;
+	status_ = check_prefix(full_path, paths, &joined, &i);
+	if (status_ != 0)
 	{
-		status_ = resolve_command(node);
-		// if (status_ != 0)
-			return (status_);
+		free(joined);
+		return (free_tab(paths), status_);
 	}
-	else
-	{
-		status_ = validate_executable(node);
-		// if (status_ != 0)
-			return (status_);
-	}
-	return (0);
+	status_ = check_last_path(full_path, paths, &joined, i);
+	free(joined);
+	free_tab(paths);
+	return (status_);
 }

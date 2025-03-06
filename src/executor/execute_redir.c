@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:09:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 23:26:59 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,11 @@ static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 	if (saved_fd[current_redir->fd] == -1)
 		saved_fd[current_redir->fd] = dup(current_redir->fd);
 	perform_dup2(fd, current_redir->fd);
-	// close(fd);
 }
 
 // Function to handle regular file redirection
 static void	handle_regular_redirection(t_redir *current_redir, \
-			int saved_fd[2])
+			int saved_fd[2], bool error_)
 {
 	int	fd;
 
@@ -58,7 +57,8 @@ static void	handle_regular_redirection(t_redir *current_redir, \
 	fd = open(current_redir->file, current_redir->flags, 0644);
 	if (fd == -1)
 	{
-		error(current_redir->file, NULL);
+		if (error_)
+			error(current_redir->file, NULL);
 		set_exit_status(1);
 		return ;
 	}
@@ -68,12 +68,12 @@ static void	handle_regular_redirection(t_redir *current_redir, \
 }
 
 // Main function to launch the redirection
-void	launch_redir(t_redir *current_redir, int saved_fd[2])
+void	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_)
 {
 	if (current_redir->type == TOKEN_HEREDOC)
 		handle_heredoc_redirection(current_redir, saved_fd);
 	else
-		handle_regular_redirection(current_redir, saved_fd);
+		handle_regular_redirection(current_redir, saved_fd, error_);
 }
 
 void	restore_redirection(int saved_fd[2])

@@ -64,7 +64,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/redirection_utils.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
-			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_utils2.c \
 			   $(ENV_DIR)/env_utils1.c \
 			   $(ENV_DIR)/env_set.c \
 
@@ -73,17 +73,16 @@ BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
 				 $(BUITLIN_DIR)/builtin_export.c \
 				 $(BUITLIN_DIR)/builtin_cd.c \
 				 $(BUITLIN_DIR)/builtin.c \
-				 $(BUITLIN_DIR)/utils.c \
+				 $(BUITLIN_DIR)/utils1.c \
 
 EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
 				 $(EXECUTOR_DIR)/exit_update.c \
-				 $(EXECUTOR_DIR)/utils.c \
+				 $(EXECUTOR_DIR)/utils1.c \
 				 $(EXECUTOR_DIR)/utils2.c \
-				 $(EXECUTOR_DIR)/utils3.c \
 				 $(EXECUTOR_DIR)/heredoc_utils.c \
 				 $(EXECUTOR_DIR)/pipe_utils.c \
-				 $(EXECUTOR_DIR)/error/error.c \
+				 $(EXECUTOR_DIR)/wait_utils.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
 				 $(EXECUTOR_DIR)/execute_heredoc.c \
@@ -95,6 +94,7 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/mem_split.c \
 				$(COMMON_DIR)/mem_realloc.c \
 				$(COMMON_DIR)/mem_free.c \
+				$(COMMON_DIR)/error.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \

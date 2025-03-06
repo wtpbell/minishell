@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 15:59:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 23:51:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	handle_heredoc(t_redir *curr, \
 	close(heredoc_fd);
 }
 
-static void	handle_redirections(t_redir *curr, int saved_fd[2])
+void	handle_redirections(t_redir *curr, int saved_fd[2], int error_)
 {
 	t_redir	*last_heredoc;
 	t_redir	*tmp;
@@ -57,9 +57,12 @@ static void	handle_redirections(t_redir *curr, int saved_fd[2])
 	while (curr)
 	{
 		if (curr->type != TOKEN_HEREDOC)
-			launch_redir(curr, saved_fd);
+			launch_redir(curr, saved_fd, 0);
 		if (curr->heredoc_processed)
-			handle_heredoc(curr, last_heredoc, saved_fd);
+		{
+			if (error_ && curr->heredoc_processed)
+				handle_heredoc(curr, last_heredoc, saved_fd);
+		}
 		curr = curr->next;
 	}
 }
@@ -77,9 +80,9 @@ static void	handle_child_process(t_child_info *child, \
 	{
 		saved_fd[1] = -1;
 		curr = node->redirections;
-		handle_redirections(curr, saved_fd);
+		handle_redirections(curr, saved_fd, 1);
 	}
-	set_exit_status(executor_status(node, env, tokens));
+	set_exit_status(executor_status(node, env, tokens, 1));
 }
 
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
