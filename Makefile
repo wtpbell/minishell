@@ -5,8 +5,8 @@ CFLAGS = -Wall -Wextra -Werror -g3
 # -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
-CFLAGS += -I$(shell brew --prefix readline)/include
-LDFLAGS += -L$(shell brew --prefix readline)/lib -lreadline
+# CFLAGS += -I$(shell brew --prefix readline)/include
+# LDFLAGS += -L$(shell brew --prefix readline)/lib -lreadline
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer

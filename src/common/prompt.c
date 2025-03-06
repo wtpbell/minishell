@@ -6,14 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/06 15:38:39 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 16:10:51 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 16:13:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "common.h"
 
-
-static char *get_relative_path(char *cwd)
+static char	*get_relative_path(char *cwd)
 {
 	char	*home_dir;
 	char	*relative_path;
@@ -22,7 +21,6 @@ static char *get_relative_path(char *cwd)
 	home_dir = getenv("HOME");
 	if (!home_dir)
 		return (ft_strdup(cwd));
-
 	home_len = ft_strlen(home_dir);
 	if (ft_strncmp(cwd, home_dir, home_len) == 0)
 	{
@@ -30,13 +28,14 @@ static char *get_relative_path(char *cwd)
 		if (!relative_path)
 			return (ft_strdup(cwd));
 		relative_path[0] = '~';
-		ft_strlcpy(relative_path + 1, cwd + home_len, ft_strlen(cwd) - home_len + 1);
+		ft_strlcpy(relative_path + 1, cwd + home_len,
+			ft_strlen(cwd) - home_len + 1);
 		return (relative_path);
 	}
 	return (ft_strdup(cwd));
 }
 
-static char *join_three_strings(char *s1, char *s2, char *s3)
+static char	*join_three_strings(char *s1, char *s2, char *s3)
 {
 	char	*result;
 	size_t	len1;
@@ -57,7 +56,7 @@ static char *join_three_strings(char *s1, char *s2, char *s3)
 	return (result);
 }
 
-static char *create_prompt_string(char *path)
+static char	*create_prompt_string(char *path)
 {
 	char	*result;
 
