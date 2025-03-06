@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 13:57:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 14:02:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,9 @@ static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 	if (!token || !*token)
 		return (free_ast(left), NULL);
 	*token = (*token)->next;
-
 	right = process_pipe_right_command(token);
 	if (!right)
 		return (free_ast(left), NULL);
-
 	pipe_node = create_pipe_node(left, right);
 	if (!pipe_node)
 	{
