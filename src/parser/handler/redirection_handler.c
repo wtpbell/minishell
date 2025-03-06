@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/05 17:37:06 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 13:57:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,6 @@ static void	add_args_to_cmd_node(t_ast_node *cmd_node, t_token **current)
 	*current = temp;
 }
 
-static int	handle_redirection_error(t_ast_node *cmd_node, t_token **token)
-{
-	free_ast(cmd_node);
-	*token = NULL;
-	set_exit_status(2);
-	return (1);
-}
-
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node	*cmd_node;
@@ -95,10 +87,7 @@ t_ast_node	*parse_redirection(t_token **token)
 	while (current && is_redirection(current))
 	{
 		if (!current->next || !is_valid_filename_token(current->next))
-		{
-			if (handle_redirection_error(cmd_node, token))
-				return (NULL);
-		}
+			return (free_ast(cmd_node),*token = NULL, set_exit_status(2), NULL);
 		add_redirection(cmd_node, current->type, current->next->content,
 			current->next->quote_type);
 		current = current->next->next;
