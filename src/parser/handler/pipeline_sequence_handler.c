@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 16:59:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 17:23:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ static t_ast_node	*process_pipe_right_command(t_token **token)
 	{
 		return (parse_group(token));
 	}
-	else if (current && (is_redirection(current) || current->type == TOKEN_WORD))
+	else if (current && (is_redirection(current)
+			|| current->type == TOKEN_WORD))
 	{
 		cmd_node = handle_pipe_redirection(token);
 		if (!cmd_node)
@@ -56,7 +57,7 @@ static t_ast_node	*process_pipe_right_command(t_token **token)
 	return (parse_pipe_sequence(token));
 }
 
-static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
+t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*right;
 	t_ast_node	*pipe_node;

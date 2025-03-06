@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/10 15:21:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 17:21:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,14 @@ static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 	{
 		result = handle_logic_operation(token, node);
 		if (!result)
-		{
-			free_ast(node);
-			return (NULL);
-		}
+			return (free_ast(node), NULL);
+		return (result);
+	}
+	else if (*token && (*token)->type == TOKEN_PIPE)
+	{
+		result = handle_pipe_right(token, node);
+		if (!result)
+			return (free_ast(node), NULL);
 		return (result);
 	}
 	return (node);
