@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 12:03:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 13:19:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	child->output = pipe_fd[1];
 	child->new_input = pipe_fd[0];
 	pid = fork();
+	printf("in spawn node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
 	if (pid == 0)
 	{
 		printf("in spawn node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
@@ -128,6 +129,7 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		if (pipe(pipe_fd) == -1)
 			return (error("pipe", NULL), -1);
 		pid = spawn_process(child, pipe_fd, temp->left, env);
+		printf("in launch_pipe temp->left->type: %d, temp->left->file: %s\n", temp->left->redirections->type, temp->left->redirections->file ? temp->left->redirections->file : "NULL");
 		if (pid == -1)
 		{
 			close(pipe_fd[0]);

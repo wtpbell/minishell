@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 17:20:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 13:38:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	builtin_echo(t_ast_node *node, t_env **env, t_token *tokens)
 	int	print_newline;
 
 	(void)env;
-	(void)tokens; 
+	(void)tokens;
 	if (node->argc == 1)
 		return (printf("\n"), EXIT_SUCCESS);
 	i = verify_args(node->args);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 17:38:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 13:38:36 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char	**args;
 	int		exit_status;
-	
+
 	args = node->args;
 	exit_status = get_exit_status();
 	ft_putendl_fd("exit", STDIN_FILENO);

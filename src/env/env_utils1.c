@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 23:30:20 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 21:30:52 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 13:37:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,27 @@ char	**env_to_arr(t_env *envs)
 	}
 	env[i] = NULL;
 	return (env);
+}
+
+void	setup_shlvl(t_env *new)
+{
+	int	old_shlvl;
+
+	if (new->value)
+	{
+		old_shlvl = ft_atoi(new->value);
+		free(new->value);
+		if (old_shlvl < 0)
+			new->value = ft_itoa(0);
+		else if (old_shlvl >= 999)
+		{
+			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
+			ft_putendl_fd("too high, resetting to 1", 2);
+			new->value = ft_itoa(1);
+		}
+		else
+			new->value = ft_itoa(++old_shlvl);
+		if (!new->value)
+			return ;
+	}
 }

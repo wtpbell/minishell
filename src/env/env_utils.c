@@ -42,17 +42,12 @@ static bool	exist_key(t_env *env, char *key)
 	return (get_env(env, key) != NULL);
 }
 
-void	add_env_var(t_env **env, char *key, char *value)
+static void	added_env_init(t_env *new_env, char *key, char **value)
 {
-	t_env	*new_env;
-
-	new_env = (t_env *)malloc(sizeof(t_env));
-	if (!new_env)
-		return ;
 	new_env->key = key;
-	if (value)
+	if (*value)
 	{
-		new_env->value = ft_strdup(value);
+		new_env->value = ft_strdup(*value);
 		if (!new_env->value)
 			return ;
 	}
@@ -60,10 +55,20 @@ void	add_env_var(t_env **env, char *key, char *value)
 		new_env->value = NULL;
 	new_env->hide = false;
 	new_env->scope = BOTH;
-	if (value == NULL)
+	if (*value == NULL)
 		new_env->scope = EXPORT;
 	new_env->next = NULL;
 	new_env->prev = NULL;
+}
+
+void	add_env_var(t_env **env, char *key, char *value)
+{
+	t_env	*new_env;
+
+	new_env = (t_env *)malloc(sizeof(t_env));
+	if (!new_env)
+		return ;
+	added_env_init(new_env, key, &value);
 	if (exist_key(*(env), key))
 	{
 		set_env(*(env), key, value);
@@ -72,27 +77,4 @@ void	add_env_var(t_env **env, char *key, char *value)
 	}
 	else
 		add_env(env, new_env);
-}
-
-void	setup_shlvl(t_env *new)
-{
-	int	old_shlvl;
-
-	if (new->value)
-	{
-		old_shlvl = ft_atoi(new->value);
-		free(new->value);
-		if (old_shlvl < 0)
-			new->value = ft_itoa(0);
-		else if (old_shlvl >= 999)
-		{
-			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
-			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = ft_itoa(1);
-		}
-		else
-			new->value = ft_itoa(++old_shlvl);
-		if (!new->value)
-			return ;
-	}
 }
