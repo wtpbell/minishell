@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:44:52 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 18:05:06 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,11 @@ static int	validate_pipeline_structure(t_ast_node *root)
 		{
 			if (!current->left || !current->right)
 			{
+				ft_putstr_fd(RED, STDERR_FILENO);
 				ft_putendl_fd(
 					"minishell: syntax error near unexpected token '|'",
 					STDERR_FILENO);
+				ft_putstr_fd(RESET, STDERR_FILENO);
 				valid = 0;
 				break ;
 			}
