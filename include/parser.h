@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 14:08:35 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 17:27:35 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ t_ast_node			*handle_logic_operation(t_token **token,
 int					is_logic_operator(t_token *token);
 t_ast_node			*create_logic_node(t_token **token);
 t_ast_node			*handle_logic_error(void);
+t_ast_node			*handle_pipe_right(t_token **token, t_ast_node *left);
 void				add_redirection(t_ast_node *node, t_token_type type,
 						char *file, t_quote_type quote_type);
 t_ast_node			*create_pipe_node(t_ast_node *left, t_ast_node *right);

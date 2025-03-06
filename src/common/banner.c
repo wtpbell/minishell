@@ -6,11 +6,11 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:36:16 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/05 09:36:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 16:13:09 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "common.h"
 
 static void	print_line(const char *str)
 {
