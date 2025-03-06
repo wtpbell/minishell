@@ -6,11 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/06 15:38:39 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 15:59:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 16:10:51 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "common.h"
+
 
 static char *get_relative_path(char *cwd)
 {
@@ -56,68 +57,27 @@ static char *join_three_strings(char *s1, char *s2, char *s3)
 	return (result);
 }
 
-static char *create_prompt_string(char *username, char *hostname, char *path)
+static char *create_prompt_string(char *path)
 {
-	char	*part1;
 	char	*result;
 
-	part1 = join_three_strings(username, "@", hostname);
-	if (!part1)
-		return (ft_strdup("minishell$ "));
-	result = join_three_strings(part1, ":", path);
-	free(part1);
-	if (!result)
-		return (ft_strdup("minishell$ "));
-	part1 = result;
-	result = join_three_strings(part1, "", "$ ");
-	free(part1);
+	result = join_three_strings(path, "", "$ ");
 	if (!result)
 		return (ft_strdup("minishell$ "));
 	return (result);
 }
 
-static char *get_username_hostname(char **hostname_ptr)
-{
-	char	*username;
-	char	*dot_pos;
-
-	username = getenv("USER");
-	if (!username)
-		username = "user";
-	*hostname_ptr = malloc(HOST_NAME_MAX + 1);
-	if (!*hostname_ptr)
-		return (NULL);
-	if (gethostname(*hostname_ptr, HOST_NAME_MAX) != 0)
-	{
-		free(*hostname_ptr);
-		*hostname_ptr = ft_strdup("localhost");
-	}
-	else
-	{
-		dot_pos = ft_strchr(*hostname_ptr, '.');
-		if (dot_pos)
-			*dot_pos = '\0';
-	}
-	return (username);
-}
-
 char	*get_custom_prompt(void)
 {
-	char	*username;
-	char	*hostname;
 	char	*cwd;
 	char	*relative_path;
 	char	*prompt;
 
-	username = get_username_hostname(&hostname);
-	if (!hostname)
-		return (ft_strdup("minishell$ "));
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		cwd = ft_strdup(".");
 	relative_path = get_relative_path(cwd);
-	prompt = create_prompt_string(username, hostname, relative_path);
-	free(hostname);
+	prompt = create_prompt_string(relative_path);
 	free(cwd);
 	free(relative_path);
 	return (prompt);
