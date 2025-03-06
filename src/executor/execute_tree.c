@@ -169,6 +169,8 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	expander(node, env);
+	if (!node->args[0] || node->args[0][0] == '\0')
+		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());

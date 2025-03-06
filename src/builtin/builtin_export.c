@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:09:19 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 22:48:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,10 @@ static void	append_env_value(t_env *env, char **key, char **value)
 		*key = ft_substr(key_, 0, (ft_strlen(key_) - 1));
 		free(tmp);
 		if (value_ == NULL)
+		{
+			*value = ft_strdup("");
 			return ;
+		}
 		tmp = value_;
 		*value = ft_strjoin(get_env_value(env, (*key)), value_);
 		if (tmp != NULL)
