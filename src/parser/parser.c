@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 16:43:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 17:04:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 	}
 	if (*tokens)
 	{
-		set_exit_status(1);
+		ft_putendl_fd("minishell: syntax error: unexpected token",
+			STDERR_FILENO);
 		free_ast(root);
 		return (NULL);
 	}
