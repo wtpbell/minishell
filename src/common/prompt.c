@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/06 15:38:39 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 15:44:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 15:59:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,10 @@ static char *create_prompt_string(char *username, char *hostname, char *path)
 	return (result);
 }
 
-static char	*get_username_hostname(char **hostname_ptr)
+static char *get_username_hostname(char **hostname_ptr)
 {
 	char	*username;
+	char	*dot_pos;
 
 	username = getenv("USER");
 	if (!username)
@@ -90,6 +91,12 @@ static char	*get_username_hostname(char **hostname_ptr)
 	{
 		free(*hostname_ptr);
 		*hostname_ptr = ft_strdup("localhost");
+	}
+	else
+	{
+		dot_pos = ft_strchr(*hostname_ptr, '.');
+		if (dot_pos)
+			*dot_pos = '\0';
 	}
 	return (username);
 }
