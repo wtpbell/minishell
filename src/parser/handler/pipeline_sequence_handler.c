@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 10:32:53 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/06 14:02:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,42 +35,21 @@ static t_ast_node	*handle_pipe_left(t_token **token)
 	return (left);
 }
 
-static void	process_redirection(t_ast_node *cmd_node, t_token **current)
-{
-	if (!*current || !(*current)->next || (*current)->next->type != TOKEN_WORD)
-		return ;
-	add_redirection(cmd_node, (*current)->type, (*current)->next->content,
-		(*current)->next->quote_type);
-	*current = (*current)->next->next;
-}
-
-static t_ast_node	*handle_pipe_redirection(t_token **token)
+static t_ast_node	*process_pipe_right_command(t_token **token)
 {
 	t_ast_node	*cmd_node;
 	t_token		*current;
-	int			has_command;
 
-	cmd_node = create_ast_node(TOKEN_WORD);
-	if (!cmd_node)
-		return (NULL);
 	current = *token;
-	has_command = 0;
-	while (current && (is_redirection(current)
-			|| current->type == TOKEN_WORD || current->type == TOKEN_WILDCARD))
+	cmd_node = NULL;
+	if (current && (is_redirection(current) || current->type == TOKEN_WORD))
 	{
-		if (is_redirection(current))
-			process_redirection(cmd_node, &current);
-		else
-		{
-			has_command = 1;
-			add_arg_to_node(cmd_node, current->content, current->quote_type);
-			current = current->next;
-		}
+		cmd_node = handle_pipe_redirection(token);
+		if (!cmd_node)
+			return (NULL);
+		return (cmd_node);
 	}
-	if (!has_command && !cmd_node->redirections)
-		return (free_ast(cmd_node), NULL);
-	*token = current;
-	return (cmd_node);
+	return (parse_pipe_sequence(token));
 }
 
 static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
@@ -81,15 +60,9 @@ static t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 	if (!token || !*token)
 		return (free_ast(left), NULL);
 	*token = (*token)->next;
-	if (*token && is_redirection(*token))
-		right = handle_pipe_redirection(token);
-	else
-		right = parse_pipe_sequence(token);
+	right = process_pipe_right_command(token);
 	if (!right)
-	{
-		free_ast(left);
-		return (NULL);
-	}
+		return (free_ast(left), NULL);
 	pipe_node = create_pipe_node(left, right);
 	if (!pipe_node)
 	{
@@ -107,15 +80,15 @@ t_ast_node	*parse_pipe_sequence(t_token **token)
 
 	if (!token || !*token)
 		return (NULL);
-	if ((*token)->type == TOKEN_WORD)
+	if (is_redirection(*token))
 	{
-		left = handle_pipe_left(token);
+		left = handle_pipe_redirection(token);
 		if (!left)
 			return (NULL);
 	}
-	else if (is_redirection(*token))
+	else if ((*token)->type == TOKEN_WORD)
 	{
-		left = handle_pipe_redirection(token);
+		left = handle_pipe_left(token);
 		if (!left)
 			return (NULL);
 	}
