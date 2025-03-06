@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 13:51:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 16:09:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,28 +101,6 @@ static void	modify_env(t_env **env, char *args)
 		return ;
 	}
 	env_args_handler(env, split, args);
-	// key = ft_strdup(split[0]);
-	// if (!key)
-	// {
-	// 	free_tab(split);
-	// 	return ;
-	// }
-	// if (split[1])
-	// 	value = ft_strdup(split[1]);
-	// else
-	// 	value = NULL;
-	// free_tab(split);
-	// if (args[ft_strlen(args) - 1] == '=')
-	// {
-	// 	if (value)
-	// 		free(value);
-	// 	add_env_var(env, key, "");
-	// }
-	// else if (key && !value)
-	// 	add_env_var(env, key, NULL);
-	// else
-	// 	add_env_var(env, key, value);
-	// free(value);
 }
 
 int	builtin_export(t_ast_node *node, t_env **env, t_token *tokens)

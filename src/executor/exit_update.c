@@ -28,9 +28,9 @@
 
 void	set_exit_status(int status)
 {
-	char *status_;
+	char	*status_;
 
-	status_ = ft_itoa(status);;
+	status_ = ft_itoa(status);
 	if (status_)
 	{
 		set_env(*get_env_list(), "?", status_);

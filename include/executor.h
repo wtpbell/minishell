@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 13:59:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 16:02:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_child_info
 	int		input;
 	int		output;
 	int		new_input;
-	t_token *tokens;
+	t_token	*tokens;
 }	t_child_info;
 
 /*error*/
@@ -56,7 +56,8 @@ int		exec_cmd(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_pipe(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_block(t_ast_node *node, t_env **env, t_token *tokens);
-int		exec_redir(t_ast_node *node, t_env **env, t_redir *redir, t_token *tokens);
+int		exec_redir(t_ast_node *node, t_env **env, \
+		t_redir *redir, t_token *tokens);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 19:03:42 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/06 16:47:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static int	resolve_command(t_ast_node *node)
 	tmp = get_cmd_path(node->args[0]);
 	if (!tmp)
 	{
-		error(node->args[0], "Command not found");
+		// error(node->args[0], "Command not found");
 		set_underscore(node->argc, node->args);
-		return (set_exit_status(127), 127);
+		return (set_exit_status(0), 0);
 	}
 	free(node->args[0]);
 	node->args[0] = tmp;
@@ -120,13 +120,13 @@ int	check_cmd(t_ast_node *node, t_env **env)
 	if (node->args[0][0] != '/' && node->args[0][0] != '.')
 	{
 		status_ = resolve_command(node);
-		if (status_ != 0)
+		// if (status_ != 0)
 			return (status_);
 	}
 	else
 	{
 		status_ = validate_executable(node);
-		if (status_ != 0)
+		// if (status_ != 0)
 			return (status_);
 	}
 	return (0);

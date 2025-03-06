@@ -102,7 +102,6 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	// printf("node->type: %d, node->file: %s\n", node->redirections->type, node->redirections->file ? node->redirections->file : "NULL");
 	if (node->left->redirections && node->left->redirections->type == TOKEN_HEREDOC)
 		input = node->left->redirections->fd;
 	child_init(&child, input, tokens);
@@ -174,7 +173,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (builtin)
 		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());
 	status_ = check_cmd(node, env);
-	if (status_ != 0)
+	if (status_)
 		return (status_);
 	signal(SIGINT, interrupt_w_msg);
 	signal(SIGQUIT, interrupt_w_msg);
