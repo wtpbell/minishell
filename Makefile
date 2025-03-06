@@ -20,8 +20,7 @@ OBJ_DIR = obj
 INCLUDE_DIR = include
 LIBFT_DIR = lib
 
-SRC_FILES = $(SRC_DIR)/main.c \
-			$(SRC_DIR)/banner.c
+SRC_FILES = $(SRC_DIR)/main.c
 
 LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/init/tokenizer_init.c \
@@ -89,6 +88,8 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_redir.c \
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
+				$(COMMON_DIR)/banner.c \
+				$(COMMON_DIR)/prompt.c \
 				$(COMMON_DIR)/utils/memory/mem_tracker.c \
 				$(COMMON_DIR)/utils/memory/mem_free.c \
 				$(COMMON_DIR)/utils/memory/utils.c \
