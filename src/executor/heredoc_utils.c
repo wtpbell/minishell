@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:34:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 23:12:53 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 22:10:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	process_line(t_heredoc_data *data)
 		free(data->line);
 	return (1);
 }
+
 void	cleanup_heredocs(t_redir *redir)
 {
 	while (redir)

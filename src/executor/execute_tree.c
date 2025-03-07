@@ -116,33 +116,33 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	return (status_);
 }
 
-int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir, t_token *tokens, bool error_)
+int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 {
 	int		saved_fd[2];
 	int		status_;
 	t_redir	*cur_redir;
+	bool	redir_error;
 
-	if (!node || !redir || !env)
+	if (!node || !node->redirections || !env)
 		return (0);
+	cur_redir = node->redirections;
 	saved_fd[0] = -1;
 	saved_fd[1] = -1;
-	expand_redir_wildcards(redir);
-	if (get_exit_status() == 130)
-		return (130);
-	cur_redir = redir;
-	while (cur_redir)
+	expand_redir_wildcards(cur_redir);
+	redir_error = false;
+	while (cur_redir && !redir_error)
 	{
 		launch_redir(cur_redir, saved_fd, error_);
 		if (get_exit_status() == 1)
-		{
-			restore_redirection(saved_fd);
-			return (1);
-		}
+			redir_error = true;
 		cur_redir = cur_redir->next;
 	}
-	status_ = exec_cmd(node, env, tokens);
+	if (!redir_error)
+		status_ = exec_cmd(node, env, tokens);
+	else
+		status_ = 1;
 	restore_redirection(saved_fd);
-	cleanup_heredocs(redir);
+	cleanup_heredocs(node->redirections);
 	signals_init();
 	return (status_);
 }
@@ -157,6 +157,7 @@ int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir, t_token *tokens, b
 
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
+	// printf("DEBUG: exec_cmd called with command: %s\n", node->args[0]);
 	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
 	pid_t	pid;
 	int		status_;

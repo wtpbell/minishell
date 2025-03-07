@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 23:36:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 21:53:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,7 @@ int		exec_cmd(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_pipe(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens);
 int		exec_block(t_ast_node *node, t_env **env, t_token *tokens);
-int		exec_redir(t_ast_node *node, t_env **env, \
-		t_redir *redir, t_token *tokens, bool error_);
+int		exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);
@@ -74,6 +73,7 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *node, t_env **env);
 void	redirect_io(int input, int output, int new_input);
+t_redir	*get_last_heredoc(t_redir *curr);
 
 /*execute_heredoc*/
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2]);

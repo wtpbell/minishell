@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 23:51:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 22:27:28 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,27 @@ static void	handle_heredoc(t_redir *curr, \
 void	handle_redirections(t_redir *curr, int saved_fd[2], int error_)
 {
 	t_redir	*last_heredoc;
-	t_redir	*tmp;
+	bool	redir_error;
 
-	last_heredoc = NULL;
-	tmp = curr;
-	while (tmp)
-	{
-		if (tmp->type == TOKEN_HEREDOC)
-			last_heredoc = tmp;
-		tmp = tmp->next;
-	}
-	while (curr)
+	redir_error = false;
+	last_heredoc = get_last_heredoc(curr);
+	while (curr && !redir_error)
 	{
 		if (curr->type != TOKEN_HEREDOC)
-			launch_redir(curr, saved_fd, 0);
-		if (curr->heredoc_processed)
+		{
+			launch_redir(curr, saved_fd, error_);
+			if (get_exit_status() != 0)
+				redir_error = true;
+		}
+		else if (curr->heredoc_processed && !redir_error)
 		{
 			if (error_ && curr->heredoc_processed)
 				handle_heredoc(curr, last_heredoc, saved_fd);
 		}
-		curr = curr->next;
+		if (!redir_error)
+			curr = curr->next;
+		else
+			break ;
 	}
 }
 
@@ -72,17 +73,28 @@ static void	handle_child_process(t_child_info *child, \
 {
 	int		saved_fd[2];
 	t_redir	*curr;
+	int		status_;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	saved_fd[0] = -1;
+	saved_fd[1] = -1;
 	redirect_io(child->input, child->output, child->new_input);
+	status_ = 0;
+	set_exit_status(0);
 	if (node->redirections)
 	{
-		saved_fd[1] = -1;
 		curr = node->redirections;
 		handle_redirections(curr, saved_fd, 1);
+		if (get_exit_status() == 0)
+			status_ = exec_cmd(node, env, tokens);
+		else
+			status_ = get_exit_status();
 	}
-	set_exit_status(executor_status(node, env, tokens, 1));
+	else
+		status_ = exec_cmd(node, env, tokens);
+	restore_redirection(saved_fd);
+	set_exit_status(status_);
 }
 
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
@@ -96,7 +108,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	if (pid == 0)
 	{
 		handle_child_process(child, node, env, child->tokens);
-		exit_shell(get_exit_status(), node, env, child->tokens);
+		exit(get_exit_status());
 	}
 	else if (pid < 0)
 	{

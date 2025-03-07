@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:43:42 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 23:06:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 18:03:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,89 +14,83 @@
 #include "common.h"
 #include "env.h"
 
-static int	count_words(char const *str, char *set)
+static int	is_delimiter(char c, char *set)
 {
-	int	words;
-	int	i;
+	if (ft_strchr(set, c) != NULL)
+		return (true);
+	return (false);
+}
 
+static size_t	wordcount(char const *s, char *set)
+{
+	size_t	size;
+	size_t	i;
+
+	i = 0;
+	size = 0;
+	while (s[i] != '\0')
+	{
+		if ((i == 0 && !is_delimiter(s[i], set)) || 
+		(is_delimiter(s[i], set) && s[i + 1] != '\0' && 
+		!is_delimiter(s[i + 1], set)))
+			size++;
+		i++;
+	}
+	return (size);
+}
+
+static char *mem_strndup(const char *s, size_t len)
+{
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	str = (char *)ft_calloc(sizeof(char), (len + 1));
 	if (!str)
-		return (0);
-	words = 0;
-	i = 0;
-	while (str[i] && ft_strchr(set, str[i]))
-		i++;
-	if (!str[i])
-		return (0);
-	while (str[i])
+		return (NULL);
+	while (i < len)
 	{
-		if (!ft_strchr(set, str[i]))
-		{
-			words++;
-			while (str[i] && !ft_strchr(set, str[i]))
-				i++;
-		}
-		else
-			i++;
-	}
-	return (words);
-}
-
-static size_t	mem_strlen(char const *str, char *set)
-{
-	size_t	len;
-
-	len = 0;
-	while (str[len] && !ft_strchr(set, str[len]))
-		len++;
-	return (len);
-}
-
-static int	mem_strcpy(char *dest, char const *src, char *set)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] && !ft_strchr(set, src[i]))
-	{
-		dest[i] = src[i];
+		str[i] = s[i];
 		i++;
 	}
-	dest[i] = '\0';
-	while (src[i] && ft_strchr(set, src[i]))
-		i++;
-	return (i);
+	return(str);
 }
 
-void	free_split(char **arr, int i)
+static char **free_split(char **list)
 {
-	while (i > 0)
-		free(arr[--i]);
-	free(arr);
+	size_t	i;
+
+	i = 0;
+	while (list[i])
+		free(list[i++]);
+	free(list);
+	return (NULL);
 }
 
-char	**mem_split(char const *str, char *set)
+char **mem_split(char const *s, char *set)
 {
-	int		words;
-	int		i;
-	int		j;
-	char	**arr;
+	char	**list;
+	size_t	i;
+	size_t	j;
+	size_t	temp;
 
-	words = count_words(str, set);
-	arr = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!arr)
+	if (!s || !set)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (str && str[j] && ft_strchr(set, str[j]))
-		j++;
-	while (i < words)
+	list = (char **)ft_calloc(sizeof(char *), wordcount(s, set) + 1);
+	if (!list)
+		return (NULL);
+	while (i < wordcount(s, set) && s[j] != '\0')
 	{
-		arr[i] = (char *)malloc(sizeof(char) * (mem_strlen(str + j, set) + 1));
-		if (!arr[i])
-			return (free_split(arr, i), NULL);
-		j += mem_strcpy(arr[i], str + j, set);
-		i++;
+		while (is_delimiter(s[j], set))
+			j++;
+		temp = j;
+		while (s[j] != '\0' && !is_delimiter(s[j], set))
+			j++;
+		list[i] = mem_strndup(&s[temp], j - temp);
+		if (!list[i++])
+			return (free_split(list));
 	}
-	arr[i] = 0;
-	return (arr);
+	return (list);
 }

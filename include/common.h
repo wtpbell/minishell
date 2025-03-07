@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:27:40 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/07 18:03:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void			free_exit_memory(t_ast_node *node, \
 void			*mem_realloc(void *ptr, size_t new_size, \
 				size_t old_size);
 char			**mem_split(char const *str, char *set);
-void			free_split(char **arr, int i);
+// void			free_split(char **arr, int i);
 void			exit_shell(int status, t_ast_node *node, \
 				t_env **env, t_token *tokens);
 

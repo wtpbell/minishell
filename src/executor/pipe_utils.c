@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 23:53:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 21:19:54 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,17 @@ size_t	count_pipes(t_ast_node *node)
 		node = node->right;
 	}
 	return (count);
+}
+
+t_redir	*get_last_heredoc(t_redir *curr)
+{
+	t_redir	*last_heredoc = NULL;
+
+	while (curr)
+	{
+		if (curr->type == TOKEN_HEREDOC)
+			last_heredoc = curr;
+		curr = curr->next;
+	}
+	return (last_heredoc);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 23:26:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 22:11:14 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 // Function to handle regular file redirection
 static void	handle_regular_redirection(t_redir *current_redir, \
 			int saved_fd[2], bool error_)
-{
-	int	fd;
+{	
+	int			fd;
 
 	if (!current_redir->file)
 		return ;
