@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/07 22:27:28 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 22:46:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,28 +73,18 @@ static void	handle_child_process(t_child_info *child, \
 {
 	int		saved_fd[2];
 	t_redir	*curr;
-	int		status_;
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	saved_fd[0] = -1;
-	saved_fd[1] = -1;
 	redirect_io(child->input, child->output, child->new_input);
-	status_ = 0;
-	set_exit_status(0);
 	if (node->redirections)
 	{
+		saved_fd[0] = -1;
+		saved_fd[1] = -1;
 		curr = node->redirections;
-		handle_redirections(curr, saved_fd, 1);
-		if (get_exit_status() == 0)
-			status_ = exec_cmd(node, env, tokens);
-		else
-			status_ = get_exit_status();
+		handle_redirections(curr, saved_fd, 0);
 	}
-	else
-		status_ = exec_cmd(node, env, tokens);
-	restore_redirection(saved_fd);
-	set_exit_status(status_);
+	set_exit_status(executor_status(node, env, tokens, 1));
 }
 
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
