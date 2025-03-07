@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils2.c                                           :+:    :+:            */
+/*   utils1.c                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 23:14:22 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/07 17:41:09 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ static int	resolve_command(t_ast_node *node)
 	tmp = get_cmd_path(node->args[0]);
 	if (!tmp)
 	{
-		// error(node->args[0], "Command not found");
+		error(node->args[0], "Command not found");
 		set_underscore(node->argc, node->args);
-		return (set_exit_status(0), 0);
+		return (set_exit_status(127), 127);
 	}
 	free(node->args[0]);
 	node->args[0] = tmp;
