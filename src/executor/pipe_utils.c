@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 16:35:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 19:09:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	redirect_io(int input, int output, int new_input)
 		if (dup2(input, STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed on input");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(input);
 	}
@@ -30,7 +30,7 @@ void	redirect_io(int input, int output, int new_input)
 		if (dup2(output, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed on output");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(output);
 	}
