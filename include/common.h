@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/09 17:16:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 19:48:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void			exit_shell(int status, t_ast_node *node, \
 
 /*signal*/
 void			signals_init(void);
-void			interrupt_w_msg(int sig);
+void			interrupt_w_nl(int sig);
 void			interrput_silence(int sig);
 void			heredoc_signals(int sig);
 

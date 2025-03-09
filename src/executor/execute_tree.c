@@ -69,7 +69,7 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		status_ = executor_status(node->left, env, tokens, 0);
+		status_ = executor_status(node->left, env, tokens, 1);
 		set_exit_status(status_);
 		exit(status_);
 	}
@@ -171,8 +171,8 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	status_ = check_cmd(node, env);
 	if (status_)
 		return (status_);
-	signal(SIGINT, interrupt_w_msg);
-	signal(SIGQUIT, interrupt_w_msg);
+	signal(SIGINT, interrupt_w_nl);
+	signal(SIGQUIT, interrupt_w_nl);
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), EXIT_FAILURE);
