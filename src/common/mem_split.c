@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 19:43:42 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/07 18:03:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 14:18:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ static size_t	wordcount(char const *s, char *set)
 	size = 0;
 	while (s[i] != '\0')
 	{
-		if ((i == 0 && !is_delimiter(s[i], set)) || 
-		(is_delimiter(s[i], set) && s[i + 1] != '\0' && 
-		!is_delimiter(s[i + 1], set)))
+		if ((i == 0 && !is_delimiter(s[i], set)) || \
+		(is_delimiter(s[i], set) && s[i + 1] != '\0' && \
+			!is_delimiter(s[i + 1], set)))
 			size++;
 		i++;
 	}
 	return (size);
 }
 
-static char *mem_strndup(const char *s, size_t len)
+static char	*mem_strndup(const char *s, size_t len)
 {
 	size_t	i;
 	char	*str;
@@ -53,10 +53,10 @@ static char *mem_strndup(const char *s, size_t len)
 		str[i] = s[i];
 		i++;
 	}
-	return(str);
+	return (str);
 }
 
-static char **free_split(char **list)
+static char	**free_split(char **list)
 {
 	size_t	i;
 
@@ -67,7 +67,7 @@ static char **free_split(char **list)
 	return (NULL);
 }
 
-char **mem_split(char const *s, char *set)
+char	**mem_split(char const *s, char *set)
 {
 	char	**list;
 	size_t	i;

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/07 21:53:42 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:41:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_child_info
 	int		output;
 	int		new_input;
 	t_token	*tokens;
+	int		saved_stdin;
 }	t_child_info;
 
 /*error*/
@@ -64,7 +65,8 @@ int		parent(t_ast_node *node);
 
 /*executor*/
 void	executor(t_ast_node *node, t_env **env, t_token *toekns);
-int		executor_status(t_ast_node *node, t_env **env, t_token *tokens, bool error);
+int		executor_status(t_ast_node *node, t_env **env, \
+		t_token *tokens, bool error);
 
 /*execute_pipe*/
 size_t	count_pipes(t_ast_node *node);
@@ -79,7 +81,7 @@ t_redir	*get_last_heredoc(t_redir *curr);
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2]);
 
 /*execute_redir*/
-void	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_);
+bool	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_);
 void	restore_redirection(int saved_fd[2]);
 void	handle_redirections(t_redir *curr, int saved_fd[2], int error_);
 
@@ -94,7 +96,7 @@ void	append_cwd(t_ast_node *node);
 int		check_cmd(t_ast_node *node, t_env **env);
 
 /*utils3*/
-int		check_paths(char *full_path);
+int		validate_path(char *full_path);
 
 /*heredoc utils*/
 char	*gen_filename(void);

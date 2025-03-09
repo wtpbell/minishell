@@ -72,13 +72,13 @@ BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
 				 $(BUITLIN_DIR)/builtin_export.c \
 				 $(BUITLIN_DIR)/builtin_cd.c \
 				 $(BUITLIN_DIR)/builtin.c \
-				 $(BUITLIN_DIR)/utils1.c \
+				 $(BUITLIN_DIR)/builtin_utils.c \
 
 EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
 				 $(EXECUTOR_DIR)/exit_update.c \
-				 $(EXECUTOR_DIR)/utils1.c \
-				 $(EXECUTOR_DIR)/utils2.c \
+				 $(EXECUTOR_DIR)/cmd_utils.c \
+				 $(EXECUTOR_DIR)/path_utils.c \
 				 $(EXECUTOR_DIR)/heredoc_utils.c \
 				 $(EXECUTOR_DIR)/pipe_utils.c \
 				 $(EXECUTOR_DIR)/wait_utils.c \

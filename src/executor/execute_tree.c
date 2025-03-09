@@ -102,15 +102,15 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 		node->left->redirections->type == TOKEN_HEREDOC)
 		input = node->left->redirections->fd;
 	child_init(&child, input, tokens);
-	if (node->left->redirections)
-	{
-		int saved_fd[2] = {-1, -1};
-		handle_redirections(node->left->redirections, saved_fd, 0);
-		restore_redirection(saved_fd);
-	}
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	status_ = wait_for_pid(last_pid);
 	wait_for_remain();
+	if (child.saved_stdin != -1)
+	{
+		if (dup2(child.saved_stdin, STDIN_FILENO) == -1)
+			perror("Failed to restore stdin after pipeline");
+		close(child.saved_stdin);
+	}
 	set_exit_status(status_);
 	signals_init();
 	return (status_);
@@ -118,13 +118,11 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 
 int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 {
-	int		saved_fd[2];
-	int		status_;
-	t_redir	*cur_redir;
-	bool	redir_error;
+	int			saved_fd[2];
+	int			status_;
+	t_redir		*cur_redir;
+	bool		redir_error;
 
-	if (!node || !node->redirections || !env)
-		return (0);
 	cur_redir = node->redirections;
 	saved_fd[0] = -1;
 	saved_fd[1] = -1;
@@ -133,14 +131,14 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 	while (cur_redir && !redir_error)
 	{
 		launch_redir(cur_redir, saved_fd, error_);
-		if (get_exit_status() == 1)
+		if (get_exit_status() != 0)
 			redir_error = true;
 		cur_redir = cur_redir->next;
 	}
 	if (!redir_error)
 		status_ = exec_cmd(node, env, tokens);
 	else
-		status_ = 1;
+		status_ = get_exit_status();
 	restore_redirection(saved_fd);
 	cleanup_heredocs(node->redirections);
 	signals_init();
@@ -157,7 +155,6 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
-	// printf("DEBUG: exec_cmd called with command: %s\n", node->args[0]);
 	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
 	pid_t	pid;
 	int		status_;

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:14:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 21:32:09 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 18:31:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,13 @@ void	expand_redir_wildcards(t_redir *redir)
 			matches = get_matching_files(redir->file, &match_count);
 			if (matches && match_count > 0)
 			{
+				if (match_count > 1)
+				{
+					error(redir->file, "ambiguous redirect");
+					free_matches(matches, match_count);
+					set_exit_status(1);
+					return ;
+				}
 				free(redir->file);
 				redir->file = ft_strdup(matches[0]);
 			}

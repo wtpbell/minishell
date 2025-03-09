@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 23:30:20 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 13:37:49 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:38:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minishell.h"
 #include "executor.h"
 #include "common.h"
+#include "parser.h"
 
 static int	count_visible_envs(t_env *envs)
 {
@@ -91,4 +92,11 @@ void	setup_shlvl(t_env *new)
 		if (!new->value)
 			return ;
 	}
+}
+
+int	set_underscore_error(t_ast_node *node, char *msg, int status_)
+{
+	error(node->args[0], msg);
+	set_underscore(node->argc, node->args);
+	return (set_exit_status(status_), status_);
 }

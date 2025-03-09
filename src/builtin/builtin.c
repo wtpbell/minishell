@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/03 17:23:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:07:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ static int	builtin_env(t_ast_node *node, t_env **env, t_token *tokens)
 	set_underscore(node->argc, node->args);
 	if (node->argc > 1)
 	{
-		ft_putendl_fd("Too many args", STDERR_FILENO);
+		ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 	head = *env;
 	while (head)
 	{
-		if (head->hide == false && (head->scope & (BOTH | ENVE)))
+		if (head->hide == false && (head->scope & (BOTH | ENV)))
 			printf("%s=%s\n", head->key, head->value);
 		head = head->next;
 	}

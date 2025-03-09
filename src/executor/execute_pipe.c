@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/07 22:46:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 16:46:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	handle_redirections(t_redir *curr, int saved_fd[2], int error_)
 		}
 		else if (curr->heredoc_processed && !redir_error)
 		{
-			if (error_ && curr->heredoc_processed)
+			if (error_)
 				handle_heredoc(curr, last_heredoc, saved_fd);
 		}
 		if (!redir_error)
@@ -71,19 +71,9 @@ void	handle_redirections(t_redir *curr, int saved_fd[2], int error_)
 static void	handle_child_process(t_child_info *child, \
 			t_ast_node *node, t_env **env, t_token *tokens)
 {
-	int		saved_fd[2];
-	t_redir	*curr;
-
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(child->input, child->output, child->new_input);
-	if (node->redirections)
-	{
-		saved_fd[0] = -1;
-		saved_fd[1] = -1;
-		curr = node->redirections;
-		handle_redirections(curr, saved_fd, 0);
-	}
 	set_exit_status(executor_status(node, env, tokens, 1));
 }
 
@@ -110,6 +100,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	return (pid);
 }
 
+/* while loop handle all but bot the last cmd in pipeline */
 pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *temp, t_env **env)
 {

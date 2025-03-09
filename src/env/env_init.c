@@ -44,7 +44,7 @@ static t_env	*env_int(char **key_value)
 /*
 	OLDPWD: Initialized with NULL value and scope set to EXPORT.
 	SHLVL: tracks how many nested shells are currently active
-	_: Represents the last executed command; its scope is set to ENVE.
+	_: Represents the last executed command; its scope is set to ENV.
 	?: Special variable representing the exit status of the last command.
 */
 t_env	*create_env(char *env)
@@ -67,7 +67,7 @@ t_env	*create_env(char *env)
 	else if (ft_strcmp(new->key, "SHLVL") == 0)
 		setup_shlvl(new);
 	else if (ft_strcmp(new->key, "_") == 0)
-		new->scope = ENVE;
+		new->scope = ENV;
 	else if (ft_strcmp(new->key, "?") == 0)
 		new->scope = SPECIAL;
 	return (new);
@@ -90,7 +90,7 @@ static void	add_empty_env(t_env **env)
 	new[3] = create_env("PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin");
 	new[3]->scope = SPECIAL;
 	new[4] = create_env("_=/usr/bin/env");
-	new[4]->scope = ENVE;
+	new[4]->scope = ENV;
 	while (i < 5)
 		add_env(env, new[i++]);
 }

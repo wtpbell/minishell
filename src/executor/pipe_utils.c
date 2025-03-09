@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/07 21:19:54 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 16:35:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ void	child_init(t_child_info *child, int input, t_token *tokens)
 	child->output = -1;
 	child->new_input = -1;
 	child->tokens = tokens;
+	child->saved_stdin = dup(STDIN_FILENO);
+	if (child->saved_stdin == -1)
+		perror("dup stdin failed");
 }
 
 size_t	count_pipes(t_ast_node *node)
@@ -74,8 +77,9 @@ size_t	count_pipes(t_ast_node *node)
 
 t_redir	*get_last_heredoc(t_redir *curr)
 {
-	t_redir	*last_heredoc = NULL;
+	t_redir	*last_heredoc;
 
+	last_heredoc = NULL;
 	while (curr)
 	{
 		if (curr->type == TOKEN_HEREDOC)

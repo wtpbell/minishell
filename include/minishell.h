@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:27:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/09 17:13:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define MANY_ARGS_ERROR "too many arguments"
 # define NUM_ARGS_REQUIRED "numeric argument required"
 # define NON_EXIST_DIR "Nonexistent directory"
+# define NO_FILE_DIR "No such file or directory"
+# define NOT_DIR "Is not a directory"
+# define IS_DIR "Is a directory"
+# define PERMISSION_DENIED "Permission denied"
 # define PATH_MAX 4096  //getconf PATH_MAX /
 # define DECLARE "declare -x "
 
