@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 19:04:24 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 19:12:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ static bool	parse_num(char *arg, long long *num, int *digit_count)
 	{
 		if (++(*digit_count) > MAX_STATUS_LEN)
 			return (false);
-		if ((*num > LLONG_MAX / 10) || (*num == LLONG_MAX / 10 &&
-			(arg[i] - '0') > LLONG_MAX % 10))
+		if ((*num > LLONG_MAX / 10) || (*num == LLONG_MAX / 10 && \
+				(arg[i] - '0') > LLONG_MAX % 10))
 			return (false);
 		*num = (*num * 10) + (arg[i++] - '0');
 	}
