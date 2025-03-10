@@ -71,6 +71,7 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 		signal(SIGQUIT, SIG_DFL);
 		status_ = executor_status(node->left, env, tokens, 1);
 		set_exit_status(status_);
+		free_exit_memory(node, env, tokens);
 		exit(status_);
 	}
 	status_ = wait_for_child();
@@ -160,8 +161,8 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	int		status_;
 
 	(void) tokens;
-	if (!node || !node->args || !env || node->argc == 0)
-		return (set_exit_status(0), 0);
+	// if (!node || !node->args || !env || node->argc == 0)
+	// 	return (set_exit_status(0), 0);
 	expander(node, env);
 	if (!node->args[0] || node->args[0][0] == '\0')
 		return (set_exit_status(0), 0);
@@ -179,5 +180,6 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (pid == 0)
 		child(node, env);
 	status_ = wait_for_pid(pid);
+	signals_init();
 	return (status_);
 }
