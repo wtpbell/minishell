@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/10 19:37:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/10 19:53:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,4 +120,5 @@ pid_t	final_process(t_child_info *child, t_ast_node *temp, t_env **env);
 int		wait_for_child(void);
 int		wait_for_pid(pid_t pid);
 void	wait_for_remain(void);
+void free_child_resources(t_env **env, t_token *tokens);
 #endif

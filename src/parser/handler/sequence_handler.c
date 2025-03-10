@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 15:10:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:18:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/10 18:18:39 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_ast_node	*parse_command_sequence(t_token **token, t_token_type end_type)
 		result = handle_logic_operation(token, current);
 		if (!result)
 		{
-			free_ast(current);
+			// free_ast(current);
 			return (NULL);
 		}
 		current = result;
