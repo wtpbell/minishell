@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 18:14:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/10 12:08:58 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,7 @@ t_ast_node	*parse_pipeline(t_token **token)
 	{
 		pipe_node = handle_pipe_right(token, root);
 		if (!pipe_node)
-		{
-			free_ast(root);
 			return (NULL);
-		}
 		root = pipe_node;
 	}
 	if (!validate_pipeline_structure(root))
