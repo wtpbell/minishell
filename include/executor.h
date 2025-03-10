@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/09 17:41:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/10 19:37:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,16 @@ typedef struct s_child_info
 	int		output;
 	int		new_input;
 	t_token	*tokens;
+	t_ast_node	*root;
 	int		saved_stdin;
 }	t_child_info;
+
+typedef struct s_exec_tracker
+{
+	t_ast_node *root;
+	t_ast_node *current;
+	t_token 	*token;
+} t_exec_tracker;
 
 /*error*/
 void	error(char *word, char *msg);

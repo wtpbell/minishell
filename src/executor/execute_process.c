@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/10 12:10:07 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/10 18:28:25 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 void	child(t_ast_node *node, t_env **env)
 {
 	char	**env_arr;
+	int		i;
 
+	i = 0;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	env_arr = env_to_arr(*env);
@@ -33,9 +35,18 @@ void	child(t_ast_node *node, t_env **env)
 	{
 		perror("env_to_arr failed");
 		error(node->args[0], NULL);
+		set_exit_status(127);
+		exit(get_exit_status());
 	}
 	if (execve(node->args[0], node->args, env_arr) == -1)
+	{
 		error(node->args[0], NULL);
+		child_cleanup(node, env_arr);
+		set_exit_status(127);
+		exit(get_exit_status());
+	}
+	printf("am i in child");
+	free_ast(node);
 	set_exit_status(127);
 	exit(get_exit_status());
 }
@@ -50,6 +61,7 @@ int	parent(t_ast_node *node)
 	else if (WIFSIGNALED(status_))
 		status_ = WTERMSIG(status_) + 128;
 	set_underscore(node->argc, node->args);
+	free_ast(node);
 	set_exit_status(status_);
 	signals_init();
 	return (get_exit_status());

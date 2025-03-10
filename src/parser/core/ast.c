@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 18:12:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/10 16:28:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ void	add_arg_to_node(t_ast_node *node, char *arg, t_quote_type quote_type)
 {
 	t_arg_data	data;
 
+     printf("Adding argument: '%s' (address: %p) to node %p\n", arg, (void*)arg, (void*)node);
 	if (!node || !arg)
 		return ;
 	data.args_len = get_args_length(node->args);

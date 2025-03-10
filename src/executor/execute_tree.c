@@ -64,7 +64,7 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	signal(SIGQUIT, interrput_silence);
 	pid = fork();
 	if (pid == -1)
-		return (error("fork() failed", NULL), EXIT_FAILURE);
+		return (error("fork() failed", NULL), free_exit_memory(node, env, tokens), EXIT_FAILURE);
 	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -99,9 +99,9 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	if (node->left->redirections && \
-		node->left->redirections->type == TOKEN_HEREDOC)
-		input = node->left->redirections->fd;
+	// if (node->left->redirections && \
+	// 	node->left->redirections->type == TOKEN_HEREDOC)
+	// 	input = node->left->redirections->fd;
 	child_init(&child, input, tokens);
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	status_ = wait_for_pid(last_pid);
@@ -161,8 +161,8 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	int		status_;
 
 	(void) tokens;
-	// if (!node || !node->args || !env || node->argc == 0)
-	// 	return (set_exit_status(0), 0);
+	if (!node || !node->args || !env || node->argc == 0)
+		return (set_exit_status(0), 0);
 	expander(node, env);
 	if (!node->args[0] || node->args[0][0] == '\0')
 		return (set_exit_status(0), 0);
@@ -176,7 +176,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	signal(SIGQUIT, interrupt_w_nl);
 	pid = fork();
 	if (pid == -1)
-		return (perror("fork failed"), EXIT_FAILURE);
+		return (perror("fork failed"), free_exit_memory(node, env, tokens), EXIT_FAILURE);
 	if (pid == 0)
 		child(node, env);
 	status_ = wait_for_pid(pid);
