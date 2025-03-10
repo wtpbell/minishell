@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:42:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:06:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,60 +35,37 @@ static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 	set_env(envs, "PWD", pwd);
 }
 
-static int	handle_home_dir(t_env **env)
+static int	change_dir(t_ast_node *node, t_env **env, char *old_pwd)
 {
-	char	*home_path;
-
-	home_path = get_env_value(*env, "HOME");
-	if (!home_path)
-		return (error("cd", "HOME not set"), ERR_ENV);
-	if (chdir(home_path) == -1)
+	if (chdir(node->args[1]) == -1)
 		return (error("cd", NULL), ERR_CHDIR);
+	update_pwd(*env, old_pwd, node->args[1]);
 	return (EXIT_SUCCESS);
 }
 
-static int	handle_prev_dir(t_env **env)
+static int	home_dir(t_env **env, bool home, char *old_pwd)
 {
-	char	*old_pwd;
-	char	*prev_path;
+	char	*path;
+	char	current_pwd[PATH_MAX];
 
-	old_pwd = get_env_value(*env, "OLDPWD");
-	if (!old_pwd)
-		return (error("cd", "OLDPWD not set"), ERR_ENV);
-	prev_path = ft_strdup(old_pwd);
-	if (!prev_path)
-		return (error("cd", "malloc failed"), ERR_MALLOC);
-	if (chdir(prev_path) == -1)
-	{
-		free(prev_path);
-		return (error("cd", NULL), ERR_CHDIR);
-	}
-	ft_putendl_fd(prev_path, STDOUT_FILENO);
-	free(prev_path);
-	return (EXIT_SUCCESS);
-}
-
-static int	cd_dir(t_ast_node *node, t_env **env)
-{
-	char	old_pwd[PATH_MAX];
-	int		status;
-
-	if (getcwd(old_pwd, PATH_MAX) == NULL)
-		return (error("cd", NULL), ERR_CHDIR);
-	set_env(*env, "OLDPWD", old_pwd);
-	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
-		status = handle_home_dir(env);
-	else if (ft_strcmp(node->args[1], "-") == 0)
-		status = handle_prev_dir(env);
+	if (home)
+		path = get_env_value(*env, "HOME");
 	else
+		path = get_env_value (*env, "OLDPWD");
+	if (!path)
 	{
-		if (chdir(node->args[1]) == -1)
-			return (error("cd", NULL), ERR_CHDIR);
-		status = EXIT_SUCCESS;
+		if (home)
+			return (error("cd", "HOME is not set"), ERR_ENV);
+		else
+			return (error("cd", "OLDPWD is not set"), ERR_ENV);
 	}
-	if (status == EXIT_SUCCESS)
-		update_pwd(*env, old_pwd, node->args[1]);
-	return (status);
+	if (chdir(path) == -1)
+		return (error("cd", NULL), ERR_CHDIR);
+	if (!home)
+		ft_putendl_fd(path, STDOUT_FILENO);
+	if (getcwd(current_pwd, PATH_MAX) != NULL)
+		update_pwd(*env, old_pwd, current_pwd);
+	return (EXIT_SUCCESS);
 }
 
 /*
@@ -100,29 +77,27 @@ static int	cd_dir(t_ast_node *node, t_env **env)
 */
 int	builtin_cd(t_ast_node *node, t_env **env, t_token *tokens)
 {
-	char		*tmp;
 	char		old_pwd[PATH_MAX];
+	int			status_;
 	struct stat	info;
 
 	(void) tokens;
 	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	if (node->argc > 2)
-		return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), 1);
-	if (node->argc == 1 || ft_strcmp(node->args[1], "-") == 0
-		|| ft_strcmp(node->args[1], "~") == 0)
-		return (cd_dir(node, env));
-	if (access(node->args[1], F_OK) == -1)
-		return (error("cd", "No such file or directory"), EXIT_FAILURE);
+		return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), EXIT_FAILURE);
+	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
+		return (home_dir(env, true, old_pwd));
+	if (ft_strcmp(node->args[1], "-") == 0)
+		return (home_dir(env, false, old_pwd));
 	if (stat(node->args[1], &info) == -1)
-		return (error("cd", NULL), EXIT_FAILURE);
+		return (error("cd", NO_FILE_DIR), EXIT_FAILURE);
 	if (!S_ISDIR(info.st_mode))
-		return (error("cd", "Is not a directory"), EXIT_FAILURE);
+		return (error("cd", NOT_DIR), EXIT_FAILURE);
 	if (access(node->args[1], R_OK | X_OK) == -1)
-		return (error("cd", "Permission denied"), EXIT_FAILURE);
-	if (chdir(node->args[1]) == -1)
-		return (error("cd", NULL), EXIT_FAILURE);
-	tmp = node->args[1];
-	update_pwd(*env, old_pwd, tmp);
-	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
+		return (error("cd", PERMISSION_DENIED), EXIT_FAILURE);
+	status_ = change_dir(node, env, old_pwd);
+	if (status_ == EXIT_SUCCESS)
+		set_underscore(node->argc, node->args);
+	return (status_);
 }

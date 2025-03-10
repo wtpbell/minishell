@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/05 16:12:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 09:37:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,17 @@ void	add_env(t_env **env, t_env *new)
 	new->next = NULL;
 }
 
+static void	set_scope(t_env *envs, const char *new_value)
+{
+	if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
+	{
+		if (new_value)
+			envs->scope = BOTH;
+		else
+			envs->scope = EXPORT;
+	}
+}
+
 void	set_env(t_env *envs, const char *key, const char *new_value)
 {
 	while (envs)
@@ -44,18 +55,17 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 		{
 			envs->hide = false;
 			if (envs->value)
+			{
 				free(envs->value);
-			envs->value = NULL;
-			if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
-				envs->scope = BOTH;
+				envs->value = NULL;
+			}
+			set_scope(envs, new_value);
 			if (new_value)
 			{
 				envs->value = ft_strdup(new_value);
 				if (!envs->value)
 					return ;
 			}
-			else if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
-				envs->scope = EXPORT;
 			return ;
 		}
 		envs = envs->next;
@@ -72,6 +82,8 @@ void	set_underscore(int argc, char **args)
 	char	**splited;
 	int		i;
 
+	if (argc < 1 || !args || !args[0])
+		return ;
 	if ((argc - 1) != 0)
 	{
 		set_env(*get_env_list(), "_", args[argc - 1]);
@@ -81,12 +93,9 @@ void	set_underscore(int argc, char **args)
 	if (!splited)
 		return ;
 	i = 0;
-	while (splited[i])
+	while (splited[i + 1])
 		i++;
-	if (i == 0)
-		i = 1;
-	if (i > 0)
-		set_env(*get_env_list(), "_", splited[i - 1]);
+	set_env(*get_env_list(), "_", splited[i]);
 	free_tab(splited);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/04 23:53:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 19:09:19 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	redirect_io(int input, int output, int new_input)
 		if (dup2(input, STDIN_FILENO) == -1)
 		{
 			perror("dup2 failed on input");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(input);
 	}
@@ -30,7 +30,7 @@ void	redirect_io(int input, int output, int new_input)
 		if (dup2(output, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 failed on output");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 		close(output);
 	}
@@ -56,6 +56,9 @@ void	child_init(t_child_info *child, int input, t_token *tokens)
 	child->output = -1;
 	child->new_input = -1;
 	child->tokens = tokens;
+	child->saved_stdin = dup(STDIN_FILENO);
+	if (child->saved_stdin == -1)
+		perror("dup stdin failed");
 }
 
 size_t	count_pipes(t_ast_node *node)
@@ -70,4 +73,18 @@ size_t	count_pipes(t_ast_node *node)
 		node = node->right;
 	}
 	return (count);
+}
+
+t_redir	*get_last_heredoc(t_redir *curr)
+{
+	t_redir	*last_heredoc;
+
+	last_heredoc = NULL;
+	while (curr)
+	{
+		if (curr->type == TOKEN_HEREDOC)
+			last_heredoc = curr;
+		curr = curr->next;
+	}
+	return (last_heredoc);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils3.c                                           :+:    :+:            */
+/*   path_utils.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:42:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:43:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "common.h"
 #include <sys/stat.h>
 
-static int	join_path(char **joined, char *to_append, bool add_slash)
+static int	append_path(char **joined, char *to_append, bool add_slash)
 {
 	char	*temp;
 	char	*new_str;
@@ -40,7 +40,7 @@ static int	join_path(char **joined, char *to_append, bool add_slash)
 }
 
 // Helper function to check if path exists and is a directory
-static int	validate_path(char *path, char *full_path)
+static int	validate_path_c(char *path, char *full_path)
 {
 	struct stat	info;
 
@@ -49,11 +49,11 @@ static int	validate_path(char *path, char *full_path)
 	if (stat(path, &info) == -1)
 		return (error(full_path, NULL), ERR_ACCESS);
 	if (!S_ISDIR(info.st_mode))
-		return (error(full_path, "Not a directory"), ERR_NOT_DIR);
+		return (error(full_path, NOT_DIR), ERR_NOT_DIR);
 	return (0);
 }
 
-static int	check_prefix(char *full_path, char **paths, char **joined, int *i)
+static int	validate_dir_c(char *full_path, char **paths, char **joined, int *i)
 {
 	int	status;
 
@@ -67,14 +67,14 @@ static int	check_prefix(char *full_path, char **paths, char **joined, int *i)
 	{
 		if ((*i) > 0 || full_path[0] == '/')
 		{
-			status = join_path(joined, "/", false);
+			status = append_path(joined, "/", false);
 			if (status != 0)
 				return (status);
 		}
-		status = join_path(joined, paths[*i], false);
+		status = append_path(joined, paths[*i], false);
 		if (status != 0)
 			return (status);
-		status = validate_path(*joined, full_path);
+		status = validate_path_c(*joined, full_path);
 		if (status != 0)
 			return (status);
 		(*i)++;
@@ -82,7 +82,8 @@ static int	check_prefix(char *full_path, char **paths, char **joined, int *i)
 	return (0);
 }
 
-int	check_last_path(char *full_path, char **paths, char **joined, int i)
+static int	validate_trailing_c(char *full_path, char **paths, \
+			char **joined, int i)
 {
 	int	status;
 	int	len;
@@ -94,13 +95,13 @@ int	check_last_path(char *full_path, char **paths, char **joined, int i)
 		len++;
 	if (full_path[len - 1] != '/')
 		return (0);
-	status = join_path(joined, paths[i], true);
+	status = append_path(joined, paths[i], true);
 	if (status != 0)
 		return (status);
-	return (validate_path(*joined, full_path));
+	return (validate_path_c(*joined, full_path));
 }
 
-int	check_paths(char *full_path)
+int	validate_path(char *full_path)
 {
 	char	**paths;
 	int		i;
@@ -114,13 +115,13 @@ int	check_paths(char *full_path)
 		return (-1);
 	joined = NULL;
 	i = 0;
-	status_ = check_prefix(full_path, paths, &joined, &i);
+	status_ = validate_dir_c(full_path, paths, &joined, &i);
 	if (status_ != 0)
 	{
 		free(joined);
 		return (free_tab(paths), status_);
 	}
-	status_ = check_last_path(full_path, paths, &joined, i);
+	status_ = validate_trailing_c(full_path, paths, &joined, i);
 	free(joined);
 	free_tab(paths);
 	return (status_);

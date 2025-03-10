@@ -1,0 +1,12 @@
+Makefile
+coverage
+include
+lib
+minishell
+minishell.supp
+minishell_tester
+note.md
+obj
+outfiles
+src
+test_files

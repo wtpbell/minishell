@@ -32,15 +32,15 @@ int	exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens)
 	if (node->type == TOKEN_AND)
 	{
 		if (node->left)
-			status_ = executor_status(node->left, env, tokens);
+			status_ = executor_status(node->left, env, tokens, 1);
 		if (status_ == EXIT_SUCCESS)
-			status_ = executor_status(node->right, env, tokens);
+			status_ = executor_status(node->right, env, tokens, 1);
 	}
 	else if (node->type == TOKEN_OR)
 	{
-		status_ = executor_status(node->left, env, tokens);
+		status_ = executor_status(node->left, env, tokens, 1);
 		if (status_ != EXIT_SUCCESS)
-			status_ = executor_status(node->right, env, tokens);
+			status_ = executor_status(node->right, env, tokens, 1);
 	}
 	set_exit_status(status_);
 	return (status_);
@@ -69,15 +69,11 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		status_ = executor_status(node->left, env, tokens);
+		status_ = executor_status(node->left, env, tokens, 1);
 		set_exit_status(status_);
 		exit(status_);
 	}
-	wait(&status_);
-	if (WIFEXITED(status_))
-		status_ = WEXITSTATUS(status_);
-	else
-		status_ = EXIT_FAILURE;
+	status_ = wait_for_child();
 	set_exit_status(status_);
 	signals_init();
 	return (status_);
@@ -102,53 +98,51 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	if (node->left->redirections && node->left->redirections->type == TOKEN_HEREDOC)
+	if (node->left->redirections && \
+		node->left->redirections->type == TOKEN_HEREDOC)
 		input = node->left->redirections->fd;
 	child_init(&child, input, tokens);
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
-	waitpid(last_pid, &status_, 0);
-	if (WIFEXITED(status_))
-		status_ = WEXITSTATUS(status_);
-	else if (WIFSIGNALED(status_))
-		status_ = 128 + WTERMSIG(status_);
-	else
-		status_ = EXIT_FAILURE;
-	while (wait(NULL) > 0)
-		;
+	status_ = wait_for_pid(last_pid);
+	wait_for_remain();
+	if (child.saved_stdin != -1)
+	{
+		if (dup2(child.saved_stdin, STDIN_FILENO) == -1)
+			perror("Failed to restore stdin after pipeline");
+		close(child.saved_stdin);
+	}
 	set_exit_status(status_);
 	signals_init();
 	return (status_);
 }
 
-int	exec_redir(t_ast_node *node, t_env **env, t_redir *redir, t_token *tokens)
+int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 {
-	int		saved_fd[2];
-	int		status;
-	t_redir	*cur_redir;
+	int			saved_fd[2];
+	int			status_;
+	t_redir		*cur_redir;
+	bool		redir_error;
 
-	if (!node || !redir || !env)
-		return (0);
+	cur_redir = node->redirections;
 	saved_fd[0] = -1;
 	saved_fd[1] = -1;
-	expand_redir_wildcards(redir);
-	if (get_exit_status() == 130)
-		return (130);
-	cur_redir = redir;
-	while (cur_redir)
+	expand_redir_wildcards(cur_redir);
+	redir_error = false;
+	while (cur_redir && !redir_error)
 	{
-		launch_redir(cur_redir, saved_fd);
-		if (get_exit_status() == 1)
-		{
-			restore_redirection(saved_fd);
-			return (1);
-		}
+		launch_redir(cur_redir, saved_fd, error_);
+		if (get_exit_status() != 0)
+			redir_error = true;
 		cur_redir = cur_redir->next;
 	}
-	status = exec_cmd(node, env, tokens);
+	if (!redir_error)
+		status_ = exec_cmd(node, env, tokens);
+	else
+		status_ = get_exit_status();
 	restore_redirection(saved_fd);
-	cleanup_heredocs(redir);
+	cleanup_heredocs(node->redirections);
 	signals_init();
-	return (status);
+	return (status_);
 }
 
 /*
@@ -169,22 +163,21 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	expander(node, env);
+	if (!node->args[0] || node->args[0][0] == '\0')
+		return (set_exit_status(0), 0);
 	builtin = is_builtin(node->args[0]);
 	if (builtin)
 		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());
 	status_ = check_cmd(node, env);
 	if (status_)
 		return (status_);
-	signal(SIGINT, interrupt_w_msg);
-	signal(SIGQUIT, interrupt_w_msg);
+	signal(SIGINT, interrupt_w_nl);
+	signal(SIGQUIT, interrupt_w_nl);
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), EXIT_FAILURE);
 	if (pid == 0)
 		child(node, env);
-	waitpid(pid, &status_, 0);
-	if (WIFEXITED(status_))
-		return (WEXITSTATUS(status_));
-	else
-		return (EXIT_FAILURE);
+	status_ = wait_for_pid(pid);
+	return (status_);
 }

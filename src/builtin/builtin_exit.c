@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 13:38:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 19:12:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,23 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-static bool	is_valid_numeric(char *arg)
+static bool	parse_num(char *arg, long long *num, int *digit_count)
 {
 	int	i;
-	int	j;
 
+	*num = 0;
+	*digit_count = 0;
 	i = 0;
-	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
-		i++;
-	if (arg[i] == '+' || arg[i] == '-')
-		i++;
-	j = 0;
-	while (arg[i + j] && ft_isdigit(arg[i + j]))
-		j++;
-	if (j > MAX_STATUS_LEN)
-		return (false);
-	i += j;
-	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
-		i++;
-	if (arg[i] != '\0')
-		return (false);
-	return (true);
+	while (arg[i] && ft_isdigit(arg[i]))
+	{
+		if (++(*digit_count) > MAX_STATUS_LEN)
+			return (false);
+		if ((*num > LLONG_MAX / 10) || (*num == LLONG_MAX / 10 && \
+				(arg[i] - '0') > LLONG_MAX % 10))
+			return (false);
+		*num = (*num * 10) + (arg[i++] - '0');
+	}
+	return (arg[i] == '\0');
 }
 
 static bool	is_within_long_range(char *arg)
@@ -45,10 +41,12 @@ static bool	is_within_long_range(char *arg)
 	long long	num;
 	int			sign;
 	int			i;
+	int			count;
 
 	num = 0;
 	sign = 1;
 	i = 0;
+	count = 0;
 	while (arg[i] && (arg[i] == ' ' || arg[i] == '\t'))
 		i++;
 	if (arg[i] == '+' || arg[i] == '-')
@@ -57,16 +55,10 @@ static bool	is_within_long_range(char *arg)
 			sign = -1;
 		i++;
 	}
-	while (arg[i] && ft_isdigit(arg[i]))
-	{
-		if ((num > LLONG_MAX / 10) || \
-			(num == LLONG_MAX / 10 && (arg[i] - '0') > LLONG_MAX % 10))
-			return (false);
-		num = num * 10 + (arg[i] - '0');
-		i++;
-	}
+	if (!parse_num(arg + i, &num, &count) || count == 0)
+		return (false);
 	num *= sign;
-	return (num <= LLONG_MAX && num >= LLONG_MIN);
+	return (true);
 }
 /*
 	No Arguments: Exits with status 0 (default).
@@ -85,10 +77,10 @@ int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 	ft_putendl_fd("exit", STDIN_FILENO);
 	if (node->argc > 1)
 	{
-		if (!(is_valid_numeric(args[1]) && is_within_long_range(args[1])))
+		if (!(is_within_long_range(args[1])))
 		{
 			ft_putendl_fd(SHELL_ERROR NUM_ARGS_REQUIRED, STDERR_FILENO);
-			exit(2);
+			exit_shell(2, node, env, tokens);
 		}
 		else if (node->argc > 2)
 		{
@@ -98,7 +90,6 @@ int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 		else
 			exit_status = ft_atoi(args[1]);
 	}
-	free_exit_memory(node, env, tokens);
-	exit(exit_status);
+	exit_shell(exit_status, node, env, tokens);
 	return (0);
 }

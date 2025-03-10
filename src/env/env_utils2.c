@@ -37,19 +37,23 @@ char	*get_env_value(t_env *envs, const char *key)
 	return (NULL);
 }
 
-static bool	exist_key(t_env *env, char *key)
-{
-	return (get_env(env, key) != NULL);
-}
-
 static void	added_env_init(t_env *new_env, char *key, char **value)
 {
-	new_env->key = key;
+	new_env->key = ft_strdup(key);
+	if (!new_env->key)
+	{
+		free(new_env);
+		return ;
+	}
 	if (*value)
 	{
 		new_env->value = ft_strdup(*value);
 		if (!new_env->value)
+		{
+			free(new_env->key);
+			free(new_env);
 			return ;
+		}
 	}
 	else
 		new_env->value = NULL;
@@ -65,16 +69,14 @@ void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
+	if (get_env(*env, key))
+	{
+		set_env(*env, key, value);
+		return ;
+	}
 	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
 		return ;
 	added_env_init(new_env, key, &value);
-	if (exist_key(*(env), key))
-	{
-		set_env(*(env), key, value);
-		free(new_env);
-		return ;
-	}
-	else
-		add_env(env, new_env);
+	add_env(env, new_env);
 }
