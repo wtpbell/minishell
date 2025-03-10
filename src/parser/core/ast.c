@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 18:12:33 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/10 19:08:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	add_arg_to_node(t_ast_node *node, char *arg, t_quote_type quote_type)
 		return ;
 	data.args_len = get_args_length(node->args);
 	data.new_args = (char **)ft_calloc((data.args_len + 2), sizeof(char *));
+	printf("new_args: %p\n", data.new_args);
 	if (!data.new_args)
 		return ;
 	data.new_quote_types = ft_calloc((data.args_len + 2), sizeof(t_quote_type));

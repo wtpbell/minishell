@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 10:33:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/10 19:09:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,42 @@ void	free_redirections(t_redir *redir)
 }
 
 /* Free instruction argument array memory */
-void	free_args(char **args)
+// void	free_args(char **args)
+// {
+// 	int	i;
+
+// 	if (!args)
+// 		return ;
+// 	i = 0;
+// 	while (args[i])
+// 	{
+// 		printf("freeing %s\n", args[i]);
+// 		free(args[i++]);
+// 	}
+// 	free(args);
+// }
+
+void free_args(char **args)
 {
-	int	i;
+	int i;
 
 	if (!args)
-		return ;
+		return;
+
+	printf("Freeing args array at %p\n", (void*)args);
 	i = 0;
 	while (args[i])
+	{
+		printf("Freeing arg[%d] at %p: '%s'\n", i, (void*)args[i], args[i]);
 		free(args[i++]);
+	}
 	free(args);
+	printf("Args array freed\n");
 }
 
 /* Free AST full structure memory */
 void	free_ast(t_ast_node *node)
 {
-	int	i;
-
 	if (!node)
 		return ;
 	if (node->left)
@@ -58,12 +77,7 @@ void	free_ast(t_ast_node *node)
 	if (node->right)
 		free_ast(node->right);
 	if (node->args)
-	{
-		i = 0;
-		while (node->args[i])
-			free(node->args[i++]);
-		free(node->args);
-	}
+		free_args(node->args);
 	if (node->arg_quote_types)
 		free(node->arg_quote_types);
 	if (node->redirections)
