@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 10:32:30 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 10:33:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 	child->new_input = pipe_fd[0];
 	printf("[PARENT] node before fork: %p\n", node);
 	pid = fork();
-	if (pid == 0)z
+	if (pid == 0)
 	{
 		printf("[CHILD] node after fork: %p\n", node);
 		handle_child_process(child, node, env, child->tokens);
