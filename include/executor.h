@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/10 19:53:16 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/11 11:30:19 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ typedef struct s_child_info
 
 typedef struct s_exec_tracker
 {
-	t_ast_node *root;
-	t_ast_node *current;
+	t_ast_node	*root;
+	t_ast_node	*current;
 	t_token 	*token;
 } t_exec_tracker;
 

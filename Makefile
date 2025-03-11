@@ -95,6 +95,7 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/mem_realloc.c \
 				$(COMMON_DIR)/mem_free.c \
 				$(COMMON_DIR)/error.c \
+				$(COMMON_DIR)/root_node.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
