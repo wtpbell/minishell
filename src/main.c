@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 13:24:17 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:16:23 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,9 @@ static int	process_command_line(char *line, t_env **env_)
 		free_tokens(tokens);
 		tokens = NULL;
 		executor(ast, env_, NULL);
-		printf("clean ast before\n");
 		free_ast(ast);
 		get_root_node(NULL);
-		printf("clean ast after\n");
 	}
-	// if (tokens)
-	// 	free_tokens(tokens);
 	return (1);
 }
 

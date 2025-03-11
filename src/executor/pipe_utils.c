@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 10:32:26 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:15:15 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	redirect_io(int input, int output, int new_input)
 {
-	if (new_input != 0)
+	if (new_input != 0 && new_input != -1)
 		close(new_input);
 	if (input != 0)
 	{
@@ -44,11 +44,12 @@ pid_t	final_process(t_child_info *child, \
 
 	final_pipe[1] = STDOUT_FILENO;
 	final_pipe[0] = 0;
-	printf("in final process?\n");
-	printf("node run in final process: %p\n", temp);
 	last_pid = spawn_process(child, final_pipe, temp, env);
 	if (child->input != 0)
+	{
 		close(child->input);
+		child->input = 0;
+	}
 	return (last_pid);
 }
 

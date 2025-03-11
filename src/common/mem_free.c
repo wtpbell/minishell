@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/04 21:39:14 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 14:24:47 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:15:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,31 +55,19 @@ void	free_exit_memory(t_ast_node *node, t_env **env, t_token *tokens)
 	t_ast_node *root_to_free;
 
 	(void)node;
-	(void)tokens;
-	ft_putendl_fd("EXITING!!!!!!!!!!!!!!!!!!!!!!!!!!!!", 2);
 	root_to_free = get_root_node(NULL);
 	if (root_to_free)
 	{
-		// dprintf(2, "%p %p\n", root_to_free, *env);
-		printf("freeing root\n");
 		free_ast(root_to_free);
 		get_root_node(NULL);
 	}
-	// if (node && node != root_to_free)
-	// {
-	// 	printf("freeing node\n");
-	// 	free_ast(node);
-	// 	node = NULL;
-	// }
-	// if (tokens)
-	// {
-	// 	printf("freeing tokens\n");
-	// 	free_tokens(tokens);
-	// 	tokens = NULL;
-	// }
+	if (tokens)
+	{
+		free_tokens(tokens);
+		tokens = NULL;
+	}
 	if (env && *env)
 	{
-		printf("freeing env\n");
 		free_env(env);
 		env = NULL;
 	}
@@ -88,9 +76,7 @@ void	free_exit_memory(t_ast_node *node, t_env **env, t_token *tokens)
 
 void	exit_shell(int status, t_ast_node *node, t_env **env, t_token *tokens)
 {
-	(void)node;
-	(void)tokens;
-	free_exit_memory(NULL, env, NULL);
+	free_exit_memory(node, env, tokens);
 	exit(status);
 }
 

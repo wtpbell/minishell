@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 08:52:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:08:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@
 void	child(t_ast_node *node, t_env **env)
 {
 	char	**env_arr;
-	// int		i;
 
-	// i = 0;
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	env_arr = env_to_arr(*env);
@@ -45,8 +43,8 @@ void	child(t_ast_node *node, t_env **env)
 		set_exit_status(127);
 		exit(get_exit_status());
 	}
-	printf("am i in child");
-	free_ast(node);
+	printf("in child");
+	free_tab(env_arr);
 	set_exit_status(127);
 	exit(get_exit_status());
 }
