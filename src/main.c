@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 08:54:11 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 10:01:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static void	main_loop(t_env **env_)
 		}
 		free(line);
 	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **env)
@@ -78,5 +79,6 @@ int	main(int argc, char **argv, char **env)
 	// print_banner();
 	main_loop(env_);
 	free_env(env_);
+	rl_clear_history();
 	return (EXIT_SUCCESS);
 }
