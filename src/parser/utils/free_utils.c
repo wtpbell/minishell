@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 09:01:25 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 10:31:51 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,20 @@ void	free_ast(t_ast_node *node)
 		node->right = NULL;
 	}
 	if (node->args)
+	{
 		free_args(node->args);
+		node->args = NULL;
+	}
 	if (node->arg_quote_types)
+	{
 		free(node->arg_quote_types);
+		node->arg_quote_types = NULL;
+	}
 	if (node->redirections)
+	{
 		free_redirections(node->redirections);
+		node->redirections = NULL;
+	}
 	printf("freeing whole node\n");
 	free(node);
 }
