@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 10:33:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 13:52:10 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	handle_child_process(t_child_info *child, \
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(child->input, child->output, child->new_input);
 	set_exit_status(executor_status(node, env, tokens, 1));
+	get_root_node(NULL);
 }
 
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
