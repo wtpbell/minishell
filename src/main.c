@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 18:50:00 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 00:07:02 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int	process_command_line(char *line, t_env **env_)
 	ast = parse(tokens);
 	if (ast)
 	{
-		printf("ast->type = %d\n", ast->type);
 		get_root_node(ast);
 		free_tokens(tokens);
 		tokens = NULL;
