@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 08:34:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 09:01:25 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,32 @@ void	free_redirections(t_redir *redir)
 	t_redir	*current;
 	t_redir	*next;
 
+	if (!redir)
+		return ;
+	printf("freeing redirections\n");
 	current = redir;
 	while (current)
 	{
 		next = current->next;
 		if (current->file)
+		{
+			printf("freeing %s\n", current->file);
 			free(current->file);
+			current->file = NULL;
+		}
 		if (current->delimiter)
+		{
+			printf("freeing %s\n", current->delimiter);
 			free(current->delimiter);
+			current->delimiter = NULL;
+		}
 		if (current->heredoc_file)
+		{
+			printf("freeing %s\n", current->heredoc_file);
 			free(current->heredoc_file);
+			current->heredoc_file = NULL;
+		}
+		printf("freeing whole redir\n");
 		free(current);
 		current = next;
 	}
@@ -61,7 +77,9 @@ void free_args(char **args)
 	while (args[i])
 	{
 		printf("Freeing arg[%d] at %p: '%s'\n", i, (void*)args[i], args[i]);
-		free(args[i++]);
+		free(args[i]);
+		args[i] = NULL;
+		i++;
 	}
 	free(args);
 	printf("Args array freed\n");
@@ -74,21 +92,22 @@ void	free_ast(t_ast_node *node)
 		return ;
 	if (node->left)
 	{
-		printf("am i freeing node->left\n");
+		printf("freeing node->left\n");
 		free_ast(node->left);
+		node->left = NULL;
 	}
 	if (node->right)
 	{
-		printf("am i freeing node->right\n");
+		printf("freeing node->right\n");
 		free_ast(node->right);
+		node->right = NULL;
 	}
-	printf("Freeing node args at %p\n", (void*)node->args);
 	if (node->args)
 		free_args(node->args);
 	if (node->arg_quote_types)
 		free(node->arg_quote_types);
 	if (node->redirections)
 		free_redirections(node->redirections);
-	printf("am i freeing whole node\n");
+	printf("freeing whole node\n");
 	free(node);
 }
