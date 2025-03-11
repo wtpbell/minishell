@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
-# -fsanitize=address -fno-omit-frame-pointer
+# -g3 -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
 # CFLAGS += -I$(shell brew --prefix readline)/include
@@ -64,7 +64,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/utils/redirection_utils.c \
 
 ENV_FILES 	 = $(ENV_DIR)/env_init.c \
-			   $(ENV_DIR)/env_utils.c \
+			   $(ENV_DIR)/env_utils2.c \
 			   $(ENV_DIR)/env_utils1.c \
 			   $(ENV_DIR)/env_set.c \
 
@@ -73,15 +73,16 @@ BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
 				 $(BUITLIN_DIR)/builtin_export.c \
 				 $(BUITLIN_DIR)/builtin_cd.c \
 				 $(BUITLIN_DIR)/builtin.c \
+				 $(BUITLIN_DIR)/builtin_utils.c \
 
 EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
 				 $(EXECUTOR_DIR)/exit_update.c \
-				 $(EXECUTOR_DIR)/utils.c \
-				 $(EXECUTOR_DIR)/utils2.c \
-				 $(EXECUTOR_DIR)/utils3.c \
+				 $(EXECUTOR_DIR)/cmd_utils.c \
+				 $(EXECUTOR_DIR)/path_utils.c \
 				 $(EXECUTOR_DIR)/heredoc_utils.c \
-				 $(EXECUTOR_DIR)/error/error.c \
+				 $(EXECUTOR_DIR)/pipe_utils.c \
+				 $(EXECUTOR_DIR)/wait_utils.c \
 				 $(EXECUTOR_DIR)/execute_process.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
 				 $(EXECUTOR_DIR)/execute_heredoc.c \
@@ -90,15 +91,11 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/banner.c \
 				$(COMMON_DIR)/prompt.c \
-				$(COMMON_DIR)/utils/memory/mem_tracker.c \
-				$(COMMON_DIR)/utils/memory/mem_free.c \
-				$(COMMON_DIR)/utils/memory/utils.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_itoa.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_split.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strjoin.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strndup.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_strdup.c \
-				$(COMMON_DIR)/utils/mem_helper/mem_substr.c \
+				$(COMMON_DIR)/mem_split.c \
+				$(COMMON_DIR)/mem_realloc.c \
+				$(COMMON_DIR)/mem_free.c \
+				$(COMMON_DIR)/error.c \
+				$(COMMON_DIR)/root_node.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \

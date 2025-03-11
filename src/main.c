@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 16:34:11 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:21:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,13 @@ static int	process_command_line(char *line, t_env **env_)
 	ast = parse(tokens);
 	if (ast)
 	{
-		executor(ast, env_);
+		get_root_node(ast);
+		free_tokens(tokens);
+		tokens = NULL;
+		executor(ast, env_, NULL);
 		free_ast(ast);
+		get_root_node(NULL);
 	}
-	free_tokens(tokens);
 	return (1);
 }
 
@@ -60,6 +63,7 @@ static void	main_loop(t_env **env_)
 		}
 		free(line);
 	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **env)
@@ -71,8 +75,9 @@ int	main(int argc, char **argv, char **env)
 	env_ = get_env_list();
 	*env_ = build_env(env);
 	signals_init();
-	print_banner();
+	// print_banner();
 	main_loop(env_);
 	free_env(env_);
+	rl_clear_history();
 	return (EXIT_SUCCESS);
 }

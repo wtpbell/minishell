@@ -28,7 +28,14 @@
 
 void	set_exit_status(int status)
 {
-	set_env(*get_env_list(), "?", mem_itoa(status));
+	char	*status_;
+
+	status_ = ft_itoa(status);
+	if (status_)
+	{
+		set_env(*get_env_list(), "?", status_);
+		free(status_);
+	}
 }
 
 int	get_exit_status(void)

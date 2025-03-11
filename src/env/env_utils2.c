@@ -30,8 +30,6 @@ char	*get_env_value(t_env *envs, const char *key)
 {
 	while (envs)
 	{
-		// printf("Debug - checking env: key=%s, value=%s, hide=%d\n",
-			// envs->key, envs->value ? envs->value : "NULL", envs->hide); //debug
 		if (ft_strcmp(envs->key, key) == 0 && envs->hide == false)
 			return (envs->value);
 		envs = envs->next;
@@ -39,68 +37,46 @@ char	*get_env_value(t_env *envs, const char *key)
 	return (NULL);
 }
 
-static bool	exist_key(t_env *env, char *key)
+static void	added_env_init(t_env *new_env, char *key, char **value)
 {
-	while (env)
+	new_env->key = ft_strdup(key);
+	if (!new_env->key)
 	{
-		if (ft_strcmp(env->key, key) == 0)
-			return (true);
-		env = env->next;
+		free(new_env);
+		return ;
 	}
-	return (false);
+	if (*value)
+	{
+		new_env->value = ft_strdup(*value);
+		if (!new_env->value)
+		{
+			free(new_env->key);
+			free(new_env);
+			return ;
+		}
+	}
+	else
+		new_env->value = NULL;
+	new_env->hide = false;
+	new_env->scope = BOTH;
+	if (*value == NULL)
+		new_env->scope = EXPORT;
+	new_env->next = NULL;
+	new_env->prev = NULL;
 }
 
 void	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*new_env;
 
-	//fprintf(stderr,"Debug - add_env_var: key=%s, value=%s\n", key, value ? value : "NULL"); // Debug
-	new_env = (t_env *)mem_alloc(sizeof(t_env));
+	if (get_env(*env, key))
+	{
+		set_env(*env, key, value);
+		return ;
+	}
+	new_env = (t_env *)malloc(sizeof(t_env));
 	if (!new_env)
 		return ;
-	new_env->key = key;
-	if (value)
-	{
-		new_env->value = mem_strdup(value);
-		if (!new_env->value)
-			return ;
-	}
-	else
-		new_env->value = NULL;
-	new_env->hide = false;
-	new_env->scope = BOTH;
-	if (value == NULL)
-		new_env->scope = EXPORT;
-	new_env->next = NULL;
-	new_env->prev = NULL;
-	if (exist_key(*(env), key))
-		set_env(*(env), key, value);
-	else
-		add_env(env, new_env);
-}
-
-void	setup_shlvl(t_env *new)
-{
-	int	old_shlvl;
-
-	if (new->value)
-	{
-		old_shlvl = ft_atoi(new->value);
-		if (old_shlvl < 0)
-			new->value = mem_itoa(0);
-		else if (old_shlvl >= 999)
-		{
-			ft_putstr_fd("minishell: warning: shell level(1000) ", 2);
-			ft_putendl_fd("too high, resetting to 1", 2);
-			new->value = mem_itoa(1);
-			if (!new->value)
-				return ;
-		}
-		else
-		{
-			new->value = mem_itoa(++old_shlvl);
-			if (!new->value)
-				return ;
-		}
-	}
+	added_env_init(new_env, key, &value);
+	add_env(env, new_env);
 }

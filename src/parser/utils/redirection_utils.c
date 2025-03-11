@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 13:27:18 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 18:09:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/05 16:03:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_redir	*init_redir_node(t_token_type type, char *file, t_quote_type quote_type)
 	new_redir->type = type;
 	new_redir->quote_type = quote_type;
 	new_redir->next = NULL;
+	new_redir->heredoc_processed = 0;
 	if (type == TOKEN_HEREDOC)
 	{
 		new_redir->delimiter = ft_strdup(file);

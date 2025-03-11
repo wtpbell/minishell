@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 10:33:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:16:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	free_redirections(t_redir *redir)
 	t_redir	*current;
 	t_redir	*next;
 
+	if (!redir)
+		return ;
 	current = redir;
 	while (current)
 	{
@@ -49,8 +51,6 @@ void	free_args(char **args)
 /* Free AST full structure memory */
 void	free_ast(t_ast_node *node)
 {
-	int	i;
-
 	if (!node)
 		return ;
 	if (node->left)
@@ -58,12 +58,7 @@ void	free_ast(t_ast_node *node)
 	if (node->right)
 		free_ast(node->right);
 	if (node->args)
-	{
-		i = 0;
-		while (node->args[i])
-			free(node->args[i++]);
-		free(node->args);
-	}
+		free_args(node->args);
 	if (node->arg_quote_types)
 		free(node->arg_quote_types);
 	if (node->redirections)

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/01 13:10:55 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/09 20:44:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	open_heredoc_file(char **filename)
 	if (fd == -1)
 	{
 		error("open heredoc", NULL);
-		free_alloc(*filename);
+		free(*filename);
 		*filename = NULL;
 		return (-1);
 	}
@@ -44,6 +44,12 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		if (get_exit_status() == 130)
 			break ;
 		line = readline("heredoc> ");
+		if (!line)
+		{
+			if (get_exit_status() != 130)
+				error_heredoc(delimiter);
+			break ;
+		}
 		data.line = line;
 		data.delimiter = delimiter;
 		data.fd = fd;
@@ -52,6 +58,7 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 		continue_reading = process_line(&data);
 		if (continue_reading == 0)
 			break ;
+		free(line);
 	}
 }
 
@@ -70,20 +77,17 @@ static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
 	return (filename);
 }
 
-void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
+// Function to process all heredocs
+static void	process_heredocs(t_redir *redir)
 {
 	t_redir			*current;
 	char			*temp_file;
 	t_quote_type	quote_type;
 
 	current = redir;
-	if (saved_fd[0] == -1)
-		saved_fd[0] = dup(STDIN_FILENO);
-	signal(SIGINT, heredoc_signals);
-	*heredoc_error() = -1;
 	while (current)
 	{
-		if (current->type == TOKEN_HEREDOC)
+		if (current->type == TOKEN_HEREDOC && !current->heredoc_processed)
 		{
 			quote_type = current->quote_type;
 			temp_file = process_heredoc(current->delimiter, quote_type);
@@ -92,9 +96,27 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 				if (current->heredoc_file)
 					free(current->heredoc_file);
 				current->heredoc_file = temp_file;
+				current->heredoc_processed = 1;
 			}
+			else
+				break ;
 		}
 		current = current->next;
+	}
+}
+
+//Main function to handle all heredocs and restore stdin after
+void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
+{
+	if (saved_fd[0] == -1)
+		saved_fd[0] = dup(STDIN_FILENO);
+	signal(SIGINT, heredoc_signals);
+	process_heredocs(redir);
+	if (saved_fd[0] != -1)
+	{
+		if (dup2(saved_fd[0], STDIN_FILENO) == -1)
+			perror("Failed to redirect stdin to heredoc");
+		close(saved_fd[0]);
 	}
 	signal(SIGINT, SIG_DFL);
 }

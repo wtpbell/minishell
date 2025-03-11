@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 20:51:16 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/11 15:08:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,20 @@ void	child(t_ast_node *node, t_env **env)
 	if (!env_arr)
 	{
 		perror("env_to_arr failed");
-		exit(1);
+		error(node->args[0], NULL);
+		set_exit_status(127);
+		exit(get_exit_status());
 	}
 	if (execve(node->args[0], node->args, env_arr) == -1)
+	{
 		error(node->args[0], NULL);
+		child_cleanup(node, env_arr);
+		set_exit_status(127);
+		exit(get_exit_status());
+	}
+	printf("in child");
+	free_tab(env_arr);
 	set_exit_status(127);
-	// free_all_memory();
 	exit(get_exit_status());
 }
 
@@ -51,6 +59,7 @@ int	parent(t_ast_node *node)
 	else if (WIFSIGNALED(status_))
 		status_ = WTERMSIG(status_) + 128;
 	set_underscore(node->argc, node->args);
+	free_ast(node);
 	set_exit_status(status_);
 	signals_init();
 	return (get_exit_status());

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/28 15:39:46 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/04 21:31:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ static void	handle_regular_env_var(t_ast_node *node, t_env **env_list, int i)
 	if (env_value)
 	{
 		free(node->args[i]);
-		node->args[i] = mem_strdup(env_value);
+		node->args[i] = ft_strdup(env_value);
 	}
 	else
 	{
 		free(node->args[i]);
-		node->args[i] = mem_strdup("");
+		node->args[i] = ft_strdup("");
 	}
 }
 

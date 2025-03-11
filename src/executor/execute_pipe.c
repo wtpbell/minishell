@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:46:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:14:57 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,86 +16,63 @@
 #include "executor.h"
 #include "common.h"
 
-size_t	count_pipes(t_ast_node *node)
+static void	handle_child_process(t_child_info *child, \
+			t_ast_node *node, t_env **env, t_token *tokens)
 {
-	size_t	count;
-
-	count = 0;
-	while (node)
-	{
-		if (node->type == TOKEN_PIPE)
-			count++;
-		node = node->right;
-	}
-	return (count);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	redirect_io(child->input, child->output, child->new_input);
+	set_exit_status(executor_status(node, env, tokens, 1));
+	get_root_node(NULL);
+	exit_shell(get_exit_status(), node, env, tokens);
 }
 
-pid_t	launch_pipe(t_ast_node *node, t_env **env)
-{
-	int	input;
-	int	pipe_fd[2];
-
-	input = 0;
-	signal(SIGINT, interrput_silence);
-	signal(SIGQUIT, interrput_silence);
-	while (node && node->left && node->type == TOKEN_PIPE)
-	{
-		if (pipe(pipe_fd) == -1)
-		{
-			error("pipe", NULL);
-			exit(1);
-		}
-		spawn_process(input, pipe_fd, node->left, env);
-		close(pipe_fd[1]);
-		input = pipe_fd[0];
-		node = node->right;
-	}
-	pipe_fd[1] = 1;
-	pipe_fd[0] = 0;
-	return (spawn_process(input, pipe_fd, node, env));
-}
-
-pid_t	spawn_process(int input, int pipe_fd[2], t_ast_node *node, t_env **env)
+pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
+		t_ast_node *node, t_env **env)
 {
 	pid_t	pid;
-	int		output;
-	int		new_input;
 
-	output = pipe_fd[1];
-	new_input = pipe_fd[0];
-	//fprintf(stderr, "Spawning process for command: %s\n", node->args[0]);
+	child->output = pipe_fd[1];
+	child->new_input = pipe_fd[0];
 	pid = fork();
 	if (pid == 0)
-	{
-		//fprintf(stderr, "Executing child process: %s\n", node->args[0]);
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		redirect_io(input, output, new_input);
-		set_exit_status(executor_status(node, env));
-		exit(get_exit_status());
-	}
+		handle_child_process(child, node, env, child->tokens);
 	else if (pid < 0)
 	{
 		error("fork", NULL);
-		exit(1);
+		if (pipe_fd[0] != STDIN_FILENO)
+			close(pipe_fd[0]);
+		if (pipe_fd[1] != STDOUT_FILENO)
+			close(pipe_fd[1]);
+		return (-1);
 	}
-	if (input != 0)
-		close(input);
+	if (pipe_fd[1] != STDOUT_FILENO)
+		close(pipe_fd[1]);
 	return (pid);
 }
 
-void	redirect_io(int input, int output, int new_input)
+/* while loop handle all but bot the last cmd in pipeline */
+pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
+		t_ast_node *node, t_env **env)
 {
-	if (new_input != 0)
-		close(new_input);
-	if (input != 0)
+	pid_t	pid;
+	pid_t	last_pid;
+
+	last_pid = -1;
+	while (node && node->left && node->type == TOKEN_PIPE)
 	{
-		dup2(input, STDIN_FILENO);
-		close(input);
+		if (pipe(pipe_fd) == -1)
+			return (error("pipe", NULL), -1);
+		pid = spawn_process(child, pipe_fd, node->left, env);
+		if (pid == -1)
+			break ;
+		if (child->input != 0)
+			close(child->input);
+		child->input = pipe_fd[0];
+		node = node->right;
+		last_pid = pid;
 	}
-	if (output != 1)
-	{
-		dup2(output, STDOUT_FILENO);
-		close(output);
-	}
+	if (node)
+		last_pid = final_process(child, node, env);
+	return (last_pid);
 }

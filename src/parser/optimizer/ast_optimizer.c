@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:40:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:41:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 10:03:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ static t_ast_node	*optimize_subshell(t_ast_node *node)
 	if (node->redirections)
 		node->redirections = merge_redirections(node->redirections);
 	if (node->left->type == TOKEN_PIPE)
+	{
 		node->left = optimize_pipeline(node->left);
+		if (!node->left)
+		{
+			free_ast(node);
+			return (NULL);
+		}
+	}
 	return (node);
 }
 

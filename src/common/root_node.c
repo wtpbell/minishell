@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   mem_strdup.c                                       :+:    :+:            */
+/*   root_node.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: bewong <bewong@student.codam.nl>             +#+                     */
+/*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/06 20:01:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/13 12:30:34 by bewong        ########   odam.nl         */
+/*   Created: 2025/03/11 13:23:24 by spyun         #+#    #+#                 */
+/*   Updated: 2025/03/11 15:22:23 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
-#include "common.h"
-#include "env.h"
+#include "minishell.h"
+#include "parser.h"
 
-char	*mem_strdup(const char *str)
+t_ast_node	*get_root_node(t_ast_node *new_root)
 {
-	char	*nstr;
+	static t_ast_node	*root_node = NULL;
 
-	nstr = (char *)mem_alloc((ft_strlen(str) + 1));
-	if (!nstr)
-		return (NULL);
-	ft_memcpy(nstr, str, (ft_strlen(str) + 1));
-	return (nstr);
+	if (new_root != NULL)
+		root_node = new_root;
+	return (root_node);
 }

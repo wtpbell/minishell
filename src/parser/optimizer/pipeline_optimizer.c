@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 15:39:22 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:14:28 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 10:02:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ t_ast_node	*optimize_pipeline(t_ast_node *node)
 	node->left = optimize_pipeline(node->left);
 	node->right = optimize_pipeline(node->right);
 	node = remove_empty_pipe_segment(node);
+	if (!node)
+		return (NULL);
 	if (!node->left && !node->right)
 	{
 		free_ast(node);

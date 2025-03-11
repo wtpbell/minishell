@@ -6,7 +6,7 @@
 /*   By: spyun <marvin@42.fr>                         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/28 09:59:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 18:07:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/09 17:43:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ int	is_valid_token_sequence(t_token *tokens)
 static void	print_syntax_error(char *token_str)
 {
 	ft_putstr_fd(RED, STDERR_FILENO);
-	ft_putstr_fd("minishell: syntax error near unexpected token '", STDERR_FILENO);
+	ft_putstr_fd("minishell: syntax error near unexpected token '", \
+				STDERR_FILENO);
 	ft_putstr_fd(token_str, STDERR_FILENO);
 	ft_putendl_fd("'", STDERR_FILENO);
 	ft_putstr_fd(RESET, STDERR_FILENO);

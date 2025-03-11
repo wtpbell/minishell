@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 13:48:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/26 14:56:22 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/09 16:49:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 #include "common.h"
 
 /* Calculate new arguments count and prepare for replacement */
-static int	prepare_replacement(t_ast_node *node, int arg_idx, int match_count,
+static int	prepare_replacement(t_ast_node *node, int match_count,
 			int *new_argc)
 {
-	(void)arg_idx;
 	*new_argc = node->argc + match_count - 1;
 	return (1);
 }
@@ -29,7 +28,7 @@ static char	**allocate_replacement_args(int size)
 {
 	char	**new_args;
 
-	new_args = mem_alloc(sizeof(char *) * (size + 1));
+	new_args = malloc(sizeof(char *) * (size + 1));
 	if (new_args)
 		new_args[size] = NULL;
 	return (new_args);
@@ -68,7 +67,7 @@ bool	replace_wildcard_arg(t_ast_node *node, int arg_idx, char **matches,
 	char			**old_args;
 	t_copy_params	params;
 
-	if (!prepare_replacement(node, arg_idx, match_count, &new_argc))
+	if (!prepare_replacement(node, match_count, &new_argc))
 		return (false);
 	new_args = allocate_replacement_args(new_argc);
 	if (!new_args)

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/27 10:32:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 09:34:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,17 @@ static void	append_env_value(t_env *env, char **key, char **value)
 	if (key_[ft_strlen(key_) - 1] == '+')
 	{
 		tmp = key_;
-		*key = mem_substr(key_, 0, (ft_strlen(key_) - 1));
-		free_alloc(tmp);
+		*key = ft_substr(key_, 0, (ft_strlen(key_) - 1));
+		free(tmp);
 		if (value_ == NULL)
+		{
+			*value = ft_strdup("");
 			return ;
+		}
 		tmp = value_;
-		*value = mem_strjoin(get_env_value(env, (*key)), value_);
+		*value = ft_strjoin(get_env_value(env, (*key)), value_);
 		if (tmp != NULL)
-			free_alloc(tmp);
+			free(tmp);
 		return ;
 	}
 }
@@ -97,20 +100,17 @@ static void	modify_env(t_env **env, char *args)
 		ft_putstr_fd(args, STDERR_FILENO);
 		ft_putendl_fd(" : not a valid identifier", STDERR_FILENO);
 		set_exit_status(1);
+		free_tab(split);
 		return ;
 	}
-	if (args[ft_strlen(args) - 1] == '=')
-		add_env_var(env, split[0], "");
-	else if (split[0] && !split[1])
-		add_env_var(env, split[0], NULL);
-	else
-		add_env_var(env, split[0], split[1]);
+	env_args_handler(env, split, args);
 }
 
-int	builtin_export(t_ast_node *node, t_env **env)
+int	builtin_export(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int	i;
 
+	(void)tokens;
 	i = 0;
 	sort_env(env);
 	if (node->argc == 1)

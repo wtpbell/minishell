@@ -6,17 +6,18 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/02/28 15:44:36 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/09 17:07:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-static int	builtin_unset(t_ast_node *node, t_env **env)
+static int	builtin_unset(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	t_env	*tmp;
 	int		i;
 
+	(void)tokens;
 	i = 1;
 	while (i < node->argc)
 	{
@@ -28,20 +29,21 @@ static int	builtin_unset(t_ast_node *node, t_env **env)
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
-static int	builtin_env(t_ast_node *node, t_env **env)
+static int	builtin_env(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	t_env	*head;
 
+	(void)tokens;
 	set_underscore(node->argc, node->args);
 	if (node->argc > 1)
 	{
-		ft_putendl_fd("Too many args", STDERR_FILENO);
+		ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
 	head = *env;
 	while (head)
 	{
-		if (head->hide == false && (head->scope & (BOTH | ENVE)))
+		if (head->hide == false && (head->scope & (BOTH | ENV)))
 			printf("%s=%s\n", head->key, head->value);
 		head = head->next;
 	}
@@ -51,11 +53,12 @@ static int	builtin_env(t_ast_node *node, t_env **env)
 /*
 	If the getcwd function fails, it return 1, otherwise returns 1.
 */
-static int	builtin_pwd(t_ast_node *node, t_env **env)
+static int	builtin_pwd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char	cwd[PATH_MAX];
 
 	(void)env;
+	(void)tokens;
 	if (getcwd(cwd, PATH_MAX) == NULL)
 		return (ft_putendl_fd(NON_EXIST_DIR, STDERR_FILENO), 1);
 	printf("%s\n", cwd);
@@ -70,7 +73,7 @@ static int	builtin_pwd(t_ast_node *node, t_env **env)
 	to the corresponding built-in handler
 	The return type of is_builtin is a function pointer
 */
-int	(*is_builtin(char *args))(t_ast_node *node, t_env **env)
+int	(*is_builtin(char *args))(t_ast_node *node, t_env **env, t_token *token)
 {
 	if (!args || !args[0])
 		return (NULL);
