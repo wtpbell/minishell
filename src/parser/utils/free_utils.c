@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 09:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/10 19:52:50 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/11 08:34:32 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,23 +84,11 @@ void	free_ast(t_ast_node *node)
 	}
 	printf("Freeing node args at %p\n", (void*)node->args);
 	if (node->args)
-<<<<<<< HEAD
-	{
-		i = 0;
-		while (node->args[i])
-		{
-			printf("Freeing arg '%s' at address %p\n", node->args[i], (void*)node->args[i]);
-			free(node->args[i++]);
-		}
-		free(node->args);
-	}
-=======
 		free_args(node->args);
->>>>>>> 0f00a2aaadd14249250df604d083dd3a2bd619ef
 	if (node->arg_quote_types)
 		free(node->arg_quote_types);
 	if (node->redirections)
 		free_redirections(node->redirections);
-	printf("am i freeing whole node\n");	
+	printf("am i freeing whole node\n");
 	free(node);
 }
