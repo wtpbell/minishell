@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/04 21:39:14 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 15:15:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:22:11 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,9 @@ void	free_tab(char **tab)
 }
 
 // extern t_ast_node *root;
-
 void	free_exit_memory(t_ast_node *node, t_env **env, t_token *tokens)
 {
-	t_ast_node *root_to_free;
+	t_ast_node	*root_to_free;
 
 	(void)node;
 	root_to_free = get_root_node(NULL);

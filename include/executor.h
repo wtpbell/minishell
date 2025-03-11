@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 11:30:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:25:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,13 @@ typedef struct s_heredoc_data
 
 typedef struct s_child_info
 {
-	int		input;
-	int		output;
-	int		new_input;
-	t_token	*tokens;
+	int			input;
+	int			output;
+	int			new_input;
+	t_token		*tokens;
 	t_ast_node	*root;
-	int		saved_stdin;
+	int			saved_stdin;
 }	t_child_info;
-
-typedef struct s_exec_tracker
-{
-	t_ast_node	*root;
-	t_ast_node	*current;
-	t_token 	*token;
-} t_exec_tracker;
 
 /*error*/
 void	error(char *word, char *msg);
@@ -120,5 +113,4 @@ pid_t	final_process(t_child_info *child, t_ast_node *temp, t_env **env);
 int		wait_for_child(void);
 int		wait_for_pid(pid_t pid);
 void	wait_for_remain(void);
-void free_child_resources(t_env **env, t_token *tokens);
 #endif

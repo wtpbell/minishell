@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/10 16:16:59 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/11 15:18:48 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ static int	resolve_command(t_ast_node *node)
 		set_underscore(node->argc, node->args);
 		return (set_exit_status(127), 127);
 	}
-	// if (node)
-	// 	printf("node: %s\n", node->args[0]);
 	free(node->args[0]);
 	node->args[0] = tmp;
 	return (0);
@@ -104,8 +102,6 @@ int	check_cmd(t_ast_node *node, t_env **env)
 
 	if (!node || !node->args || !node->args[0])
 		return (set_exit_status(0), 0);
-	if (node)
-		printf("node: %s\n", node->args[0]);
 	is_path_cmd = (node->args[0][0] == '/' || node->args[0][0] == '.');
 	if (get_env_value(*env, "PATH") == NULL && !is_path_cmd)
 		append_cwd(node);

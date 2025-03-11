@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 13:22:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:21:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,5 @@ typedef struct s_token
 	t_quote_type	quote_type;
 	struct s_token	*next;
 }	t_token;
-
-# include "parser.h"
-
 
 #endif

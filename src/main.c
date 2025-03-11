@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 15:16:23 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 15:21:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include "env.h"
 #include "common.h"
 #include <unistd.h>
-
 
 static int	process_command_line(char *line, t_env **env_)
 {

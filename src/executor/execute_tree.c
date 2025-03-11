@@ -64,7 +64,8 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	signal(SIGQUIT, interrput_silence);
 	pid = fork();
 	if (pid == -1)
-		return (error("fork() failed", NULL), free_exit_memory(node, env, tokens), EXIT_FAILURE);
+		return (error("fork() failed", NULL),
+			free_exit_memory(node, env, tokens), EXIT_FAILURE);
 	else if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
@@ -153,7 +154,6 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 	If it's an external command, search for it in the system's executable paths
 	and run it in a child process.
 */
-
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
