@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 15:21:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 17:10:34 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ static int	process_command_line(char *line, t_env **env_)
 		free_ast(ast);
 		get_root_node(NULL);
 	}
+	if (tokens)
+		free_tokens(tokens);
 	return (1);
 }
 
@@ -70,7 +72,11 @@ int	main(int argc, char **argv, char **env)
 {
 	t_env	**env_;
 
-	(void)argc;
+	if (argc > 1)
+	{
+		ft_putendl_fd("minishell: too many arguments", STDERR_FILENO);
+		return (EXIT_FAILURE);
+	}
 	(void)argv;
 	env_ = get_env_list();
 	*env_ = build_env(env);
