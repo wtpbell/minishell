@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 15:05:05 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 23:52:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		pid = spawn_process(child, pipe_fd, node->left, env);
 		if (pid == -1)
 			return (cleanup_pipe(child, pipe_fd), -1);
-		if (child->input != 0 && child->input != -1)
+		if (child->input > 0)
 			close(child->input);
 		close(pipe_fd[1]);
 		child->input = pipe_fd[0];
