@@ -106,6 +106,7 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
 				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/heredoc_expander.c \
+				$(EXPANDER_DIR)/mixed_wildcard_handler.c \
 				$(EXPANDER_DIR)/wildcard_expander.c \
 				$(EXPANDER_DIR)/wildcard_replacement.c \
 				$(EXPANDER_DIR)/wildcard_array_utils.c \

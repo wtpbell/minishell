@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 15:07:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 15:49:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ void	copy_matches(char **dest, char **matches, int match_count,
 void	free_matches(char **matches, int match_count);
 void	process_wildcard_arg(t_ast_node *node, int i);
 void	expand_wildcards(t_ast_node *node);
+void	process_mixed_wildcard(t_ast_node *node, int i);
+int		is_mixed_quote_wildcard(const char *str, t_quote_type quote_type);
 
 bool	replace_wildcard_arg(t_ast_node *node, int arg_idx, char **matches,
 			int match_count);

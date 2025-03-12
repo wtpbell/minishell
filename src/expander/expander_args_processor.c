@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 14:18:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 15:52:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,15 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 	}
 	else if (has_wildcard(node->args[i]))
 	{
-		if (should_skip_expansion(node, i, 0))
+		if (should_skip_expansion(node, i, 0)
+			&& !is_mixed_quote_wildcard(node->args[i],
+				node->arg_quote_types[i]))
 			return ;
+		if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
+		{
+			process_mixed_wildcard(node, i);
+			return ;
+		}
 		process_wildcard_arg(node, i);
 	}
 }

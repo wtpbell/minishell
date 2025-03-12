@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:02:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 14:31:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 15:54:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,15 @@ t_quote_type	quote_type_select(t_quote_type current_type, char quote)
 	{
 		if (quote == '\'')
 			return (QUOTE_SINGLE);
-		return (QUOTE_DOUBLE);
+		else if (quote == '\"')
+			return (QUOTE_DOUBLE);
 	}
-	if (current_type == QUOTE_SINGLE && quote == '\'')
-		return (QUOTE_NONE);
-	if (current_type == QUOTE_DOUBLE && quote == '\"')
-		return (QUOTE_NONE);
+	else if ((current_type == QUOTE_SINGLE && quote == '\"')
+		|| (current_type == QUOTE_DOUBLE && quote == '\'')
+		|| current_type == QUOTE_MIXED)
+	{
+		return (QUOTE_MIXED);
+	}
 	return (current_type);
 }
 
