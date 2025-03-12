@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 12:08:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 12:26:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 
 typedef struct s_tokenizer
 {
-	char	*input;
-	t_token	*head;
-	int		position;
-	int		in_quote;
-	char	quote_char;
+	char			*input;
+	t_token			*head;
+	int				position;
+	int				in_quote;
+	char			quote_char;
 	t_quote_type	current_quote_type;
 }	t_tokenizer;
 
@@ -69,7 +69,7 @@ char			*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
 					t_quote_type *current_quote_type);
 char			*handle_char_in_word(t_tokenizer *tokenizer, char *result);
 t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote,
-										t_quote_type current_quote_type);
+					t_quote_type current_quote_type);
 char			*handle_special_wildcard(t_tokenizer *tokenizer);
 int				is_wildcard_after_quote(t_tokenizer *tokenizer);
 #endif

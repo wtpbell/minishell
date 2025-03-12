@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:02:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 12:24:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 12:26:10 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static char	*handle_quote_error(char *result, t_quoted_result *quoted_result)
 	free_quoted_result(quoted_result);
 	return (NULL);
 }
-
 
 static char	*create_full_quoted_str(t_quoted_result *quoted_result)
 {
