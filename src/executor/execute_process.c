@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 15:08:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 09:54:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ void	child(t_ast_node *node, t_env **env)
 		set_exit_status(127);
 		exit(get_exit_status());
 	}
-	printf("in child");
 	free_tab(env_arr);
 	set_exit_status(127);
 	exit(get_exit_status());
