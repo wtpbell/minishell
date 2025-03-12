@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 15:08:29 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 17:31:48 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	handle_regular_redirection(t_redir *current_redir, \
 {
 	int	fd;
 
-	printf("current_redir->file: %s\n", current_redir->file);
 	if (!current_redir->file)
 		return ;
 	fd = open(current_redir->file, current_redir->flags, 0644);
