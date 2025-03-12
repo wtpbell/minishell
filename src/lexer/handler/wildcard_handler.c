@@ -6,27 +6,36 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 16:09:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 15:54:03 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* Check if the string contains a wildcard */
 int	has_wildcard(const char *str)
 {
+	int		i;
+	int		in_single_quote;
+	int		in_double_quote;
+
 	if (!str)
 		return (0);
-	while (*str)
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	while (str[i])
 	{
-		if (*str == '*')
+		if (str[i] == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (str[i] == '\"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		else if (str[i] == '*' && !in_single_quote && !in_double_quote)
 			return (1);
-		str++;
+		i++;
 	}
 	return (0);
 }
 
-/* Create a wildcard token with TOKEN_WILDCARD type */
 t_token	*handle_wildcard_token(const char *str)
 {
 	t_token_type	type;

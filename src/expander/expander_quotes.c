@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:15:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 12:50:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 14:58:48 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,110 +14,70 @@
 #include "parser.h"
 #include "expander.h"
 
-/* Handle quote characters in expansion */
-static void	handle_quote_char(char c, t_quote_type *current_quote)
+static char	*init_expansion(void)
 {
-	if (c == '\'' && *current_quote != QUOTE_DOUBLE)
-	{
-		if (*current_quote == QUOTE_SINGLE)
-			*current_quote = QUOTE_NONE;
-		else
-			*current_quote = QUOTE_SINGLE;
-	}
-	else if (c == '\"' && *current_quote != QUOTE_SINGLE)
-	{
-		if (*current_quote == QUOTE_DOUBLE)
-			*current_quote = QUOTE_NONE;
-		else
-			*current_quote = QUOTE_DOUBLE;
-	}
+	char	*result;
+
+	result = ft_strdup("");
+	return (result);
 }
 
-/* Process a single character in the string */
-static char	*process_string_char(char c, char *result)
+static void	process_quote_change(char quote_char, t_quote_type *current_quote,
+	int *in_double_quotes)
 {
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_substr(&c, 0, 1);
-	tmp2 = ft_strjoin(result, tmp);
-	free(tmp);
-	free(result);
-	return (tmp2);
+	if (quote_char == '\"' && *current_quote == QUOTE_NONE)
+		*in_double_quotes = 1;
+	else if (quote_char == '\"' && *current_quote == QUOTE_DOUBLE)
+		*in_double_quotes = 0;
+	handle_quote_char(quote_char, current_quote);
 }
 
-/* Process expansion part when '$' is found */
-static char	*process_expansion(const char *arg, int *i,
-							char *result, t_quote_type current_quote)
+static char	*handle_quotes(const char *arg, int *i, char *result,
+	t_expansion_state *state)
 {
-	char	*tmp;
-	char	*expanded;
-	t_env	*env_list;
-
-	env_list = *get_env_list();
-	expanded = process_dollar(arg, i, env_list, current_quote);
-	tmp = ft_strjoin(result, expanded);
-	free(expanded);
-	free(result);
-	return (tmp);
-}
-
-/* Handle escape characters and expansions in string */
-static char	*process_escapes_and_expansion(const char *arg, int *i,
-			char *result, t_quote_type current_quote)
-{
-	if (arg[*i] == '\\')
-	{
-		if (arg[*i + 1] && (arg[*i + 1] == '$' || arg[*i + 1] == '\"'
-				|| arg[*i + 1] == '\\') && current_quote != QUOTE_SINGLE)
-		{
-			result = process_string_char('\\', result);
-			result = process_string_char(arg[*i + 1], result);
-			*i += 2;
-			return (result);
-		}
-	}
-	else if (arg[*i] == '$' && current_quote != QUOTE_SINGLE)
-	{
-		if (*i > 0 && arg[*i - 1] == '\\')
-			result = process_string_char('$', result);
-		else
-		{
-			result = process_expansion(arg, i, result, current_quote);
-			return (result);
-		}
-	}
-	else
-		result = process_string_char(arg[*i], result);
+	process_quote_change(arg[*i], &state->current_quote,
+		&state->in_double_quotes);
+	result = process_string_char(arg[*i], result);
+	if (!result)
+		return (NULL);
 	(*i)++;
+	return (result);
+}
+
+static char	*handle_expansion_loop(const char *arg, char *result,
+	t_expansion_state *state)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i])
+	{
+		if (arg[i] == '\'' || arg[i] == '\"')
+			result = handle_quotes(arg, &i, result, state);
+		else if (state->in_double_quotes && is_full_exit_status_pattern(arg, i))
+			result = process_exit_status_in_dquotes(arg, &i, result);
+		else
+			result = process_escapes_and_expansion(arg, &i, result,
+					&state->current_quote);
+		if (!result)
+			return (NULL);
+	}
 	return (result);
 }
 
 char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
 {
-	int				i;
-	char			*result;
-	t_quote_type	current_quote;
+	char				*result;
+	t_expansion_state	state;
 
-	(void)*tokenizer;
+	(void)tokenizer;
 	if (!arg)
 		return (NULL);
-	result = ft_strdup("");
+	result = init_expansion();
 	if (!result)
 		return (NULL);
-	i = 0;
-	current_quote = QUOTE_NONE;
-	while (arg[i])
-	{
-		if (arg[i] == '\'' || arg[i] == '\"')
-		{
-			handle_quote_char(arg[i], &current_quote);
-			result = process_string_char(arg[i], result);
-			i++;
-		}
-		else
-			result = process_escapes_and_expansion(arg, &i, result,
-					current_quote);
-	}
+	state.current_quote = QUOTE_NONE;
+	state.in_double_quotes = 0;
+	result = handle_expansion_loop(arg, result, &state);
 	return (result);
 }

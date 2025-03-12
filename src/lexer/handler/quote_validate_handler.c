@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   quote_validator.c                                  :+:    :+:            */
+/*   quote_validate_handler.c                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 10:01:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/27 15:30:23 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 16:33:05 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ static int	process_quote(const char *input, int *i)
 	closing_pos = find_closing_quote(input, *i, current_quote);
 	if (closing_pos == -1)
 	{
-		ft_putstr_fd("minishell: unclosed quote detected\n", STDERR_FILENO);
+		ft_putstr_fd(RED, STDERR_FILENO);
+		ft_putendl_fd("minishell: unclosed quote detected\n", STDERR_FILENO);
+		ft_putstr_fd(RESET, STDERR_FILENO);
 		return (0);
 	}
 	*i = closing_pos;

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:40:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 10:03:00 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 16:16:50 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,6 @@ t_ast_node	*optimize_ast(t_ast_node *root)
 		return (NULL);
 	if (root->is_subshell)
 		return (optimize_subshell(root));
-	root = remove_empty_nodes(root);
-	if (!root)
-		return (NULL);
 	root->left = optimize_ast(root->left);
 	root->right = optimize_ast(root->right);
 	return (root);

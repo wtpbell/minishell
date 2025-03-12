@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/02 20:53:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 15:49:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ typedef struct s_copy_params
 	int		node_argc;
 }	t_copy_params;
 
+typedef struct s_expansion_state
+{
+	t_quote_type	current_quote;
+	int				in_double_quotes;
+}	t_expansion_state;
+
 void	expander(t_ast_node *node, t_env **env_list);
 int		should_skip_expansion(t_ast_node *node, int i, int dollar_exp);
 
@@ -43,6 +49,26 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 
 char	*process_dollar(const char *str, int *i, t_env *env_list,
 			t_quote_type quote_type);
+
+char	*handle_dollar_sign(const char *arg, int *i,
+			char *result, t_quote_type current_quote);
+char	*handle_regular_char(const char *arg, int *i, char *result);
+char	*handle_escape_char(const char *arg, int *i,
+			char *result, t_quote_type current_quote);
+char	*handle_single_quote_dollar(const char *arg, int *i,
+			char *result, t_quote_type current_quote);
+
+char	*handle_exit_status(int *i, char *result);
+char	*process_exit_status_in_dquotes(const char *arg, int *i,
+			char *result);
+
+void	handle_quote_char(char c, t_quote_type *current_quote);
+char	*process_string_char(char c, char *result);
+char	*process_expansion(const char *arg, int *i,
+			char *result, t_quote_type current_quote);
+char	*process_escapes_and_expansion(const char *arg, int *i,
+			char *result, t_quote_type *current_quote);
+int		is_full_exit_status_pattern(const char *arg, int i);
 
 char	*handle_expansion(t_tokenizer *tokenizer, const char *arg);
 
@@ -53,6 +79,8 @@ void	copy_matches(char **dest, char **matches, int match_count,
 void	free_matches(char **matches, int match_count);
 void	process_wildcard_arg(t_ast_node *node, int i);
 void	expand_wildcards(t_ast_node *node);
+void	process_mixed_wildcard(t_ast_node *node, int i);
+int		is_mixed_quote_wildcard(const char *str, t_quote_type quote_type);
 
 bool	replace_wildcard_arg(t_ast_node *node, int arg_idx, char **matches,
 			int match_count);

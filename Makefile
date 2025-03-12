@@ -5,9 +5,6 @@ CFLAGS = -Wall -Wextra -Werror -g3
 # -g3 -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
-# CFLAGS += -I$(shell brew --prefix readline)/include
-# LDFLAGS += -L$(shell brew --prefix readline)/lib -lreadline
-
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
@@ -29,11 +26,12 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 			  $(LEXER_DIR)/token/token_utils.c \
 			  $(LEXER_DIR)/handler/operator_handler.c \
 			  $(LEXER_DIR)/handler/quote_handler.c \
-			  $(LEXER_DIR)/handler/quote_validator.c \
+			  $(LEXER_DIR)/handler/quote_validate_handler.c \
+			  $(LEXER_DIR)/handler/quote_extract_handler.c \
+			  $(LEXER_DIR)/handler/quote_create_handler.c \
 			  $(LEXER_DIR)/handler/wildcard_handler.c \
 			  $(LEXER_DIR)/handler/word_handler.c \
 			  $(LEXER_DIR)/utils/char_check.c \
-			  $(LEXER_DIR)/utils/quote_utils.c \
 			  $(LEXER_DIR)/utils/word_utils.c \
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
@@ -47,7 +45,6 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/handler/sequence_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
-			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
 			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
@@ -99,9 +96,13 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
-				$(EXPANDER_DIR)/expander_variables.c \
+				$(EXPANDER_DIR)/expander_dollar.c \
+				$(EXPANDER_DIR)/expander_exit_status.c \
+				$(EXPANDER_DIR)/expander_quotes_utils.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
+				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/heredoc_expander.c \
+				$(EXPANDER_DIR)/mixed_wildcard_handler.c \
 				$(EXPANDER_DIR)/wildcard_expander.c \
 				$(EXPANDER_DIR)/wildcard_replacement.c \
 				$(EXPANDER_DIR)/wildcard_array_utils.c \

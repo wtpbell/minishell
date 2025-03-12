@@ -1,32 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   quote_utils.c                                      :+:    :+:            */
+/*   quote_extract_handler.c                            :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/18 10:25:56 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/04 18:10:38 by spyun         ########   odam.nl         */
+/*   Created: 2025/03/12 12:04:25 by spyun         #+#    #+#                 */
+/*   Updated: 2025/03/12 14:19:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
-						t_quote_type *current_quote_type)
-{
-	t_quoted_result	*quoted_result;
-	char			*joined;
-
-	quoted_result = extract_quoted_content(tokenizer,
-			tokenizer->input[tokenizer->position]);
-	if (!quoted_result)
-		return (result);
-	joined = join_words(result, quoted_result->content);
-	*current_quote_type = quoted_result->quote_type;
-	free(quoted_result);
-	return (joined);
-}
 
 char	*handle_char_in_word(t_tokenizer *tokenizer, char *result)
 {
@@ -36,18 +20,21 @@ char	*handle_char_in_word(t_tokenizer *tokenizer, char *result)
 	temp = ft_substr(tokenizer->input, tokenizer->position, 1);
 	if (!temp)
 		return (result);
-	joined = join_words(result, temp);
+	joined = ft_strjoin(result, temp);
+	free(result);
+	free(temp);
 	tokenizer->position++;
 	return (joined);
 }
 
-t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
+t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote,
+			t_quote_type current_quote_type)
 {
 	int				start;
 	int				len;
 	t_quoted_result	*result;
 
-	result = (t_quoted_result *)ft_calloc(1, sizeof(t_quoted_result));
+	result = ft_calloc(1, sizeof(t_quoted_result));
 	if (!result)
 		return (NULL);
 	tokenizer->position++;
@@ -56,16 +43,13 @@ t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote)
 		&& tokenizer->input[tokenizer->position] != quote)
 		tokenizer->position++;
 	if (!tokenizer->input[tokenizer->position])
-	{
-		free(result);
-		return (NULL);
-	}
+		return (free(result), NULL);
 	len = tokenizer->position - start;
 	result->content = ft_substr(tokenizer->input, start, len);
-	if (quote == '\'')
-		result->quote_type = QUOTE_SINGLE;
-	else
+	if (current_quote_type == QUOTE_DOUBLE && quote == '\'')
 		result->quote_type = QUOTE_DOUBLE;
+	else
+		result->quote_type = quote_type_select(current_quote_type, quote);
 	tokenizer->position++;
 	return (result);
 }
