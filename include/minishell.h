@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 15:21:31 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 11:36:56 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ typedef enum e_quote_type
 {
 	QUOTE_NONE,
 	QUOTE_SINGLE,
-	QUOTE_DOUBLE
+	QUOTE_DOUBLE,
+	QUOTE_MIXED
 }	t_quote_type;
 
 typedef struct s_token

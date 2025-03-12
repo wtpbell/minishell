@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 09:34:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 11:30:36 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
+/* Extract word */
 static char	*extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 {
 	char	*result;
@@ -27,18 +28,12 @@ static char	*extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
-	if (is_wildcard_after_quote(tokenizer))
-		return (free(result), handle_special_wildcard(tokenizer));
 	while (tokenizer->input[tokenizer->position]
 		&& !ft_isspace(tokenizer->input[tokenizer->position])
 		&& !is_operator(&tokenizer->input[tokenizer->position]))
 	{
 		if (is_quote(tokenizer->input[tokenizer->position]))
-		{
 			result = handle_quote_in_word(tokenizer, result, quote_type);
-			if (tokenizer->input[tokenizer->position] == '*')
-				return (result);
-		}
 		else
 			result = handle_char_in_word(tokenizer, result);
 		if (!result)
