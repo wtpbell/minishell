@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/11 15:14:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 13:05:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static void	handle_child_process(t_child_info *child, \
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	redirect_io(child->input, child->output, child->new_input);
+	if (child->saved_stdin != -1 && child->saved_stdin != STDIN_FILENO)
+		close(child->saved_stdin);
 	set_exit_status(executor_status(node, env, tokens, 1));
 	get_root_node(NULL);
 	exit_shell(get_exit_status(), node, env, tokens);
@@ -44,11 +46,23 @@ pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
 			close(pipe_fd[0]);
 		if (pipe_fd[1] != STDOUT_FILENO)
 			close(pipe_fd[1]);
+		if (child->saved_stdin != STDIN_FILENO)
+			close(child->saved_stdin);
 		return (-1);
 	}
 	if (pipe_fd[1] != STDOUT_FILENO)
 		close(pipe_fd[1]);
 	return (pid);
+}
+
+static void	cleanup_pipe(t_child_info *child, int pipe_fd[2])
+{
+	if (pipe_fd[1] != STDOUT_FILENO)
+		close(pipe_fd[1]);
+	if (pipe_fd[0] != STDIN_FILENO)
+		close(pipe_fd[0]);
+	if (child->input != 0)
+		close(child->input);
 }
 
 /* while loop handle all but bot the last cmd in pipeline */
@@ -65,14 +79,16 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 			return (error("pipe", NULL), -1);
 		pid = spawn_process(child, pipe_fd, node->left, env);
 		if (pid == -1)
-			break ;
-		if (child->input != 0)
+			return (cleanup_pipe(child, pipe_fd), -1);
+		if (child->input != 0 && child->input != -1)
 			close(child->input);
+		close(pipe_fd[1]);
 		child->input = pipe_fd[0];
 		node = node->right;
 		last_pid = pid;
 	}
 	if (node)
 		last_pid = final_process(child, node, env);
+	close(child->saved_stdin);
 	return (last_pid);
 }
