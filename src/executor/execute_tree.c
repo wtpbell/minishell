@@ -150,17 +150,48 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 	If it's an external command, search for it in the system's executable paths
 	and run it in a child process.
 */
+// int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
+// {
+// 	int	status;
+
+// 	if (!node || !node->args || !env || node->argc == 0)
+// 		return (set_exit_status(0), 0);
+// 	if (expand_and_validate(node, env))
+// 		return (127);
+// 	status = launch_builtin(node, env, tokens);
+// 	if (status != -1)
+// 		return (status);
+// 	status = launch_external(node, env, tokens);
+// 	return (status);
+// }
+
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
-	int	status;
+	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
+	pid_t	pid;
+	int		status_;
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
-	if (expand_and_validate(node, env))
-		return (127);
-	status = launch_builtin(node, env, tokens);
-	if (status != -1)
-		return (status);
-	status = launch_external(node, env, tokens);
-	return (status);
+	if (!node->args[0] || node->args[0][0] == '\0')
+		return (set_exit_status(127), ft_putstr_fd("command not found\n", STDERR_FILENO), 127);
+	expander(node, env);
+	if (!node->args[0] || node->args[0][0] == '\0')
+		return (set_exit_status(0), 0);
+	builtin = is_builtin(node->args[0]);
+	if (builtin)
+		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());
+	status_ = check_cmd(node, env);
+	if (status_)
+		return (status_);
+	signal(SIGINT, interrupt_w_nl);
+	signal(SIGQUIT, interrupt_w_nl);
+	pid = fork();
+	if (pid == -1)
+		return (perror("fork failed"), free_exit_memory(node, env, tokens), EXIT_FAILURE);
+	if (pid == 0)
+		child(node, env);
+	status_ = wait_for_pid(pid);
+	signals_init();
+	return (status_);
 }
