@@ -102,11 +102,11 @@ t_env	*build_env(char **env)
 	int		i;
 
 	envs = NULL;
-	i = -1;
+	i = 0;
 	add_env(&envs, create_env("?=0"));
 	if (!env[0])
 		add_empty_env(&envs);
-	while (env[++i])
+	while (env[i])
 	{
 		new = create_env(env[i]);
 		if (!new)
@@ -115,6 +115,7 @@ t_env	*build_env(char **env)
 			return (NULL);
 		}
 		add_env(&envs, new);
+		i++;
 	}
 	return (envs);
 }

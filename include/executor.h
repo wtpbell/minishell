@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 17:15:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 21:26:32 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,8 @@ int		write_expanded_line(char *expanded_line, int fd);
 int		process_line(t_heredoc_data *data);
 
 /*execute_cmd.c*/
-int		launch_builtin(t_ast_node *node, t_env **env, t_token *tokens);
-int		launch_external(t_ast_node *node, t_env **env, t_token *tokens);
-int		expand_and_validate(t_ast_node *node, t_env **env);
+int		launch_external_cmd(t_ast_node *node, t_env **env, t_token *tokens);
+
 /*pipe_utils.c*/
 void	redirect_io(int input, int output, int new_input);
 void	child_init(t_child_info *child, int input, t_token *tokens);
