@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 13:05:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 15:05:05 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 	pid_t	last_pid;
 
 	last_pid = -1;
-	while (node && node->left && node->type == TOKEN_PIPE)
+	while (node && node->type == TOKEN_PIPE)
 	{
 		if (pipe(pipe_fd) == -1)
 			return (error("pipe", NULL), -1);
