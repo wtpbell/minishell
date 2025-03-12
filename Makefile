@@ -5,9 +5,6 @@ CFLAGS = -Wall -Wextra -Werror -g3
 # -g3 -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
-# CFLAGS += -I$(shell brew --prefix readline)/include
-# LDFLAGS += -L$(shell brew --prefix readline)/lib -lreadline
-
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
 PARSER_DIR = $(SRC_DIR)/parser
@@ -48,7 +45,6 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/handler/sequence_handler.c \
 			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
-			   $(PARSER_DIR)/optimizer/empty_node_optimizer.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
 			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:27:35 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 16:17:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ char				*get_syntax_error_msg(t_syntax_error error);
 
 /* AST optimization */
 t_ast_node			*optimize_ast(t_ast_node *root);
-t_ast_node			*remove_empty_nodes(t_ast_node *node);
 t_redir				*merge_redirections(t_redir *redir);
 t_ast_node			*optimize_pipeline(t_ast_node *node);
 
