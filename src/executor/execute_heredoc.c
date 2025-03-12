@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 20:44:37 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 11:31:15 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,31 +32,29 @@ static int	open_heredoc_file(char **filename)
 	return (fd);
 }
 
-static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
-		t_quote_type quote_type)
+static void	read_heredoc_lines(t_heredoc_data *data)
 {
-	char			*line;
-	int				continue_reading;
-	t_heredoc_data	data;
+	char	*line;
 
 	while (1)
 	{
 		if (get_exit_status() == 130)
-			break ;
+			set_exit_status(0);
 		line = readline("heredoc> ");
+		if (get_exit_status() == 130)
+		{
+			free(line);
+			break ;
+		}
 		if (!line)
 		{
 			if (get_exit_status() != 130)
-				error_heredoc(delimiter);
+				error_heredoc(data->delimiter);
+			set_exit_status(0);
 			break ;
 		}
-		data.line = line;
-		data.delimiter = delimiter;
-		data.fd = fd;
-		data.env_list = env_list;
-		data.should_expand = (quote_type == QUOTE_NONE);
-		continue_reading = process_line(&data);
-		if (continue_reading == 0)
+		data->line = line;
+		if (process_line(data) == 0)
 			break ;
 		free(line);
 	}
@@ -64,20 +62,28 @@ static void	read_heredoc_lines(int fd, char *delimiter, t_env *env_list,
 
 static char	*process_heredoc(char *delimiter, t_quote_type quote_type)
 {
-	char	*filename;
-	int		fd;
-	t_env	*env_list;
+	char			*filename;
+	int				fd;
+	t_env			*env_list;
+	t_heredoc_data	data;
 
 	env_list = *get_env_list();
 	fd = open_heredoc_file(&filename);
 	if (fd == -1)
 		return (NULL);
-	read_heredoc_lines(fd, delimiter, env_list, quote_type);
+	data = (t_heredoc_data){
+		.line = NULL,
+		.delimiter = delimiter,
+		.fd = fd,
+		.env_list = env_list,
+		.quote_type = quote_type,
+		.should_expand = (quote_type == QUOTE_NONE)
+	};
+	read_heredoc_lines(&data);
 	close(fd);
 	return (filename);
 }
 
-// Function to process all heredocs
 static void	process_heredocs(t_redir *redir)
 {
 	t_redir			*current;
@@ -118,5 +124,5 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 			perror("Failed to redirect stdin to heredoc");
 		close(saved_fd[0]);
 	}
-	signal(SIGINT, SIG_DFL);
+	signals_init();
 }

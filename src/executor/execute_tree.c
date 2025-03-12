@@ -106,8 +106,7 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	wait_for_remain();
 	if (child.saved_stdin != -1)
 	{
-		if (dup2(child.saved_stdin, STDIN_FILENO) == -1)
-			perror("Failed to restore stdin after pipeline");
+		dup2(child.saved_stdin, STDIN_FILENO);
 		close(child.saved_stdin);
 	}
 	set_exit_status(status_);
@@ -157,7 +156,6 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	pid_t	pid;
 	int		status_;
 
-	(void) tokens;
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	expander(node, env);

@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 15:25:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 11:36:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@
 
 typedef struct s_heredoc_data
 {
-	char	*line;
-	char	*delimiter;
-	int		fd;
-	t_env	*env_list;
-	int		should_expand;
+	char			*line;
+	char			*delimiter;
+	int				fd;
+	t_env			*env_list;
+	int				should_expand;
+	t_quote_type	quote_type;
 }	t_heredoc_data;
 
 typedef struct s_child_info
@@ -70,7 +71,6 @@ int		executor_status(t_ast_node *node, t_env **env, \
 		t_token *tokens, bool error);
 
 /*execute_pipe*/
-size_t	count_pipes(t_ast_node *node);
 pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *temp_node, t_env **env);
 pid_t	spawn_process(t_child_info *child, int pipe_fd[2], \
