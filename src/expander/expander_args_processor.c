@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 15:52:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 19:42:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ static void	handle_exit_status_expansion(t_ast_node *node, int i)
 	status = ft_strdup(get_env_value(*get_env_list(), "?"));
 	if (!status)
 		status = ft_strdup("0");
+		
 	if (node->args[i][2] != '\0')
 	{
 		result = ft_strjoin(status, node->args[i] + 2);
