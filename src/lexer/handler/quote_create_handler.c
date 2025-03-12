@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:02:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 14:18:39 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 14:31:37 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
 	quote_str[0] = tokenizer->input[tokenizer->position];
 	quote_str[1] = '\0';
 	*current_quote_type = quote_type_select(*current_quote_type, quote_str[0]);
-
 	quoted_result = extract_quoted_content(tokenizer, quote_str[0],
 			outer_quote_type);
 	if (!quoted_result)
