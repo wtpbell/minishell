@@ -100,9 +100,6 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	input = 0;
 	signal(SIGINT, interrput_silence);
 	signal(SIGQUIT, interrput_silence);
-	// if (node->left->redirections && \
-	// 	node->left->redirections->type == TOKEN_HEREDOC)
-	// 	input = node->left->redirections->fd;
 	child_init(&child, input, tokens);
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	status_ = wait_for_pid(last_pid);

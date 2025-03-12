@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:35:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/01 09:36:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/11 18:59:47 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,5 @@ char	*expand_heredoc_line(char *line, t_env *env_list)
 	result = expand_line_loop(line, env_list, result);
 	if (!result)
 		return (line);
-	free(line);
 	return (result);
 }
