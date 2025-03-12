@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 11:36:03 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 13:05:57 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static void	cleanup_pipe(t_child_info *child, int pipe_fd[2])
 		close(pipe_fd[1]);
 	if (pipe_fd[0] != STDIN_FILENO)
 		close(pipe_fd[0]);
-	if (child->input != 0 && child->input != -1)
+	if (child->input != 0)
 		close(child->input);
 }
 
