@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:02:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 12:07:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 12:24:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,12 @@ static char	*handle_quote_error(char *result, t_quoted_result *quoted_result)
 	return (NULL);
 }
 
-static char	*create_full_quoted_str(char *quote_str,
-								t_quoted_result *quoted_result)
-{
-	char	*full_quoted_str;
-	char	*result;
 
-	full_quoted_str = ft_strjoin(quote_str, quoted_result->content);
-	if (!full_quoted_str)
-		return (NULL);
-	result = ft_strjoin(full_quoted_str, quote_str);
-	free(full_quoted_str);
-	return (result);
+static char	*create_full_quoted_str(t_quoted_result *quoted_result)
+{
+	if (quoted_result->content == NULL)
+		return (ft_strdup(""));
+	return (ft_strdup(quoted_result->content));
 }
 
 char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
@@ -71,7 +65,7 @@ char	*handle_quote_in_word(t_tokenizer *tokenizer, char *result,
 			*current_quote_type);
 	if (!quoted_result)
 		return (result);
-	temp_str = create_full_quoted_str(quote_str, quoted_result);
+	temp_str = create_full_quoted_str(quoted_result);
 	if (!temp_str)
 		return (handle_quote_error(result, quoted_result));
 	temp_result = ft_strjoin(result, temp_str);
