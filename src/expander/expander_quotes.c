@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:15:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 14:18:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 14:43:46 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ static char	*process_string_char(char c, char *result)
 
 	if (!result)
 		return (NULL);
-
 	buffer[0] = c;
 	buffer[1] = '\0';
-
 	tmp = ft_strjoin(result, buffer);
 	free(result);
 	return (tmp);
@@ -69,7 +67,6 @@ static int	is_exit_status_pattern(const char *arg, int pos)
 {
 	if (!arg || pos <= 0)
 		return (0);
-
 	if (arg[pos] != '$')
 		return (0);
 	if (arg[pos + 1] != '?')
@@ -81,31 +78,39 @@ static int	is_exit_status_pattern(const char *arg, int pos)
 	return (1);
 }
 
-static char	*process_escapes_and_expansion(const char *arg, int *i,
-			char *result, t_quote_type current_quote)
+static char	*handle_exit_status(int *i, char *result)
 {
 	char	*tmp;
 	char	*exit_status;
+	t_env	*env_list;
 
-	if (!arg || !result || !i)
-		return (NULL);
+	env_list = *get_env_list();
+	exit_status = ft_strdup(get_env_value(env_list, "?"));
+	if (!exit_status)
+		exit_status = ft_strdup("0");
+	tmp = ft_strjoin(result, exit_status);
+	free(exit_status);
+	free(result);
+	*i += 2;
+	return (tmp);
+}
+
+static char	*handle_single_quote_dollar(const char *arg, int *i,
+	char *result, t_quote_type current_quote)
+{
 	if (current_quote == QUOTE_SINGLE && arg[*i] == '$')
 	{
 		if (is_exit_status_pattern(arg, *i))
-		{
-			exit_status = ft_strdup(get_env_value(*get_env_list(), "?"));
-			if (!exit_status)
-				exit_status = ft_strdup("0");
-			tmp = ft_strjoin(result, exit_status);
-			free(exit_status);
-			free(result);
-			*i += 2;
-			return (tmp);
-		}
+			return (handle_exit_status(i, result));
 		result = process_string_char(arg[*i], result);
 		(*i)++;
-		return (result);
 	}
+	return (result);
+}
+
+static char	*handle_escape_char(const char *arg, int *i,
+	char *result, t_quote_type current_quote)
+{
 	if (arg[*i] == '\\')
 	{
 		if (arg[*i + 1] && (arg[*i + 1] == '$' || arg[*i + 1] == '\"'
@@ -113,20 +118,45 @@ static char	*process_escapes_and_expansion(const char *arg, int *i,
 		{
 			result = process_string_char(arg[*i + 1], result);
 			*i += 2;
-			return (result);
 		}
-		result = process_string_char(arg[*i], result);
-		(*i)++;
+		else
+		{
+			result = process_string_char(arg[*i], result);
+			(*i)++;
+		}
 	}
-	else if (arg[*i] == '$')
-	{
+	return (result);
+}
+
+static char	*handle_dollar_sign(const char *arg, int *i,
+	char *result, t_quote_type current_quote)
+{
+	if (arg[*i] == '$')
 		result = process_expansion(arg, i, result, current_quote);
-	}
+	return (result);
+}
+
+static char	*handle_regular_char(const char *arg, int *i, char *result)
+{
+	result = process_string_char(arg[*i], result);
+	(*i)++;
+	return (result);
+}
+
+static char	*process_escapes_and_expansion(const char *arg, int *i,
+	char *result, t_quote_type *current_quote)
+{
+	if (!arg || !result || !i)
+		return (NULL);
+	result = handle_single_quote_dollar(arg, i, result, *current_quote);
+	if ((size_t) * i >= ft_strlen(arg))
+		return (result);
+	if (arg[*i] == '\\')
+		result = handle_escape_char(arg, i, result, *current_quote);
+	else if (arg[*i] == '$')
+		result = handle_dollar_sign(arg, i, result, *current_quote);
 	else
-	{
-		result = process_string_char(arg[*i], result);
-		(*i)++;
-	}
+		result = handle_regular_char(arg, i, result);
 	return (result);
 }
 
@@ -134,80 +164,109 @@ static int	is_full_exit_status_pattern(const char *arg, int i)
 {
 	if (!arg)
 		return (0);
-	if (!arg[i] || !arg[i+1] || !arg[i+2] || !arg[i+3])
+	if (!arg[i] || !arg[i + 1] || !arg[i + 2] || !arg[i + 3])
 		return (0);
-	if (arg[i] == '\'' &&
-		arg[i+1] == '$' &&
-		arg[i+2] == '?' &&
-		arg[i+3] == '\'')
+	if (arg[i] == '\''
+		&& arg[i + 1] == '$'
+		&& arg[i + 2] == '?'
+		&& arg[i + 3] == '\'')
 		return (1);
 	return (0);
 }
 
-char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
+static char	*init_expansion(void)
 {
-	int				i;
-	char			*result;
-	t_quote_type	current_quote;
-	int				in_double_quotes;
-	char			*tmp;
-	char			*exit_status;
+	char	*result;
 
-	(void)*tokenizer;
-	if (!arg)
-		return (NULL);
 	result = ft_strdup("");
+	return (result);
+}
+
+static void	process_quote_change(char quote_char, t_quote_type *current_quote,
+	int *in_double_quotes)
+{
+	if (quote_char == '\"' && *current_quote == QUOTE_NONE)
+		*in_double_quotes = 1;
+	else if (quote_char == '\"' && *current_quote == QUOTE_DOUBLE)
+		*in_double_quotes = 0;
+	handle_quote_char(quote_char, current_quote);
+}
+
+static char	*handle_quotes(const char *arg, int *i, char *result,
+	t_expansion_state *state)
+{
+	process_quote_change(arg[*i], &state->current_quote,
+		&state->in_double_quotes);
+	result = process_string_char(arg[*i], result);
 	if (!result)
 		return (NULL);
-	i = 0;
-	current_quote = QUOTE_NONE;
-	in_double_quotes = 0;
+	(*i)++;
+	return (result);
+}
 
+static char	*process_exit_status_in_dquotes(const char *arg, int *i,
+	char *result)
+{
+	char	*tmp;
+	char	*exit_status;
+	t_env	*env_list;
+
+	result = process_string_char(arg[*i], result);
+	if (!result)
+		return (NULL);
+	(*i)++;
+	env_list = *get_env_list();
+	exit_status = ft_strdup(get_env_value(env_list, "?"));
+	if (!exit_status)
+		exit_status = ft_strdup("0");
+	tmp = ft_strjoin(result, exit_status);
+	free(exit_status);
+	free(result);
+	result = tmp;
+	if (!result)
+		return (NULL);
+	*i += 2;
+	result = process_string_char(arg[*i], result);
+	if (!result)
+		return (NULL);
+	(*i)++;
+	return (result);
+}
+
+static char	*handle_expansion_loop(const char *arg, char *result,
+	t_expansion_state *state)
+{
+	int	i;
+
+	i = 0;
 	while (arg[i])
 	{
 		if (arg[i] == '\'' || arg[i] == '\"')
-		{
-			if (arg[i] == '\"' && current_quote == QUOTE_NONE)
-				in_double_quotes = 1;
-			else if (arg[i] == '\"' && current_quote == QUOTE_DOUBLE)
-				in_double_quotes = 0;
-
-			handle_quote_char(arg[i], &current_quote);
-			result = process_string_char(arg[i], result);
-			if (!result)
-				return (NULL);
-			i++;
-		}
+			result = handle_quotes(arg, &i, result, state);
+		else if (state->in_double_quotes && is_full_exit_status_pattern(arg, i))
+			result = process_exit_status_in_dquotes(arg, &i, result);
 		else
-		{
-			if (in_double_quotes && is_full_exit_status_pattern(arg, i))
-			{
-				result = process_string_char(arg[i], result);
-				if (!result)
-					return (NULL);
-				i++;
-				exit_status = ft_strdup(get_env_value(*get_env_list(), "?"));
-				if (!exit_status)
-					exit_status = ft_strdup("0");
-				tmp = ft_strjoin(result, exit_status);
-				free(exit_status);
-				free(result);
-				result = tmp;
-				if (!result)
-					return (NULL);
-				i += 2;
-				result = process_string_char(arg[i], result);
-				if (!result)
-					return (NULL);
-				i++;
-			}
-			else
-			{
-				result = process_escapes_and_expansion(arg, &i, result, current_quote);
-				if (!result)
-					return (NULL);
-			}
-		}
+			result = process_escapes_and_expansion(arg, &i, result,
+					&state->current_quote);
+		if (!result)
+			return (NULL);
 	}
+	return (result);
+}
+
+char	*handle_expansion(t_tokenizer *tokenizer, const char *arg)
+{
+	char				*result;
+	t_expansion_state	state;
+
+	(void)tokenizer;
+	if (!arg)
+		return (NULL);
+	result = init_expansion();
+	if (!result)
+		return (NULL);
+	state.current_quote = QUOTE_NONE;
+	state.in_double_quotes = 0;
+	result = handle_expansion_loop(arg, result, &state);
 	return (result);
 }
