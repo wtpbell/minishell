@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:37:21 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 12:08:04 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int				match_pattern(const char *pattern, const char *string);
 /* Quote handling */
 void			handle_quote(t_tokenizer *tokenizer);
 int				validate_quotes(const char *input);
+t_quote_type	quote_type_select(t_quote_type current_type, char quote);
 
 /* Helper functions */
 t_token_type	get_operator_type(char *input);
