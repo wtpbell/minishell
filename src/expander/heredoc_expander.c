@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:35:02 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 18:59:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/12 15:09:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*join_char_to_result(char *result, char c)
 	return (result);
 }
 
-static char	*handle_dollar_sign(char *line, int *i, char *result,
+static char	*heredoc_handle_dollar_sign(char *line, int *i, char *result,
 					t_env *env_list)
 {
 	char	*expanded;
@@ -62,7 +62,7 @@ static char	*expand_line_loop(char *line, t_env *env_list, char *result)
 	{
 		if (line[i] == '$')
 		{
-			result = handle_dollar_sign(line, &i, result, env_list);
+			result = heredoc_handle_dollar_sign(line, &i, result, env_list);
 			if (!result)
 				return (NULL);
 		}

@@ -100,8 +100,11 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
-				$(EXPANDER_DIR)/expander_variables.c \
+				$(EXPANDER_DIR)/expander_dollar.c \
+				$(EXPANDER_DIR)/expander_exit_status.c \
+				$(EXPANDER_DIR)/expander_quotes_utils.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
+				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/heredoc_expander.c \
 				$(EXPANDER_DIR)/wildcard_expander.c \
 				$(EXPANDER_DIR)/wildcard_replacement.c \
