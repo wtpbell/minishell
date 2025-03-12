@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:04:25 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 12:19:06 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/12 14:19:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,10 @@ t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote,
 		return (free(result), NULL);
 	len = tokenizer->position - start;
 	result->content = ft_substr(tokenizer->input, start, len);
-	result->quote_type = quote_type_select(current_quote_type, quote);
+	if (current_quote_type == QUOTE_DOUBLE && quote == '\'')
+		result->quote_type = QUOTE_DOUBLE;
+	else
+		result->quote_type = quote_type_select(current_quote_type, quote);
 	tokenizer->position++;
 	return (result);
 }
