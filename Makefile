@@ -101,15 +101,17 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
 				$(EXPANDER_DIR)/expander_dollar.c \
 				$(EXPANDER_DIR)/expander_exit_status.c \
+				$(EXPANDER_DIR)/expander_expansion_handler.c \
 				$(EXPANDER_DIR)/expander_quotes_utils.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
 				$(EXPANDER_DIR)/expander_utils.c \
 				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/heredoc_expander.c \
 				$(EXPANDER_DIR)/mixed_wildcard_handler.c \
+				$(EXPANDER_DIR)/wildcard_array_utils.c \
+				$(EXPANDER_DIR)/wildcard_expander_utils.c\
 				$(EXPANDER_DIR)/wildcard_expander.c \
 				$(EXPANDER_DIR)/wildcard_replacement.c \
-				$(EXPANDER_DIR)/wildcard_array_utils.c \
 				$(EXPANDER_DIR)/wildcard_filesystem.c \
 
 OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

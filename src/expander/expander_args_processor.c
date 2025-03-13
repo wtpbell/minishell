@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 11:10:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 16:34:59 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	handle_regular_env_var(t_ast_node *node, t_env **env_list, int i)
 	node->args[i] = result;
 }
 
-static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
+void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
 {
 	if (node->args[i][1] == '?')
 		handle_exit_status_expansion(node, i);
@@ -45,7 +45,7 @@ static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
 		handle_regular_env_var(node, env_list, i);
 }
 
-static void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
+void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 		int i)
 {
 	char	*expanded_arg;
@@ -58,7 +58,7 @@ static void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 	}
 }
 
-static void	handle_wildcard_expansion(t_ast_node *node, int i)
+void	handle_wildcard_expansion(t_ast_node *node, int i)
 {
 	if (should_skip_expansion(node, i, 0)
 		&& !is_mixed_quote_wildcard(node->args[i], node->arg_quote_types[i]))
@@ -74,20 +74,14 @@ static void	handle_wildcard_expansion(t_ast_node *node, int i)
 void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		t_tokenizer *tokenizer, int i)
 {
-	if (node->args[i][0] == '$' && node->args[i][1])
-	{
-		if (should_skip_expansion(node, i, 1))
-			return ;
-		expand_env_var(node, env_list, i);
-		if (strchr(node->args[i], '$') != NULL)
-			handle_dollar_in_string(node, tokenizer, i);
-	}
-	else if (strchr(node->args[i], '$') != NULL)
-	{
-		if (should_skip_expansion(node, i, 1))
-			return ;
-		handle_dollar_in_string(node, tokenizer, i);
-	}
-	else if (has_wildcard(node->args[i]))
+	int	had_env_expansion;
+
+	had_env_expansion = 0;
+	handle_env_dollar_expansion(node, env_list, i, &had_env_expansion);
+	if (!had_env_expansion)
+		handle_dollar_expansion(node, tokenizer, i, &had_env_expansion);
+	if (had_env_expansion && has_wildcard(node->args[i]))
+		handle_wildcard_with_expansion(node, i);
+	else if (!had_env_expansion && has_wildcard(node->args[i]))
 		handle_wildcard_expansion(node, i);
 }
