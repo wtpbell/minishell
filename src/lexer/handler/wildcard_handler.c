@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 11:15:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 15:54:03 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:57:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,15 @@ int	match_pattern(const char *pattern, const char *string)
 	while (pattern[state.i] == '*')
 		state.i++;
 	return (pattern[state.i] == '\0');
+}
+
+char	*handle_special_wildcard(t_tokenizer *tokenizer)
+{
+	char	*result;
+
+	result = ft_strdup("*");
+	if (!result)
+		return (NULL);
+	tokenizer->position++;
+	return (result);
 }
