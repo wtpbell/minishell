@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
-# -g3 -fsanitize=address -fno-omit-frame-pointer
+# CFLAGS += -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
 SRC_DIR = src
@@ -90,7 +90,6 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
-				$(COMMON_DIR)/banner.c \
 				$(COMMON_DIR)/prompt.c \
 				$(COMMON_DIR)/mem_split.c \
 				$(COMMON_DIR)/mem_realloc.c \
@@ -153,7 +152,8 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/expander
 
 $(LIBFT):
-	@make -C $(LIBFT_DIR)
+	@echo "\033[1;32mCompiling...\033[0m"
+	@make -C $(LIBFT_DIR) --no-print-directory
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -161,17 +161,27 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
 	@$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
-	@echo "Minishell compiled successfully!"
+	@echo "\033[1;36m"
+	@echo "                                                                         "
+	@echo "   ███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗        "
+	@echo "   ████╗ ████║██║████╗  ██║██║██╔════╝██║  ██║██╔════╝██║     ██║        "
+	@echo "   ██╔████╔██║██║██╔██╗ ██║██║███████╗███████║█████╗  ██║     ██║        "
+	@echo "   ██║╚██╔╝██║██║██║╚██╗██║██║╚════██║██╔══██║██╔══╝  ██║     ██║        "
+	@echo "   ██║ ╚═╝ ██║██║██║ ╚████║██║███████║██║  ██║███████╗███████╗███████╗   "
+	@echo "   ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝   "
+	@echo "                                                made by spyun & bewong   "
+	@echo "\033[0m"
+	@echo "\033[1;32mMinishell compiled successfully!\033[0m"
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@make -C $(LIBFT_DIR) clean
-	@echo "Object files cleaned!"
+	@make -C $(LIBFT_DIR) clean --no-print-directory
+	@echo "\033[1;33mObject files cleaned!\033[0m"
 
 fclean: clean
 	@rm -f $(NAME)
-	@make -C $(LIBFT_DIR) fclean
-	@echo "Everything cleaned!"
+	@make -C $(LIBFT_DIR) fclean --no-print-directory
+	@echo "\033[1;34mEverything cleaned!\033[0m"
 
 re: fclean all
 
