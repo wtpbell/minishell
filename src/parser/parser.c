@@ -6,12 +6,18 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:02:50 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:16:37 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:27:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "executor.h"
+
+static int	is_command_separator(t_token *token)
+{
+	return (token && (token->type == TOKEN_PIPE || token->type == TOKEN_AND
+			|| token->type == TOKEN_OR));
+}
 
 static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 {
@@ -33,7 +39,7 @@ static t_ast_node	*parse_tokens_to_ast(t_token **tokens)
 		set_exit_status(2);
 		return (NULL);
 	}
-	if (*tokens)
+	if (*tokens && !is_command_separator(*tokens))
 	{
 		set_exit_status(1);
 		free_ast(root);
