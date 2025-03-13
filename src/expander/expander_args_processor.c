@@ -3,91 +3,129 @@
 /*                                                        ::::::::            */
 /*   expander_args_processor.c                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: spyun <spyun@student.codam.nl>               +#+                     */
+/*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 11:10:49 by spyun         ########   odam.nl         */
+/*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
+/*   Updated: 2025/03/13 16:20:45 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parser.h"
 #include "expander.h"
+#include "common.h"
 
-static void	handle_regular_env_var(t_ast_node *node, t_env **env_list, int i)
+void	copy_args_range(char **dest, char **source, int range[2], int *dest_idx)
 {
-	char	*var_name;
-	char	*env_value;
+	int	i;
+
+	i = range[0];
+	while (i < range[1])
+		dest[(*dest_idx)++] = source[i++];
+}
+
+void	copy_matches(char **dest, char **matches, int match_count,
+			int *dest_idx)
+{
+	int	i;
+
+	i = 0;
+	while (i < match_count)
+		dest[(*dest_idx)++] = matches[i++];
+}
+
+void	free_matches(char **matches, int match_count)
+{
+	int	i;
+
+	i = 0;
+	if (!matches)
+		return ;
+	while (i < match_count)
+		free(matches[i++]);
+	free(matches);
+}
+
+void	process_wildcard_arg(t_ast_node *node, int i)
+{
+	int		match_count;
+	char	**matches;
+
+	match_count = 0;
+	matches = get_matching_files(node->args[i], &match_count);
+	if (matches && match_count > 0)
+	{
+		if (!replace_wildcard_arg(node, i, matches, match_count))
+		{
+			free_matches(matches, match_count);
+			return ;
+		}
+	}
+	else if (matches)
+		free(matches);
+}
+
+void	expand_wildcards(t_ast_node *node)
+{
+	int	i;
+
+	i = 0;
+	if (!node || !node->args)
+		return ;
+	while (i < node->argc && node->args[i])
+	{
+		if (has_wildcard(node->args[i]))
+		{
+			process_wildcard_arg(node, i);
+			i++;
+			continue ;
+		}
+		i++;
+	}
+}
+
+char	*process_wildcard_in_variable(char *value)
+{
+	char	**matches;
+	int		match_count;
 	char	*result;
-	char	*rest_of_arg;
-	int		var_len;
 
-	var_name = extract_var_name_expander(node->args[i] + 1, &var_len);
-	rest_of_arg = ft_strdup(node->args[i] + 1 + var_len);
-	env_value = get_env_value(*env_list, var_name);
-	if (env_value)
-		result = ft_strdup(env_value);
-	else
-		result = ft_strdup("");
-	free(var_name);
-	if (rest_of_arg && *rest_of_arg)
-		result = join_and_free(result, rest_of_arg);
-	free(rest_of_arg);
-	free(node->args[i]);
-	node->args[i] = result;
+	match_count = 0;
+	if (!value || !has_wildcard(value))
+		return (value);
+	matches = get_matching_files(value, &match_count);
+	free(value);
+	if (!matches || match_count == 0)
+		return (ft_strdup("*"));
+	result = join_matches_with_spaces(matches, match_count);
+	free_matches(matches, match_count);
+	return (result);
 }
 
-static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
+char	*join_matches_with_spaces(char **matches, int match_count)
 {
-	if (node->args[i][1] == '?')
-		handle_exit_status_expansion(node, i);
-	else
-		handle_regular_env_var(node, env_list, i);
-}
+	char	*result;
+	char	*temp;
+	int		i;
 
-static void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
-		int i)
-{
-	char	*expanded_arg;
-
-	expanded_arg = handle_expansion(tokenizer, node->args[i]);
-	if (expanded_arg)
+	result = NULL;
+	if (!matches || match_count <= 0)
+		return (ft_strdup(""));
+	result = ft_strdup(matches[0]);
+	if (!result)
+		return (NULL);
+	for (i = 1; i < match_count; i++)
 	{
-		free(node->args[i]);
-		node->args[i] = expanded_arg;
+		temp = result;
+		result = ft_strjoin(result, " ");
+		free(temp);
+		if (!result)
+			return (NULL);
+		temp = result;
+		result = ft_strjoin(result, matches[i]);
+		free(temp);
+		if (!result)
+			return (NULL);
 	}
-}
-
-static void	handle_wildcard_expansion(t_ast_node *node, int i)
-{
-	if (should_skip_expansion(node, i, 0)
-		&& !is_mixed_quote_wildcard(node->args[i], node->arg_quote_types[i]))
-		return ;
-	if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
-	{
-		process_mixed_wildcard(node, i);
-		return ;
-	}
-	process_wildcard_arg(node, i);
-}
-
-void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
-		t_tokenizer *tokenizer, int i)
-{
-	if (node->args[i][0] == '$' && node->args[i][1])
-	{
-		if (should_skip_expansion(node, i, 1))
-			return ;
-		expand_env_var(node, env_list, i);
-		if (strchr(node->args[i], '$') != NULL)
-			handle_dollar_in_string(node, tokenizer, i);
-	}
-	else if (strchr(node->args[i], '$') != NULL)
-	{
-		if (should_skip_expansion(node, i, 1))
-			return ;
-		handle_dollar_in_string(node, tokenizer, i);
-	}
-	else if (has_wildcard(node->args[i]))
-		handle_wildcard_expansion(node, i);
+	return (result);
 }
