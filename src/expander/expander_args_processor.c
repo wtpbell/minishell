@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 15:52:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 10:59:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,40 @@ static void	handle_exit_status_expansion(t_ast_node *node, int i)
 	}
 }
 
+static char	*extract_var_name(char *arg, int *var_len)
+{
+	char	*var_name;
+	int		len;
+
+	len = 0;
+	while (arg[len] && (ft_isalnum(arg[len]) || arg[len] == '_'))
+		len++;
+	var_name = ft_substr(arg, 0, len);
+	*var_len = len;
+	return (var_name);
+}
+
 static void	handle_regular_env_var(t_ast_node *node, t_env **env_list, int i)
 {
 	char	*var_name;
 	char	*env_value;
+	char	*result;
+	char	*rest_of_arg;
+	int		var_len;
 
-	var_name = node->args[i] + 1;
+	var_name = extract_var_name(node->args[i] + 1, &var_len);
+	rest_of_arg = ft_strdup(node->args[i] + 1 + var_len);
 	env_value = get_env_value(*env_list, var_name);
 	if (env_value)
-	{
-		free(node->args[i]);
-		node->args[i] = ft_strdup(env_value);
-	}
+		result = ft_strdup(env_value);
 	else
-	{
-		free(node->args[i]);
-		node->args[i] = ft_strdup("");
-	}
+		result = ft_strdup("");
+	free(var_name);
+	if (rest_of_arg && *rest_of_arg)
+		result = join_and_free(result, rest_of_arg);
+	free(rest_of_arg);
+	free(node->args[i]);
+	node->args[i] = result;
 }
 
 static void	expand_env_var(t_ast_node *node, t_env **env_list, int i)
@@ -76,6 +93,19 @@ static void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 	}
 }
 
+static void	handle_wildcard_expansion(t_ast_node *node, int i)
+{
+	if (should_skip_expansion(node, i, 0)
+		&& !is_mixed_quote_wildcard(node->args[i], node->arg_quote_types[i]))
+		return ;
+	if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
+	{
+		process_mixed_wildcard(node, i);
+		return ;
+	}
+	process_wildcard_arg(node, i);
+}
+
 void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		t_tokenizer *tokenizer, int i)
 {
@@ -84,6 +114,8 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		if (should_skip_expansion(node, i, 1))
 			return ;
 		expand_env_var(node, env_list, i);
+		if (strchr(node->args[i], '$') != NULL)
+			handle_dollar_in_string(node, tokenizer, i);
 	}
 	else if (strchr(node->args[i], '$') != NULL)
 	{
@@ -92,16 +124,5 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		handle_dollar_in_string(node, tokenizer, i);
 	}
 	else if (has_wildcard(node->args[i]))
-	{
-		if (should_skip_expansion(node, i, 0)
-			&& !is_mixed_quote_wildcard(node->args[i],
-				node->arg_quote_types[i]))
-			return ;
-		if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
-		{
-			process_mixed_wildcard(node, i);
-			return ;
-		}
-		process_wildcard_arg(node, i);
-	}
+		handle_wildcard_expansion(node, i);
 }
