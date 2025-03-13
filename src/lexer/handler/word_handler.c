@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:32:09 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:30:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 13:45:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* Skip spaces */
 static void	skip_spaces(t_tokenizer *tokenizer)
 {
 	while (tokenizer->input[tokenizer->position]
@@ -20,7 +19,6 @@ static void	skip_spaces(t_tokenizer *tokenizer)
 		tokenizer->position++;
 }
 
-/* Extract word */
 static char	*extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 {
 	char	*result;
@@ -42,7 +40,6 @@ static char	*extract_word(t_tokenizer *tokenizer, t_quote_type *quote_type)
 	return (result);
 }
 
-/* Analyze and create token */
 static t_token	*analyze_and_create_token(char *content)
 {
 	t_token	*token;
@@ -57,7 +54,6 @@ static t_token	*analyze_and_create_token(char *content)
 	return (token);
 }
 
-/* Handle word */
 t_token	*handle_word(t_tokenizer *tokenizer)
 {
 	char			*content;

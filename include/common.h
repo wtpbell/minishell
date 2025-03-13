@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 15:21:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 15:23:21 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ void			exit_shell(int status, t_ast_node *node, \
 void			child_cleanup(t_ast_node *node, char **env_arr);
 t_ast_node		*get_root_node(t_ast_node *new_root);
 
-/*signal*/
 void			signals_init(void);
 void			interrupt_w_nl(int sig);
 void			interrput_silence(int sig);
 void			heredoc_signals(int sig);
 
-void			print_banner(void);
 char			*get_custom_prompt(void);
 #endif
