@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:54:15 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:56:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:42:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Get the length of the argument array */
 static int	get_args_length(char **args)
 {
 	int	len;
@@ -26,7 +25,6 @@ static int	get_args_length(char **args)
 	return (len);
 }
 
-/* Create and initialise AST nodes */
 t_ast_node	*create_ast_node(t_token_type type)
 {
 	t_ast_node	*node;
@@ -44,7 +42,6 @@ t_ast_node	*create_ast_node(t_token_type type)
 	return (node);
 }
 
-/* Copy existing args and add new arg */
 static int	copy_args_and_add(t_ast_node *node, t_arg_data *data, char *arg)
 {
 	int	i;
@@ -69,7 +66,6 @@ static int	copy_args_and_add(t_ast_node *node, t_arg_data *data, char *arg)
 	return (1);
 }
 
-/* Complete the argument addition process */
 static void	complete_arg_addition(t_ast_node *node, t_arg_data *data)
 {
 	data->new_quote_types[data->args_len] = data->quote_type;
@@ -82,7 +78,6 @@ static void	complete_arg_addition(t_ast_node *node, t_arg_data *data)
 	node->argc++;
 }
 
-/* Add an argument to the node */
 void	add_arg_to_node(t_ast_node *node, char *arg, t_quote_type quote_type)
 {
 	t_arg_data	data;

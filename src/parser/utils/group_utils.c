@@ -6,25 +6,22 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 14:49:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/06 16:34:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:38:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Check if the token is a left parenthesis */
 int	is_left_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_LPAREN);
 }
 
-/* Check if the token is a right parenthesis */
 int	is_right_paren(t_token *token)
 {
 	return (token && token->type == TOKEN_RPAREN);
 }
 
-/* Check if the token is valid after a subshell */
 int	is_valid_after_subshell(t_token *token)
 {
 	if (!token)

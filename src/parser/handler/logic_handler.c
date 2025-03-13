@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:52 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 18:09:40 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:42:52 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Handle logic operation */
 t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*logic_node;
@@ -42,7 +41,6 @@ t_ast_node	*handle_logic_operation(t_token **token, t_ast_node *left)
 	return (logic_node);
 }
 
-/* Handle logic sequence */
 static t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 {
 	t_ast_node	*logic_node;
@@ -68,7 +66,6 @@ static t_ast_node	*handle_logic_sequence(t_token **token, t_ast_node *left)
 	return (logic_node);
 }
 
-/* Parse complete */
 t_ast_node	*parse_complete_bonus(t_token **token)
 {
 	t_ast_node	*root;

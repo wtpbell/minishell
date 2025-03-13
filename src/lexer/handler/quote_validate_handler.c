@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/22 10:01:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:33:05 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:36:29 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* Check if the character is escaped */
 static int	is_escaped(const char *str, int pos)
 {
 	int	count;
@@ -26,7 +25,6 @@ static int	is_escaped(const char *str, int pos)
 	return (count % 2);
 }
 
-/* Check if there are unclosed quotations */
 static int	find_closing_quote(const char *str, int start, char quote_char)
 {
 	int	i;
@@ -59,7 +57,6 @@ static int	process_quote(const char *input, int *i)
 	return (1);
 }
 
-/* Validate quotes in input string */
 int	validate_quotes(const char *input)
 {
 	int	i;

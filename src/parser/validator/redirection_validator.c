@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 09:13:33 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 15:18:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:43:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Validate redirection syntax */
 t_syntax_error	validate_redir_syntax(t_ast_node *node)
 {
 	t_redir	*redir;

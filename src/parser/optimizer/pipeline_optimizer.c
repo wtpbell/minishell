@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 15:39:22 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 19:01:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:43:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Check if the command is empty */
 static int	is_empty_command(t_ast_node *node)
 {
 	if (!node || node->type != TOKEN_WORD)
@@ -22,7 +21,6 @@ static int	is_empty_command(t_ast_node *node)
 	return (0);
 }
 
-/* Remove empty pipe segment */
 static t_ast_node	*remove_empty_pipe_segment(t_ast_node *node)
 {
 	t_ast_node	*result;
@@ -43,7 +41,6 @@ static t_ast_node	*remove_empty_pipe_segment(t_ast_node *node)
 	return (result);
 }
 
-/* Optimize pipeline */
 t_ast_node	*optimize_pipeline(t_ast_node *node)
 {
 	if (!node)

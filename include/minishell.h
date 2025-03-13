@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:13:34 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:36:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:40:08 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-// # include "parser.h"
 
 # define SHELL_ERROR "minishell: "
 # define MANY_ARGS_ERROR "too many arguments"

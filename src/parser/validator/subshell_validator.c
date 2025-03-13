@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/06 13:42:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 15:25:04 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:39:01 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Get the depth of the subshell */
 static int	get_subshell_depth(t_ast_node *node)
 {
 	int	left_depth;
@@ -30,7 +29,6 @@ static int	get_subshell_depth(t_ast_node *node)
 	return (1 + max_depth);
 }
 
-/* Validate the parentheses */
 int	validate_parentheses(t_token *tokens)
 {
 	int		depth;
@@ -53,7 +51,6 @@ int	validate_parentheses(t_token *tokens)
 	return (depth == 0);
 }
 
-/* Validate the subshell command */
 int	validate_subshell_command(t_ast_node *node)
 {
 	if (!node)
@@ -68,7 +65,6 @@ int	validate_subshell_command(t_ast_node *node)
 	return (1);
 }
 
-/* Validate the subshell syntax */
 t_syntax_error	validate_subshell_syntax(t_ast_node *node)
 {
 	t_syntax_error	redir_status;

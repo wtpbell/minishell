@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 12:32:49 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/29 12:49:02 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:38:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Get the validation error message */
 char	*get_validation_error_msg(t_cmd_valid_error error)
 {
 	static char	*messages[6];
@@ -26,7 +25,6 @@ char	*get_validation_error_msg(t_cmd_valid_error error)
 	return (messages[error]);
 }
 
-/* Get the syntax error message */
 char	*get_syntax_error_msg(t_syntax_error error)
 {
 	static char	*messages[9];

@@ -6,16 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:25:10 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/14 10:48:20 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:36:44 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/*
-** Return operator type (||, &&, <<, >>, |, <, >, (, ))
-** Returns TOKEN_WORD if not applicable
-*/
 t_token_type	get_operator_type(char *input)
 {
 	if (!input || !*input)
@@ -41,8 +37,6 @@ t_token_type	get_operator_type(char *input)
 	return (TOKEN_WORD);
 }
 
-/* Returns the length of the ** operator
-   (2: ||,&&,<<,>> 1: |,<,>,() 0: plain word) */
 int	get_operator_len(t_token_type type)
 {
 	if (type == TOKEN_OR || type == TOKEN_AND

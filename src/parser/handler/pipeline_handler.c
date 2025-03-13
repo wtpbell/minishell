@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:20 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 18:08:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:42:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Create a pipe node */
 t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 {
 	t_ast_node	*pipe_node;
@@ -37,7 +36,6 @@ t_ast_node	*create_pipe_node(t_ast_node *left, t_ast_node *right)
 	return (pipe_node);
 }
 
-/* Handle redirection in pipe */
 t_ast_node	*handle_redirection_in_pipe(t_ast_node *left,
 											t_token **token)
 {
@@ -97,7 +95,6 @@ static int	validate_pipeline_structure(t_ast_node *root)
 	return (valid);
 }
 
-/* Parse pipeline */
 t_ast_node	*parse_pipeline(t_token **token)
 {
 	t_ast_node	*root;

@@ -36,6 +36,7 @@ LEXER_FILES = $(LEXER_DIR)/tokenizer.c \
 
 PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/core/ast.c \
+			   $(PARSER_DIR)/core/parser_ast.c \
 			   $(PARSER_DIR)/handler/command_handler.c \
 			   $(PARSER_DIR)/handler/redirection_handler.c \
 			   $(PARSER_DIR)/handler/pipeline_handler.c \
@@ -48,6 +49,7 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
 			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
+			   $(PARSER_DIR)/validator/parser_validator.c \
 			   $(PARSER_DIR)/validator/redirection_validator.c \
 			   $(PARSER_DIR)/validator/syntax_validator.c \
 			   $(PARSER_DIR)/validator/subshell_validator.c \
