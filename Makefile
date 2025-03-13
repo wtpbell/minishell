@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
-# CFLAGS += -g3 -fsanitize=address -fno-omit-frame-pointer
+# CFLAGS += -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
 SRC_DIR = src
