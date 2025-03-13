@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 21:26:32 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:05:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2]);
 /*utils*/
 void	set_exit_status(int status);
 int		get_exit_status(void);
-// void	sort_env(t_env **envs);
 void	cleanup_heredocs(t_redir *redir);
 
 /*utils2*/
