@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 16:40:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:16:50 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:38:00 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Optimize subshell */
 static t_ast_node	*optimize_subshell(t_ast_node *node)
 {
 	if (!node->left)
@@ -40,7 +39,6 @@ static t_ast_node	*optimize_subshell(t_ast_node *node)
 	return (node);
 }
 
-/* Optimize the AST */
 t_ast_node	*optimize_ast(t_ast_node *root)
 {
 	if (!root)

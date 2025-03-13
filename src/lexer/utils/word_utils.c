@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:23:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 09:35:18 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:57:43 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,4 @@ int	is_wildcard_after_quote(t_tokenizer *tokenizer)
 		&& tokenizer->position > 0
 		&& (tokenizer->input[tokenizer->position - 1] == '\''
 			|| tokenizer->input[tokenizer->position - 1] == '\"'));
-}
-
-char	*handle_special_wildcard(t_tokenizer *tokenizer)
-{
-	char	*result;
-
-	result = ft_strdup("*");
-	if (!result)
-		return (NULL);
-	tokenizer->position++;
-	return (result);
 }

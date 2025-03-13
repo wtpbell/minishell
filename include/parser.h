@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:17:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:45:49 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ t_ast_node			*parse_command(t_token **token);
 t_ast_node			*parse_group(t_token **token);
 t_ast_node			*parse_redirection(t_token **token);
 t_ast_node			*parse_pipe_sequence(t_token **token);
+t_ast_node			*parse_tokens_to_ast(t_token **tokens);
+t_ast_node			*validate_ast(t_ast_node *root);
 
 /* AST node manipulation */
 t_ast_node			*create_ast_node(t_token_type type);
@@ -99,6 +101,7 @@ void				add_arg_to_node(t_ast_node *node, char *arg,
 						t_quote_type quote_type);
 void				free_ast(t_ast_node *node);
 void				free_redirections(t_redir *redir);
+int					is_command_separator(t_token *token);
 
 /* Logic operation handling */
 t_ast_node			*parse_command_sequence(t_token **token,

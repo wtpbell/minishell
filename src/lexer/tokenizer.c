@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 14:36:18 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 09:33:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:55:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* Check if the position is valid */
 int	is_valid_position(t_tokenizer *tokenizer)
 {
 	return (tokenizer && tokenizer->input
@@ -20,7 +19,6 @@ int	is_valid_position(t_tokenizer *tokenizer)
 		&& tokenizer->position < (int)ft_strlen(tokenizer->input));
 }
 
-/* Tokenize the input */
 t_token	*tokenize(char *input)
 {
 	t_tokenizer	tokenizer;

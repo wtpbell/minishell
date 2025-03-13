@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 12:31:13 by spyun         #+#    #+#                 */
-/*   Updated: 2025/02/11 14:17:15 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:39:17 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Validate pipe operator syntax */
 static t_syntax_error	validate_pipe_syntax(t_ast_node *node)
 {
 	if (!node->left || !node->right)
@@ -20,7 +19,6 @@ static t_syntax_error	validate_pipe_syntax(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
-/* Validate logical operators (AND, OR) syntax */
 static t_syntax_error	validate_logic_syntax(t_ast_node *node)
 {
 	if (!node->left || !node->right)
@@ -31,7 +29,6 @@ static t_syntax_error	validate_logic_syntax(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
-/* Validate parentheses syntax */
 static t_syntax_error	validate_paren_syntax(t_ast_node *node)
 {
 	t_ast_node	*content;
@@ -54,7 +51,6 @@ static t_syntax_error	validate_paren_syntax(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
-/* Main operator precedence validation function */
 static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 {
 	if (!node)
@@ -71,7 +67,6 @@ static t_syntax_error	validate_operator_precedence(t_ast_node *node)
 	return (SYNTAX_OK);
 }
 
-/* Validate the syntax tree */
 t_syntax_error	validate_syntax_tree(t_ast_node *root)
 {
 	t_syntax_error	left_error;
