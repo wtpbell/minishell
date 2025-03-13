@@ -104,6 +104,7 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_exit_status.c \
 				$(EXPANDER_DIR)/expander_quotes_utils.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
+				$(EXPANDER_DIR)/expander_utils.c \
 				$(EXPANDER_DIR)/expander_variables.c \
 				$(EXPANDER_DIR)/heredoc_expander.c \
 				$(EXPANDER_DIR)/mixed_wildcard_handler.c \
