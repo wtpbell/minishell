@@ -101,6 +101,7 @@ EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
 				$(EXPANDER_DIR)/expander_dollar.c \
 				$(EXPANDER_DIR)/expander_exit_status.c \
+				$(EXPANDER_DIR)/expander_expansion_handler.c \
 				$(EXPANDER_DIR)/expander_quotes_utils.c \
 				$(EXPANDER_DIR)/expander_quotes.c \
 				$(EXPANDER_DIR)/expander_utils.c \

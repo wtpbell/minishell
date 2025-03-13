@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 16:28:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 16:29:58 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,4 +130,3 @@ char	*process_wildcard_in_variable(char *value)
 	free_matches(matches, match_count);
 	return (result);
 }
-
