@@ -69,7 +69,7 @@ t_env	*create_env(char *env)
 	else if (ft_strcmp(new->key, "_") == 0)
 		new->scope = ENV;
 	else if (ft_strcmp(new->key, "?") == 0)
-		new->scope = SPECIAL;
+		new->scope = BOTH;
 	return (new);
 }
 

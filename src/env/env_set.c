@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/10 15:42:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 09:51:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ void	add_env(t_env **env, t_env *new)
 
 static void	set_scope(t_env *envs, const char *new_value)
 {
-	if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0)
+	if (envs->scope != SPECIAL && ft_strcmp(envs->key, "_") != 0 && \
+		ft_strcmp(envs->key, "?") != 0)
 	{
 		if (new_value)
 			envs->scope = BOTH;

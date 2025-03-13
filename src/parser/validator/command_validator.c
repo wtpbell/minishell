@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 10:18:14 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:00:55 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 09:49:17 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_cmd_valid_error	validate_node_args(t_ast_node *node)
 	else if (!node->args || !node->args[0])
 	{
 		if (!node->redirections)
-			return (VALID_EMPTY_CMD);
+			return (VALID_SUCCESS);
 	}
 	else if (node->args && node->args[0] && ft_strcmp(node->args[0], "&") == 0)
 	{
