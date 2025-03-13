@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:35 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 17:21:44 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:37:30 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Create a subshell node */
 t_ast_node	*create_subshell_node(void)
 {
 	t_ast_node	*node;
@@ -24,7 +23,6 @@ t_ast_node	*create_subshell_node(void)
 	return (node);
 }
 
-/* Parse the content of the group */
 static t_ast_node	*parse_group_content(t_token **token)
 {
 	t_ast_node	*content;
@@ -44,7 +42,6 @@ static t_ast_node	*parse_group_content(t_token **token)
 	return (subshell_node);
 }
 
-/* Handle the closure of the group */
 static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 {
 	t_ast_node	*result;
@@ -72,7 +69,6 @@ static t_ast_node	*handle_group_closure(t_token **token, t_ast_node *node)
 	return (node);
 }
 
-/* Parse the group */
 t_ast_node	*parse_group(t_token **token)
 {
 	t_ast_node	*node;

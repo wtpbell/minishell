@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 13:15:54 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/06 11:32:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 09:38:18 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-/* Check if the redirection should be removed */
 static int	should_remove_redir(t_redir *curr, t_last_redir *last)
 {
 	return ((curr->type == TOKEN_REDIR_IN && curr != last->in)
@@ -21,7 +20,6 @@ static int	should_remove_redir(t_redir *curr, t_last_redir *last)
 		|| (curr->type == TOKEN_APPEND && curr != last->append));
 }
 
-/* Free the redirection node */
 static void	free_redir_node(t_redir *curr)
 {
 	if (curr->file)
@@ -33,7 +31,6 @@ static void	free_redir_node(t_redir *curr)
 	free(curr);
 }
 
-/* Remove overridden redirections */
 static void	remove_overridden_redirs(t_redir **redir, t_last_redir *last)
 {
 	t_redir	*curr;
@@ -59,7 +56,6 @@ static void	remove_overridden_redirs(t_redir **redir, t_last_redir *last)
 	}
 }
 
-/* Find the last redirections */
 static void	find_last_redirs(t_redir *redir, t_last_redir *last)
 {
 	t_redir	*curr;

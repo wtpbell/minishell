@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:34:05 by spyun         #+#    #+#                 */
-/*   Updated: 2025/01/23 17:07:07 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:36:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* check if string is a valid operator */
 static int	validate_operator(char *str)
 {
 	if (!str || !*str)
@@ -31,7 +30,6 @@ static int	validate_operator(char *str)
 	return (0);
 }
 
-/* Converting operators to tokens */
 t_token	*handle_operator(t_tokenizer *tokenizer)
 {
 	t_token_type	type;

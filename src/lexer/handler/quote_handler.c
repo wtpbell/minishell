@@ -6,13 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 15:30:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:52:56 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:36:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-/* Update quote type based on current and previous quote */
 static t_quote_type	update_quote_type(t_quote_type current_type, char new_quote)
 {
 	if (current_type == QUOTE_NONE)
@@ -29,7 +28,6 @@ static t_quote_type	update_quote_type(t_quote_type current_type, char new_quote)
 	return (QUOTE_MIXED);
 }
 
-/* Handle nested quotes */
 static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
 {
 	if (!is_valid_position(tokenizer))
@@ -55,7 +53,6 @@ static int	handle_nested_quote(t_tokenizer *tokenizer, char quote)
 	return (0);
 }
 
-/* Quote handling logic */
 void	handle_quote(t_tokenizer *tokenizer)
 {
 	char	current;

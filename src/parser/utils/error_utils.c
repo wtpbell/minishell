@@ -6,14 +6,13 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/11 08:54:30 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 16:32:42 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:38:31 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "executor.h"
 
-/* Handle logic error */
 t_ast_node	*handle_logic_error(void)
 {
 	ft_putendl_fd("minishell: syntax error near unexpected token",
@@ -21,7 +20,6 @@ t_ast_node	*handle_logic_error(void)
 	return (NULL);
 }
 
-/* Handle group error */
 t_ast_node	*handle_group_error(char *msg)
 {
 	ft_putstr_fd("minishell: syntax error: ", STDERR_FILENO);

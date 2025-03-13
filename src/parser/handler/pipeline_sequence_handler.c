@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 11:14:04 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/11 10:42:16 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 09:37:51 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ t_ast_node	*handle_pipe_right(t_token **token, t_ast_node *left)
 	return (pipe_node);
 }
 
-/* Parse pipe sequence */
 t_ast_node	*parse_pipe_sequence(t_token **token)
 {
 	t_ast_node	*left;
