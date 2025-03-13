@@ -128,6 +128,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
+	status_ = 0;
 	if (!node->args[0] || node->args[0][0] == '\0')
 		return (set_exit_status(127), \
 				error(node->args[0], "command not found"), 127);
@@ -138,7 +139,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (builtin)
 		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());
 	status_ = check_cmd(node, env);
-	if (status_)
+	if (status_ != 0)
 		return (status_);
 	status_ = launch_external_cmd(node, env, tokens);
 	signals_init();
