@@ -18,12 +18,6 @@
 #include "common.h"
 #include <fcntl.h>
 
-/*
-	These are typically used in shell commands to control the flow of
-	execution based on the success or failure of the previous command.
-	AND Operator (&&): The second command runs only if the first one succeeds.
-	OR Operator (||): The second command runs only if the first one fails
-*/
 int	exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int	status_;
@@ -46,14 +40,6 @@ int	exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens)
 	return (status_);
 }
 
-/*
-	The exec_block() handles executing a block of commands inside
-	parentheses () in a shell-like program.
-	When a block of commands is executed, it's typically treated
-	as a separate process, isolated from the parent shell.
-	The function forks a new child process to execute the commands
-	in the block and waits for it to complete
-*/
 int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int		status_;
@@ -81,14 +67,6 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	return (status_);
 }
 
-/*
-	The exec_pipe() is responsible for handling pipelines of commands
-	where the output of one command becomes the input of the next.
-	This function sets up a pipeline, forks processes,
-	and connects them via pipes.
-	The function waits for the last process in the pipeline to finish, collects
-	the exit status, and returns it.
-*/
 int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	pid_t			last_pid;
@@ -142,14 +120,6 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 	signals_init();
 	return (status_);
 }
-
-/*
-	The exec_cmd() is responsible for executing a single command in the shell,
-	which can either be a built-in command or an external command.
-	If it's a built-in command, execute it directly.
-	If it's an external command, search for it in the system's executable paths
-	and run it in a child process.
-*/
 
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {

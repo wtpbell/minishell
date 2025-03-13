@@ -41,12 +41,6 @@ static t_env	*env_int(char **key_value)
 	return (new);
 }
 
-/*
-	OLDPWD: Initialized with NULL value and scope set to EXPORT.
-	SHLVL: tracks how many nested shells are currently active
-	_: Represents the last executed command; its scope is set to ENV.
-	?: Special variable representing the exit status of the last command.
-*/
 t_env	*create_env(char *env)
 {
 	t_env	*new;

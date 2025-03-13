@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/23 23:30:20 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 17:38:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:17:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ static char	*create_env_entry(t_env *envs)
 	return (full_entry);
 }
 
-// /*
-// 	Convert env variables into an arrray of strings, formatted as
-// 	"key=value" for execve() as executing a new process with execve(),
-// 	we need to pass environment variables as a char ** array
-// */
 char	**env_to_arr(t_env *envs)
 {
 	char	**env;

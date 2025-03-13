@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 19:12:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:14:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,6 @@ static bool	is_within_long_range(char *arg)
 	num *= sign;
 	return (true);
 }
-/*
-	No Arguments: Exits with status 0 (default).
-	Single Numeric Argument: Exits with the given status.
-	Single Non-Numeric Argument: Displays an error and exits with status 2.
-	Multiple Arguments: Displays an error and does not exit.
-*/
 
 int	builtin_exit(t_ast_node *node, t_env **env, t_token *tokens)
 {

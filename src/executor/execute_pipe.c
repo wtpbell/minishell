@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 23:52:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:18:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static void	cleanup_pipe(t_child_info *child, int pipe_fd[2])
 		close(child->input);
 }
 
-/* while loop handle all but bot the last cmd in pipeline */
 pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *node, t_env **env)
 {

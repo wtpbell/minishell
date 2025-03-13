@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/27 15:44:06 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 09:51:06 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:17:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "executor.h"
 #include "common.h"
 
-// Helper function to add new node to env list
 void	add_env(t_env **env, t_env *new)
 {
 	t_env	*curr;
@@ -73,11 +72,6 @@ void	set_env(t_env *envs, const char *key, const char *new_value)
 	}
 }
 
-/*
-	_ is automatically updated by the shell to store:
-	- The last argument of the last command.
-	- Or the full path of the executed command if there are no arguments.
-*/
 void	set_underscore(int argc, char **args)
 {
 	char	**splited;
@@ -100,11 +94,6 @@ void	set_underscore(int argc, char **args)
 	free_tab(splited);
 }
 
-/*
-	Set the _ environment variable to:
-	-The last argument if there are arguments (argc > 1)
-	-An empty string if there are no arguments
-*/
 void	set_last(char **args, int argc)
 {
 	if (!args)
