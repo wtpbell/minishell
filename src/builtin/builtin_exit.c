@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 23:06:50 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:14:39 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 16:51:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,28 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+static bool	check_min_llong(char *arg, long long *num, int *digit_count)
+{
+	if (ft_strcmp(arg, "9223372036854775808") == 0)
+	{
+		*num = LLONG_MIN;
+		*digit_count = 19;
+		return (true);
+	}
+	return (false);
+}
+
 static bool	parse_num(char *arg, long long *num, int *digit_count)
 {
-	int	i;
+	int		i;
+	bool	is_llong_min;
 
 	*num = 0;
 	*digit_count = 0;
 	i = 0;
+	is_llong_min = check_min_llong(arg, num, digit_count);
+	if (is_llong_min)
+		return (true);
 	while (arg[i] && ft_isdigit(arg[i]))
 	{
 		if (++(*digit_count) > MAX_STATUS_LEN)
@@ -55,6 +70,8 @@ static bool	is_within_long_range(char *arg)
 			sign = -1;
 		i++;
 	}
+	if (sign == -1 && ft_strcmp(arg + i, "9223372036854775808") == 0)
+		return (true);
 	if (!parse_num(arg + i, &num, &count) || count == 0)
 		return (false);
 	num *= sign;

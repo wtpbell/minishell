@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 18:36:55 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 16:01:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 16:14:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int		(*is_builtin(char *args))(t_ast_node *node, \
 void	env_args_dup(char **split, char **key, char **value);
 void	env_args_handler(t_env **env, char **split, char *args);
 void	sort_env(t_env **envs);
+char	**split_env_var(const char *env_str);
 
 #endif

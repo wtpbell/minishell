@@ -46,24 +46,18 @@ t_env	*create_env(char *env)
 	t_env	*new;
 	char	**key_value;
 
-	key_value = mem_split(env, "=");
+	key_value = split_env_var(env);
 	if (!key_value || !key_value[0])
 		return (free_tab(key_value), NULL);
 	new = env_int(key_value);
 	if (!new)
 		return (NULL);
-	if (ft_strcmp(new->key, "OLDPWD") == 0)
-	{
-		free(new->value);
-		new->value = NULL;
-		new->scope = EXPORT;
-	}
 	else if (ft_strcmp(new->key, "SHLVL") == 0)
 		setup_shlvl(new);
 	else if (ft_strcmp(new->key, "_") == 0)
 		new->scope = ENV;
 	else if (ft_strcmp(new->key, "?") == 0)
-		new->scope = BOTH;
+		new->scope = SPECIAL;
 	return (new);
 }
 
