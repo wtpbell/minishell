@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 11:10:19 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 16:26:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,5 @@ char	*expand_heredoc_line(char *line, t_env *env_list);
 void	expand_redir_wildcards(t_redir *redir);
 
 char	*join_and_free(char *s1, char *s2);
+char	*join_matches_with_spaces(char **matches, int match_count);
 #endif

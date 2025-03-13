@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 16:21:36 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 16:28:54 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,24 +84,6 @@ void	expand_wildcards(t_ast_node *node)
 	}
 }
 
-char	*process_wildcard_in_variable(char *value)
-{
-	char	**matches;
-	int		match_count;
-	char	*result;
-
-	match_count = 0;
-	if (!value || !has_wildcard(value))
-		return (value);
-	matches = get_matching_files(value, &match_count);
-	free(value);
-	if (!matches || match_count == 0)
-		return (ft_strdup("*"));
-	result = join_matches_with_spaces(matches, match_count);
-	free_matches(matches, match_count);
-	return (result);
-}
-
 char	*join_matches_with_spaces(char **matches, int match_count)
 {
 	char	*result;
@@ -130,3 +112,22 @@ char	*join_matches_with_spaces(char **matches, int match_count)
 	}
 	return (result);
 }
+
+char	*process_wildcard_in_variable(char *value)
+{
+	char	**matches;
+	int		match_count;
+	char	*result;
+
+	match_count = 0;
+	if (!value || !has_wildcard(value))
+		return (value);
+	matches = get_matching_files(value, &match_count);
+	free(value);
+	if (!matches || match_count == 0)
+		return (ft_strdup("*"));
+	result = join_matches_with_spaces(matches, match_count);
+	free_matches(matches, match_count);
+	return (result);
+}
+
