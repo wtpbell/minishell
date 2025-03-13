@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 13:48:45 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/09 16:49:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:21:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "expander.h"
 #include "common.h"
 
-/* Calculate new arguments count and prepare for replacement */
 static int	prepare_replacement(t_ast_node *node, int match_count,
 			int *new_argc)
 {
@@ -23,7 +22,6 @@ static int	prepare_replacement(t_ast_node *node, int match_count,
 	return (1);
 }
 
-/* Handle allocation of new arguments array */
 static char	**allocate_replacement_args(int size)
 {
 	char	**new_args;
@@ -34,7 +32,6 @@ static char	**allocate_replacement_args(int size)
 	return (new_args);
 }
 
-/* Update node with new arguments */
 static void	update_node_args(t_ast_node *node, char **new_args, char **old_args,
 			int new_argc)
 {

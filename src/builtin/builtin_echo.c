@@ -6,18 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/23 17:54:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/06 13:38:26 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:14:33 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-/*
-	echo with -n do not output the trailing newline
-	echo with no args, output a newline
-	echo with multiple -n, skip those -n
-	echo with invalid -n, e.g. -nn, do not output the trailing newline
-*/
 static int	verify_args(char **args)
 {
 	int	i;

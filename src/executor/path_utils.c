@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/30 22:36:21 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 17:43:21 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:20:26 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static int	append_path(char **joined, char *to_append, bool add_slash)
 	return (0);
 }
 
-// Helper function to check if path exists and is a directory
 static int	validate_path_c(char *path, char *full_path)
 {
 	struct stat	info;

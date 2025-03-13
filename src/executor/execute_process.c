@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 09:54:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:19:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@
 #include "common.h"
 #include <sys/wait.h>
 
-/*
-	SIG_DFL (default handler for signal), informs the kernel that
-	there is no user signal handler for the given signal, and that
-	the kernel should take default action for it.
-*/
 void	child(t_ast_node *node, t_env **env)
 {
 	char	**env_arr;
@@ -46,20 +41,4 @@ void	child(t_ast_node *node, t_env **env)
 	free_tab(env_arr);
 	set_exit_status(127);
 	exit(get_exit_status());
-}
-
-int	parent(t_ast_node *node)
-{
-	int	status_;
-
-	wait(&status_);
-	if (WIFEXITED(status_))
-		status_ = WEXITSTATUS(status_);
-	else if (WIFSIGNALED(status_))
-		status_ = WTERMSIG(status_) + 128;
-	set_underscore(node->argc, node->args);
-	free_ast(node);
-	set_exit_status(status_);
-	signals_init();
-	return (get_exit_status());
 }

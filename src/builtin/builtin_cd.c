@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 12:03:23 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:14:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,6 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <unistd.h>
-/*
-	Command				Expected Behavior
-	cd dir1				Changes to dir1.
-	cd nonexistent_dir	Prints "cd: nonexistent_dir: No such file or dir".
-	cd					Goes to the home dir.
-	cd ~				Goes to the home dir.
-	cd ""				Prints "cd: invalid dir".
-	cd dir1 dir2		Prints "cd: too many arguments".
-	cd /path/to/file	Fails if /path/to/file is not a dir.
-	cd ..				Goes to the parent dir.
-*/
 
 static void	update_pwd(t_env *envs, char *old_pwd, char *pwd)
 {
@@ -68,13 +57,6 @@ static int	home_dir(t_env **env, bool home, char *old_pwd)
 	return (EXIT_SUCCESS);
 }
 
-/*
-	int stat(const char *path, struct stat *buf);
-	- path:the path to the file or dir you want to query.
-	- buf:  where the file's information will be stored.
-	0: Success. The struct stat pointed to by buf is filled with the file's info.
-	-1: Failure. The global variable errno is set to indicate the error
-*/
 int	builtin_cd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char		old_pwd[PATH_MAX];

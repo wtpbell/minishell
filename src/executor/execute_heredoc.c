@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 11:31:15 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:18:51 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ static void	process_heredocs(t_redir *redir)
 	}
 }
 
-//Main function to handle all heredocs and restore stdin after
 void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
 	if (saved_fd[0] == -1)

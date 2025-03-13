@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 13:05:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:18:58 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static void	cleanup_pipe(t_child_info *child, int pipe_fd[2])
 		close(child->input);
 }
 
-/* while loop handle all but bot the last cmd in pipeline */
 pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *node, t_env **env)
 {
@@ -73,14 +72,14 @@ pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 	pid_t	last_pid;
 
 	last_pid = -1;
-	while (node && node->left && node->type == TOKEN_PIPE)
+	while (node && node->type == TOKEN_PIPE)
 	{
 		if (pipe(pipe_fd) == -1)
 			return (error("pipe", NULL), -1);
 		pid = spawn_process(child, pipe_fd, node->left, env);
 		if (pid == -1)
 			return (cleanup_pipe(child, pipe_fd), -1);
-		if (child->input != 0 && child->input != -1)
+		if (child->input > 0)
 			close(child->input);
 		close(pipe_fd[1]);
 		child->input = pipe_fd[0];

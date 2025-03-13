@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/19 12:56:28 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 20:35:30 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:19:49 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static void	perform_dup2(int fd, int redir_fd)
 		close(fd);
 }
 
-// Function to handle heredoc redirection
-static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
+void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 {
 	int	fd;
 
@@ -46,8 +45,7 @@ static void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2])
 	perform_dup2(fd, current_redir->fd);
 }
 
-// Function to handle regular file redirection
-static void	handle_regular_redirection(t_redir *current_redir, \
+void	handle_regular_redirection(t_redir *current_redir, \
 			int saved_fd[2], bool error_)
 {
 	int	fd;
@@ -68,7 +66,6 @@ static void	handle_regular_redirection(t_redir *current_redir, \
 	set_exit_status(0);
 }
 
-// Main function to launch the redirection
 bool	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_)
 {
 	int	pre_status;

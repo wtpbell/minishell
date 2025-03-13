@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 09:34:47 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:14:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ static void	print_envs(t_env *env)
 	}
 }
 
-/*
-	check if a valid variable name starts with a letter (A-Z or a-z) or
-	an underscore (_) but cannot start with a number or special character.
-*/
 static bool	is_valid_key(char *key)
 {
 	int	i;

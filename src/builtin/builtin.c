@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:26 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/09 17:07:17 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:15:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,6 @@ static int	builtin_env(t_ast_node *node, t_env **env, t_token *tokens)
 	return (EXIT_SUCCESS);
 }
 
-/*
-	If the getcwd function fails, it return 1, otherwise returns 1.
-*/
 static int	builtin_pwd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	char	cwd[PATH_MAX];
@@ -65,14 +62,6 @@ static int	builtin_pwd(t_ast_node *node, t_env **env, t_token *tokens)
 	return (set_underscore(node->argc, node->args), EXIT_SUCCESS);
 }
 
-/*
-	This function is responsible for checking whether the command
-	(represented by args) corresponds to a built-in shell command
-	is_builtin() takes a string (the command name) checks it
-	against a list of known built-ins, and returns a function pointer
-	to the corresponding built-in handler
-	The return type of is_builtin is a function pointer
-*/
 int	(*is_builtin(char *args))(t_ast_node *node, t_env **env, t_token *token)
 {
 	if (!args || !args[0])
