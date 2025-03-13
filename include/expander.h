@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/12 12:13:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 16:35:11 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 16:37:34 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,14 @@ void	expand_redir_wildcards(t_redir *redir);
 char	*join_and_free(char *s1, char *s2);
 char	*join_matches_with_spaces(char **matches, int match_count);
 void	handle_env_dollar_expansion(t_ast_node *node, t_env **env_list,
-		int i, int *had_expansion);
+			int i, int *had_expansion);
 void	handle_dollar_expansion(t_ast_node *node, t_tokenizer *tokenizer,
-		int i, int *had_expansion);
+			int i, int *had_expansion);
 void	handle_wildcard_with_expansion(t_ast_node *node, int i);
 void	expand_env_var(t_ast_node *node, t_env **env_list, int i);
 void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
-		int i);
+			int i);
 void	handle_wildcard_expansion(t_ast_node *node, int i);
+char	*join_matches_with_spaces(char **matches, int match_count);
+char	*process_wildcard_in_variable(char *value);
 #endif
