@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 09:31:24 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 10:21:11 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "expander.h"
 #include "common.h"
 
-/* Copies arguments from source to destination within specified range */
 void	copy_args_range(char **dest, char **source, int range[2], int *dest_idx)
 {
 	int	i;
@@ -25,7 +24,6 @@ void	copy_args_range(char **dest, char **source, int range[2], int *dest_idx)
 		dest[(*dest_idx)++] = source[i++];
 }
 
-/* Copies matches into the destination array */
 void	copy_matches(char **dest, char **matches, int match_count,
 			int *dest_idx)
 {
@@ -36,7 +34,6 @@ void	copy_matches(char **dest, char **matches, int match_count,
 		dest[(*dest_idx)++] = matches[i++];
 }
 
-/* Frees matches array and its contents */
 void	free_matches(char **matches, int match_count)
 {
 	int	i;
@@ -68,7 +65,6 @@ void	process_wildcard_arg(t_ast_node *node, int i)
 		free(matches);
 }
 
-/* Main function that expands wildcards in command arguments */
 void	expand_wildcards(t_ast_node *node)
 {
 	int	i;

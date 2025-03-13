@@ -86,6 +86,8 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_pipe.c \
 				 $(EXECUTOR_DIR)/execute_heredoc.c \
 				 $(EXECUTOR_DIR)/execute_redir.c \
+				 $(EXECUTOR_DIR)/execute_cmd.c \
+
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
 				$(COMMON_DIR)/banner.c \

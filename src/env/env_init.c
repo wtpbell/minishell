@@ -41,12 +41,6 @@ static t_env	*env_int(char **key_value)
 	return (new);
 }
 
-/*
-	OLDPWD: Initialized with NULL value and scope set to EXPORT.
-	SHLVL: tracks how many nested shells are currently active
-	_: Represents the last executed command; its scope is set to ENV.
-	?: Special variable representing the exit status of the last command.
-*/
 t_env	*create_env(char *env)
 {
 	t_env	*new;
@@ -69,7 +63,7 @@ t_env	*create_env(char *env)
 	else if (ft_strcmp(new->key, "_") == 0)
 		new->scope = ENV;
 	else if (ft_strcmp(new->key, "?") == 0)
-		new->scope = SPECIAL;
+		new->scope = BOTH;
 	return (new);
 }
 
@@ -102,11 +96,11 @@ t_env	*build_env(char **env)
 	int		i;
 
 	envs = NULL;
-	i = -1;
+	i = 0;
 	add_env(&envs, create_env("?=0"));
 	if (!env[0])
 		add_empty_env(&envs);
-	while (env[++i])
+	while (env[i])
 	{
 		new = create_env(env[i]);
 		if (!new)
@@ -115,6 +109,7 @@ t_env	*build_env(char **env)
 			return (NULL);
 		}
 		add_env(&envs, new);
+		i++;
 	}
 	return (envs);
 }

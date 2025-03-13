@@ -18,12 +18,6 @@
 #include "common.h"
 #include <fcntl.h>
 
-/*
-	These are typically used in shell commands to control the flow of
-	execution based on the success or failure of the previous command.
-	AND Operator (&&): The second command runs only if the first one succeeds.
-	OR Operator (||): The second command runs only if the first one fails
-*/
 int	exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int	status_;
@@ -46,14 +40,6 @@ int	exec_ctrl(t_ast_node *node, t_env **env, t_token *tokens)
 	return (status_);
 }
 
-/*
-	The exec_block() handles executing a block of commands inside
-	parentheses () in a shell-like program.
-	When a block of commands is executed, it's typically treated
-	as a separate process, isolated from the parent shell.
-	The function forks a new child process to execute the commands
-	in the block and waits for it to complete
-*/
 int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int		status_;
@@ -81,14 +67,6 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	return (status_);
 }
 
-/*
-	The exec_pipe() is responsible for handling pipelines of commands
-	where the output of one command becomes the input of the next.
-	This function sets up a pipeline, forks processes,
-	and connects them via pipes.
-	The function waits for the last process in the pipeline to finish, collects
-	the exit status, and returns it.
-*/
 int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	pid_t			last_pid;
@@ -143,23 +121,16 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 	return (status_);
 }
 
-/*
-	The exec_cmd() is responsible for executing a single command in the shell,
-	which can either be a built-in command or an external command.
-	If it's a built-in command, execute it directly.
-	If it's an external command, search for it in the system's executable paths
-	and run it in a child process.
-*/
 int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
-	pid_t	pid;
 	int		status_;
 
 	if (!node || !node->args || !env || node->argc == 0)
 		return (set_exit_status(0), 0);
 	if (!node->args[0] || node->args[0][0] == '\0')
-		return (set_exit_status(127), ft_putstr_fd("command not found\n", STDERR_FILENO), 127);
+		return (set_exit_status(127), \
+				error(node->args[0], "command not found"), 127);
 	expander(node, env);
 	if (!node->args[0] || node->args[0][0] == '\0')
 		return (set_exit_status(0), 0);
@@ -169,14 +140,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	status_ = check_cmd(node, env);
 	if (status_)
 		return (status_);
-	signal(SIGINT, interrupt_w_nl);
-	signal(SIGQUIT, interrupt_w_nl);
-	pid = fork();
-	if (pid == -1)
-		return (perror("fork failed"), free_exit_memory(node, env, tokens), EXIT_FAILURE);
-	if (pid == 0)
-		child(node, env);
-	status_ = wait_for_pid(pid);
+	status_ = launch_external_cmd(node, env, tokens);
 	signals_init();
 	return (status_);
 }

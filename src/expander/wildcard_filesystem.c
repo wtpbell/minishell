@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:14:19 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/09 18:31:25 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:21:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include "expander.h"
 #include "common.h"
 
-/* Add a matching file to the matches array */
 int	add_matching_file(char ***matches, int *count, int *capacity,
 			const char *filename)
 {
@@ -35,7 +34,6 @@ int	add_matching_file(char ***matches, int *count, int *capacity,
 	return (1);
 }
 
-/* Process directory entries to find matching files */
 int	process_dir_entries(DIR *dir, t_dir_info *info)
 {
 	struct dirent	*entry;
@@ -55,7 +53,6 @@ int	process_dir_entries(DIR *dir, t_dir_info *info)
 	return (1);
 }
 
-/* Get files matching a wildcard pattern */
 char	**get_matching_files(const char *pattern, int *num_matches)
 {
 	DIR			*dir;

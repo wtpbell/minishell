@@ -15,17 +15,6 @@
 #include "executor.h"
 #include "common.h"
 
-/*
-	Exit Code		Meaning 							Example
-	1				Catchall for general errors
-	2				Misuse of shell builtins			empty_function()
-	126				Command invoked cannot execute		/dev/null
-	127				"command not found"					illegal_command (typo)
-	128				Invalid argument to exit			kill -9 $PPID returns 137
-	130				Script terminated by Control-C		Ctl-C
-	255*			Exit status out of range			exit -1
-*/
-
 void	set_exit_status(int status)
 {
 	char	*status_;

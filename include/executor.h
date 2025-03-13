@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:36:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:05:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,13 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2]);
 bool	launch_redir(t_redir *current_redir, int saved_fd[2], bool error_);
 void	restore_redirection(int saved_fd[2]);
 void	handle_redirections(t_redir *curr, int saved_fd[2], int error_);
+void	handle_regular_redirection(t_redir *current_redir, \
+			int saved_fd[2], bool error_);
+void	handle_heredoc_redirection(t_redir *current_redir, int saved_fd[2]);
 
 /*utils*/
 void	set_exit_status(int status);
 int		get_exit_status(void);
-// void	sort_env(t_env **envs);
 void	cleanup_heredocs(t_redir *redir);
 
 /*utils2*/
@@ -103,6 +105,9 @@ int		validate_path(char *full_path);
 char	*gen_filename(void);
 int		write_expanded_line(char *expanded_line, int fd);
 int		process_line(t_heredoc_data *data);
+
+/*execute_cmd.c*/
+int		launch_external_cmd(t_ast_node *node, t_env **env, t_token *tokens);
 
 /*pipe_utils.c*/
 void	redirect_io(int input, int output, int new_input);

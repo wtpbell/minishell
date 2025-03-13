@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 10:18:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 10:22:20 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-/*
-	Print a newline on Ctrl+C.
-	rl_on_new_lin: Readline (if using) on a new line.
-	rl_replace_line: Clear the current line.
-	rl_redisplay: Redisplay the prompt.
-	Set exit status for interrupt.
-*/
 static void	interrupt_handler(int sig)
 {
 	(void)sig;
@@ -32,7 +25,6 @@ static void	interrupt_handler(int sig)
 	set_exit_status(1);
 }
 
-/* minimal feedback for external cmd execution */
 void	interrupt_w_nl(int sig)
 {
 	(void)sig;
@@ -63,10 +55,6 @@ void	heredoc_signals(int sig)
 	set_exit_status(130);
 }
 
-/* 
-	Ignore SIGINT & SIGQUIT in parent process while it’s managing a subshell,
-	preventing it from being interrupted while waiting for the child to finish.
-*/
 void	signals_init(void)
 {
 	sig_t	error;
