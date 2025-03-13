@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/13 16:36:22 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 16:37:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 18:25:39 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,3 +61,5 @@ char	*process_wildcard_in_variable(char *value)
 	free_matches(matches, match_count);
 	return (result);
 }
+
+

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 16:37:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/13 18:45:10 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,20 +65,48 @@ void	process_wildcard_arg(t_ast_node *node, int i)
 		free(matches);
 }
 
+static char *process_wildcard_wo_expand(t_ast_node *node, int idx)
+{
+	int		i;
+	int		j;
+	char	*result;
+	char	*arg;
+
+	arg = node->args[idx];
+	result = (char *)ft_calloc(sizeof(char), ft_strlen(arg)+1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (arg[i])
+	{
+		if (arg[i] == '\'' || arg[i] == '\"')
+			result[j++] = arg[i];
+		i++;
+	}
+	return (result);
+}
+
+
 void	expand_wildcards(t_ast_node *node)
 {
-	int	i;
+	int				i;
+	t_quote_type	quote_type;
 
 	i = 0;
 	if (!node || !node->args)
 		return ;
 	while (i < node->argc && node->args[i])
 	{
-		if (has_wildcard(node->args[i]))
+		if (has_wildcard(node->args[i]) == 1)
 		{
 			process_wildcard_arg(node, i);
 			i++;
 			continue ;
+		}
+		else if (is_mixed_quote_type(node->args[i]), )
+		{
+			
 		}
 		i++;
 	}
