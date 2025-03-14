@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/20 22:06:07 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 21:34:18 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 15:20:53 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ void	process_wildcard_arg(t_ast_node *node, int i)
 	int		match_count;
 	char	**matches;
 
+	if (!node || !node->args || i < 0 || i >= node->argc)
+		return ;
+	if (node->arg_quote_types && i < node->argc
+		&& (node->arg_quote_types[i] == QUOTE_SINGLE
+			|| node->arg_quote_types[i] == QUOTE_DOUBLE)
+		&& node->arg_quote_types[i] != QUOTE_MIXED)
+	{
+		return ;
+	}
 	match_count = 0;
 	matches = get_matching_files(node->args[i], &match_count);
 	if (matches && match_count > 0)
