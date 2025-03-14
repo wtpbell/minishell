@@ -6,11 +6,12 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/29 12:32:49 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 09:38:27 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 14:23:32 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+#include "executor.h"
 
 char	*get_validation_error_msg(t_cmd_valid_error error)
 {
@@ -47,4 +48,23 @@ char	*get_syntax_error_msg(t_syntax_error error)
 	messages[SYNTAX_INVALID_COMMAND]
 		= "Syntax error: Invalid command";
 	return (messages[error]);
+}
+
+void	print_paren_error(void)
+{
+	ft_putstr_fd(RED, STDERR_FILENO);
+	ft_putendl_fd("minishell: syntax error: unmatched parentheses",
+		STDERR_FILENO);
+	ft_putstr_fd(RESET, STDERR_FILENO);
+}
+
+void	print_token_error(char *content)
+{
+	ft_putstr_fd(RED, STDERR_FILENO);
+	ft_putstr_fd("minishell: syntax error near unexpected token `",
+		STDERR_FILENO);
+	ft_putstr_fd(content, STDERR_FILENO);
+	ft_putendl_fd("'", STDERR_FILENO);
+	ft_putstr_fd(RESET, STDERR_FILENO);
+	set_exit_status(2);
 }

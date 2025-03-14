@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:46:08 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 09:45:49 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 14:23:14 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,8 @@ void				handle_redirection_error_message(t_token *current);
 /* Error messages */
 char				*get_validation_error_msg(t_cmd_valid_error error);
 char				*get_syntax_error_msg(t_syntax_error error);
-
-/* AST optimization */
-t_ast_node			*optimize_ast(t_ast_node *root);
-t_redir				*merge_redirections(t_redir *redir);
-t_ast_node			*optimize_pipeline(t_ast_node *node);
+void				print_token_error(char *content);
+void				print_paren_error(void);
 
 /* Parentheses handling */
 int					is_left_paren(t_token *token);
