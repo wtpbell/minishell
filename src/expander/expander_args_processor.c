@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/14 09:11:41 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:15:28 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,15 @@ void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 
 void	handle_wildcard_expansion(t_ast_node *node, int i)
 {
-	if (should_skip_expansion(node, i, 0)
-		&& !is_mixed_quote_wildcard(node->args[i], node->arg_quote_types[i]))
+	if (!node || !node->args || i < 0 || i >= node->argc)
 		return ;
-	if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
+	if (should_skip_expansion(node, i, 0)
+		&& !is_mixed_quote_wildcard(node->args[i],
+		(node->arg_quote_types && i < node->argc) ?
+		node->arg_quote_types[i] : QUOTE_NONE))
+		return ;
+	if (node->arg_quote_types && i < node->argc &&
+		node->arg_quote_types[i] == QUOTE_MIXED)
 	{
 		process_mixed_wildcard(node, i);
 		return ;
