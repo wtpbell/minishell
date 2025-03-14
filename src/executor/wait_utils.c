@@ -6,12 +6,13 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/06 23:00:05 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/10 12:38:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 17:27:56 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 #include "minishell.h"
+#include "common.h"
 #include <fcntl.h>
 
 int	wait_for_child(void)
@@ -26,13 +27,23 @@ int	wait_for_child(void)
 
 int	wait_for_pid(pid_t pid)
 {
-	int	status_;
+
+	int status_;
 
 	waitpid(pid, &status_, 0);
 	if (WIFEXITED(status_))
 		return (WEXITSTATUS(status_));
 	else if (WIFSIGNALED(status_))
-		return (128 + WTERMSIG(status_));
+	{
+		int sig = WTERMSIG(status_);
+		if (sig == SIGINT)
+			signal_set(SIG_RECEIVED_INT);
+		else if (sig == SIGTERM)
+			signal_set(SIG_RECEIVED_TERM);
+		else if (sig == SIGQUIT)
+			signal_set(SIG_RECEIVED_QUIT);
+		return (128 + sig);
+	}
 	return (EXIT_FAILURE);
 }
 
