@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/14 09:15:28 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:23:52 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,18 @@ void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 
 void	handle_wildcard_expansion(t_ast_node *node, int i)
 {
+	int	quote_type;
+
 	if (!node || !node->args || i < 0 || i >= node->argc)
 		return ;
+	quote_type = QUOTE_NONE;
+	if (node->arg_quote_types && i < node->argc)
+		quote_type = node->arg_quote_types[i];
 	if (should_skip_expansion(node, i, 0)
-		&& !is_mixed_quote_wildcard(node->args[i],
-		(node->arg_quote_types && i < node->argc) ?
-		node->arg_quote_types[i] : QUOTE_NONE))
+		&& !is_mixed_quote_wildcard(node->args[i], quote_type))
 		return ;
-	if (node->arg_quote_types && i < node->argc &&
-		node->arg_quote_types[i] == QUOTE_MIXED)
+	if (node->arg_quote_types && i < node->argc
+		&& node->arg_quote_types[i] == QUOTE_MIXED)
 	{
 		process_mixed_wildcard(node, i);
 		return ;
@@ -87,7 +90,6 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 	{
 		had_env_expansion = 0;
 		repeat_expansion = 0;
-
 		handle_env_dollar_expansion(node, env_list, i, &had_env_expansion);
 		if (!had_env_expansion)
 			handle_dollar_expansion(node, tokenizer, i, &had_env_expansion);
