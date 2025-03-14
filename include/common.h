@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/14 17:03:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 18:05:13 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "executor.h"
 # include "parser.h"
 # include <signal.h>
+
+extern volatile sig_atomic_t g_signal;
 
 typedef enum e_signal_state
 {
@@ -25,9 +27,19 @@ typedef enum e_signal_state
 	SIG_HEREDOC_INT = 8
 } t_signal_state;
 
-extern int g_signal;
 
-/*signal.c */
+/*signal_utils1.c */
+void	signal_set(t_signal_state state);
+void	signal_clear(t_signal_state state);
+int		signal_is_set(t_signal_state state);
+void	signals_ignore(void);
+void	signals_child(void);
+
+/*signal.c*/
+void			signals_init(void);
+void			interrupt_w_nl(int sig);
+void			interrput_silence(int sig);
+void			heredoc_signals(int sig);
 
 
 void			free_tab(char **tab);
@@ -42,10 +54,6 @@ void			exit_shell(int status, t_ast_node *node, \
 void			child_cleanup(t_ast_node *node, char **env_arr);
 t_ast_node		*get_root_node(t_ast_node *new_root);
 
-void			signals_init(void);
-void			interrupt_w_nl(int sig);
-void			interrput_silence(int sig);
-void			heredoc_signals(int sig);
 
 char			*get_custom_prompt(void);
 #endif

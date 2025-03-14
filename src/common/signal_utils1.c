@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/14 17:04:59 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 17:19:44 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 18:05:37 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	signal_clear(t_signal_state state)
 	g_signal &= ~state;
 }
 
-int	signal_set(t_signal_state state)
+int	signal_is_set(t_signal_state state)
 {
-	return (g_signal & state != 0);
+	return (g_signal && state != 0);
 }
 
 void	signals_ignore(void)

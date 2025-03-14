@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 17:25:46 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 17:48:38 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	child(t_ast_node *node, t_env **env)
 {
 	char	**env_arr;
 
-	signals_child_default();
+	signals_child();
 	env_arr = env_to_arr(*env);
 	if (!env_arr)
 	{

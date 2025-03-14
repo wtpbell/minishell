@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 17:23:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 18:01:55 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "executor.h"
 #include <signal.h>
 #include <unistd.h>
-
-volatile sig_atomic_t g_signal = SIG_NONE;
 
 static void	interrupt_handler(int sig)
 {
@@ -46,12 +44,12 @@ void	interrput_silence(int sig)
 	signal(SIGINT, interrput_silence);
 }
 
-static void kill_handle(int sig)
+static void kill_handler(int sig)
 {
 	(void)sig;
 	set_exit_status(0);
 	signal_set(SIG_RECEIVED_TERM);
-	signal(SIGTERM, kill_handle);
+	signal(SIGTERM, kill_handler);
 }
 
 void	heredoc_signals(int sig)
@@ -77,13 +75,14 @@ void	signals_init(void)
 {
 	sig_t	error;
 
+	error = signal(SIGINT, interrupt_handler);
 	g_signal = SIG_NONE;
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
 	error = signal(SIGQUIT, SIG_IGN);
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
-	error = signal(SIGTERM, kill_handle);
+	error = signal(SIGTERM, kill_handler);
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
 }
