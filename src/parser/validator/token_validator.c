@@ -6,30 +6,17 @@
 /*   By: spyun <marvin@42.fr>                         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/28 09:59:36 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/14 14:18:54 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 14:24:16 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "executor.h"
 
-static void	print_paren_error(void)
+static int	is_valid_after_rparen(t_token_type type)
 {
-	ft_putstr_fd(RED, STDERR_FILENO);
-	ft_putendl_fd("minishell: syntax error: unmatched parentheses",
-		STDERR_FILENO);
-	ft_putstr_fd(RESET, STDERR_FILENO);
-}
-
-static void	print_token_error(char *content)
-{
-	ft_putstr_fd(RED, STDERR_FILENO);
-	ft_putstr_fd("minishell: syntax error near unexpected token `",
-		STDERR_FILENO);
-	ft_putstr_fd(content, STDERR_FILENO);
-	ft_putendl_fd("'", STDERR_FILENO);
-	ft_putstr_fd(RESET, STDERR_FILENO);
-	set_exit_status(2);
+	return (type == TOKEN_AND || type == TOKEN_OR
+		|| type == TOKEN_PIPE || type == TOKEN_RPAREN);
 }
 
 static int	check_consecutive_paren(t_token *tokens)
@@ -41,7 +28,7 @@ static int	check_consecutive_paren(t_token *tokens)
 	last_was_rparen = 0;
 	while (curr)
 	{
-		if (last_was_rparen && curr->type == TOKEN_LPAREN)
+		if (last_was_rparen && !is_valid_after_rparen(curr->type))
 		{
 			print_token_error(curr->content);
 			return (0);
