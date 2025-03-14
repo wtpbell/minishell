@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:15:38 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 14:58:48 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:46:59 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	*handle_quotes(const char *arg, int *i, char *result,
 	return (result);
 }
 
-static char	*handle_expansion_loop(const char *arg, char *result,
+char	*handle_expansion_loop(const char *arg, char *result,
 	t_expansion_state *state)
 {
 	int	i;
