@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 12:04:25 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 13:40:57 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:05:47 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,7 @@ t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote,
 	else
 		result->quote_type = quote_type_select(current_quote_type, quote);
 	tokenizer->position++;
+	if (tokenizer->input[tokenizer->position] == '*')
+		result->quote_type = QUOTE_MIXED;
 	return (result);
 }

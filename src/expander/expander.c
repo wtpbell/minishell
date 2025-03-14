@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 10:35:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 14:11:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:09:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 #include "parser.h"
 #include "expander.h"
 
-/* Checks if expansion should be skipped based on quote types */
 int	should_skip_expansion(t_ast_node *node, int i, int dollar_exp)
 {
-	if (!node->arg_quote_types)
+	if (!node->arg_quote_types || i >= node->argc)
 		return (0);
 	if (dollar_exp && node->arg_quote_types[i] == QUOTE_SINGLE)
 		return (1);

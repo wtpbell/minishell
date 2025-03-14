@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 13:28:37 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 12:26:01 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 08:59:27 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,7 @@ t_quoted_result	*extract_quoted_content(t_tokenizer *tokenizer, char quote,
 					t_quote_type current_quote_type);
 char			*handle_special_wildcard(t_tokenizer *tokenizer);
 int				is_wildcard_after_quote(t_tokenizer *tokenizer);
+
+void	debug_print_quote_type(t_quote_type quote_type, const char *content);
+
 #endif

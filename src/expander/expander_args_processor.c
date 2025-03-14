@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 16:34:59 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:11:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,28 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		t_tokenizer *tokenizer, int i)
 {
 	int	had_env_expansion;
+	int	repeat_expansion;
 
-	had_env_expansion = 0;
-	handle_env_dollar_expansion(node, env_list, i, &had_env_expansion);
-	if (!had_env_expansion)
-		handle_dollar_expansion(node, tokenizer, i, &had_env_expansion);
-	if (had_env_expansion && has_wildcard(node->args[i]))
-		handle_wildcard_with_expansion(node, i);
-	else if (!had_env_expansion && has_wildcard(node->args[i]))
-		handle_wildcard_expansion(node, i);
+	repeat_expansion = 1;
+	while (repeat_expansion)
+	{
+		had_env_expansion = 0;
+		repeat_expansion = 0;
+
+		handle_env_dollar_expansion(node, env_list, i, &had_env_expansion);
+		if (!had_env_expansion)
+			handle_dollar_expansion(node, tokenizer, i, &had_env_expansion);
+		if (had_env_expansion)
+		{
+			if (strchr(node->args[i], '$') != NULL)
+				repeat_expansion = 1;
+		}
+	}
+	if (has_wildcard(node->args[i]))
+	{
+		if (had_env_expansion)
+			handle_wildcard_with_expansion(node, i);
+		else
+			handle_wildcard_expansion(node, i);
+	}
 }
