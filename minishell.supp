@@ -1,0 +1,131 @@
+{
+   Readline_memory
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libreadline.so*
+}
+{
+   Libtinfo_memory
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libtinfo.so*
+}
+{
+   Readline_internal_teardown
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:readline_internal_teardown
+   ...
+}
+{
+   Readline_add_history
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:xmalloc
+   fun:add_history
+   ...
+}
+{
+   Tgetent_memory
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:tgetent_sp
+   ...
+}
+{
+   <Readline>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:readline
+   ...
+}
+{
+   <Readline/AddHistory>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:add_history
+   ...
+}
+{
+   <Bash>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:copy_command
+   ...
+}
+{
+   <Bash>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:initialize_job_control
+   ...
+}
+{
+   <Bash>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:execute_command_internal
+   ...
+}
+{
+   <Bash>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:initialize_shell_variables
+   ...
+}
+{
+   <Bash_set_bashopts>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   ...
+   fun:set_bashopts
+   ...
+   fun:main
+}
+{
+   <Bash_make_bare_word>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:make_bare_word
+   fun:copy_function_def_contents
+   ...
+}
+{
+   <Bash_yyparse>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:yyparse
+   fun:parse_command
+   ...
+}
+{
+   <Bash_reader_loop>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:reader_loop
+   fun:main
+}
+{
+   <Bash_Any>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/bash
+}
