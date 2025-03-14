@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 14:41:36 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 15:09:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 16:50:06 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,6 @@ void	heredoc_signals(int sig)
 	set_exit_status(130);
 }
 
-static void	kill_handle(int sig)
-{
-	(void) sig;
-	set_exit_status(1);
-}
-
 void	signals_init(void)
 {
 	sig_t	error;
@@ -69,9 +63,6 @@ void	signals_init(void)
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
 	error = signal(SIGQUIT, SIG_IGN);
-	if (error == SIG_ERR)
-		ft_putendl_fd("signal() error", STDERR_FILENO);
-	error = signal(SIGTERM, kill_handle);
 	if (error == SIG_ERR)
 		ft_putendl_fd("signal() error", STDERR_FILENO);
 }
