@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/26 14:27:42 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 16:34:59 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:54:22 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,18 @@ void	handle_dollar_in_string(t_ast_node *node, t_tokenizer *tokenizer,
 
 void	handle_wildcard_expansion(t_ast_node *node, int i)
 {
-	if (should_skip_expansion(node, i, 0)
-		&& !is_mixed_quote_wildcard(node->args[i], node->arg_quote_types[i]))
+	int	quote_type;
+
+	if (!node || !node->args || i < 0 || i >= node->argc)
 		return ;
-	if (node->arg_quote_types && node->arg_quote_types[i] == QUOTE_MIXED)
+	quote_type = QUOTE_NONE;
+	if (node->arg_quote_types && i < node->argc)
+		quote_type = node->arg_quote_types[i];
+	if (should_skip_expansion(node, i, 0)
+		&& !is_mixed_quote_wildcard(node->args[i], quote_type))
+		return ;
+	if (node->arg_quote_types && i < node->argc
+		&& node->arg_quote_types[i] == QUOTE_MIXED)
 	{
 		process_mixed_wildcard(node, i);
 		return ;
@@ -75,13 +83,16 @@ void	handle_arg_expansion(t_ast_node *node, t_env **env_list,
 		t_tokenizer *tokenizer, int i)
 {
 	int	had_env_expansion;
+	int	expansion_count;
 
+	expansion_count = 0;
 	had_env_expansion = 0;
-	handle_env_dollar_expansion(node, env_list, i, &had_env_expansion);
-	if (!had_env_expansion)
-		handle_dollar_expansion(node, tokenizer, i, &had_env_expansion);
-	if (had_env_expansion && has_wildcard(node->args[i]))
-		handle_wildcard_with_expansion(node, i);
-	else if (!had_env_expansion && has_wildcard(node->args[i]))
-		handle_wildcard_expansion(node, i);
+	while (expansion_count < 10)
+	{
+		had_env_expansion = process_env_expansion(node, env_list, tokenizer, i);
+		if (!should_repeat_expansion(node, i, had_env_expansion))
+			break ;
+		expansion_count++;
+	}
+	process_wildcard(node, i, had_env_expansion);
 }

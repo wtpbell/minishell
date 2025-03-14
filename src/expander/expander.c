@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/10 10:35:01 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 14:11:12 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/14 09:30:41 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "parser.h"
 #include "expander.h"
 
-/* Checks if expansion should be skipped based on quote types */
 int	should_skip_expansion(t_ast_node *node, int i, int dollar_exp)
 {
 	if (!node->arg_quote_types)
@@ -33,19 +32,18 @@ static void	expander_process_args(t_ast_node *node, t_env **env_list,
 	int	i;
 
 	i = 0;
-	while (i < node->argc && node->args[i])
+	while (node && node->args && i < node->argc && node->args[i])
 	{
 		handle_arg_expansion(node, env_list, tokenizer, i);
 		i++;
 	}
 }
 
-/* Main expander function */
 void	expander(t_ast_node *node, t_env **env_list)
 {
 	t_tokenizer	tokenizer;
 
-	if (!node || !node->args)
+	if (!node || !node->args || node->argc <= 0)
 		return ;
 	ft_memset(&tokenizer, 0, sizeof(t_tokenizer));
 	expander_process_args(node, env_list, &tokenizer);

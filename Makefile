@@ -99,6 +99,7 @@ COMMON_FILES = $(COMMON_DIR)/signal.c \
 
 EXPANDER_FILES = $(EXPANDER_DIR)/expander.c \
 				$(EXPANDER_DIR)/expander_args_processor.c \
+				$(EXPANDER_DIR)/expander_args_expansion.c \
 				$(EXPANDER_DIR)/expander_dollar.c \
 				$(EXPANDER_DIR)/expander_exit_status.c \
 				$(EXPANDER_DIR)/expander_expansion_handler.c \
