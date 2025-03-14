@@ -45,9 +45,6 @@ PARSER_FILES = $(PARSER_DIR)/parser.c \
 			   $(PARSER_DIR)/handler/logic_handler.c \
 			   $(PARSER_DIR)/handler/group_handler.c \
 			   $(PARSER_DIR)/handler/sequence_handler.c \
-			   $(PARSER_DIR)/optimizer/ast_optimizer.c \
-			   $(PARSER_DIR)/optimizer/pipeline_optimizer.c \
-			   $(PARSER_DIR)/optimizer/redirection_optimizer.c \
 			   $(PARSER_DIR)/validator/command_validator.c \
 			   $(PARSER_DIR)/validator/parser_validator.c \
 			   $(PARSER_DIR)/validator/redirection_validator.c \
@@ -143,7 +140,6 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/lexer/utils
 	@mkdir -p $(OBJ_DIR)/parser/core
 	@mkdir -p $(OBJ_DIR)/parser/handler
-	@mkdir -p $(OBJ_DIR)/parser/optimizer
 	@mkdir -p $(OBJ_DIR)/parser/utils
 	@mkdir -p $(OBJ_DIR)/parser/validator
 	@mkdir -p $(OBJ_DIR)/env

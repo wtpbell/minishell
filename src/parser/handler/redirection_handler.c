@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 21:55:07 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 09:49:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 14:40:12 by spyun         ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,14 @@ static void	add_args_to_cmd_node(t_ast_node *cmd_node, t_token **current)
 	*current = temp;
 }
 
+static void	ensure_empty_command(t_ast_node *cmd_node)
+{
+	if (!cmd_node->args || !cmd_node->args[0])
+	{
+		add_arg_to_node(cmd_node, "", QUOTE_NONE);
+	}
+}
+
 t_ast_node	*parse_redirection(t_token **token)
 {
 	t_ast_node	*cmd_node;
@@ -95,6 +103,8 @@ t_ast_node	*parse_redirection(t_token **token)
 	if (current && (current->type == TOKEN_WORD
 			|| current->type == TOKEN_WILDCARD))
 		add_args_to_cmd_node(cmd_node, &current);
+	else
+		ensure_empty_command(cmd_node);
 	*token = current;
 	return (cmd_node);
 }
