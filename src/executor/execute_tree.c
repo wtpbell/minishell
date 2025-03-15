@@ -136,7 +136,7 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (builtin)
 		return (set_exit_status(builtin(node, env, tokens)), get_exit_status());
 	status_ = check_cmd(node, env);
-	if (status_)
+	if (status_ != 0)
 		return (status_);
 	status_ = launch_external_cmd(node, env, tokens);
 	return (status_);

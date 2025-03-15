@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 14:56:46 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/15 21:12:02 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 21:19:12 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef enum e_signal_state
 	SIG_RECEIVED_INT = 1,
 	SIG_RECEIVED_TERM = 2,
 	SIG_RECEIVED_QUIT = 4,
+	SIG_HEREDOC_INT = 8
 }	t_signal_state;
 
 /*signal_utils1.c */

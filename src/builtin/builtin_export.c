@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:14:43 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 22:37:08 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,6 @@ static bool	is_valid_key(char *key)
 	return (false);
 }
 
-/*
-	This function appends a new value to an existing env variable 
-	if the key ends with +. If not, nothing special happens.
-*/
 static void	append_env_value(t_env *env, char **key, char **value)
 {
 	char	*key_;
@@ -91,6 +87,14 @@ static void	modify_env(t_env **env, char *args)
 		return ;
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
+	if (args[0] == '-')
+	{
+		ft_putstr_fd(args, STDERR_FILENO);
+		ft_putendl_fd(" : invalid option", STDERR_FILENO);
+		set_exit_status(2);
+		free_tab(split);
+		return ;
+	}
 	if (!is_valid_key(split[0]) || args[0] == '=')
 	{
 		ft_putstr_fd(args, STDERR_FILENO);

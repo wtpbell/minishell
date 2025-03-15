@@ -69,7 +69,8 @@ BUILTIN_FILES =  $(BUITLIN_DIR)/builtin_exit.c \
 				 $(BUITLIN_DIR)/builtin_export.c \
 				 $(BUITLIN_DIR)/builtin_cd.c \
 				 $(BUITLIN_DIR)/builtin.c \
-				 $(BUITLIN_DIR)/builtin_utils.c \
+				 $(BUITLIN_DIR)/builtin_utils1.c \
+				 $(BUITLIN_DIR)/builtin_utils2.c \
 
 EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_tree.c \
