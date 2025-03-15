@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -Wreturn-null:malloc() -g3
 # CFLAGS += -fsanitize=address -fno-omit-frame-pointer
 # LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
