@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 16:48:58 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:03:48 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/14 09:32:29 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static int	resolve_command(t_ast_node *node)
 	tmp = get_cmd_path(node->args[0]);
 	if (!tmp)
 	{
-		error(node->args[0], "Command not found");
+		error(node->args[0], "command not found");
 		set_underscore(node->argc, node->args);
 		return (set_exit_status(127), 127);
 	}
@@ -87,7 +87,7 @@ static int	resolve_path(t_ast_node *node)
 	if (access(node->args[0], F_OK) == -1)
 		return (set_underscore_error(node, NO_FILE_DIR, 127));
 	if (stat(node->args[0], &info) == -1)
-		return (error(node->args[0], NULL), ERR_ACCESS);
+		return (error(node->args[0], NULL), 126);
 	if (S_ISDIR(info.st_mode))
 		return (set_underscore_error(node, IS_DIR, 126));
 	if (access(node->args[0], R_OK | X_OK) == -1)

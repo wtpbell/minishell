@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:14:22 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/13 22:20:41 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	builtin_cd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (node->argc == 2 && ft_strcmp(node->args[1], "") == 0)
 		return (set_exit_status(0), 0);
 	if (stat(node->args[1], &info) == -1)
-		return (error("cd", NO_FILE_DIR), EXIT_FAILURE);
+		return (error("cd", NULL), EXIT_FAILURE);
 	if (!S_ISDIR(info.st_mode))
 		return (error("cd", NOT_DIR), EXIT_FAILURE);
 	if (access(node->args[1], R_OK | X_OK) == -1)
