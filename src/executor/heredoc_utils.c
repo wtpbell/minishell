@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:34:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:37:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 18:28:01 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	process_line(t_heredoc_data *data)
 		expanded_line = expand_heredoc_line(data->line, data->env_list);
 	else
 		expanded_line = data->line;
-	write_expanded_line(expanded_line, data->fd);
+	write(data->fd, expanded_line, ft_strlen(expanded_line));
+	write(data->fd, "\n", 1);
 	if (data->should_expand && expanded_line != data->line)
 		free(expanded_line);
 	return (1);

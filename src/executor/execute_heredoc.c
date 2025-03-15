@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:18:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 13:59:30 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
 	if (saved_fd[0] == -1)
 		saved_fd[0] = dup(STDIN_FILENO);
-	signal(SIGINT, heredoc_signals);
+	signals_heredoc();
 	process_heredocs(redir);
 	if (saved_fd[0] != -1)
 	{
@@ -123,5 +123,4 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 			perror("Failed to redirect stdin to heredoc");
 		close(saved_fd[0]);
 	}
-	signals_init();
 }

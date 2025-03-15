@@ -6,11 +6,12 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/03 11:45:44 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/12 14:07:01 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 18:09:45 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include "common.h"
 
 void	redirect_io(int input, int output, int new_input)
 {
@@ -31,14 +32,14 @@ void	redirect_io(int input, int output, int new_input)
 }
 
 pid_t	final_process(t_child_info *child, \
-		t_ast_node *temp, t_env **env)
+		t_ast_node *node, t_env **env)
 {
 	pid_t	last_pid;
 	int		final_pipe[2];
 
 	final_pipe[1] = STDOUT_FILENO;
 	final_pipe[0] = 0;
-	last_pid = spawn_process(child, final_pipe, temp, env);
+	last_pid = spawn_process(child, final_pipe, node, env);
 	if (child->input != 0)
 	{
 		close(child->input);
@@ -56,18 +57,4 @@ void	child_init(t_child_info *child, int input, t_token *tokens)
 	child->saved_stdin = dup(STDIN_FILENO);
 	if (child->saved_stdin == -1)
 		perror("dup stdin failed");
-}
-
-t_redir	*get_last_heredoc(t_redir *curr)
-{
-	t_redir	*last_heredoc;
-
-	last_heredoc = NULL;
-	while (curr)
-	{
-		if (curr->type == TOKEN_HEREDOC)
-			last_heredoc = curr;
-		curr = curr->next;
-	}
-	return (last_heredoc);
 }

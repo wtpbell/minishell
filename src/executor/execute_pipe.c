@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/31 11:37:43 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:18:58 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 18:07:21 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@
 static void	handle_child_process(t_child_info *child, \
 			t_ast_node *node, t_env **env, t_token *tokens)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signals_child();
 	redirect_io(child->input, child->output, child->new_input);
 	if (child->saved_stdin != -1 && child->saved_stdin != STDIN_FILENO)
 		close(child->saved_stdin);
@@ -68,8 +67,8 @@ static void	cleanup_pipe(t_child_info *child, int pipe_fd[2])
 pid_t	launch_pipe(t_child_info *child, int pipe_fd[2], \
 		t_ast_node *node, t_env **env)
 {
-	pid_t	pid;
-	pid_t	last_pid;
+	pid_t		pid;
+	pid_t		last_pid;
 
 	last_pid = -1;
 	while (node && node->type == TOKEN_PIPE)

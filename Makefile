@@ -2,8 +2,8 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
-# CFLAGS += -fsanitize=address -fno-omit-frame-pointer
-# LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
+CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
@@ -86,6 +86,7 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_cmd.c \
 
 COMMON_FILES = $(COMMON_DIR)/signal.c \
+				$(COMMON_DIR)/signal_handler.c \
 				$(COMMON_DIR)/signal_utils1.c \
 				$(COMMON_DIR)/prompt.c \
 				$(COMMON_DIR)/mem_split.c \

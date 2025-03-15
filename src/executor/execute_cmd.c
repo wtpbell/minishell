@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/12 21:22:22 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 17:24:57 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 21:10:18 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,27 @@
 #include "parser.h"
 #include "common.h"
 
+int	is_kill_zero(t_ast_node *node)
+{
+	if (node->args[0] && ft_strcmp(node->args[0], "kill") == 0 && \
+		node->args[1] && ft_strcmp(node->args[1], "0") == 0 && \
+		(node->args[2] == NULL || node->args[2][0] == '\0'))
+	{
+		signal_clear_all();
+		set_exit_status(0);
+		kill(0, SIGTERM);
+		return (0);
+	}
+	return (1);
+}
+
 int	launch_external_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 {
 	pid_t	pid;
 	int		status_;
 
-	signal(SIGINT, interrupt_w_nl);
-	signal(SIGQUIT, interrupt_w_nl);
-	signal_clear(SIG_RECEIVED_INT | SIG_RECEIVED_TERM | SIG_RECEIVED_QUIT);
+	signal_clear_all();
+	signals_child();
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork failed"), \
@@ -32,7 +45,7 @@ int	launch_external_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (pid == 0)
 		child(node, env);
 	status_ = wait_for_pid(pid);
-	if (signal_is_set(SIG_RECEIVED_TERM) && status_ == 143)
-		status_ = 0; 
+	if (signal_is_set(SIG_RECEIVED_TERM))
+		return (0);
 	return (status_);
 }

@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/04 18:45:18 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/14 17:48:38 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/15 21:10:42 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,14 @@ void	child(t_ast_node *node, t_env **env)
 		set_exit_status(127);
 		exit(get_exit_status());
 	}
+	if (execve(node->args[0], node->args, env_arr) == -1)
+	{
+		error(node->args[0], NULL);
+		child_cleanup(node, env_arr);
+		set_exit_status(127);
+		exit(get_exit_status());
+	}
+	free_tab(env_arr);
+	set_exit_status(127);
+	exit(get_exit_status());
 }
