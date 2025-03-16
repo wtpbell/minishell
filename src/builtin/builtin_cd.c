@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:16 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 22:20:41 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 17:46:24 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	builtin_cd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (getcwd (old_pwd, PATH_MAX) == NULL)
 		return (error("cd", NULL), EXIT_FAILURE);
 	if (node->argc > 2)
-		return (ft_putendl_fd(MANY_ARGS_ERROR, STDERR_FILENO), EXIT_FAILURE);
+		return (error("cd", MANY_ARGS_ERROR), EXIT_FAILURE);
 	if (node->argc == 1 || ft_strcmp(node->args[1], "~") == 0)
 		return (home_dir(env, true, old_pwd));
 	if (ft_strcmp(node->args[1], "-") == 0)

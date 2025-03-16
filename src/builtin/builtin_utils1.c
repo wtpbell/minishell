@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   builtin_utils.c                                    :+:    :+:            */
+/*   builtin_utils1.c                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/28 17:22:19 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 14:08:33 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 14:33:16 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ void	env_args_handler(t_env **env, char **split, char *args)
 	if (args[ft_strlen(args) - 1] == '=')
 	{
 		if (value)
+		{
 			free(value);
+			value = NULL;
+		}
 		add_env_var(env, key, "");
 	}
 	else if (key && !value)

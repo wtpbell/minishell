@@ -1,9 +1,9 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
-CFLAGS += -fsanitize=address -fno-omit-frame-pointer
-LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -Wall -Wextra -Werror -fanalyzer -Wanalyzer-null-dereference -Wnull-dereference -g3
+# CFLAGS += -fsanitize=address -fno-omit-frame-pointer
+# LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer

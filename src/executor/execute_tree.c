@@ -46,7 +46,7 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	pid_t	pid;
 
 	status_ = 0;
-	signals_child();
+	signal_clear_all();
 	pid = fork();
 	if (pid == -1)
 		return (error("fork() failed", NULL),
@@ -74,7 +74,6 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 
 	input = 0;
 	signal_clear_all();
-	signals_child();
 	child_init(&child, input, tokens);
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	status_ = wait_for_pid(last_pid);
@@ -85,7 +84,6 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 		close(child.saved_stdin);
 	}
 	set_exit_status(status_);
-	signals_shell();
 	return (status_);
 }
 
