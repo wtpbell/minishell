@@ -1,9 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fanalyzer -Wanalyzer-null-dereference -Wnull-dereference -g3
-# CFLAGS += -fsanitize=address -fno-omit-frame-pointer
-# LDFLAGS = -fsanitize=address -fno-omit-frame-pointer
+CFLAGS = -Wall -Wextra -Werror
 
 SRC_DIR = src
 LEXER_DIR = $(SRC_DIR)/lexer
@@ -161,7 +159,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(LIBFT) $(ALL_OBJ)
-	@$(CC) $(ALL_OBJ) $(LIBS) $(LDFLAGS) -o $(NAME)
+	@$(CC) $(ALL_OBJ) $(LIBS) -o $(NAME)
 	@echo "\033[1;36m"
 	@echo "                                                                         "
 	@echo "   ███╗   ███╗██╗███╗   ██╗██╗███████╗██╗  ██╗███████╗██╗     ██╗        "
