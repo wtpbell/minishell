@@ -15,7 +15,7 @@
 #include "executor.h"
 #include "common.h"
 
-static t_env	*env_int(char **key_value)
+static t_env	*env_init(char **key_value)
 {
 	t_env	*new;
 
@@ -49,7 +49,7 @@ t_env	*create_env(char *env)
 	key_value = split_env_var(env);
 	if (!key_value || !key_value[0])
 		return (free_tab(key_value), NULL);
-	new = env_int(key_value);
+	new = env_init(key_value);
 	if (!new)
 		return (NULL);
 	else if (ft_strcmp(new->key, "SHLVL") == 0)

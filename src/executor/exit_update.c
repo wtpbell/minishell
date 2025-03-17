@@ -19,6 +19,8 @@ void	set_exit_status(int status)
 {
 	char	*status_;
 
+	if (signal_is_set(SIG_RECEIVED_TERM))
+		status_ = 0;
 	status_ = ft_itoa(status);
 	if (status_)
 	{

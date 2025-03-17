@@ -46,16 +46,14 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	pid_t	pid;
 
 	status_ = 0;
-	signal(SIGINT, interrput_silence);
-	signal(SIGQUIT, interrput_silence);
+	signal_clear_all();
 	pid = fork();
 	if (pid == -1)
 		return (error("fork() failed", NULL),
 			free_exit_memory(node, env, tokens), EXIT_FAILURE);
 	else if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
+		signals_child();
 		status_ = executor_status(node->left, env, tokens, 1);
 		set_exit_status(status_);
 		free_exit_memory(node, env, tokens);
@@ -63,7 +61,6 @@ int	exec_block(t_ast_node *node, t_env **env, t_token *tokens)
 	}
 	status_ = wait_for_child();
 	set_exit_status(status_);
-	signals_init();
 	return (status_);
 }
 
@@ -76,8 +73,7 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 	t_child_info	child;
 
 	input = 0;
-	signal(SIGINT, interrput_silence);
-	signal(SIGQUIT, interrput_silence);
+	signal_clear_all();
 	child_init(&child, input, tokens);
 	last_pid = launch_pipe(&child, pipe_fd, node, env);
 	status_ = wait_for_pid(last_pid);
@@ -88,7 +84,6 @@ int	exec_pipe(t_ast_node *node, t_env **env, t_token *tokens)
 		close(child.saved_stdin);
 	}
 	set_exit_status(status_);
-	signals_init();
 	return (status_);
 }
 
@@ -117,7 +112,6 @@ int	exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_)
 		status_ = get_exit_status();
 	restore_redirection(saved_fd);
 	cleanup_heredocs(node->redirections);
-	signals_init();
 	return (status_);
 }
 
@@ -126,9 +120,10 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	int		(*builtin)(t_ast_node *node, t_env **env, t_token *tokens);
 	int		status_;
 
-	if (!node || !node->args || !env || node->argc == 0)
+	if (!node || !env || !node->args)
 		return (set_exit_status(0), 0);
-	status_ = 0;
+	if (!is_kill_zero(node))
+		return (0);
 	if (!node->args[0] || node->args[0][0] == '\0')
 		return (set_exit_status(127), \
 				error(node->args[0], "command not found"), 127);
@@ -142,6 +137,5 @@ int	exec_cmd(t_ast_node *node, t_env **env, t_token *tokens)
 	if (status_ != 0)
 		return (status_);
 	status_ = launch_external_cmd(node, env, tokens);
-	signals_init();
 	return (status_);
 }

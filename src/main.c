@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/20 10:40:01 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/14 14:42:32 by spyun         ########   odam.nl         */
+/*   Updated: 2025/03/16 16:27:31 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	main(int argc, char **argv, char **env)
 	(void)argv;
 	env_ = get_env_list();
 	*env_ = build_env(env);
-	signals_init();
+	signals_shell();
 	main_loop(env_);
 	free_env(env_);
 	rl_clear_history();

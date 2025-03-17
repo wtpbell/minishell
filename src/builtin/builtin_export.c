@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 15:14:34 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 22:37:08 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 17:39:22 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	modify_env(t_env **env, char *args)
 		return ;
 	if (split[0])
 		append_env_value((*env), &split[0], &split[1]);
-	if (args[0] == '-')
+	if (args[0] == '-' && args[1] != '\0')
 	{
 		ft_putstr_fd(args, STDERR_FILENO);
 		ft_putendl_fd(" : invalid option", STDERR_FILENO);

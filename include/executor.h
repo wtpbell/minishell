@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/01/21 10:13:43 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/13 10:05:12 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 19:20:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_child_info
 	int			output;
 	int			new_input;
 	t_token		*tokens;
-	t_ast_node	*root;
 	int			saved_stdin;
 }	t_child_info;
 
@@ -63,7 +62,6 @@ int		exec_redir(t_ast_node *node, t_env **env, t_token *tokens, bool error_);
 
 /*execute_process*/
 void	child(t_ast_node *node, t_env **env);
-int		parent(t_ast_node *node);
 
 /*executor*/
 void	executor(t_ast_node *node, t_env **env, t_token *toekns);
@@ -103,11 +101,11 @@ int		validate_path(char *full_path);
 
 /*heredoc utils*/
 char	*gen_filename(void);
-int		write_expanded_line(char *expanded_line, int fd);
 int		process_line(t_heredoc_data *data);
 
 /*execute_cmd.c*/
 int		launch_external_cmd(t_ast_node *node, t_env **env, t_token *tokens);
+int		is_kill_zero(t_ast_node *node);
 
 /*pipe_utils.c*/
 void	redirect_io(int input, int output, int new_input);
@@ -118,4 +116,5 @@ pid_t	final_process(t_child_info *child, t_ast_node *temp, t_env **env);
 int		wait_for_child(void);
 int		wait_for_pid(pid_t pid);
 void	wait_for_remain(void);
+int		process_exit_status(int status_);
 #endif

@@ -86,8 +86,9 @@ EXECUTOR_FILES = $(EXECUTOR_DIR)/executor.c \
 				 $(EXECUTOR_DIR)/execute_redir.c \
 				 $(EXECUTOR_DIR)/execute_cmd.c \
 
-
 COMMON_FILES = $(COMMON_DIR)/signal.c \
+				$(COMMON_DIR)/signal_handler.c \
+				$(COMMON_DIR)/signal_utils1.c \
 				$(COMMON_DIR)/prompt.c \
 				$(COMMON_DIR)/mem_split.c \
 				$(COMMON_DIR)/mem_realloc.c \

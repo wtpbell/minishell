@@ -6,7 +6,7 @@
 /*   By: spyun <spyun@student.codam.nl>               +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/03/01 09:34:29 by spyun         #+#    #+#                 */
-/*   Updated: 2025/03/12 11:37:11 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 17:35:43 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,10 @@ char	*gen_filename(void)
 	return (filename);
 }
 
-int	write_expanded_line(char *expanded_line, int fd)
+static void	write_expanded_line(char *expanded_line, int fd)
 {
-	size_t	len;
-
-	len = ft_strlen(expanded_line);
-	if (len > 0)
-	{
-		write(fd, expanded_line, len);
-		write(fd, "\n", 1);
-	}
-	return (1);
+	write(fd, expanded_line, ft_strlen(expanded_line));
+	write(fd, "\n", 1);
 }
 
 int	process_line(t_heredoc_data *data)
@@ -50,6 +43,7 @@ int	process_line(t_heredoc_data *data)
 	if (!data->line)
 	{
 		error_heredoc(data->delimiter);
+		set_exit_status(0);
 		return (0);
 	}
 	len = ft_strlen(data->line);

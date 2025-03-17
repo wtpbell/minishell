@@ -6,7 +6,7 @@
 /*   By: bewong <bewong@student.codam.nl>             +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/02/18 10:15:49 by bewong        #+#    #+#                 */
-/*   Updated: 2025/03/13 10:18:51 by bewong        ########   odam.nl         */
+/*   Updated: 2025/03/16 17:23:46 by bewong        ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,10 @@ static void	read_heredoc_lines(t_heredoc_data *data)
 
 	while (1)
 	{
-		if (get_exit_status() == 130)
-			set_exit_status(0);
 		line = readline("heredoc> ");
 		if (get_exit_status() == 130)
 		{
 			free(line);
-			break ;
-		}
-		if (!line)
-		{
-			if (get_exit_status() != 130)
-				error_heredoc(data->delimiter);
-			set_exit_status(0);
 			break ;
 		}
 		data->line = line;
@@ -115,7 +106,7 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 {
 	if (saved_fd[0] == -1)
 		saved_fd[0] = dup(STDIN_FILENO);
-	signal(SIGINT, heredoc_signals);
+	signals_heredoc();
 	process_heredocs(redir);
 	if (saved_fd[0] != -1)
 	{
@@ -123,5 +114,4 @@ void	handle_all_heredocs(t_redir *redir, int saved_fd[2])
 			perror("Failed to redirect stdin to heredoc");
 		close(saved_fd[0]);
 	}
-	signals_init();
 }
